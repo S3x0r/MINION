@@ -1,3 +1,11 @@
+    __                      __           __   
+.--|  |.---.-.--.--.--.--. |  |--.-----.|  |_ 
+|  _  ||  _  |  |  |  |  | |  _  |  _  ||   _|
+|_____||___._|\___/|___  | |_____|_____||____| VERSION 0.0.5
+                   |_____|                    
+				   (olisek@gmail.com)
+
+
 Before running BOT you should config configuration file (CONFIG/CONFIG.INI)
 
 You can write commands to BOT on channel or in private message.
