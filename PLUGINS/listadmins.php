@@ -4,10 +4,15 @@
 
 function listadmins()
 {
+ $table = $GLOBALS['owners'];
 
  fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :My Admins:\n");
- fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel'].' :'.$GLOBALS['admin1']."\n");
-//fix it and add admins...
+
+ for ($i=0; $i<count($table); $i++)
+ {
+  fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel'].' :'.$table[$i]."\n");
+ } 
+
 }
 
 ?>

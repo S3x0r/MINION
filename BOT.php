@@ -1,7 +1,12 @@
 <?php
 
 /*
-  
+   v0.0.7! changes:
+   - completly engine rewrited
+   - added ctcp reply
+   - moved admins to bot file
+   - FIXED commands input by user, works now
+   
    v0.0.5 changes:
    - moved source to GitHub
    - more in English
@@ -27,16 +32,24 @@ TODO:
   !AddAdmin <user@host>
   !identify <passwd>
   RAW <command>
-  fix loop
-  fix !reconnect, !quit / quit msg
-
 */
 
+
+/* ADMINS/OWNERS EDIT IT!
+
+            nick ! ident@   host
+              |      |       |
+   example: S3x0r!~S3x0r@85-220-98-249.dsl.dynamic.simnet.is
+*/
+
+
+$GLOBALS['owners'] = Array ('S3x0r!~S3x0r@85-220-98-249.dsl.dynamic.simnet.is','');
+$GLOBALS['admins'] = Array ('' , ''); 
+//------------------------------------------------------------------------------------------------
 set_time_limit(0);
 error_reporting(E_ALL ^ E_NOTICE);
+define('VER', 'v0.0.7');
 
-define('VER', 'v0.0.5');
-//------------------------------------------------------------------------------------------------
 Start();
 LoadConfig();
 LoadPlugins();
@@ -66,7 +79,6 @@ $GLOBALS['ident']				= $GLOBALS['cfg']->get("Configuration","ident");
 $GLOBALS['server']				= $GLOBALS['cfg']->get("Configuration","server");			
 $GLOBALS['port']				= $GLOBALS['cfg']->get("Configuration","port");			
 $GLOBALS['channel']				= $GLOBALS['cfg']->get("Configuration","channel");	
-$GLOBALS['admin1']				= $GLOBALS['cfg']->get("Admins","admin1");		
 $GLOBALS['show_raw']			= $GLOBALS['cfg']->get("Debug","show_raw");
 
 MSG("1. Configuration Loaded from: CONFIG.INI\n");
@@ -74,7 +86,6 @@ MSG("1. Configuration Loaded from: CONFIG.INI\n");
 //------------------------------------------------------------------------------------------------
 function LoadPlugins()
 {
-	
 MSG("2. My Plugins:\n");
  foreach ( glob( '../PLUGINS/*.php' ) as $plugin_name )
  {
@@ -86,95 +97,134 @@ echo "--------------------------------------------------------\n";
 }
 //------------------------------------------------------------------------------------------------
 function Connect()
-{
+{      
 $GLOBALS['socket'] = fsockopen($GLOBALS['server'], $GLOBALS['port']);
+
 MSG('3. Connecting to: '.$GLOBALS['server'].', port: '.$GLOBALS['port']);
+
 fputs($GLOBALS['socket'], 'USER '.$GLOBALS['nickname'].' FORCE '.$GLOBALS['ident'].' :'.$GLOBALS['name']."\n");
 fputs($GLOBALS['socket'], 'NICK ' . $GLOBALS['nickname'] . "\n");
+
 MSG('4. My nickname is: '.$GLOBALS['nickname']);
+Engine();
 }
 //------------------------------------------------------------------------------------------------
+function Engine()
+{
 while(1) {
-	while($data = fgets($GLOBALS['socket'])) {
-      if($GLOBALS['show_raw'] == 'yes') { echo $data; }
-	  flush(); 
+    while(!feof($GLOBALS['socket'])) {
+        $mask   = NULL;
+        $data = fgets ($GLOBALS['socket'], 512);
+        if($GLOBALS['show_raw'] == 'yes') { echo $data; }
 
-       	$ex = explode(' ', $data);
-		$rawcmd = explode(':', $ex[3]);
-        $chann = $ex[2];
-		$nicka = explode('@', $ex[0]);
-		$nickb = explode('!', $nicka[0]);
-		$nickc = explode(':', $nickb[0]);
+        flush();
+        $ex = explode(' ', trim($data));
+      
+		if($ex[0] == "PING") {
+            fputs($GLOBALS['socket'], "PONG ".$ex[1]."\n");
+            continue; 
+        }
+        
+		if (preg_match ('/^:(.*)\!(.*)\@(.*)$/', $ex[0], $source)) {
+                $nick   = $source[1];
+                $ident  = $source[2];
+                $host   = $source[3];
+        } else {
+                $server = str_replace(':', '', $ex[0]);
+        }
+        if (count ($ex) < 4)
+                continue;
+        $rawcmd = explode (':', $ex[3]);
+        $GLOBALS['args'] = NULL; for ($i = 4; $i < count($ex); $i++) { $GLOBALS['args'] .= $ex[$i] . ' '; }
+        $wordlist = explode(' ', $GLOBALS['args']);
+        if (isset($nick))
+                $mask = $nick . "!" . $ident . "@" . $host;
+		
+		/* Server Actions */
+		if($ex[1] == '432') { 
+		MSG('   ` Nickname reserved, changing to alternative nick: '.$GLOBALS['alternative_nick']);
+		fputs($GLOBALS['socket'],'NICK '.$GLOBALS['alternative_nick']."\n");
+		}
 
-		$host = $nicka[1];
-		$nick = $nickc[1];
+		if($ex[1] == '433') { 
+		MSG('   ` Nickname already used, changing to alternative nick: '.$GLOBALS['alternative_nick']);
+		fputs($GLOBALS['socket'],'NICK '.$GLOBALS['alternative_nick']."\n");
+		}
 
-if($ex[1] == '432') { 
-	MSG('   ` Nickname reserved, changing to alternative nick: '.$GLOBALS['alternative_nick']);
-	fputs($GLOBALS['socket'],'NICK '.$GLOBALS['alternative_nick']."\n");
-	}
+		if($ex[1] == '376') { 
+		MSG('5. OK im connected! ]:)');
+		MSG('6. Joining channel: '.$GLOBALS['channel']);
+		fputs($GLOBALS['socket'],'JOIN '.$GLOBALS['channel']."\n");
+		}
+            /* CTCP */
+             if ($rawcmd[1] == "VERSION") {
+                    fputs($GLOBALS['socket'], "NOTICE $nick :VERSION http://github.com/S3x0r/davybot\n");
+             }
+             elseif ($rawcmd[1] == "FINGER") {
+                    fputs($GLOBALS['socket'], "NOTICE $nick :FINGER http://github.com/S3x0r/davybot\n");
+             }
+             elseif ($rawcmd[1] == "PING") {
+                    $a = str_replace(" ","",$GLOBALS['args']);
+                    fputs($GLOBALS['socket'], "NOTICE $nick :PING ".$a."\n");
+             }
+             elseif ($rawcmd[1] == "TIME") {
+                    $a = date("F j, Y, g:i a");
+                    fputs($GLOBALS['socket'], "NOTICE $nick :TIME ".$a."\n");
+             }
 
-if($ex[1] == '433') { 
-	MSG('   ` Nickname already used, changing to alternative nick: '.$GLOBALS['alternative_nick']);
-	fputs($GLOBALS['socket'],'NICK '.$GLOBALS['alternative_nick']."\n");
-	}
-
-if($ex[1] == '376') { 
-	MSG('5. OK im connected! ]:)');
-	MSG('6. Joining channel: '.$GLOBALS['channel']);
-	fputs($GLOBALS['socket'],'JOIN '.$GLOBALS['channel']."\n");
-	}
-
-if($ex[0] == 'PING'){
-	fputs($GLOBALS['socket'], 'PONG '.$ex[1]."\n");
-    }
-
-$GLOBALS['args'] = NULL; for ($i = 4; $i < count($ex); $i++) { $GLOBALS['args'] .= $ex[$i]; }
-
-$userhost = $nickb[1] .'@'. $nicka[1];
-
-if($userhost == $GLOBALS['admin1']) {
-
-if ($rawcmd[1] == '!uptime')      {		if(function_exists('uptime'))		{ uptime(); } }
-
-if ($rawcmd[1] == '!md5')	      {		if(function_exists('emd5'))			{ emd5(); } }
-if ($rawcmd[1] == '!info')	      {		if(function_exists('info'))			{ info(); } }
-
-if ($rawcmd[1] == '!op')	      {		if(function_exists('op'))			{ op(); } }
-if ($rawcmd[1] == '!deop')	      {		if(function_exists('deop'))			{ deop(); } }
-
-if ($rawcmd[1] == '!join')	      {		if(function_exists('joinc'))		{ joinc(); } }
-if ($rawcmd[1] == '!j')		      {		if(function_exists('joinc'))		{ joinc(); } }
-
-if ($rawcmd[1] == '!leave')	      {		if(function_exists('leave'))		{ leave(); } }
-if ($rawcmd[1] == '!part')        {		if(function_exists('leave'))		{ leave(); } }
-
-if ($rawcmd[1] == '!quit')	      {		if(function_exists('quit'))			{ quit(); } }
-if ($rawcmd[1] == '!die')	      {		if(function_exists('quit'))			{ quit(); } }
-
-if ($rawcmd[1] == '!topic')	      {		if(function_exists('topic'))		{ topic(); } }
-
-if ($rawcmd[1] == '!cham')	      {		if(function_exists('cham'))			{ cham(); } }
-
-if ($rawcmd[1] == '!newnick')     {		if(function_exists('newnick'))		{ newnick(); } }
-
-if ($rawcmd[1] == '!commands')    {		if(function_exists('commands'))		{ commands(); } }
-
-if ($rawcmd[1] == '!showconfig')  {		if(function_exists('showconfig'))	{ showconfig(); } }
-
-if ($rawcmd[1] == '!savenick')	  {		if(function_exists('savenick'))		{ savenick(); } }
-if ($rawcmd[1] == '!savealtnick') {		if(function_exists('savealtnick'))	{ savealtnick(); } }
-if ($rawcmd[1] == '!saveident')   {		if(function_exists('saveident'))	{ saveident(); } }
-if ($rawcmd[1] == '!savename')    {		if(function_exists('savename'))		{ savename(); } }
-if ($rawcmd[1] == '!saveport')    {		if(function_exists('saveport'))		{ saveport(); } }
-if ($rawcmd[1] == '!saveserver')  {		if(function_exists('saveserver'))	{ saveserver(); } }
-if ($rawcmd[1] == '!savechannel') {		if(function_exists('savechannel'))	{ savechannel(); } }
-
-if ($rawcmd[1] == '!reconnect')	  {		if(function_exists('reconnect'))	{ reconnect(); } }
-
-if ($rawcmd[1] == '!listadmins')  {		if(function_exists('listadmins'))	{ listadmins(); } }
-  }
+		if (HasOwner ($mask)) 
+		{
+		if ($rawcmd[1] == '!uptime')      {		if(function_exists('uptime'))		{ uptime(); } }
+		if ($rawcmd[1] == '!md5')	      {		if(function_exists('emd5'))			{ emd5(); } }
+		if ($rawcmd[1] == '!info')	      {		if(function_exists('info'))			{ info(); } }
+		if ($rawcmd[1] == '!op')	      {		if(function_exists('op'))			{ op(); } }
+		if ($rawcmd[1] == '!deop')	      {		if(function_exists('deop'))			{ deop(); } }
+		if ($rawcmd[1] == '!join')	      {		if(function_exists('joinc'))		{ joinc(); } }
+		if ($rawcmd[1] == '!j')		      {		if(function_exists('joinc'))		{ joinc(); } }
+		if ($rawcmd[1] == '!leave')	      {		if(function_exists('leave'))		{ leave(); } }
+		if ($rawcmd[1] == '!part')        {		if(function_exists('leave'))		{ leave(); } }
+		if ($rawcmd[1] == '!quit')	      {		if(function_exists('quit'))			{ quit(); } }
+		if ($rawcmd[1] == '!die')	      {		if(function_exists('quit'))			{ quit(); } }
+		if ($rawcmd[1] == '!topic')	      {		if(function_exists('topic'))		{ topic(); } }
+		if ($rawcmd[1] == '!cham')	      {		if(function_exists('cham'))			{ cham(); } }
+		if ($rawcmd[1] == '!newnick')     {		if(function_exists('newnick'))		{ newnick(); } }
+		if ($rawcmd[1] == '!commands')    {		if(function_exists('commands'))		{ commands(); } }
+		if ($rawcmd[1] == '!showconfig')  {		if(function_exists('showconfig'))	{ showconfig(); } }
+		if ($rawcmd[1] == '!savenick')	  {		if(function_exists('savenick'))		{ savenick(); } }
+		if ($rawcmd[1] == '!savealtnick') {		if(function_exists('savealtnick'))	{ savealtnick(); } }
+		if ($rawcmd[1] == '!saveident')   {		if(function_exists('saveident'))	{ saveident(); } }
+		if ($rawcmd[1] == '!savename')    {		if(function_exists('savename'))		{ savename(); } }
+		if ($rawcmd[1] == '!saveport')    {		if(function_exists('saveport'))		{ saveport(); } }
+		if ($rawcmd[1] == '!saveserver')  {		if(function_exists('saveserver'))	{ saveserver(); } }
+		if ($rawcmd[1] == '!savechannel') {		if(function_exists('savechannel'))	{ savechannel(); } }
+		if ($rawcmd[1] == '!reconnect')	  {		if(function_exists('reconnect'))	{ reconnect(); } }
+		if ($rawcmd[1] == '!listadmins')  {		if(function_exists('listadmins'))	{ listadmins(); } }
+		}
+       }
+   exit;
  }
+}
+//------------------------------------------------------------------------------------------------
+function HasAccess ($mask) {
+        global $admins;
+        if ($mask == NULL)
+        if ($mask == NULL)
+                return FALSE;
+        foreach ($admins as $admin)
+                if (fnmatch($admin, $mask, 16))
+                        return TRUE;
+        return FALSE;
+}
+//------------------------------------------------------------------------------------------------
+function HasOwner ($mask) {
+        global $owners;
+        if ($mask == NULL)
+        if ($mask == NULL)
+                return FALSE;
+        foreach ($owners as $owner)
+                if (fnmatch($owner, $mask, 16))
+                        return TRUE;
+        return FALSE;
 }
 //------------------------------------------------------------------------------------------------
 function MSG($msg)
@@ -183,6 +233,7 @@ function MSG($msg)
  echo $line;
 }
 //------------------------------------------------------------------------------------------------
+// Configuration File Parser
 class iniParser {
 	
 	var $_iniFilename = '';

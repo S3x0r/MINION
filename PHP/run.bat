@@ -1,3 +1,3 @@
 cd..
 cls
-run
+START_BOT.BAT
