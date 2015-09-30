@@ -1,0 +1,36 @@
+
+
+   v0.0.8 changes:
+   - directories structure changed
+   - added 'DOCS' dir for documentation
+   - added 'changelog.txt' file to docs
+   - php interpreter now packed with upx
+
+
+   v0.0.7 changes:
+   - completly engine rewrited
+   - added ctcp reply
+   - moved admins to bot file
+   - FIXED commands input by user, works now
+   
+
+   v0.0.5 changes:
+   - moved source to GitHub
+   - more in English
+   - changed config system to ini file style
+   - moved admin hosts to config file
+   - moved show_raw to config file
+   - added changing nick when reserved by server
+   - added readme.txt file
+   - some cosmetic changes
+   - fixed uptime plugin and other changes in plugins
+
+
+   v0.0.4 changes:
+   - php interpreter have now less MB
+   - comments looks more natural
+   - mail added in info
+   - more functions/var are now in English
+   - addded time in messages
+   - cleaned some code: globals, etc.
+   - !listadmins /New command added

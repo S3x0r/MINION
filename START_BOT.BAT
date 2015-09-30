@@ -1,3 +1,3 @@
+cd SRC/PHP
 cls
-cd php
-php ../bot.php
+php ../BOT.php

@@ -1,13 +1,13 @@
     __                      __           __   
 .--|  |.---.-.--.--.--.--. |  |--.-----.|  |_ 
 |  _  ||  _  |  |  |  |  | |  _  |  _  ||   _|
-|_____||___._|\___/|___  | |_____|_____||____| VERSION 0.0.7
+|_____||___._|\___/|___  | |_____|_____||____|
                    |_____|                    
 				   (olisek@gmail.com)
 
 
-Before running BOT you should config configuration file (CONFIG/CONFIG.INI)
-and add Owner host in BOT.PHP file
+Before running BOT you should config configuration file (CONFIG.INI)
+and add Owner host in SRC/BOT.PHP file
 
 You can write commands to BOT on channel or in private message.
 Prefix: !
