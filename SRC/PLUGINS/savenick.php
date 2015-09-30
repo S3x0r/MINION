@@ -4,11 +4,12 @@
 
 function savenick()
 {
-$new = trim($GLOBALS['args']);
+ global $cfg;
+ $new = trim($GLOBALS['args']);
 
- $GLOBALS['cfg'] = new iniParser("../../CONFIG.INI");
- $GLOBALS['cfg']->setValue("Configuration","nickname", "$new");
- $GLOBALS['cfg']->save();
+ $cfg = new iniParser("../../CONFIG.INI");
+ $cfg->setValue("Configuration","nickname", "$new");
+ $cfg->save();
 
  fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :New Nick Saved.\n");
 

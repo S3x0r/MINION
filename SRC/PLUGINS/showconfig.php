@@ -4,11 +4,13 @@
 
 function showconfig()
 {
-  fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :My Config\n");
-  fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel'].' :Nick: '.$GLOBALS['nickname'].', Alternative: '.$GLOBALS['alternative_nick']."\n");
-  fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel'].' :Name: '.$GLOBALS['name'].', Ident: '.$GLOBALS['ident']."\n");
-  fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel'].' :Server: '.$GLOBALS['server'].':'.$GLOBALS['port']."\n");
-  fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel'].' :Channel(s): '.$GLOBALS['channel']."\n");
+  global $socket;
+  global $channel;
+  fputs($socket, 'PRIVMSG '.$channel." :My Config\n");
+  fputs($socket, 'PRIVMSG '.$channel.' :Nick: '.$GLOBALS['nickname'].', Alternative: '.$GLOBALS['alternative_nick']."\n");
+  fputs($socket, 'PRIVMSG '.$channel.' :Name: '.$GLOBALS['name'].', Ident: '.$GLOBALS['ident']."\n");
+  fputs($socket, 'PRIVMSG '.$channel.' :Server: '.$GLOBALS['server'].':'.$GLOBALS['port']."\n");
+  fputs($socket, 'PRIVMSG '.$channel.' :Channel(s): '.$channel."\n");
 }
 
 ?>

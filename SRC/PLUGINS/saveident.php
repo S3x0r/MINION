@@ -4,11 +4,12 @@
 
 function saveident()
 {
-$new = trim($GLOBALS['args']);
+ global $cfg;
+ $new = trim($GLOBALS['args']);
 
- $GLOBALS['cfg'] = new iniParser("../../CONFIG.INI");
- $GLOBALS['cfg']->setValue("Configuration","ident", "$new");
- $GLOBALS['cfg']->save();
+ $cfg = new iniParser("../../CONFIG.INI");
+ $cfg->setValue("Configuration","ident", "$new");
+ $cfg->save();
 
  fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :New Ident Saved.\n");
 

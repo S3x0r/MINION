@@ -4,11 +4,12 @@
 
 function savename()
 {
-$new = trim($GLOBALS['args']);
+ global $cfg;
+ $new = trim($GLOBALS['args']);
 
- $GLOBALS['cfg'] = new iniParser("../../CONFIG.INI");
- $GLOBALS['cfg']->setValue("Configuration","name", "$new");
- $GLOBALS['cfg']->save();
+ $cfg = new iniParser("../../CONFIG.INI");
+ $cfg->setValue("Configuration","name", "$new");
+ $cfg->save();
 
  fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :New Name Saved.\n");
 

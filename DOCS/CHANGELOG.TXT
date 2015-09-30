@@ -1,5 +1,13 @@
 
 
+   v0.0.9 changes:
+   - !reconnect is now !restart
+   - some code cleanup/changes
+   - now we are checking if there is config file
+   - checks if wrong address/no connection 
+     and exits with message.
+
+
    v0.0.8 changes:
    - directories structure changed
    - added 'DOCS' dir for documentation
@@ -12,7 +20,7 @@
    - added ctcp reply
    - moved admins to bot file
    - FIXED commands input by user, works now
-   
+
 
    v0.0.5 changes:
    - moved source to GitHub

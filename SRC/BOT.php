@@ -11,8 +11,8 @@ $GLOBALS['owners'] = Array ('S3x0r!~S3x0r@85-220-98-249.dsl.dynamic.simnet.is','
 $GLOBALS['admins'] = Array ('' , ''); 
 //------------------------------------------------------------------------------------------------
 set_time_limit(0);
-error_reporting(E_ALL ^ E_NOTICE);
-define('VER', 'v0.0.8');
+//error_reporting(E_ALL ^ E_NOTICE);
+define('VER', 'v0.0.9');
 
 Start();
 LoadConfig();
@@ -34,18 +34,28 @@ echo "
 //------------------------------------------------------------------------------------------------
 function LoadConfig()
 {
-$GLOBALS['cfg'] = new iniParser("../../CONFIG.INI");
+global $cfg; 
+  
+  if(file_exists('../../CONFIG.INI')) {
+   
+   $cfg = new iniParser("../../CONFIG.INI");
+ 
+   $GLOBALS['nickname']			= $cfg->get("Configuration","nickname");
+   $GLOBALS['alternative_nick']	= $cfg->get("Configuration","alternative_nick");
+   $GLOBALS['name']				= $cfg->get("Configuration","name");	
+   $GLOBALS['ident']			= $cfg->get("Configuration","ident");			
+   $GLOBALS['server']			= $cfg->get("Configuration","server");			
+   $GLOBALS['port']				= $cfg->get("Configuration","port");			
+   $GLOBALS['channel']			= $cfg->get("Configuration","channel");	
+   $GLOBALS['show_raw']			= $cfg->get("Debug","show_raw");
 
-$GLOBALS['nickname']			= $GLOBALS['cfg']->get("Configuration","nickname");
-$GLOBALS['alternative_nick']	= $GLOBALS['cfg']->get("Configuration","alternative_nick");
-$GLOBALS['name']				= $GLOBALS['cfg']->get("Configuration","name");	
-$GLOBALS['ident']				= $GLOBALS['cfg']->get("Configuration","ident");			
-$GLOBALS['server']				= $GLOBALS['cfg']->get("Configuration","server");			
-$GLOBALS['port']				= $GLOBALS['cfg']->get("Configuration","port");			
-$GLOBALS['channel']				= $GLOBALS['cfg']->get("Configuration","channel");	
-$GLOBALS['show_raw']			= $GLOBALS['cfg']->get("Debug","show_raw");
-
-MSG("1. Configuration Loaded from: CONFIG.INI\n");
+   MSG("1. Configuration Loaded from: CONFIG.INI\n");
+  }
+  else {
+	  MSG("ERROR: You need configuration file (CONFIG.INI)");
+	  sleep(6);
+	  die();
+  }
 }
 //------------------------------------------------------------------------------------------------
 function LoadPlugins()
@@ -61,31 +71,42 @@ echo "--------------------------------------------------------\n";
 }
 //------------------------------------------------------------------------------------------------
 function Connect()
-{      
-$GLOBALS['socket'] = fsockopen($GLOBALS['server'], $GLOBALS['port']);
+{
+global $socket;
+global $nickname;
+
+$socket = fsockopen($GLOBALS['server'], $GLOBALS['port']);
+
+if ($socket===false) {
+    echo "Cannot connect to server, probably wrong address or no internet connection.\n";
+    die();
+}
 
 MSG('3. Connecting to: '.$GLOBALS['server'].', port: '.$GLOBALS['port']);
 
-fputs($GLOBALS['socket'], 'USER '.$GLOBALS['nickname'].' FORCE '.$GLOBALS['ident'].' :'.$GLOBALS['name']."\n");
-fputs($GLOBALS['socket'], 'NICK ' . $GLOBALS['nickname'] . "\n");
+fputs($socket, 'USER '.$nickname.' FORCE '.$GLOBALS['ident'].' :'.$GLOBALS['name']."\n");
+fputs($socket, 'NICK '.$nickname."\n");
 
-MSG('4. My nickname is: '.$GLOBALS['nickname']);
+MSG('4. My nickname is: '.$nickname);
 Engine();
 }
 //------------------------------------------------------------------------------------------------
 function Engine()
 {
+global $socket;
+global $alternative_nick;
+global $args;
 while(1) {
-    while(!feof($GLOBALS['socket'])) {
+    while(!feof($socket)) {
         $mask   = NULL;
-        $data = fgets ($GLOBALS['socket'], 512);
+        $data = fgets ($socket, 512);
         if($GLOBALS['show_raw'] == 'yes') { echo $data; }
 
         flush();
         $ex = explode(' ', trim($data));
       
 		if($ex[0] == "PING") {
-            fputs($GLOBALS['socket'], "PONG ".$ex[1]."\n");
+            fputs($socket, "PONG ".$ex[1]."\n");
             continue; 
         }
         
@@ -99,71 +120,72 @@ while(1) {
         if (count ($ex) < 4)
                 continue;
         $rawcmd = explode (':', $ex[3]);
-        $GLOBALS['args'] = NULL; for ($i = 4; $i < count($ex); $i++) { $GLOBALS['args'] .= $ex[$i] . ' '; }
-        $wordlist = explode(' ', $GLOBALS['args']);
+        $args = NULL; for ($i = 4; $i < count($ex); $i++) { $args .= $ex[$i] . ' '; }
+        $wordlist = explode(' ', $args);
         if (isset($nick))
                 $mask = $nick . "!" . $ident . "@" . $host;
 		
-		/* Server Actions */
+ /* Server Actions */
 		if($ex[1] == '432') { 
-		MSG('   ` Nickname reserved, changing to alternative nick: '.$GLOBALS['alternative_nick']);
-		fputs($GLOBALS['socket'],'NICK '.$GLOBALS['alternative_nick']."\n");
+		MSG('   ` Nickname reserved, changing to alternative nick: '.$alternative_nick);
+		fputs($socket,'NICK '.$alternative_nick."\n");
 		}
 
 		if($ex[1] == '433') { 
-		MSG('   ` Nickname already used, changing to alternative nick: '.$GLOBALS['alternative_nick']);
-		fputs($GLOBALS['socket'],'NICK '.$GLOBALS['alternative_nick']."\n");
+		MSG('   ` Nickname already used, changing to alternative nick: '.$alternative_nick);
+		fputs($socket,'NICK '.$alternative_nick."\n");
 		}
 
 		if($ex[1] == '376') { 
 		MSG('5. OK im connected! ]:)');
 		MSG('6. Joining channel: '.$GLOBALS['channel']);
-		fputs($GLOBALS['socket'],'JOIN '.$GLOBALS['channel']."\n");
+		fputs($socket,'JOIN '.$GLOBALS['channel']."\n");
 		}
-            /* CTCP */
+
+ /* CTCP */
              if ($rawcmd[1] == "VERSION") {
-                    fputs($GLOBALS['socket'], "NOTICE $nick :VERSION http://github.com/S3x0r/davybot\n");
+                    fputs($socket, "NOTICE $nick :VERSION http://github.com/S3x0r/davybot\n");
              }
              elseif ($rawcmd[1] == "FINGER") {
-                    fputs($GLOBALS['socket'], "NOTICE $nick :FINGER http://github.com/S3x0r/davybot\n");
+                    fputs($socket, "NOTICE $nick :FINGER http://github.com/S3x0r/davybot\n");
              }
              elseif ($rawcmd[1] == "PING") {
-                    $a = str_replace(" ","",$GLOBALS['args']);
-                    fputs($GLOBALS['socket'], "NOTICE $nick :PING ".$a."\n");
+                    $a = str_replace(" ","",$args);
+                    fputs($socket, "NOTICE $nick :PING ".$a."\n");
              }
              elseif ($rawcmd[1] == "TIME") {
                     $a = date("F j, Y, g:i a");
-                    fputs($GLOBALS['socket'], "NOTICE $nick :TIME ".$a."\n");
+                    fputs($socket, "NOTICE $nick :TIME ".$a."\n");
              }
 
+ /* Commands */
 		if (HasOwner ($mask)) 
 		{
-		if ($rawcmd[1] == '!restart')     {		if(function_exists('restart'))		{ restart(); } }
-		if ($rawcmd[1] == '!uptime')      {		if(function_exists('uptime'))		{ uptime(); } }
-		if ($rawcmd[1] == '!md5')	      {		if(function_exists('emd5'))			{ emd5(); } }
-		if ($rawcmd[1] == '!info')	      {		if(function_exists('info'))			{ info(); } }
-		if ($rawcmd[1] == '!op')	      {		if(function_exists('op'))			{ op(); } }
-		if ($rawcmd[1] == '!deop')	      {		if(function_exists('deop'))			{ deop(); } }
-		if ($rawcmd[1] == '!join')	      {		if(function_exists('joinc'))		{ joinc(); } }
-		if ($rawcmd[1] == '!j')		      {		if(function_exists('joinc'))		{ joinc(); } }
-		if ($rawcmd[1] == '!leave')	      {		if(function_exists('leave'))		{ leave(); } }
-		if ($rawcmd[1] == '!part')        {		if(function_exists('leave'))		{ leave(); } }
-		if ($rawcmd[1] == '!quit')	      {		if(function_exists('quit'))			{ quit(); } }
-		if ($rawcmd[1] == '!die')	      {		if(function_exists('quit'))			{ quit(); } }
-		if ($rawcmd[1] == '!topic')	      {		if(function_exists('topic'))		{ topic(); } }
-		if ($rawcmd[1] == '!cham')	      {		if(function_exists('cham'))			{ cham(); } }
-		if ($rawcmd[1] == '!newnick')     {		if(function_exists('newnick'))		{ newnick(); } }
-		if ($rawcmd[1] == '!commands')    {		if(function_exists('commands'))		{ commands(); } }
-		if ($rawcmd[1] == '!showconfig')  {		if(function_exists('showconfig'))	{ showconfig(); } }
-		if ($rawcmd[1] == '!savenick')	  {		if(function_exists('savenick'))		{ savenick(); } }
-		if ($rawcmd[1] == '!savealtnick') {		if(function_exists('savealtnick'))	{ savealtnick(); } }
-		if ($rawcmd[1] == '!saveident')   {		if(function_exists('saveident'))	{ saveident(); } }
-		if ($rawcmd[1] == '!savename')    {		if(function_exists('savename'))		{ savename(); } }
-		if ($rawcmd[1] == '!saveport')    {		if(function_exists('saveport'))		{ saveport(); } }
-		if ($rawcmd[1] == '!saveserver')  {		if(function_exists('saveserver'))	{ saveserver(); } }
-		if ($rawcmd[1] == '!savechannel') {		if(function_exists('savechannel'))	{ savechannel(); } }
-		if ($rawcmd[1] == '!reconnect')	  {		if(function_exists('reconnect'))	{ reconnect(); } }
-		if ($rawcmd[1] == '!listadmins')  {		if(function_exists('listadmins'))	{ listadmins(); } }
+		if ($rawcmd[1] == '!restart')      {	restart();			}
+		if ($rawcmd[1] == '!uptime')       {	uptime();			}
+		if ($rawcmd[1] == '!md5')	       {	emd5();				}
+		if ($rawcmd[1] == '!info')	       {	info();				}
+		if ($rawcmd[1] == '!op')	       {	op();				}
+		if ($rawcmd[1] == '!deop')	       {	deop();				}
+		if ($rawcmd[1] == '!join')	       {	joinc();			}
+		if ($rawcmd[1] == '!j')		       {	joinc();			}
+		if ($rawcmd[1] == '!leave')	       {	leave();			}
+		if ($rawcmd[1] == '!part')         {	leave();			}
+		if ($rawcmd[1] == '!quit')	       {	quit();				}
+		if ($rawcmd[1] == '!die')	       {	quit();				}
+		if ($rawcmd[1] == '!topic')	       {	topic();			}
+		if ($rawcmd[1] == '!cham')	       {	cham();				}
+		if ($rawcmd[1] == '!newnick')      {	newnick();			}
+		if ($rawcmd[1] == '!commands')     {	commands();			}
+		if ($rawcmd[1] == '!showconfig')   {	showconfig();		}
+		if ($rawcmd[1] == '!savenick')	   {	savenick();			}
+		if ($rawcmd[1] == '!savealtnick')  {	savealtnick();		}
+		if ($rawcmd[1] == '!saveident')    {	saveident();		}
+		if ($rawcmd[1] == '!savename')     {	savename();			}
+		if ($rawcmd[1] == '!saveport')     {	saveport();			}
+		if ($rawcmd[1] == '!saveserver')   {	saveserver();		}
+		if ($rawcmd[1] == '!savechannel')  {	savechannel();		}
+		if ($rawcmd[1] == '!listadmins')   {	listadmins();		}
 		}
        }
    exit;
@@ -204,10 +226,10 @@ class iniParser {
 	var $_iniFilename = '';
 	var $_iniParsedArray = array();
 	
-	function iniParser($filename)
+	function iniParser($file)
 	{
-		$this->_iniFilename = $filename;
-		if($this->_iniParsedArray = parse_ini_file($filename, true) ) {
+		$this->_iniFilename = $file;
+		if($this->_iniParsedArray = parse_ini_file($file, true) ) {
 			return true;
 		} else {
 			return false;
@@ -217,43 +239,43 @@ class iniParser {
 	{
 		return $this->_iniParsedArray[$key];
 	}
-	function getValue($section, $key)
+	function getValue($sec, $key)
 	{
-		if(!isset($this->_iniParsedArray[$section])) return false;
-		return $this->_iniParsedArray[$section][$key];
+		if(!isset($this->_iniParsedArray[$sec])) return false;
+		return $this->_iniParsedArray[$sec][$key];
 	}
-	function get($section, $key=NULL)
+	function get($sec, $key=NULL)
 	{
-		if(is_null($key)) return $this->getSection($section);
-		return $this->getValue($section, $key);
+		if(is_null($key)) return $this->getSection($sec);
+		return $this->getValue($sec, $key);
 	}
-	function setSection($section, $array)
+	function setSection($sec, $array)
 	{
 		if(!is_array($array)) return false;
-		return $this->_iniParsedArray[$section] = $array;
+		return $this->_iniParsedArray[$sec] = $array;
 	}
-	function setValue($section, $key, $value)
+	function setValue($sec, $key, $value)
 	{
-		if($this->_iniParsedArray[$section][$key] = $value) return true;
+		if($this->_iniParsedArray[$sec][$key] = $value) return true;
 	}
-	function set($section, $key, $value=NULL)
+	function set($sec, $key, $value=NULL)
 	{
-		if(is_array($key) && is_null($value)) return $this->setSection($section, $key);
-		return $this->setValue($section, $key, $value);
+		if(is_array($key) && is_null($value)) return $this->setSection($sec, $key);
+		return $this->setValue($sec, $key, $value);
 	}
-	function save( $filename = null )
+	function save( $file = null )
 	{
-		if($filename == null) $filename = $this->_iniFilename;
-		if(is_writeable($filename) ) {
-			$SFfdescriptor = fopen($filename, "w");
-			foreach($this->_iniParsedArray as $section => $array){
-				fwrite($SFfdescriptor, "[" . $section . "]\n" );
+		if($file == null) $file = $this->_iniFilename;
+		if(is_writeable($file) ) {
+			$desc = fopen($file, "w");
+			foreach($this->_iniParsedArray as $sec => $array){
+				fwrite($desc, "[" . $sec . "]\n" );
 				foreach($array as $key => $value) {
-					fwrite( $SFfdescriptor, "$key = '$value'\n" );
+					fwrite( $desc, "$key = '$value'\n" );
 				}
-				fwrite($SFfdescriptor, "\n");
+				fwrite($desc, "\n");
 			}
-			fclose($SFfdescriptor);
+			fclose($desc);
 			return true;
 		} else {
 			return false;
