@@ -127,8 +127,9 @@ xcopy /E DOCS "../DOCS"
 xcopy /E PLUGINS "../PLUGINS"
 cd ..
 rmdir /S /Q davybot-master
-del INSTALL.BAT
-START_BOT.BAT';
+del update.zip
+START_BOT.BAT
+del INSTALL.BAT';
 
 	$f=fopen($GLOBALS['dir'].'INSTALL.BAT', 'w');
 	flock($f, 2);
