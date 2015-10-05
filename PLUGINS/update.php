@@ -139,6 +139,7 @@ del INSTALL.BAT';
 
   fputs($socket, 'PRIVMSG '.$channel." :Installing...\n");
   sleep(2);
+  fputs($GLOBALS['socket'],"QUIT :Installing, reconnecting\n");
   system('cd .. & INSTALL.BAT');
   die();
 
