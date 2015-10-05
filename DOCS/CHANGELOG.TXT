@@ -1,3 +1,9 @@
+ 
+   
+   v0.1.1 changes:
+   - new command: !voice (+v <nick)
+   - new command: !devoice (-v <nick>)
+
 
    v0.1.0 changes:
    - fixed join when no motd

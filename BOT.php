@@ -1,6 +1,6 @@
 <?php
 
-/* ADMINS/OWNERS EDIT IT!
+/* OWNERS HOSTS - EDIT IT FOR USING BOT COMMANDS!
 
             nick ! ident@   host
               |      |       |
@@ -12,7 +12,7 @@ $GLOBALS['admins'] = Array ('' , '');
 //------------------------------------------------------------------------------------------------
 set_time_limit(0);
 error_reporting(E_ALL ^ E_NOTICE);
-define('VER', '0.1.0');
+define('VER', '0.1.1');
 
 Start();
 LoadConfig();
@@ -168,6 +168,8 @@ while(1) {
  /* Commands */
 		if (HasOwner ($mask)) 
 		{
+		if ($rawcmd[1] == '!voice')        {	voice();			}
+		if ($rawcmd[1] == '!devoice')      {	devoice();			}
 		if ($rawcmd[1] == '!update')       {	update();			}
 		if ($rawcmd[1] == '!restart')      {	restart();			}
 		if ($rawcmd[1] == '!uptime')       {	uptime();			}
