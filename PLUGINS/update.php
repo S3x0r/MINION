@@ -102,7 +102,7 @@ function v_extract()
       }
 	 }
 	 fputs($socket, 'PRIVMSG '.$channel." :Extracted.\n");
-	 zip_close($GLOBALS['dir'].'update.zip');
+	 zip_close($zipHandle);
 	 v_createBat();
 }
 //------------------------------------------------------------------------------------------------
