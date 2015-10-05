@@ -7,12 +7,12 @@
    example: S3x0r!~S3x0r@85-220-98-249.dsl.dynamic.simnet.is
 */
 
-$GLOBALS['owners'] = Array ('S3x0r!~S3x0r@85-220-98-249.dsl.dynamic.simnet.is','');
+$GLOBALS['owners'] = Array ('S3x0r!S3x0r@validation.sls.microsoft.com','');
 $GLOBALS['admins'] = Array ('' , ''); 
 //------------------------------------------------------------------------------------------------
 set_time_limit(0);
-//error_reporting(E_ALL ^ E_NOTICE);
-define('VER', 'v0.0.9');
+error_reporting(E_ALL ^ E_NOTICE);
+define('VER', '0.1.0');
 
 Start();
 LoadConfig();
@@ -26,7 +26,7 @@ echo "
     __                      __           __   
 .--|  |.---.-.--.--.--.--. |  |--.-----.|  |_ 
 |  _  ||  _  |  |  |  |  | |  _  |  _  ||   _|
-|_____||___._|\___/|___  | |_____|_____||____| ".VER."
+|_____||___._|\___/|___  | |_____|_____||____| v".VER."
                    |_____|                    
 				   (olisek@gmail.com)
 \n\n";
@@ -36,9 +36,9 @@ function LoadConfig()
 {
 global $cfg; 
   
-  if(file_exists('../../CONFIG.INI')) {
+  if(file_exists('../CONFIG.INI')) {
    
-   $cfg = new iniParser("../../CONFIG.INI");
+   $cfg = new iniParser("../CONFIG.INI");
  
    $GLOBALS['nickname']			= $cfg->get("Configuration","nickname");
    $GLOBALS['alternative_nick']	= $cfg->get("Configuration","alternative_nick");
@@ -61,7 +61,7 @@ global $cfg;
 function LoadPlugins()
 {
 MSG("2. My Plugins:\n");
- foreach ( glob( '../PLUGINS/*.php' ) as $plugin_name )
+ foreach(glob('../PLUGINS/*.php') as $plugin_name)
  {
   include_once($plugin_name);
   $plugin_name = basename($plugin_name, '.php');
@@ -141,6 +141,13 @@ while(1) {
 		MSG('6. Joining channel: '.$GLOBALS['channel']);
 		fputs($socket,'JOIN '.$GLOBALS['channel']."\n");
 		}
+// join if no motd
+		if($ex[1] == '422') { 
+		MSG('5. OK im connected! ]:)');
+		MSG('6. Joining channel: '.$GLOBALS['channel']);
+		fputs($socket,'JOIN '.$GLOBALS['channel']."\n");
+		}
+
 
  /* CTCP */
              if ($rawcmd[1] == "VERSION") {
@@ -161,6 +168,7 @@ while(1) {
  /* Commands */
 		if (HasOwner ($mask)) 
 		{
+		if ($rawcmd[1] == '!update')       {	update();			}
 		if ($rawcmd[1] == '!restart')      {	restart();			}
 		if ($rawcmd[1] == '!uptime')       {	uptime();			}
 		if ($rawcmd[1] == '!md5')	       {	emd5();				}

@@ -7,7 +7,7 @@ function saveident()
  global $cfg;
  $new = trim($GLOBALS['args']);
 
- $cfg = new iniParser("../../CONFIG.INI");
+ $cfg = new iniParser("../CONFIG.INI");
  $cfg->setValue("Configuration","ident", "$new");
  $cfg->save();
 

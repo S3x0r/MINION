@@ -1,4 +1,13 @@
 
+   v0.1.0 changes:
+   - fixed join when no motd
+   - added ssl support to php
+   - moved folders 'PHP', 'PLUGINS' to main folder
+   - moved file 'BOT.php to main folder
+   - you can now check for bot update and if its
+     available download it and install
+     command: !update
+
 
    v0.0.9 changes:
    - !reconnect is now !restart

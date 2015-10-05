@@ -7,7 +7,7 @@ function savechannel()
  global $cfg;
  $new = trim($GLOBALS['args']);
 
- $cfg = new iniParser("../../CONFIG.INI");
+ $cfg = new iniParser("../CONFIG.INI");
  $cfg->setValue("Configuration","channel", "$new");
  $cfg->save();
 

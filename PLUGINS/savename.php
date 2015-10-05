@@ -7,7 +7,7 @@ function savename()
  global $cfg;
  $new = trim($GLOBALS['args']);
 
- $cfg = new iniParser("../../CONFIG.INI");
+ $cfg = new iniParser("../CONFIG.INI");
  $cfg->setValue("Configuration","name", "$new");
  $cfg->save();
 

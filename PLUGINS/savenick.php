@@ -7,7 +7,7 @@ function savenick()
  global $cfg;
  $new = trim($GLOBALS['args']);
 
- $cfg = new iniParser("../../CONFIG.INI");
+ $cfg = new iniParser("../CONFIG.INI");
  $cfg->setValue("Configuration","nickname", "$new");
  $cfg->save();
 

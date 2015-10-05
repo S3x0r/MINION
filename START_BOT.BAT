@@ -1,3 +1,3 @@
-cd SRC/PHP
+cd PHP
 cls
-php ../BOT.php
+php -c "php.ini" -f "../BOT.php"

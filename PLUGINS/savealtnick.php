@@ -7,7 +7,7 @@ function savealtnick()
  global $cfg;
  $new = trim($GLOBALS['args']);
 
- $cfg = new iniParser("../../CONFIG.INI");
+ $cfg = new iniParser("../CONFIG.INI");
  $cfg->setValue("Configuration","alternative_nick", "$new");
  $cfg->save();
 

@@ -7,7 +7,7 @@ function saveserver()
  global $cfg;
  $new = trim($GLOBALS['args']);
 
- $cfg = new iniParser("../../CONFIG.INI");
+ $cfg = new iniParser("../CONFIG.INI");
  $cfg->setValue("Configuration","server", "$new");
  $cfg->save();
 

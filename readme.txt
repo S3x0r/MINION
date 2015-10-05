@@ -7,7 +7,12 @@
 
 
 Before running BOT you should config configuration file (CONFIG.INI)
-and add Owner host in SRC/BOT.PHP file
+and add Owner host in BOT.PHP
+
+Bot was writted for Windows systems, tested on Windows 7
+
+You can now check for bot update and if its available download it and install
+command: !update
 
 You can write commands to BOT on channel or in private message.
 Prefix: !
@@ -34,4 +39,5 @@ BOT Commands:
 !saveserver - Saving new server to config: !saveserver <new_server>
 !showconfig - Shows BOT configuration: !showconfig
 !topic - Changing Topic in channel: !topic <topic>
+!update - Checks for update: !update
 !uptime - Shows BOT uptime: !uptime

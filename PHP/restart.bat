@@ -1,3 +1,2 @@
-cd../..
-cls
+cd ..
 START_BOT.BAT
