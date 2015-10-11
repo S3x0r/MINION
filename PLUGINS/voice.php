@@ -2,6 +2,7 @@
 
  $plugin_description  = 'Gives voice: !voice <nick>';
 
+
 function voice()
 {
 

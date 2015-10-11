@@ -1,3 +1,5 @@
+@echo off
+TITLE davybot
 del INSTALL.BAT
 cd PHP
 cls

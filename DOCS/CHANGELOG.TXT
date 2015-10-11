@@ -1,5 +1,16 @@
  
-   
+   v0.1.2 changes:
+   - little change in 'START_BOT.BAT'
+   - now checking is bot runned in CLI
+   - updated 'readme.txt'
+   - added to !showconfig more info
+   - added auto_join option to config
+     now you can just connect bot without
+     joining any channel
+   - you can change now command prefix from '!'
+     to anything else. Option in config.ini
+
+
    v0.1.1 changes:
    - new command: !voice (+v <nick)
    - new command: !devoice (-v <nick>)
@@ -9,7 +20,7 @@
    - fixed join when no motd
    - added ssl support to php
    - moved folders 'PHP', 'PLUGINS' to main folder
-   - moved file 'BOT.php to main folder
+   - moved file 'BOT.php' to main folder
    - you can now check for bot update and if its
      available download it and install
      command: !update

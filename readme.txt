@@ -9,7 +9,8 @@
 Before running BOT you should config configuration file (CONFIG.INI)
 and add Owner host in BOT.PHP
 
-Bot was writted for Windows systems, tested on Windows 7
+Bot was writted to run from Windows systems, tested on Windows 7
+You dont need to download PHP, just run bot from START_BOT.BAT file
 
 You can now check for bot update and if its available download it and install
 command: !update
