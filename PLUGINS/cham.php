@@ -1,6 +1,6 @@
 <?php
 
- $plugin_description = 'Shows random text from file: !cham';
+ $plugin_description = 'Shows random text from file: !cham <nick>';
 
 function cham()
 {
@@ -14,7 +14,7 @@ function cham()
  shuffle($texts);
  $text  =  $texts[$count++];
 
- fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :$text\n");
+ fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel'].' :'.$GLOBALS['args'].": $text\n");
 
 }
 //add text file

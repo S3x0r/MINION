@@ -12,7 +12,7 @@ $GLOBALS['admins'] = Array ('' , '');
 //------------------------------------------------------------------------------------------------
 error_reporting(E_ALL ^ E_NOTICE);
 //------------------------------------------------------------------------------------------------
-define('VER', '0.1.2');
+define('VER', '0.1.3');
 //------------------------------------------------------------------------------------------------
 Start();
 LoadConfig();
@@ -46,6 +46,7 @@ function LoadConfig()
    
    $cfg = new iniParser($conf_file);
  
+  /* CONFIGURATION */
    $GLOBALS['nickname']			= $cfg->get("Configuration","nickname");
    $GLOBALS['alternative_nick']	= $cfg->get("Configuration","alternative_nick");
    $GLOBALS['name']				= $cfg->get("Configuration","name");	
@@ -55,16 +56,46 @@ function LoadConfig()
    $GLOBALS['channel']			= $cfg->get("Configuration","channel");
    $GLOBALS['auto_join']		= $cfg->get("Configuration","auto_join");
    $GLOBALS['command_prefix']	= $cfg->get("Configuration","command_prefix");
-   
+  /* CTCP */
+   $GLOBALS['ctcp_response']	= $cfg->get("CTCP","ctcp_response");
+   $GLOBALS['ctcp_version']	    = $cfg->get("CTCP","ctcp_version");
+   $GLOBALS['ctcp_finger']	    = $cfg->get("CTCP","ctcp_finger");
+  /* DEBUG */
    $GLOBALS['show_raw']			= $cfg->get("Debug","show_raw");
 
    MSG("1. Configuration Loaded from: CONFIG.INI\n");
   }
   else {
 	  MSG("ERROR: You need configuration file (CONFIG.INI)");
-	  sleep(6);
-	  die();
-	  //fix it no die, create default config and restart
+	  MSG("Created default configuration, you need to change it.");
+
+ /* Creating default config */
+$default_config = '[Configuration]
+nickname         = \'davybot\'
+alternative_nick = \'davybot-\'
+name             = \'http://github.com/S3x0r/davybot\'
+ident            = \'http://github.com/S3x0r/davybot\'
+server           = \'localhost\'
+port             = \'6667\'
+channel          = \'#davybot\'
+auto_join        = \'yes\'
+command_prefix   = \'!\'
+
+[CTCP]
+ctcp_response    = \'yes\'
+ctcp_version     = \'davybot\'
+ctcp_finger      = \'davybot\'
+
+[Debug]
+show_raw         = \'no\'';
+
+	$f=fopen('../CONFIG.INI', 'w');
+	flock($f, 2);
+	fwrite($f, $default_config);
+	flock($f, 3);
+	fclose($f); 
+
+	LoadConfig();
   }
 }
 //------------------------------------------------------------------------------------------------
@@ -90,8 +121,8 @@ $socket = fsockopen($GLOBALS['server'], $GLOBALS['port']);
 
 if ($socket===false) {
     echo "Cannot connect to server, probably wrong address or no internet connection.\n";
-    die();
-	//fix it not die, reconnect or something.
+    //FIX IT: try connect some time next exit program if failed.
+	Connect();
 }
 
 MSG('3. Connecting to: '.$GLOBALS['server'].', port: '.$GLOBALS['port']);
@@ -126,6 +157,7 @@ while(1) {
         }
         
 		if (preg_match ('/^:(.*)\!(.*)\@(.*)$/', $ex[0], $source)) {
+
                 $nick   = $source[1];
                 $ident  = $source[2];
                 $host   = $source[3];
@@ -138,47 +170,64 @@ while(1) {
         $args = NULL; for ($i = 4; $i < count($ex); $i++) { $args .= $ex[$i] . ' '; }
         $wordlist = explode(' ', $args);
         if (isset($nick))
-                $mask = $nick . "!" . $ident . "@" . $host;
+          $mask = $nick . "!" . $ident . "@" . $host;
 		
- /* if nick already exists */
-		if($ex[1] == '432') { 
+//-----------
+switch ($ex[1]){
+	
+	 /* if nick already exists */
+	case "432":
 		MSG('   ` Nickname reserved, changing to alternative nick: '.$alternative_nick);
 		fputs($socket,'NICK '.$alternative_nick."\n");
-		}
-
- /* if nick already exists */
-		if($ex[1] == '433') { 
+		break;
+		 
+	/* if nick already exists */
+	case "433":
 		MSG('   ` Nickname already used, changing to alternative nick: '.$alternative_nick);
 		fputs($socket,'NICK '.$alternative_nick."\n");
-		}
+		break;
 
-/* join after motd */
-		if($ex[1] == '376') { 
+	/* join after motd */
+	case "376":
 		MSG('5. OK im connected! ]:)');
 		
 		 if($GLOBALS['auto_join'] == 'yes') { 
 		 MSG('6. Joining channel: '.$GLOBALS['channel']);
 	     fputs($socket,'JOIN '.$GLOBALS['channel']."\n");
 		 }
-		}
-
-/* join if no motd */
-		if($ex[1] == '422') { 
+		break;
+	
+	/* join if no motd */
+	case "422":
 		MSG('5. OK im connected! ]:)');
 
 		 if($GLOBALS['auto_join'] == 'yes') {
 		 MSG('6. Joining channel: '.$GLOBALS['channel']);
 		 fputs($socket,'JOIN '.$GLOBALS['channel']."\n");
 		 }
-		}
+		break;
+
+	/* Quit message */
+	case "QUIT":
+		MSG('* '.$nick.' ('.$ident.'@'.$host.') Quit');
+		break;
+
+//NAPRAWIÆ TYLKO JEDNO S£OWO POKAZUJE
+	/* Changed Topic message */
+//	case "TOPIC":
+//		MSG('* '.$nick.' changes topic to \''.$ex[3].'\'');
+//		break;
+
+	}
 
 
  /* CTCP */
+     if($GLOBALS['ctcp_response'] == 'yes') {
              if ($rawcmd[1] == "VERSION") {
-                    fputs($socket, "NOTICE $nick :VERSION http://github.com/S3x0r/davybot\n");
+                    fputs($socket, "NOTICE $nick :VERSION ".$GLOBALS['ctcp_version']."\n");
              }
              elseif ($rawcmd[1] == "FINGER") {
-                    fputs($socket, "NOTICE $nick :FINGER http://github.com/S3x0r/davybot\n");
+                    fputs($socket, "NOTICE $nick :FINGER ".$GLOBALS['ctcp_finger']."\n");
              }
              elseif ($rawcmd[1] == "PING") {
                     $a = str_replace(" ","",$args);
@@ -188,10 +237,13 @@ while(1) {
                     $a = date("F j, Y, g:i a");
                     fputs($socket, "NOTICE $nick :TIME ".$a."\n");
              }
+	       }
+
 
  /* Commands */
 		if (HasOwner ($mask)) 
 		{
+		if ($rawcmd[1] == $command_prefix.'dns')          {	dns();		    	}
 		if ($rawcmd[1] == $command_prefix.'voice')        {	voice();			}
 		if ($rawcmd[1] == $command_prefix.'devoice')      {	devoice();			}
 		if ($rawcmd[1] == $command_prefix.'update')       {	update();			}

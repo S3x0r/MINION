@@ -1,38 +1,40 @@
  
+   v0.1.3 changes:
+   - new plugin !dns <address>
+   - now if there is no CONFIG.INI default one is created.
+   - now if BOT cannot connect to server trying to connect to it again
+   - now showing if user(s) quits from server
+   - command !cham <nick> updated
+   - php compressed with upx
+   - now you can choose if you want to response to ctcp: 'ctcp_response' in config.ini
+   - you can now change ctcp version and finger responses in config.ini
+   - little change in update plugin
+
+
    v0.1.2 changes:
    - little change in 'START_BOT.BAT'
    - now checking is bot runned in CLI
    - updated 'readme.txt'
    - added to !showconfig more info
-   - added auto_join option to config
-     now you can just connect bot without
-     joining any channel
-   - you can change now command prefix from '!'
-     to anything else. Option in config.ini
-
+   - added auto_join option to config now you can just connect bot without joining any channel
+   - you can change now command prefix from '!' to anything else. Option in config.ini
 
    v0.1.1 changes:
    - new command: !voice (+v <nick)
    - new command: !devoice (-v <nick>)
-
 
    v0.1.0 changes:
    - fixed join when no motd
    - added ssl support to php
    - moved folders 'PHP', 'PLUGINS' to main folder
    - moved file 'BOT.php' to main folder
-   - you can now check for bot update and if its
-     available download it and install
-     command: !update
-
+   - you can now check for bot update and if its available download it and install, command: !update
 
    v0.0.9 changes:
    - !reconnect is now !restart
    - some code cleanup/changes
    - now we are checking if there is config file
-   - checks if wrong address/no connection 
-     and exits with message.
-
+   - checks if wrong address/no connection and exits with message.
 
    v0.0.8 changes:
    - directories structure changed
@@ -40,13 +42,11 @@
    - added 'changelog.txt' file to docs
    - php interpreter now packed with upx
 
-
    v0.0.7 changes:
    - completly engine rewrited
    - added ctcp reply
    - moved admins to bot file
    - FIXED commands input by user, works now
-
 
    v0.0.5 changes:
    - moved source to GitHub
@@ -58,7 +58,6 @@
    - added readme.txt file
    - some cosmetic changes
    - fixed uptime plugin and other changes in plugins
-
 
    v0.0.4 changes:
    - php interpreter have now less MB

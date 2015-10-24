@@ -3,7 +3,7 @@
  $plugin_description = 'Checks for update: !update';
  
  $GLOBALS['dir']      = '../';
- $GLOBALS['v_addr']   = 'http://aurorix.nazwa.pl/VERSION.TXT';
+ $GLOBALS['v_addr']   = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
  $GLOBALS['v_source'] = 'http://github.com/S3x0r/davybot/archive/master.zip';
 
 //------------------------------------------------------------------------------------------------
