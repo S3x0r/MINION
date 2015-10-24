@@ -47,21 +47,21 @@ function LoadConfig()
    $cfg = new iniParser($conf_file);
  
   /* CONFIGURATION */
-   $GLOBALS['nickname']			= $cfg->get("Configuration","nickname");
-   $GLOBALS['alternative_nick']	= $cfg->get("Configuration","alternative_nick");
-   $GLOBALS['name']				= $cfg->get("Configuration","name");	
-   $GLOBALS['ident']			= $cfg->get("Configuration","ident");			
-   $GLOBALS['server']			= $cfg->get("Configuration","server");			
-   $GLOBALS['port']				= $cfg->get("Configuration","port");			
-   $GLOBALS['channel']			= $cfg->get("Configuration","channel");
-   $GLOBALS['auto_join']		= $cfg->get("Configuration","auto_join");
-   $GLOBALS['command_prefix']	= $cfg->get("Configuration","command_prefix");
+   $GLOBALS['nickname']         = $cfg->get("Configuration","nickname");
+   $GLOBALS['alternative_nick'] = $cfg->get("Configuration","alternative_nick");
+   $GLOBALS['name']             = $cfg->get("Configuration","name");	
+   $GLOBALS['ident']            = $cfg->get("Configuration","ident");			
+   $GLOBALS['server']           = $cfg->get("Configuration","server");			
+   $GLOBALS['port']             = $cfg->get("Configuration","port");			
+   $GLOBALS['channel']          = $cfg->get("Configuration","channel");
+   $GLOBALS['auto_join']        = $cfg->get("Configuration","auto_join");
+   $GLOBALS['command_prefix']   = $cfg->get("Configuration","command_prefix");
   /* CTCP */
-   $GLOBALS['ctcp_response']	= $cfg->get("CTCP","ctcp_response");
-   $GLOBALS['ctcp_version']	    = $cfg->get("CTCP","ctcp_version");
-   $GLOBALS['ctcp_finger']	    = $cfg->get("CTCP","ctcp_finger");
+   $GLOBALS['ctcp_response']    = $cfg->get("CTCP","ctcp_response");
+   $GLOBALS['ctcp_version']     = $cfg->get("CTCP","ctcp_version");
+   $GLOBALS['ctcp_finger']      = $cfg->get("CTCP","ctcp_finger");
   /* DEBUG */
-   $GLOBALS['show_raw']			= $cfg->get("Debug","show_raw");
+   $GLOBALS['show_raw']         = $cfg->get("Debug","show_raw");
 
    MSG("1. Configuration Loaded from: CONFIG.INI\n");
   }
@@ -249,12 +249,12 @@ switch ($ex[1]){
 		if ($rawcmd[1] == $command_prefix.'update')       {	update();			}
 		if ($rawcmd[1] == $command_prefix.'restart')      {	restart();			}
 		if ($rawcmd[1] == $command_prefix.'uptime')       {	uptime();			}
-		if ($rawcmd[1] == $command_prefix.'md5')	      {	emd5();				}
-		if ($rawcmd[1] == $command_prefix.'info')	      {	info();				}
-		if ($rawcmd[1] == $command_prefix.'op')	          {	op();				}
+		if ($rawcmd[1] == $command_prefix.'md5')          {	emd5();				}
+		if ($rawcmd[1] == $command_prefix.'info')         {	info();				}
+		if ($rawcmd[1] == $command_prefix.'op')           {	op();				}
 		if ($rawcmd[1] == $command_prefix.'deop')	      {	deop();				}
-		if ($rawcmd[1] == $command_prefix.'join')	      {	joinc();			}
-		if ($rawcmd[1] == $command_prefix.'j')	          {	joinc();			}
+		if ($rawcmd[1] == $command_prefix.'join')         {	joinc();			}
+		if ($rawcmd[1] == $command_prefix.'j')            {	joinc();			}
 		if ($rawcmd[1] == $command_prefix.'leave')	      {	leave();			}
 		if ($rawcmd[1] == $command_prefix.'part')         {	leave();			}
 		if ($rawcmd[1] == $command_prefix.'quit')	      {	quit();				}
