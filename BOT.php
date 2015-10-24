@@ -243,35 +243,35 @@ switch ($ex[1]){
  /* Commands */
 		if (HasOwner ($mask)) 
 		{
-		if ($rawcmd[1] == $command_prefix.'dns')          {	dns();		    	}
-		if ($rawcmd[1] == $command_prefix.'voice')        {	voice();			}
-		if ($rawcmd[1] == $command_prefix.'devoice')      {	devoice();			}
-		if ($rawcmd[1] == $command_prefix.'update')       {	update();			}
-		if ($rawcmd[1] == $command_prefix.'restart')      {	restart();			}
-		if ($rawcmd[1] == $command_prefix.'uptime')       {	uptime();			}
-		if ($rawcmd[1] == $command_prefix.'md5')          {	emd5();				}
-		if ($rawcmd[1] == $command_prefix.'info')         {	info();				}
-		if ($rawcmd[1] == $command_prefix.'op')           {	op();				}
-		if ($rawcmd[1] == $command_prefix.'deop')	      {	deop();				}
-		if ($rawcmd[1] == $command_prefix.'join')         {	joinc();			}
-		if ($rawcmd[1] == $command_prefix.'j')            {	joinc();			}
-		if ($rawcmd[1] == $command_prefix.'leave')	      {	leave();			}
-		if ($rawcmd[1] == $command_prefix.'part')         {	leave();			}
-		if ($rawcmd[1] == $command_prefix.'quit')	      {	quit();				}
-		if ($rawcmd[1] == $command_prefix.'die')	      {	quit();				}
-		if ($rawcmd[1] == $command_prefix.'topic')	      {	topic();			}
-		if ($rawcmd[1] == $command_prefix.'cham')	      {	cham();				}
-		if ($rawcmd[1] == $command_prefix.'newnick')      {	newnick();			}
-		if ($rawcmd[1] == $command_prefix.'commands')     {	commands();			}
-		if ($rawcmd[1] == $command_prefix.'showconfig')   {	showconfig();		}
-		if ($rawcmd[1] == $command_prefix.'savenick')	  {	savenick();			}
-		if ($rawcmd[1] == $command_prefix.'savealtnick')  {	savealtnick();		}
-		if ($rawcmd[1] == $command_prefix.'saveident')    {	saveident();		}
-		if ($rawcmd[1] == $command_prefix.'savename')     {	savename();			}
-		if ($rawcmd[1] == $command_prefix.'saveport')     {	saveport();			}
-		if ($rawcmd[1] == $command_prefix.'saveserver')   {	saveserver();		}
-		if ($rawcmd[1] == $command_prefix.'savechannel')  {	savechannel();		}
-		if ($rawcmd[1] == $command_prefix.'listadmins')   {	listadmins();		}
+		if ($rawcmd[1] == $command_prefix.'dns')          {	dns();           }
+		if ($rawcmd[1] == $command_prefix.'voice')        {	voice();         }
+		if ($rawcmd[1] == $command_prefix.'devoice')      {	devoice();       }
+		if ($rawcmd[1] == $command_prefix.'update')       {	update();        }
+		if ($rawcmd[1] == $command_prefix.'restart')      {	restart();       }
+		if ($rawcmd[1] == $command_prefix.'uptime')       {	uptime();        }
+		if ($rawcmd[1] == $command_prefix.'md5')          {	emd5();          }
+		if ($rawcmd[1] == $command_prefix.'info')         {	info();          }
+		if ($rawcmd[1] == $command_prefix.'op')           {	op();            }
+		if ($rawcmd[1] == $command_prefix.'deop')         {	deop();          }
+		if ($rawcmd[1] == $command_prefix.'join')         {	joinc();         }
+		if ($rawcmd[1] == $command_prefix.'j')            {	joinc();         }
+		if ($rawcmd[1] == $command_prefix.'leave')        {	leave();         }
+		if ($rawcmd[1] == $command_prefix.'part')         {	leave();         }
+		if ($rawcmd[1] == $command_prefix.'quit')         {	quit();          }
+		if ($rawcmd[1] == $command_prefix.'die')          {	quit();          }
+		if ($rawcmd[1] == $command_prefix.'topic')        {	topic();         }
+		if ($rawcmd[1] == $command_prefix.'cham')         {	cham();          }
+		if ($rawcmd[1] == $command_prefix.'newnick')      {	newnick();       }
+		if ($rawcmd[1] == $command_prefix.'commands')     {	commands();      }
+		if ($rawcmd[1] == $command_prefix.'showconfig')   {	showconfig();    }
+		if ($rawcmd[1] == $command_prefix.'savenick')	  {	savenick();      }
+		if ($rawcmd[1] == $command_prefix.'savealtnick')  {	savealtnick();   }
+		if ($rawcmd[1] == $command_prefix.'saveident')    {	saveident();     }
+		if ($rawcmd[1] == $command_prefix.'savename')     {	savename();      }
+		if ($rawcmd[1] == $command_prefix.'saveport')     {	saveport();      }
+		if ($rawcmd[1] == $command_prefix.'saveserver')   {	saveserver();    }
+		if ($rawcmd[1] == $command_prefix.'savechannel')  {	savechannel();   }
+		if ($rawcmd[1] == $command_prefix.'listadmins')   {	listadmins();    }
 		}
        }
    exit;
