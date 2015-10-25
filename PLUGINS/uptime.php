@@ -11,6 +11,8 @@ function uptime()
 	 
 	 $msg = 'My Uptime: '. $hours .' hours, '. $minutes .' minutes';
      fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :$msg\n");
+
+	 MSG('!Uptime on: '.$GLOBALS['channel']);
 }
 
 ?> 

@@ -7,6 +7,8 @@ function leave()
 
  fputs($GLOBALS['socket'],'PART '.$GLOBALS['args']."\n");
 
+ MSG('Leaving channel: '.$GLOBALS['args']);
+
 }
 
 ?>

@@ -6,6 +6,8 @@ function joinc()
 {
 
  fputs($GLOBALS['socket'],'JOIN '.$GLOBALS['args']."\n");
+ 
+ MSG('Joining channel: '.$GLOBALS['args']);
 
 }
 

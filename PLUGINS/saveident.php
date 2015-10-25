@@ -8,10 +8,12 @@ function saveident()
  $new = trim($GLOBALS['args']);
 
  $cfg = new iniParser("../CONFIG.INI");
- $cfg->setValue("Configuration","ident", "$new");
+ $cfg->setValue("BOT","ident", "$new");
  $cfg->save();
 
- fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :New Ident Saved.\n");
+ fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :Ident Saved.\n");
+
+ MSG('!saveident on: '.$GLOBALS['channel'].', New ident: '.$GLOBALS['args']);
 
 }
 

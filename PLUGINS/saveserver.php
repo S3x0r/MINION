@@ -8,10 +8,12 @@ function saveserver()
  $new = trim($GLOBALS['args']);
 
  $cfg = new iniParser("../CONFIG.INI");
- $cfg->setValue("Configuration","server", "$new");
+ $cfg->setValue("SERVER","server", "$new");
  $cfg->save();
 
- fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :New Server Saved.\n");
+ fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :Server Saved.\n");
+
+ MSG('!saveserver on: '.$GLOBALS['channel'].', New server: '.$GLOBALS['args']);
 }
 
 ?>

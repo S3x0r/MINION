@@ -8,10 +8,12 @@ function saveport()
  $new = trim($GLOBALS['args']);
 
  $cfg = new iniParser("../CONFIG.INI");
- $cfg->setValue("Configuration","port", "$new");
+ $cfg->setValue("SERVER","port", "$new");
  $cfg->save();
 
- fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :New Port Saved.\n");
+ fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :Port Saved.\n");
+
+ MSG('!saveport on: '.$GLOBALS['channel'].', New port: '.$GLOBALS['args']);
 
 }
 

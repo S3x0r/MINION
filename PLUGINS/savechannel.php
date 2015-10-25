@@ -8,10 +8,12 @@ function savechannel()
  $new = trim($GLOBALS['args']);
 
  $cfg = new iniParser("../CONFIG.INI");
- $cfg->setValue("Configuration","channel", "$new");
+ $cfg->setValue("CHANNEL","channel", "$new");
  $cfg->save();
 
- fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :New Channel Saved.\n");
+ fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :Channel Saved.\n");
+
+ MSG('!savechannel on: '.$GLOBALS['channel'].', New channel: '.$GLOBALS['args']);
 
 }
 

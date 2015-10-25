@@ -6,6 +6,8 @@ function newnick()
 {
 
  fputs($GLOBALS['socket'],'NICK '.$GLOBALS['args']."\n");
+ MSG('Changing nick to: '.$GLOBALS['args']);
+
 
 }
 

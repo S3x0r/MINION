@@ -4,7 +4,8 @@
 
 function emd5()
 {
- fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel'].' :MD5 '.md5($GLOBALS['args'])."\n");
+ fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel'].' :(MD5) '.$GLOBALS['args'].'-> '.md5($GLOBALS['args'])."\n");
+
 }
 
 ?>

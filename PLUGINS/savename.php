@@ -8,10 +8,12 @@ function savename()
  $new = trim($GLOBALS['args']);
 
  $cfg = new iniParser("../CONFIG.INI");
- $cfg->setValue("Configuration","name", "$new");
+ $cfg->setValue("BOT","name", "$new");
  $cfg->save();
 
- fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :New Name Saved.\n");
+ fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :Name Saved.\n");
+
+MSG('!savename on: '.$GLOBALS['channel'].', New name: '.$GLOBALS['args']);
 
 }
 
