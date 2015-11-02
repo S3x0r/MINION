@@ -1,8 +1,9 @@
 <?php
+if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Saving ident to config: !saveident <new_ident>';
+ $plugin_description = 'Saving ident to config: !save_ident <new_ident>';
 
-function saveident()
+function plugin_save_ident()
 {
  global $cfg;
  $new = trim($GLOBALS['args']);
@@ -11,7 +12,7 @@ function saveident()
  $cfg->setValue("BOT","ident", "$new");
  $cfg->save();
 
- fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :Ident Saved.\n");
+ CHANNEL_MSG('Ident Saved.');
 
  MSG('!saveident on: '.$GLOBALS['channel'].', New ident: '.$GLOBALS['args']);
 

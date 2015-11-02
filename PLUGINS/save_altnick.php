@@ -1,8 +1,9 @@
 <?php
+if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Saving altnick to config: !savealtnick <new_altnick>';
+ $plugin_description = 'Saving altnick to config: !save_altnick <new_altnick>';
 
-function savealtnick()
+function plugin_save_altnick()
 {
  global $cfg;
  $new = trim($GLOBALS['args']);
@@ -11,7 +12,7 @@ function savealtnick()
  $cfg->setValue("BOT","alternative_nick", "$new");
  $cfg->save();
 
- fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :AltNick Saved.\n");
+ CHANNEL_MSG('Alternative nick Saved.');
 
  MSG('!savealtnick on: '.$GLOBALS['channel'].', New altnick: '.$GLOBALS['args']);
 

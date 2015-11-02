@@ -1,4 +1,5 @@
 <?php
+if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
  $plugin_description = 'Checks for update: !update';
  
@@ -7,15 +8,13 @@
  $GLOBALS['v_source'] = 'http://github.com/S3x0r/davybot/archive/master.zip';
 
 //------------------------------------------------------------------------------------------------
- function update()
+ function plugin_update()
  {
   v_connect();
  }
 //------------------------------------------------------------------------------------------------
 function v_connect()
 {
-  global $socket;
-  global $channel;
   global $CheckVersion;
 
   $CheckVersion = file_get_contents($GLOBALS['v_addr']);
@@ -26,53 +25,42 @@ function v_connect()
 	     }
      
 	 else {
-		  fputs($socket, 'PRIVMSG '.$channel." :Cannot connect to update server, try next time.\n");
+		  CHANNEL_MSG('Cannot connect to update server, try next time.');
           }
 }
 //------------------------------------------------------------------------------------------------
 function v_checkVersion()
 {
-  global $socket;
-  global $channel;
   global $CheckVersion;
 
   $version = explode("\n", $CheckVersion);
 	
   if($version[0] > VER) 
 	{
-	 fputs($socket, 'PRIVMSG '.$channel." :My version: ".VER.", version on server: ".$version[0]."\n");
+	  CHANNEL_MSG('My version: '.VER.', version on server: '.$version[0].'');
 	 v_tryDownload();
     }
 	 
    else 
 	{
-     fputs($socket, 'PRIVMSG '.$channel." :No new update, you have the latest version.\n");
+	 CHANNEL_MSG('No new update, you have the latest version.');
 	}
 }
 //------------------------------------------------------------------------------------------------
 function v_tryDownload()
-{
-
-  global $socket;
-  global $channel;
-  
-	  fputs($socket, 'PRIVMSG '.$channel." :Downloading update...\n");
+{  
+      CHANNEL_MSG('Downloading update...');
 	  $newUpdate = file_get_contents($GLOBALS['v_source']);
       $dlHandler = fopen($GLOBALS['dir'].'update.zip', 'w');
-      if(!fwrite($dlHandler, $newUpdate)) { fputs($socket, 'PRIVMSG '.$channel." :Could not save new update, operation aborted\n"); exit(); }
+      if(!fwrite($dlHandler, $newUpdate)) { CHANNEL_MSG('Could not save new update, operation aborted'); exit(); }
       fclose($dlHandler);
-      fputs($socket, 'PRIVMSG '.$channel." :Update Downloaded\n");
+      CHANNEL_MSG('Update Downloaded');
 	  v_extract();
-
 }
 //------------------------------------------------------------------------------------------------
 function v_extract()
 {
-
-  global $socket;
-  global $channel;
-
-  fputs($socket, 'PRIVMSG '.$channel." :Extracting update\n");
+  CHANNEL_MSG('Extracting update');
 
   $zipHandle = zip_open($GLOBALS['dir'].'update.zip');
                
@@ -101,16 +89,13 @@ function v_extract()
 	   unset($contents);
       }
 	 }
-	 fputs($socket, 'PRIVMSG '.$channel." :Extracted.\n");
+	 CHANNEL_MSG('Extracted.');
 	 zip_close($zipHandle);
 	 v_createBat();
 }
 //------------------------------------------------------------------------------------------------
 function v_createBat()
 {
-  global $socket;
-  global $channel;	
-
   $data = '
 del /Q readme.txt
 del /Q .gitattributes
@@ -137,7 +122,7 @@ del INSTALL.BAT';
 	flock($f, 3);
 	fclose($f); 
 
-  fputs($socket, 'PRIVMSG '.$channel." :Installing...\n");
+  CHANNEL_MSG('Installing...');
   sleep(2);
   fputs($GLOBALS['socket'],"QUIT :Installing, reconnecting\n");
   system('cd .. & INSTALL.BAT');

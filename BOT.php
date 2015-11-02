@@ -1,22 +1,13 @@
 <?php
 
-/* OWNERS HOSTS - EDIT IT FOR USING BOT COMMANDS!
-
-            nick ! ident@   host
-              |      |       |
-   example: S3x0r!~S3x0r@85-123-48-249.dsl.dynamic.simnet.is
-*/
 //------------------------------------------------------------------------------------------------
-$GLOBALS['owners'] = Array ('S3x0r!S3x0r@validation.sls.microsoft.com','');
-$GLOBALS['admins'] = Array ('' , ''); 
-//------------------------------------------------------------------------------------------------
-define('VER', '0.1.4');
+define('VER', '0.1.5');
 //------------------------------------------------------------------------------------------------
 Start();
 //------------------------------------------------------------------------------------------------
 function Start()
 {
- if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser.'); }
+ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
  $GLOBALS['StartTime'] = time();
  echo "
@@ -55,11 +46,13 @@ function LoadConfig()
    $GLOBALS['server']           = $cfg->get("SERVER","server");
    $GLOBALS['port']             = $cfg->get("SERVER","port");
    $GLOBALS['try_connect']      = $cfg->get("SERVER","try_connect");
-   $GLOBALS['connect_delay']    = $cfg->get("SERVER","connect_delay");   
+   $GLOBALS['connect_delay']    = $cfg->get("SERVER","connect_delay"); 
+  /* OWNERS */
+   $GLOBALS['c_owners']         = $cfg->get("ADMIN","bot_owners");
   /* CHANNEL */
    $GLOBALS['channel']          = $cfg->get("CHANNEL","channel");
    $GLOBALS['auto_join']        = $cfg->get("CHANNEL","auto_join");
-   
+  /* COMMAND PREFIX */ 
    $GLOBALS['command_prefix']   = $cfg->get("COMMAND","command_prefix");
   /* CTCP */
    $GLOBALS['ctcp_response']    = $cfg->get("CTCP","ctcp_response");
@@ -90,6 +83,9 @@ server           = \'localhost\'
 port             = \'6667\'
 try_connect      = \'10\'
 connect_delay    = \'3\'
+
+[ADMIN]
+bot_owners       = \'S3x0r!S3x0r@validation.sls.microsoft.com, nick!ident@some.other.host.com\'
 
 [CHANNEL]
 channel          = \'#davybot\'
@@ -124,7 +120,7 @@ echo "--------------------------------------------------------\n";
  {
   include_once($plugin_name);
   $plugin_name = basename($plugin_name, '.php');
-  echo "$plugin_name - $plugin_description\n";
+  echo "$plugin_name -- $plugin_description\n";
  }
 echo "--------------------------------------------------------\n";
 /* we are now connecting to server */
@@ -178,7 +174,9 @@ global $socket;
 global $alternative_nick;
 global $args;
 global $command_prefix;
+global $nick;
 global $nickname;
+global $hostname;
 
 /* main socket loop */
 while(1) {
@@ -209,8 +207,9 @@ while(1) {
         $rawcmd = explode (':', $ex[3]);
         $args = NULL; for ($i = 4; $i < count($ex); $i++) { $args .= $ex[$i] . ' '; }
         $wordlist = explode(' ', $args);
-        if (isset($nick))
-          $mask = $nick . "!" . $ident . "@" . $host;
+        if (isset($nick)) { $mask = $nick . "!" . $ident . "@" . $host; }
+
+		$hostname = $ident . "@" . $host;
 		
 //-----------
 switch ($ex[1]){
@@ -233,7 +232,7 @@ switch ($ex[1]){
 		
 		 if($GLOBALS['auto_join'] == 'yes') { 
 		 MSG('5. Joining channel: '.$GLOBALS['channel']);
-	     fputs($socket,'JOIN '.$GLOBALS['channel']."\n");
+		 JOIN_CHANNEL($GLOBALS['channel']);
 		 }
 		break;
 	
@@ -243,21 +242,22 @@ switch ($ex[1]){
 
 		 if($GLOBALS['auto_join'] == 'yes') {
 		 MSG('5. Joining channel: '.$GLOBALS['channel']);
-		 fputs($socket,'JOIN '.$GLOBALS['channel']."\n");
+		 JOIN_CHANNEL($GLOBALS['channel']);
 		 }
 		break;
 
 	/* quit message */
 	case "QUIT":
 		MSG('* '.$nick.' ('.$ident.'@'.$host.') Quit');
+		//save_to_database(); /* Saving to database -> !seen */
 		break;
 
-//NAPRAWIÆ TYLKO JEDNO S£OWO POKAZUJE
-	/* Changed Topic message */
-//	case "TOPIC":
-//		MSG('* '.$nick.' changes topic to \''.$ex[3].'\'');
-//		break;
-
+/* Need to FIX
+	 Changed Topic message 
+	case "TOPIC":
+		MSG('* '.$nick.' changes topic to \''.$ex[3].'\'');
+		break;
+*/
 	}
 
 
@@ -281,45 +281,54 @@ switch ($ex[1]){
 
 
  /* commands */
-		if (HasOwner ($mask)) 
+		if(HasOwner($mask)) 
 		{
-		if ($rawcmd[1] == $command_prefix.'dns')          {	dns();           }
-		if ($rawcmd[1] == $command_prefix.'voice')        {	voice();         }
-		if ($rawcmd[1] == $command_prefix.'devoice')      {	devoice();       }
-		if ($rawcmd[1] == $command_prefix.'update')       {	update();        }
-		if ($rawcmd[1] == $command_prefix.'restart')      {	restart();       }
-		if ($rawcmd[1] == $command_prefix.'uptime')       {	uptime();        }
-		if ($rawcmd[1] == $command_prefix.'md5')          {	emd5();          }
-		if ($rawcmd[1] == $command_prefix.'info')         {	info();          }
-		if ($rawcmd[1] == $command_prefix.'op')           {	op();            }
-		if ($rawcmd[1] == $command_prefix.'deop')         {	deop();          }
-		if ($rawcmd[1] == $command_prefix.'join')         {	joinc();         }
-		if ($rawcmd[1] == $command_prefix.'j')            {	joinc();         }
-		if ($rawcmd[1] == $command_prefix.'leave')        {	leave();         }
-		if ($rawcmd[1] == $command_prefix.'part')         {	leave();         }
-		if ($rawcmd[1] == $command_prefix.'quit')         {	quit();          }
-		if ($rawcmd[1] == $command_prefix.'die')          {	quit();          }
-		if ($rawcmd[1] == $command_prefix.'topic')        {	topic();         }
-		if ($rawcmd[1] == $command_prefix.'cham')         {	cham();          }
-		if ($rawcmd[1] == $command_prefix.'newnick')      {	newnick();       }
-		if ($rawcmd[1] == $command_prefix.'commands')     {	commands();      }
-		if ($rawcmd[1] == $command_prefix.'showconfig')   {	showconfig();    }
-		if ($rawcmd[1] == $command_prefix.'savenick')	  {	savenick();      }
-		if ($rawcmd[1] == $command_prefix.'savealtnick')  {	savealtnick();   }
-		if ($rawcmd[1] == $command_prefix.'saveident')    {	saveident();     }
-		if ($rawcmd[1] == $command_prefix.'savename')     {	savename();      }
-		if ($rawcmd[1] == $command_prefix.'saveport')     {	saveport();      }
-		if ($rawcmd[1] == $command_prefix.'saveserver')   {	saveserver();    }
-		if ($rawcmd[1] == $command_prefix.'savechannel')  {	savechannel();   }
-		if ($rawcmd[1] == $command_prefix.'listadmins')   {	listadmins();    }
+		if ($rawcmd[1] == $command_prefix.'addowner')      {	plugin_addowner();       }
+		if ($rawcmd[1] == $command_prefix.'seen')          {	plugin_seen();           }
+		if ($rawcmd[1] == $command_prefix.'dns')           {	plugin_dns();            }
+		if ($rawcmd[1] == $command_prefix.'voice')         {	plugin_voice();          }
+		if ($rawcmd[1] == $command_prefix.'devoice')       {	plugin_devoice();        }
+		if ($rawcmd[1] == $command_prefix.'update')        {	plugin_update();         }
+		if ($rawcmd[1] == $command_prefix.'restart')       {	plugin_restart();        }
+		if ($rawcmd[1] == $command_prefix.'uptime')        {	plugin_uptime();         }
+		if ($rawcmd[1] == $command_prefix.'md5')           {	plugin_emd5();           }
+		if ($rawcmd[1] == $command_prefix.'info')          {	plugin_info();           }
+		if ($rawcmd[1] == $command_prefix.'op')            {	plugin_op();             }
+		if ($rawcmd[1] == $command_prefix.'deop')          {	plugin_deop();           }
+
+		if ($rawcmd[1] == $command_prefix.'join')          {	plugin_joinc();          }
+		if ($rawcmd[1] == $command_prefix.'j')             {	plugin_joinc();          }
+
+		if ($rawcmd[1] == $command_prefix.'leave')         {	plugin_leave();          }
+		if ($rawcmd[1] == $command_prefix.'part')          {	plugin_leave();          }
+
+		if ($rawcmd[1] == $command_prefix.'quit')          {	plugin_quit();           }
+		if ($rawcmd[1] == $command_prefix.'die')           {	plugin_quit();           }
+
+		if ($rawcmd[1] == $command_prefix.'topic')         {	plugin_topic();          }
+		if ($rawcmd[1] == $command_prefix.'cham')          {	plugin_cham();           }
+		if ($rawcmd[1] == $command_prefix.'newnick')       {	plugin_newnick();        }
+		if ($rawcmd[1] == $command_prefix.'commands')      {	plugin_commands();       }
+		if ($rawcmd[1] == $command_prefix.'showconfig')    {	plugin_showconfig();     }
+
+		if ($rawcmd[1] == $command_prefix.'save_nick')	   {	plugin_save_nick();      }
+		if ($rawcmd[1] == $command_prefix.'save_altnick')  {	plugin_save_altnick();   }
+		if ($rawcmd[1] == $command_prefix.'save_ident')    {	plugin_save_ident();     }
+		if ($rawcmd[1] == $command_prefix.'save_name')     {	plugin_save_name();      }
+		if ($rawcmd[1] == $command_prefix.'save_port')     {	plugin_save_port();      }
+		if ($rawcmd[1] == $command_prefix.'save_server')   {	plugin_save_server();    }
+		if ($rawcmd[1] == $command_prefix.'save_channel')  {	plugin_save_channel();   }
+
+		if ($rawcmd[1] == $command_prefix.'list_owners')    {	plugin_list_owners();    }
 		}
        }
    exit;
  }
 }
 //------------------------------------------------------------------------------------------------
-function HasAccess ($mask) {
-        global $admins;
+function HasAccess($mask)
+{
+global $admins;
         if ($mask == NULL)
         if ($mask == NULL)
                 return FALSE;
@@ -329,8 +338,14 @@ function HasAccess ($mask) {
         return FALSE;
 }
 //------------------------------------------------------------------------------------------------
-function HasOwner ($mask) {
-        global $owners;
+function HasOwner($mask)
+{
+global $owners;
+
+$owners_c  = $GLOBALS['c_owners'];
+$pieces = explode(", ", $owners_c);
+$owners = $pieces;
+
         if ($mask == NULL)
         if ($mask == NULL)
                 return FALSE;
@@ -344,6 +359,16 @@ function MSG($msg)
 {
  $line = '[' . @date( 'H:i:s' ) . '] ' . $msg . "\r\n";
  echo $line;
+}
+//------------------------------------------------------------------------------------------------
+function CHANNEL_MSG($msg)
+{
+ fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :$msg\n");
+}
+//------------------------------------------------------------------------------------------------
+function JOIN_CHANNEL($channel)
+{
+ fputs($GLOBALS['socket'],'JOIN '.$channel."\n");
 }
 //------------------------------------------------------------------------------------------------
 /* configuration file parser */

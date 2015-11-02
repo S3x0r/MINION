@@ -1,10 +1,10 @@
 <?php
+if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
  $plugin_description = 'Shows random text from file: !cham <nick>';
 
-function cham()
+function plugin_cham()
 {
- 
  $file = '../somefile.txt';
 	
  $texts = file_get_contents($file);
@@ -14,7 +14,7 @@ function cham()
  shuffle($texts);
  $text  =  $texts[$count++];
 
- fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel'].' :'.$GLOBALS['args'].": $text\n");
+ CHANNEL_MSG($GLOBALS['args'].': '.$text);
 
 }
 //add text file

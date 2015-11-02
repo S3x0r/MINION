@@ -1,4 +1,11 @@
- 
+   v0.1.5 changes:
+   - savecommands changed to save_command(s)
+   - !listadmins changed to !list_owners and little fix applied
+   - owners hosts moved to config file
+   - readme.txt updated
+   - some other code changes
+   - NEW command !addowner - Adds Owner host to config file: !addowner <nick!id@host>
+
    v0.1.4 changes:
    -    NEW: you can now change how many times try to connect to server: config.ini
    - CHANGE: php/error reporting is showed only when show_raw enabled

@@ -1,10 +1,11 @@
 <?php
+if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
  $plugin_description = 'Dns: !dns <address>';
 
-function dns()
+function plugin_dns()
 {
-  fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel'].' :'. gethostbyaddr(trim($GLOBALS['args']))."\n");
+	CHANNEL_MSG(gethostbyaddr(trim($GLOBALS['args'])));
 }
 
 ?>

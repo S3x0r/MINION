@@ -1,8 +1,9 @@
 <?php
+if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Saving new port to config: !saveport <new_port>';
+ $plugin_description = 'Saving new port to config: !save_port <new_port>';
 
-function saveport()
+function plugin_save_port()
 {
  global $cfg;
  $new = trim($GLOBALS['args']);
@@ -11,7 +12,7 @@ function saveport()
  $cfg->setValue("SERVER","port", "$new");
  $cfg->save();
 
- fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :Port Saved.\n");
+ CHANNEL_MSG('Port Saved.');
 
  MSG('!saveport on: '.$GLOBALS['channel'].', New port: '.$GLOBALS['args']);
 

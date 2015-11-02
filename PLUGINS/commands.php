@@ -1,22 +1,20 @@
 <?php
+if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
  $plugin_description = 'Shows BOT commands: !commands';
 
 
-function commands()
+function plugin_commands()
 {
-global $socket;
-global $channel;
-
-fputs($socket, "PRIVMSG ".$channel." :My Commands:\n");
+CHANNEL_MSG('My Commands:');
 
  foreach ( glob( '../PLUGINS/*.php' ) as $pluginName )
  {
   $pluginName = basename( $pluginName, '.php' );
-  fputs($socket, "PRIVMSG ".$channel." :!$pluginName\n");
+  CHANNEL_MSG("!$pluginName");
  }
 
-fputs($socket, "PRIVMSG ".$channel." :End.\n");
+CHANNEL_MSG('End.');
 
 }
 //fix: change to put msg in one line :0

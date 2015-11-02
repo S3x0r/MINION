@@ -1,14 +1,12 @@
 <?php
+if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
  $plugin_description = 'Joins channel: !join <#channel>, !j <#channel>';
 
-function joinc()
+function plugin_joinc()
 {
-
- fputs($GLOBALS['socket'],'JOIN '.$GLOBALS['args']."\n");
- 
+ JOIN_CHANNEL($GLOBALS['args']); 
  MSG('Joining channel: '.$GLOBALS['args']);
-
 }
 
 ?>
