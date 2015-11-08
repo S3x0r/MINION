@@ -1,21 +1,21 @@
 <?php
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Shows BOT commands: !commands';
-
+ $plugin_description = 'Shows BOT commands: !commands, !help';
 
 function plugin_commands()
 {
-CHANNEL_MSG('My Commands:');
+ CHANNEL_MSG('My Commands:');
 
- foreach ( glob( '../PLUGINS/*.php' ) as $pluginName )
+ foreach(glob('../PLUGINS/*.php') as $pluginName)
  {
-  $pluginName = basename( $pluginName, '.php' );
+  $pluginName = basename($pluginName, '.php');
   CHANNEL_MSG("!$pluginName");
  }
 
-CHANNEL_MSG('End.');
+ CHANNEL_MSG('End.');
 
+ MSG('!commands, !help on: '.$GLOBALS['C_CNANNEL']);
 }
-//fix: change to put msg in one line :0
+//need fix
 ?>

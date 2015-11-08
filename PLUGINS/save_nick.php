@@ -5,17 +5,13 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
 function plugin_save_nick()
 {
- global $cfg;
  $new = trim($GLOBALS['args']);
 
- $cfg = new iniParser("../CONFIG.INI");
- $cfg->setValue("BOT","nickname", "$new");
- $cfg->save();
-
+ SaveData('../CONFIG.INI', 'BOT', 'nickname', $new);
+ 
  CHANNEL_MSG('Nick Saved.');
 
- MSG('!savenick on: '.$GLOBALS['channel'].', New nick: '.$GLOBALS['args']);
-
+ MSG('!save_nick on: '.$GLOBALS['C_CNANNEL'].', New nick: '.$GLOBALS['args']);
 }
 
 ?>

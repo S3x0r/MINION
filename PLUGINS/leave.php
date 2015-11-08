@@ -5,11 +5,9 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
 function plugin_leave()
 {
-
  fputs($GLOBALS['socket'],'PART '.$GLOBALS['args']."\n");
 
- MSG('Leaving channel: '.$GLOBALS['args']);
-
+ MSG('!leave on: '.$GLOBALS['C_CNANNEL'].', leaving: '.$GLOBALS['args']);
 }
 
 ?>

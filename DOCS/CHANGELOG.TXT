@@ -1,10 +1,20 @@
+   v.0.1.6 changes:
+   - alternative nick removed from config and added nick|random if nick reserved/used
+   - fixed: now showing true nickname when connected
+   - new command !checkupdate - checking for new version but not installing it.
+   - !info updated
+   - !addowner changed to !add_owner
+   - !save_altnick removed
+   - some code cleanup/fix in plugins
+   - readme.txt updated.
+
    v0.1.5 changes:
    - savecommands changed to save_command(s)
    - !listadmins changed to !list_owners and little fix applied
    - owners hosts moved to config file
    - readme.txt updated
    - some other code changes
-   - NEW command !addowner - Adds Owner host to config file: !addowner <nick!id@host>
+   - NEW command !addowner - Adds Owner host to config file: !addowner <nick!id@host>.
 
    v0.1.4 changes:
    -    NEW: you can now change how many times try to connect to server: config.ini

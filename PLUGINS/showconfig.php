@@ -5,17 +5,16 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
 function plugin_showconfig()
 {
-
  CHANNEL_MSG('My Config');
- CHANNEL_MSG('Nick: '.$GLOBALS['nickname'].', Alternative: '.$GLOBALS['alternative_nick'].'');
- CHANNEL_MSG('Name: '.$GLOBALS['name'].', Ident: '.$GLOBALS['ident'].'');
- CHANNEL_MSG('Server: '.$GLOBALS['server'].':'.$GLOBALS['port'].', Try connect: '.$GLOBALS['try_connect'].', Delay: '.$GLOBALS['connect_delay'].'');
- CHANNEL_MSG('Auto join: '.$GLOBALS['auto_join'].', Channel(s): '.$GLOBALS['channel'].'');
- CHANNEL_MSG('Command prefix: '.$GLOBALS['command_prefix'].'');
- CHANNEL_MSG('CTCP response: '.$GLOBALS['ctcp_response'].', CTCP version: '.$GLOBALS['ctcp_version'].', CTCP finger: '.$GLOBALS['ctcp_finger'].'');
- CHANNEL_MSG('Show raw: '.$GLOBALS['show_raw'].'');
+ CHANNEL_MSG('Nick: '.$GLOBALS['C_NICKNAME'].'');
+ CHANNEL_MSG('Name: '.$GLOBALS['C_NAME'].', Ident: '.$GLOBALS['C_IDENT'].'');
+ CHANNEL_MSG('Server: '.$GLOBALS['C_SERVER'].':'.$GLOBALS['C_PORT'].', Try connect: '.$GLOBALS['C_TRY_CONNECT'].', Delay: '.$GLOBALS['C_CONNECT_DELAY'].'');
+ CHANNEL_MSG('Auto join: '.$GLOBALS['C_AUTO_JOIN'].', Channel(s): '.$GLOBALS['C_CNANNEL'].'');
+ CHANNEL_MSG('Command prefix: '.$GLOBALS['C_CMD_PREFIX'].'');
+ CHANNEL_MSG('CTCP response: '.$GLOBALS['C_CTCP_RESPONSE'].', CTCP version: '.$GLOBALS['C_CTCP_VERSION'].', CTCP finger: '.$GLOBALS['C_CTCP_FINGER'].'');
+ CHANNEL_MSG('Show raw: '.$GLOBALS['C_SHOW_RAW'].'');
 
-  MSG('!showconfig on: '.$GLOBALS['channel']);
+ MSG('!showconfig on: '.$GLOBALS['C_CNANNEL']);
 }
 
 ?>

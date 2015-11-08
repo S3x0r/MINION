@@ -3,9 +3,14 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
  $plugin_description = 'Changing string to MD5: !md5 <string>';
 
-function plugin_emd5()
+function plugin_md5()
 {
- CHANNEL_MSG('(MD5) '.$GLOBALS['args'].'-> '.md5($GLOBALS['args']));
+ $data = str_replace(" ","",$GLOBALS['args']);
+ $md5  = md5($data);
+
+ CHANNEL_MSG('(MD5) \''.$data.'\' -> '.$md5);
+
+ MSG('!md5 on: '.$GLOBALS['C_CNANNEL'].', data: '.$data);
 }
 
 ?>

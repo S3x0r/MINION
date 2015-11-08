@@ -5,17 +5,13 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
 function plugin_save_ident()
 {
- global $cfg;
  $new = trim($GLOBALS['args']);
 
- $cfg = new iniParser("../CONFIG.INI");
- $cfg->setValue("BOT","ident", "$new");
- $cfg->save();
+ SaveData('../CONFIG.INI', 'BOT', 'ident', $new);
 
  CHANNEL_MSG('Ident Saved.');
 
- MSG('!saveident on: '.$GLOBALS['channel'].', New ident: '.$GLOBALS['args']);
-
+ MSG('!save_ident on: '.$GLOBALS['C_CNANNEL'].', New ident: '.$GLOBALS['args']);
 }
 
 ?>

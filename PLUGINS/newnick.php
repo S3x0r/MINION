@@ -5,11 +5,9 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
 function plugin_newnick()
 {
-
  fputs($GLOBALS['socket'],'NICK '.$GLOBALS['args']."\n");
- MSG('Changing nick to: '.$GLOBALS['args']);
 
-
+ MSG('!newnick on: '.$GLOBALS['C_CNANNEL'].', new nick: '.$GLOBALS['args']);
 }
 
 ?>

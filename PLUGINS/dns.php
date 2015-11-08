@@ -5,7 +5,10 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
 function plugin_dns()
 {
-	CHANNEL_MSG(gethostbyaddr(trim($GLOBALS['args'])));
-}
+ $host = gethostbyaddr(trim($GLOBALS['args']));
+  
+ CHANNEL_MSG('host: '.$host);
 
+ MSG('!dns on: '.$GLOBALS['C_CNANNEL'].', dns: '.$GLOBALS['args'].'/ '.$host);
+}
 ?>

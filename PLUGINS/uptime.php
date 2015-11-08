@@ -5,13 +5,14 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
 function plugin_uptime()
 {
-     $now	  = time();
-	 $seconds = $now - $GLOBALS['StartTime'];
-	 $minutes = floor( $seconds / 60 );
-	 $hours   = floor( $seconds / 3600 );
+ $now	  = time();
+ $seconds = $now - $GLOBALS['StartTime'];
+ $minutes = floor( $seconds / 60 );
+ $hours   = floor( $seconds / 3600 );
 
-     CHANNEL_MSG('My Uptime: '.$hours.' hours, '.$minutes.' minutes');
-	 MSG('!Uptime on: '.$GLOBALS['channel']);
+ CHANNEL_MSG('My Uptime: '.$hours.' hours, '.$minutes.' minutes');
+ 
+ MSG('!Uptime on: '.$GLOBALS['C_CNANNEL']);
 }
 
 ?> 

@@ -5,17 +5,13 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
 function plugin_save_channel()
 {
- global $cfg;
  $new = trim($GLOBALS['args']);
 
- $cfg = new iniParser("../CONFIG.INI");
- $cfg->setValue("CHANNEL","channel", "$new");
- $cfg->save();
+ SaveData('../CONFIG.INI', 'CHANNEL', 'channel', $new);
 
  CHANNEL_MSG('Channel Saved.');
 
- MSG('!savechannel on: '.$GLOBALS['channel'].', New channel: '.$GLOBALS['args']);
-
+ MSG('!save_channel on: '.$GLOBALS['C_CNANNEL'].', New channel: '.$GLOBALS['args']);
 }
 
 ?>

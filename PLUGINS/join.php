@@ -6,7 +6,8 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 function plugin_joinc()
 {
  JOIN_CHANNEL($GLOBALS['args']); 
- MSG('Joining channel: '.$GLOBALS['args']);
+
+ MSG('!join, !j on: '.$GLOBALS['C_CNANNEL'].', joining: '.$GLOBALS['args']);
 }
 
 ?>

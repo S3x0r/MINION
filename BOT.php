@@ -1,7 +1,7 @@
 <?php
 
 //------------------------------------------------------------------------------------------------
-define('VER', '0.1.5');
+define('VER', '0.1.6');
 //------------------------------------------------------------------------------------------------
 Start();
 //------------------------------------------------------------------------------------------------
@@ -9,7 +9,6 @@ function Start()
 {
  if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $GLOBALS['StartTime'] = time();
  echo "
      __                      __           __ 
  .--|  |.---.-.--.--.--.--. |  |--.-----.|  |_
@@ -38,32 +37,38 @@ function LoadConfig()
   /* load configuration */
 
   /* BOT */
-   $GLOBALS['nickname']         = $cfg->get("BOT","nickname");
-   $GLOBALS['alternative_nick'] = $cfg->get("BOT","alternative_nick");
-   $GLOBALS['name']             = $cfg->get("BOT","name");
-   $GLOBALS['ident']            = $cfg->get("BOT","ident");
+   $GLOBALS['C_NICKNAME']       = $cfg->get("BOT","nickname");
+   $GLOBALS['C_NAME']           = $cfg->get("BOT","name");
+   $GLOBALS['C_IDENT']          = $cfg->get("BOT","ident");
   /* SERVER */ 
-   $GLOBALS['server']           = $cfg->get("SERVER","server");
-   $GLOBALS['port']             = $cfg->get("SERVER","port");
-   $GLOBALS['try_connect']      = $cfg->get("SERVER","try_connect");
-   $GLOBALS['connect_delay']    = $cfg->get("SERVER","connect_delay"); 
+   $GLOBALS['C_SERVER']         = $cfg->get("SERVER","server");
+   $GLOBALS['C_PORT']           = $cfg->get("SERVER","port");
+   $GLOBALS['C_TRY_CONNECT']    = $cfg->get("SERVER","try_connect");
+   $GLOBALS['C_CONNECT_DELAY']  = $cfg->get("SERVER","connect_delay"); 
   /* OWNERS */
-   $GLOBALS['c_owners']         = $cfg->get("ADMIN","bot_owners");
+   $GLOBALS['C_OWNERS']         = $cfg->get("ADMIN","bot_owners");
   /* CHANNEL */
-   $GLOBALS['channel']          = $cfg->get("CHANNEL","channel");
-   $GLOBALS['auto_join']        = $cfg->get("CHANNEL","auto_join");
+   $GLOBALS['C_CNANNEL']        = $cfg->get("CHANNEL","channel");
+   $GLOBALS['C_AUTO_JOIN']      = $cfg->get("CHANNEL","auto_join");
   /* COMMAND PREFIX */ 
-   $GLOBALS['command_prefix']   = $cfg->get("COMMAND","command_prefix");
+   $GLOBALS['C_CMD_PREFIX']     = $cfg->get("COMMAND","command_prefix");
   /* CTCP */
-   $GLOBALS['ctcp_response']    = $cfg->get("CTCP","ctcp_response");
-   $GLOBALS['ctcp_version']     = $cfg->get("CTCP","ctcp_version");
-   $GLOBALS['ctcp_finger']      = $cfg->get("CTCP","ctcp_finger");
+   $GLOBALS['C_CTCP_RESPONSE']  = $cfg->get("CTCP","ctcp_response");
+   $GLOBALS['C_CTCP_VERSION']   = $cfg->get("CTCP","ctcp_version");
+   $GLOBALS['C_CTCP_FINGER']    = $cfg->get("CTCP","ctcp_finger");
   /* DEBUG */
-   $GLOBALS['show_raw']         = $cfg->get("DEBUG","show_raw");
+   $GLOBALS['C_SHOW_RAW']       = $cfg->get("DEBUG","show_raw");
 
-   if($GLOBALS['show_raw'] == 'yes') { error_reporting(E_ALL ^ E_NOTICE); } else { error_reporting(0); }
+  /* show raw or no */
+   if($GLOBALS['C_SHOW_RAW'] == 'yes') { error_reporting(E_ALL ^ E_NOTICE); } else { error_reporting(0); }
+
+  /* set data */
+   SaveData('../data.ini', 'DATA', 'nickname', $GLOBALS['C_NICKNAME']); /* saving nickname to data file */
+   $GLOBALS['RND_NICKNAME'] = $GLOBALS['C_NICKNAME'].'|'.rand(0,99); /* set random nickname */
+   $GLOBALS['StartTime'] = time(); /* starting time */
    
    MSG("1. Configuration Loaded from: CONFIG.INI");
+
    /* now time for plugins */
    LoadPlugins();
   }
@@ -74,7 +79,6 @@ function LoadConfig()
 /* if no config - creating default one */
 $default_config = '[BOT]
 nickname         = \'davybot\'
-alternative_nick = \'davybot-\'
 name             = \'http://github.com/S3x0r/davybot\'
 ident            = \'http://github.com/S3x0r/davybot\'
 
@@ -123,29 +127,26 @@ echo "--------------------------------------------------------\n";
   echo "$plugin_name -- $plugin_description\n";
  }
 echo "--------------------------------------------------------\n";
-/* we are now connecting to server */
+
+/* now we are connecting */
 Connect();
 }
 //------------------------------------------------------------------------------------------------
 function Connect()
 {
-global $socket;
-global $nickname;
-global $try_connect;
-
- MSG('3. Connecting to: '.$GLOBALS['server'].', port: '.$GLOBALS['port']);
+ MSG('3. Connecting to: '.$GLOBALS['C_SERVER'].', port: '.$GLOBALS['C_PORT']);
 
  $i = 0;
 
 /* loop if something goes wrong */
- while ($i++ < $try_connect)
+ while ($i++ < $GLOBALS['C_TRY_CONNECT'])
  {
-  $socket = fsockopen($GLOBALS['server'], $GLOBALS['port']);
+  $GLOBALS['socket'] = fsockopen($GLOBALS['C_SERVER'], $GLOBALS['C_PORT']);
 
-   if($socket==false) {
+   if($GLOBALS['socket']==false) {
 	 MSG('Unable to connect to server, im trying to connect again...');
-     sleep($GLOBALS['connect_delay']); 
-    if($i==$try_connect) {
+     sleep($GLOBALS['C_CONNECT_DELAY']); 
+    if($i==$GLOBALS['C_TRY_CONNECT']) {
      MSG('Unable to connect to server, exiting program.');
 	 die(); /* TODO: send email that terminated program? */
 	 }
@@ -158,39 +159,31 @@ global $try_connect;
 //------------------------------------------------------------------------------------------------
 function Identify()
 {
-global $socket;
-global $nickname;
-
 /* sending user/nick to server */
-fputs($socket, 'USER '.$nickname.' FORCE '.$GLOBALS['ident'].' :'.$GLOBALS['name']."\n");
-fputs($socket, 'NICK '.$nickname."\n");
-
+fputs($GLOBALS['socket'], 'USER '.$GLOBALS['C_NICKNAME'].' FORCE '.$GLOBALS['C_IDENT'].' :'.$GLOBALS['C_NAME']."\n");
+fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['C_NICKNAME']."\n");
 Engine();
 }
 //------------------------------------------------------------------------------------------------
 function Engine()
 {
-global $socket;
-global $alternative_nick;
 global $args;
-global $command_prefix;
 global $nick;
-global $nickname;
 global $hostname;
 
 /* main socket loop */
 while(1) {
-    while(!feof($socket)) {
+    while(!feof($GLOBALS['socket'])) {
         $mask   = NULL;
-        $data = fgets ($socket, 512);
-        if($GLOBALS['show_raw'] == 'yes') { echo $data; }
+        $data = fgets ($GLOBALS['socket'], 512);
+        if($GLOBALS['C_SHOW_RAW'] == 'yes') { echo $data; }
 
         flush();
         $ex = explode(' ', trim($data));
 
 /* ping response */      
 		if($ex[0] == "PING") {
-            fputs($socket, "PONG ".$ex[1]."\n");
+            fputs($GLOBALS['socket'], "PONG ".$ex[1]."\n");
             continue; 
         }
         
@@ -210,51 +203,36 @@ while(1) {
         if (isset($nick)) { $mask = $nick . "!" . $ident . "@" . $host; }
 
 		$hostname = $ident . "@" . $host;
-		
+
 //-----------
 switch ($ex[1]){
 	
-	 /* if nick already exists */
-	case "432":
-		MSG('   ` Nickname reserved, changing to alternative nick: '.$alternative_nick);
-		fputs($socket,'NICK '.$alternative_nick."\n");
-		break;
-		 
-	/* if nick already exists */
-	case "433":
-		MSG('   ` Nickname already used, changing to alternative nick: '.$alternative_nick);
-		fputs($socket,'NICK '.$alternative_nick."\n");
-		break;
+	case '433': /* if nick already exists */
+	case '432': /* if nick reserved */
+	    MSG('-- Nickname already used, changing to alternative nick: '.$GLOBALS['RND_NICKNAME']);
+		fputs($GLOBALS['socket'],'NICK '.$GLOBALS['RND_NICKNAME']."\n");
+		SaveData('../data.ini', 'DATA', 'nickname', $GLOBALS['RND_NICKNAME']);
+        break;
 
-	/* join after motd */
-	case "376":
-		 MSG('4. OK im connected, my nickname is: '.$nickname);
-		
-		 if($GLOBALS['auto_join'] == 'yes') { 
-		 MSG('5. Joining channel: '.$GLOBALS['channel']);
-		 JOIN_CHANNEL($GLOBALS['channel']);
-		 }
-		break;
-	
-	/* join if no motd */
-	case "422":
-         MSG('4. OK im connected, my nickname is: '.$nickname);
-
-		 if($GLOBALS['auto_join'] == 'yes') {
-		 MSG('5. Joining channel: '.$GLOBALS['channel']);
-		 JOIN_CHANNEL($GLOBALS['channel']);
+	case '422': /* join if no motd */
+	case '376': /* join after motd */
+	     LoadData('../data.ini', 'DATA', 'nickname');
+		 MSG('4. OK im connected, my nickname is: '.$GLOBALS['LOADED']);
+		 if($GLOBALS['C_AUTO_JOIN'] == 'yes') { 
+		 MSG('5. Joining channel: '.$GLOBALS['C_CNANNEL']);
+		 JOIN_CHANNEL($GLOBALS['C_CNANNEL']);
+		 break;
 		 }
 		break;
 
-	/* quit message */
-	case "QUIT":
+	case 'QUIT': /* quit message */
 		MSG('* '.$nick.' ('.$ident.'@'.$host.') Quit');
 		//save_to_database(); /* Saving to database -> !seen */
 		break;
 
 /* Need to FIX
 	 Changed Topic message 
-	case "TOPIC":
+	case 'TOPIC':
 		MSG('* '.$nick.' changes topic to \''.$ex[3].'\'');
 		break;
 */
@@ -262,20 +240,20 @@ switch ($ex[1]){
 
 
  /* CTCP */
-     if($GLOBALS['ctcp_response'] == 'yes') {
+     if($GLOBALS['C_CTCP_RESPONSE'] == 'yes') {
              if ($rawcmd[1] == "VERSION") {
-                    fputs($socket, "NOTICE $nick :VERSION ".$GLOBALS['ctcp_version']."\n");
+                    fputs($GLOBALS['socket'], "NOTICE $nick :VERSION ".$GLOBALS['C_CTCP_VERSION']."\n");
              }
              elseif ($rawcmd[1] == "FINGER") {
-                    fputs($socket, "NOTICE $nick :FINGER ".$GLOBALS['ctcp_finger']."\n");
+                    fputs($GLOBALS['socket'], "NOTICE $nick :FINGER ".$GLOBALS['C_CTCP_FINGER']."\n");
              }
              elseif ($rawcmd[1] == "PING") {
                     $a = str_replace(" ","",$args);
-                    fputs($socket, "NOTICE $nick :PING ".$a."\n");
+                    fputs($GLOBALS['socket'], "NOTICE $nick :PING ".$a."\n");
              }
              elseif ($rawcmd[1] == "TIME") {
                     $a = date("F j, Y, g:i a");
-                    fputs($socket, "NOTICE $nick :TIME ".$a."\n");
+                    fputs($GLOBALS['socket'], "NOTICE $nick :TIME ".$a."\n");
              }
 	       }
 
@@ -283,43 +261,47 @@ switch ($ex[1]){
  /* commands */
 		if(HasOwner($mask)) 
 		{
-		if ($rawcmd[1] == $command_prefix.'addowner')      {	plugin_addowner();       }
-		if ($rawcmd[1] == $command_prefix.'seen')          {	plugin_seen();           }
-		if ($rawcmd[1] == $command_prefix.'dns')           {	plugin_dns();            }
-		if ($rawcmd[1] == $command_prefix.'voice')         {	plugin_voice();          }
-		if ($rawcmd[1] == $command_prefix.'devoice')       {	plugin_devoice();        }
-		if ($rawcmd[1] == $command_prefix.'update')        {	plugin_update();         }
-		if ($rawcmd[1] == $command_prefix.'restart')       {	plugin_restart();        }
-		if ($rawcmd[1] == $command_prefix.'uptime')        {	plugin_uptime();         }
-		if ($rawcmd[1] == $command_prefix.'md5')           {	plugin_emd5();           }
-		if ($rawcmd[1] == $command_prefix.'info')          {	plugin_info();           }
-		if ($rawcmd[1] == $command_prefix.'op')            {	plugin_op();             }
-		if ($rawcmd[1] == $command_prefix.'deop')          {	plugin_deop();           }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'checkupdate')   {	plugin_checkupdate();    }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'add_owner')     {	plugin_add_owner();      }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'seen')          {	plugin_seen();           }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'dns')           {	plugin_dns();            }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'voice')         {	plugin_voice();          }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'devoice')       {	plugin_devoice();        }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'update')        {	plugin_update();         }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'restart')       {	plugin_restart();        }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'uptime')        {	plugin_uptime();         }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'md5')           {	plugin_md5();            }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'info')          {	plugin_info();           }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'op')            {	plugin_op();             }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'deop')          {	plugin_deop();           }
 
-		if ($rawcmd[1] == $command_prefix.'join')          {	plugin_joinc();          }
-		if ($rawcmd[1] == $command_prefix.'j')             {	plugin_joinc();          }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'join')          {	plugin_joinc();          }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'j')             {	plugin_joinc();          }
 
-		if ($rawcmd[1] == $command_prefix.'leave')         {	plugin_leave();          }
-		if ($rawcmd[1] == $command_prefix.'part')          {	plugin_leave();          }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'leave')         {	plugin_leave();          }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'part')          {	plugin_leave();          }
 
-		if ($rawcmd[1] == $command_prefix.'quit')          {	plugin_quit();           }
-		if ($rawcmd[1] == $command_prefix.'die')           {	plugin_quit();           }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'quit')          {	plugin_quit();           }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'die')           {	plugin_quit();           }
 
-		if ($rawcmd[1] == $command_prefix.'topic')         {	plugin_topic();          }
-		if ($rawcmd[1] == $command_prefix.'cham')          {	plugin_cham();           }
-		if ($rawcmd[1] == $command_prefix.'newnick')       {	plugin_newnick();        }
-		if ($rawcmd[1] == $command_prefix.'commands')      {	plugin_commands();       }
-		if ($rawcmd[1] == $command_prefix.'showconfig')    {	plugin_showconfig();     }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'topic')         {	plugin_topic();          }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'cham')          {	plugin_cham();           }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'newnick')       {	plugin_newnick();        }
 
-		if ($rawcmd[1] == $command_prefix.'save_nick')	   {	plugin_save_nick();      }
-		if ($rawcmd[1] == $command_prefix.'save_altnick')  {	plugin_save_altnick();   }
-		if ($rawcmd[1] == $command_prefix.'save_ident')    {	plugin_save_ident();     }
-		if ($rawcmd[1] == $command_prefix.'save_name')     {	plugin_save_name();      }
-		if ($rawcmd[1] == $command_prefix.'save_port')     {	plugin_save_port();      }
-		if ($rawcmd[1] == $command_prefix.'save_server')   {	plugin_save_server();    }
-		if ($rawcmd[1] == $command_prefix.'save_channel')  {	plugin_save_channel();   }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'commands')      {	plugin_commands();       }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'help')          {	plugin_commands();       }
+		
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'showconfig')    {	plugin_showconfig();     }
 
-		if ($rawcmd[1] == $command_prefix.'list_owners')    {	plugin_list_owners();    }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'save_nick')	    {	plugin_save_nick();      }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'save_altnick')  {	plugin_save_altnick();   }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'save_ident')    {	plugin_save_ident();     }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'save_name')     {	plugin_save_name();      }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'save_port')     {	plugin_save_port();      }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'save_server')   {	plugin_save_server();    }
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'save_channel')  {	plugin_save_channel();   }
+
+		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'list_owners')    {	plugin_list_owners();    }
 		}
        }
    exit;
@@ -340,11 +322,11 @@ global $admins;
 //------------------------------------------------------------------------------------------------
 function HasOwner($mask)
 {
-global $owners;
+ global $owners;
 
-$owners_c  = $GLOBALS['c_owners'];
-$pieces = explode(", ", $owners_c);
-$owners = $pieces;
+ $owners_c = $GLOBALS['C_OWNERS'];
+ $pieces = explode(", ", $owners_c);
+ $owners = $pieces;
 
         if ($mask == NULL)
         if ($mask == NULL)
@@ -355,6 +337,19 @@ $owners = $pieces;
         return FALSE;
 }
 //------------------------------------------------------------------------------------------------
+function SaveData($v1, $v2, $v3, $v4)
+{
+ $cfg = new iniParser($v1);
+ $cfg->setValue("$v2", "$v3", "$v4");
+ $cfg->save();
+}
+//------------------------------------------------------------------------------------------------
+function LoadData($v1, $v2, $v3)
+{
+ $cfg = new iniParser($v1);
+ $GLOBALS['LOADED'] = $cfg->get("$v2", "$v3");
+}
+//------------------------------------------------------------------------------------------------
 function MSG($msg)
 {
  $line = '[' . @date( 'H:i:s' ) . '] ' . $msg . "\r\n";
@@ -363,7 +358,7 @@ function MSG($msg)
 //------------------------------------------------------------------------------------------------
 function CHANNEL_MSG($msg)
 {
- fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :$msg\n");
+ fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['C_CNANNEL']." :$msg\n");
 }
 //------------------------------------------------------------------------------------------------
 function JOIN_CHANNEL($channel)

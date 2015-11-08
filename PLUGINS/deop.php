@@ -5,11 +5,9 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
 function plugin_deop()
 {
+ fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['C_CNANNEL'].' -o '. $GLOBALS['args'] ."\n");
 
- fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' -o '. $GLOBALS['args'] ."\n");
-
- MSG('Taking op on: '.$GLOBALS['channel'].', Who: '.$GLOBALS['args']);
-
+ MSG('!deop on: '.$GLOBALS['C_CNANNEL'].', who: '.$GLOBALS['args']);
 }
 
 ?>

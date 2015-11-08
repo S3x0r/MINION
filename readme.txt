@@ -1,11 +1,11 @@
-    __                      __           __   
-.--|  |.---.-.--.--.--.--. |  |--.-----.|  |_ 
-|  _  ||  _  |  |  |  |  | |  _  |  _  ||   _|
-|_____||___._|\___/|___  | |_____|_____||____|
-                   |_____|                    
-				   (olisek@gmail.com)
+     __                      __           __
+ .--|  |.---.-.--.--.--.--. |  |--.-----.|  |_
+ |  _  ||  _  |  |  |  |  | |  _  |  _  ||   _|
+ |_____||___._|\___/|___  | |_____|_____||____|
+                    |_____|
+    Author: S3x0r, contact: olisek@gmail.com
 
-
+Important!
 Before running BOT you must configure your BOT in CONFIG.INI file.
 
 OWNERS HOSTS - EDIT IT (CONFIG.INI) FOR USING BOT COMMANDS!
@@ -18,16 +18,17 @@ example: S3x0r!~S3x0r@85-123-48-249.dsl.dynamic.simnet.is
 Bot was writted to run from Windows systems, tested on Windows 7
 You dont need to download PHP, just run bot from START_BOT.BAT file
 
-You can now check for bot update and if its available download it and install
-command: !update
+You can now check for bot update, command: !checkupdate
+And command: !update for downloading and installing new version.
 
-You can write commands to BOT on channel or in private message.
-Prefix: !
+To communicate with bot msg to it on channel using prefix: !<command>
+You can change prefix in config file.
 
 BOT Commands:
-addowner -- Adds Owner host to config file: !addowner <nick!id@host>
+add_owner -- Adds Owner host to config file: !add_owner <nick!id@host>
 cham -- Shows random text from file: !cham <nick>
-commands -- Shows BOT commands: !commands
+checkupdate -- Checking for updates: !checkupdate
+commands -- Shows BOT commands: !commands, !help
 deop -- Deops someone: !deop <nick>
 devoice -- Devoice user: !devoice <nick>
 dns -- Dns: !dns <address>
@@ -40,7 +41,6 @@ newnick -- Changes nickname: !newnick <new_nick>
 op -- Gives op: !op <nick>
 quit -- Shutdown BOT: !quit, !die
 restart -- Restarts Bot: !restart
-save_altnick -- Saving altnick to config: !save_altnick <new_altnick>
 save_channel -- Saving channel to config: !save_channel <#new_channel>
 save_ident -- Saving ident to config: !save_ident <new_ident>
 save_name -- Saving name to config: !save_name <new_name>
@@ -49,6 +49,6 @@ save_port -- Saving new port to config: !save_port <new_port>
 save_server -- Saving new server to config: !save_server <new_server>
 showconfig -- Shows BOT configuration: !showconfig
 topic -- Changing Topic in channel: !topic <topic>
-update -- Checks for update: !update
+update -- Updates the BOT if new version is available: !update
 uptime -- Shows BOT uptime: !uptime
 voice -- Gives voice: !voice <nick>

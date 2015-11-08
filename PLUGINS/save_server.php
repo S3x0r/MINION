@@ -5,16 +5,13 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
 function plugin_save_server()
 {
- global $cfg;
  $new = trim($GLOBALS['args']);
 
- $cfg = new iniParser("../CONFIG.INI");
- $cfg->setValue("SERVER","server", "$new");
- $cfg->save();
+ SaveData('../CONFIG.INI', 'SERVER', 'server', $new);
 
  CHANNEL_MSG('Server Saved.');
 
- MSG('!saveserver on: '.$GLOBALS['channel'].', New server: '.$GLOBALS['args']);
+ MSG('!save_server on: '.$GLOBALS['C_CNANNEL'].', New server: '.$GLOBALS['args']);
 }
 
 ?>

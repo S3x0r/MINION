@@ -5,9 +5,10 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
 function plugin_topic()
 {
+ $data = trim($GLOBALS['args']);
+ fputs($GLOBALS['socket'], 'TOPIC '.$GLOBALS['C_CNANNEL'].' '.$data."\n");
 
- fputs($GLOBALS['socket'], 'TOPIC '.$GLOBALS['channel'].' '. $GLOBALS['args'] ."\n");
-
+ MSG('!topic on: '.$GLOBALS['C_CNANNEL'].', New topic: '.$data);
 }
 
 ?>

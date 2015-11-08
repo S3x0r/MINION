@@ -5,17 +5,13 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
 function plugin_save_name()
 {
- global $cfg;
  $new = trim($GLOBALS['args']);
 
- $cfg = new iniParser("../CONFIG.INI");
- $cfg->setValue("BOT","name", "$new");
- $cfg->save();
+ SaveData('../CONFIG.INI', 'BOT', 'name', $new);
 
  CHANNEL_MSG('Name Saved.');
 
- MSG('!savename on: '.$GLOBALS['channel'].', New name: '.$GLOBALS['args']);
-
+ MSG('!save_name on: '.$GLOBALS['C_CNANNEL'].', New name: '.$GLOBALS['args']);
 }
 
 ?>

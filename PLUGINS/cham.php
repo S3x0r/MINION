@@ -12,10 +12,13 @@ function plugin_cham()
  $count = 0;
 
  shuffle($texts);
- $text  =  $texts[$count++];
+ $text = $texts[$count++];
 
- CHANNEL_MSG($GLOBALS['args'].': '.$text);
+ $who = trim($GLOBALS['args']);
 
+ CHANNEL_MSG($who.': '.$text);
+ 
+ MSG('!cham on: '.$GLOBALS['C_CNANNEL'].', who: '.$who);
 }
-//add text file
+/* add text file */
 ?>

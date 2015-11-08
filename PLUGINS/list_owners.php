@@ -5,12 +5,9 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
 function plugin_list_owners()
 {
- $conf_file = '../CONFIG.INI';
- $cfg = new iniParser($conf_file);
- $GLOBALS['c_owners'] = $cfg->get("ADMIN","bot_owners");
+ LoadData('../CONFIG.INI', 'ADMIN', 'bot_owners');
 
- $owners_c  = $GLOBALS['c_owners'];
- $pieces = explode(", ", $owners_c);
+ $pieces = explode(", ", $GLOBALS['LOADED']);
  $owners = $pieces;
 
  $table = $owners;
@@ -21,7 +18,8 @@ function plugin_list_owners()
  {
    CHANNEL_MSG($table[$i]);
  } 
-
+ 
+ MSG('!list_owners on: '.$GLOBALS['C_CNANNEL']);
 }
 
 ?>
