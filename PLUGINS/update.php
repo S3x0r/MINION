@@ -97,12 +97,7 @@ function v_extract()
 function v_createBat()
 {
   $data = '
-del /Q readme.txt
-del /Q .gitattributes
-del /Q BOT.php
-del /Q START_BOT.BAT
-del /Q CONFIG.INI
-del /Q CONFIG.EXE
+del /Q *
 rmdir /S /Q DOCS
 rmdir /S /Q PHP
 rmdir /S /Q PLUGINS
