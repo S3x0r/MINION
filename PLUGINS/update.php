@@ -102,19 +102,23 @@ del /Q .gitattributes
 del /Q BOT.php
 del /Q START_BOT.BAT
 del /Q CONFIG.INI
+del /Q CONFIG.EXE
 rmdir /S /Q DOCS
+rmdir /S /Q PHP
 rmdir /S /Q PLUGINS
 mkdir DOCS
+mkdir PHP
 mkdir PLUGINS
 cd davybot-master
 copy * "../"
 xcopy /E DOCS "../DOCS"
+xcopy /E PHP "../PHP"
 xcopy /E PLUGINS "../PLUGINS"
 cd ..
 rmdir /S /Q davybot-master
-del update.zip
+del /Q update.zip
 START_BOT.BAT
-del INSTALL.BAT';
+del /Q INSTALL.BAT';
 
 	$f=fopen($GLOBALS['dir'].'INSTALL.BAT', 'w');
 	flock($f, 2);
