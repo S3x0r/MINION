@@ -1,13 +1,21 @@
 <?php
 
 //------------------------------------------------------------------------------------------------
-define('VER', '0.1.6');
+define('VER', '0.1.7');
 //------------------------------------------------------------------------------------------------
 Start();
 //------------------------------------------------------------------------------------------------
 function Start()
 {
  if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
+ 
+ /* wcli extension */
+ if (extension_loaded('wcli')) {
+ wcli_clear();
+ wcli_maximize();
+ wcli_set_console_title('davybot ('.VER.')');
+ wcli_hide_cursor();
+ }
 
  echo "
      __                      __           __ 
@@ -67,14 +75,14 @@ function LoadConfig()
    $GLOBALS['RND_NICKNAME'] = $GLOBALS['C_NICKNAME'].'|'.rand(0,99); /* set random nickname */
    $GLOBALS['StartTime'] = time(); /* starting time */
    
-   MSG("1. Configuration Loaded from: CONFIG.INI");
+   CLI_MSG("1. Configuration Loaded from: CONFIG.INI");
 
    /* now time for plugins */
    LoadPlugins();
   }
   else {
-	  MSG("ERROR: No configuration file");
-	  MSG("Creating default configuration in: CONFIG.INI - !Configure it!\n");
+	  CLI_MSG("ERROR: No configuration file");
+	  CLI_MSG("Creating default configuration in: CONFIG.INI - !Configure it!\n");
 
 /* if no config - creating default one */
 $default_config = '[BOT]
@@ -118,23 +126,25 @@ show_raw         = \'no\'';
 //------------------------------------------------------------------------------------------------
 function LoadPlugins()
 {
-MSG("2. My Plugins:");
-echo "--------------------------------------------------------\n";
- foreach(glob('../PLUGINS/*.php') as $plugin_name)
- {
-  include_once($plugin_name);
-  $plugin_name = basename($plugin_name, '.php');
-  echo "$plugin_name -- $plugin_description\n";
- }
-echo "--------------------------------------------------------\n";
+ $a = count(glob("../PLUGINS/*.php",GLOB_BRACE));
+
+ CLI_MSG("2. My Plugins($a):");
+ echo "--------------------------------------------------------\n";
+  foreach(glob('../PLUGINS/*.php') as $plugin_name)
+  {
+   include_once($plugin_name);
+   $plugin_name = basename($plugin_name, '.php');
+   echo "$plugin_name -- $plugin_description\n";
+  }
+ echo "--------------------------------------------------------\n";
 
 /* now we are connecting */
-Connect();
+ Connect();
 }
 //------------------------------------------------------------------------------------------------
 function Connect()
 {
- MSG('3. Connecting to: '.$GLOBALS['C_SERVER'].', port: '.$GLOBALS['C_PORT']);
+ CLI_MSG('3. Connecting to: '.$GLOBALS['C_SERVER'].', port: '.$GLOBALS['C_PORT']);
 
  $i = 0;
 
@@ -144,10 +154,10 @@ function Connect()
   $GLOBALS['socket'] = fsockopen($GLOBALS['C_SERVER'], $GLOBALS['C_PORT']);
 
    if($GLOBALS['socket']==false) {
-	 MSG('Unable to connect to server, im trying to connect again...');
+	 CLI_MSG('Unable to connect to server, im trying to connect again...');
      sleep($GLOBALS['C_CONNECT_DELAY']); 
     if($i==$GLOBALS['C_TRY_CONNECT']) {
-     MSG('Unable to connect to server, exiting program.');
+     CLI_MSG('Unable to connect to server, exiting program.');
 	 die(); /* TODO: send email that terminated program? */
 	 }
    }
@@ -209,7 +219,7 @@ switch ($ex[1]){
 	
 	case '433': /* if nick already exists */
 	case '432': /* if nick reserved */
-	    MSG('-- Nickname already used, changing to alternative nick: '.$GLOBALS['RND_NICKNAME']);
+	    CLI_MSG('-- Nickname already used, changing to alternative nick: '.$GLOBALS['RND_NICKNAME']);
 		fputs($GLOBALS['socket'],'NICK '.$GLOBALS['RND_NICKNAME']."\n");
 		SaveData('../data.ini', 'DATA', 'nickname', $GLOBALS['RND_NICKNAME']);
         break;
@@ -217,23 +227,29 @@ switch ($ex[1]){
 	case '422': /* join if no motd */
 	case '376': /* join after motd */
 	     LoadData('../data.ini', 'DATA', 'nickname');
-		 MSG('4. OK im connected, my nickname is: '.$GLOBALS['LOADED']);
+		 CLI_MSG('4. OK im connected, my nickname is: '.$GLOBALS['LOADED']);
+		
+		 /* wcli extension */
+		 if (extension_loaded('wcli')) {
+		 wcli_set_console_title('davybot '.VER.' (server: '.$GLOBALS['C_SERVER'].':'.$GLOBALS['C_PORT'].' | nickname: '.$GLOBALS['C_NICKNAME'].' | channel: '.$GLOBALS['C_CNANNEL'].')');
+		 }
+
 		 if($GLOBALS['C_AUTO_JOIN'] == 'yes') { 
-		 MSG('5. Joining channel: '.$GLOBALS['C_CNANNEL']);
+		 CLI_MSG('5. Joining channel: '.$GLOBALS['C_CNANNEL']);
 		 JOIN_CHANNEL($GLOBALS['C_CNANNEL']);
 		 break;
 		 }
 		break;
 
 	case 'QUIT': /* quit message */
-		MSG('* '.$nick.' ('.$ident.'@'.$host.') Quit');
+		CLI_MSG('* '.$nick.' ('.$ident.'@'.$host.') Quit');
 		//save_to_database(); /* Saving to database -> !seen */
 		break;
 
 /* Need to FIX
 	 Changed Topic message 
 	case 'TOPIC':
-		MSG('* '.$nick.' changes topic to \''.$ex[3].'\'');
+		CLI_MSG('* '.$nick.' changes topic to \''.$ex[3].'\'');
 		break;
 */
 	}
@@ -350,7 +366,7 @@ function LoadData($v1, $v2, $v3)
  $GLOBALS['LOADED'] = $cfg->get("$v2", "$v3");
 }
 //------------------------------------------------------------------------------------------------
-function MSG($msg)
+function CLI_MSG($msg)
 {
  $line = '[' . @date( 'H:i:s' ) . '] ' . $msg . "\r\n";
  echo $line;

@@ -11,11 +11,14 @@ function plugin_add_owner()
  $new         = trim($GLOBALS['args']);
  $new_list    = $owners_list.', '.$new;
 
+//if (preg_match("|^([^.\s]+)((!(\S+))?@(\S+))?$|U",
+//$from, $matches)) {
+
  SaveData('../CONFIG.INI', 'ADMIN', 'bot_owners', $new_list);
 
  CHANNEL_MSG('Owner Added.');
 
- MSG('!add_owner on: '.$GLOBALS['C_CNANNEL'].', added: '.$GLOBALS['args']);
+ CLI_MSG('!add_owner on: '.$GLOBALS['C_CNANNEL'].', added: '.$GLOBALS['args']);
 }
 
 ?>

@@ -12,7 +12,7 @@ function plugin_uptime()
 
  CHANNEL_MSG('My Uptime: '.$hours.' hours, '.$minutes.' minutes');
  
- MSG('!Uptime on: '.$GLOBALS['C_CNANNEL']);
+ CLI_MSG('!Uptime on: '.$GLOBALS['C_CNANNEL']);
 }
 
 ?> 

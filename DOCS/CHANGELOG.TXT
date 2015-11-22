@@ -1,4 +1,10 @@
-   v.0.1.6 changes:
+   
+   v0.1.7 changes:
+   - added wcli extension to php
+   - now we maximize DOS window and added title to it
+   - we have now gui program to configure bot-> CONFIG.EXE
+
+   v0.1.6 changes:
    - alternative nick removed from config and added nick|random if nick reserved/used
    - fixed: now showing true nickname when connected
    - new command !checkupdate - checking for new version but not installing it.

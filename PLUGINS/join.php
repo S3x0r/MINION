@@ -7,7 +7,7 @@ function plugin_joinc()
 {
  JOIN_CHANNEL($GLOBALS['args']); 
 
- MSG('!join, !j on: '.$GLOBALS['C_CNANNEL'].', joining: '.$GLOBALS['args']);
+ CLI_MSG('!join, !j on: '.$GLOBALS['C_CNANNEL'].', joining: '.$GLOBALS['args']);
 }
 
 ?>

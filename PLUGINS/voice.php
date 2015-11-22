@@ -8,7 +8,7 @@ function plugin_voice()
 {
  fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['C_CNANNEL'].' +v '.$GLOBALS['args']."\n");
  
- MSG('!voice on: '.$GLOBALS['C_CNANNEL'].', for: '.$GLOBALS['args']);
+ CLI_MSG('!voice on: '.$GLOBALS['C_CNANNEL'].', for: '.$GLOBALS['args']);
 }
 
 ?>

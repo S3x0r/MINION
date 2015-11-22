@@ -14,7 +14,7 @@ function plugin_showconfig()
  CHANNEL_MSG('CTCP response: '.$GLOBALS['C_CTCP_RESPONSE'].', CTCP version: '.$GLOBALS['C_CTCP_VERSION'].', CTCP finger: '.$GLOBALS['C_CTCP_FINGER'].'');
  CHANNEL_MSG('Show raw: '.$GLOBALS['C_SHOW_RAW'].'');
 
- MSG('!showconfig on: '.$GLOBALS['C_CNANNEL']);
+ CLI_MSG('!showconfig on: '.$GLOBALS['C_CNANNEL']);
 }
 
 ?>

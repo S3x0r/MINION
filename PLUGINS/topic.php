@@ -8,7 +8,7 @@ function plugin_topic()
  $data = trim($GLOBALS['args']);
  fputs($GLOBALS['socket'], 'TOPIC '.$GLOBALS['C_CNANNEL'].' '.$data."\n");
 
- MSG('!topic on: '.$GLOBALS['C_CNANNEL'].', New topic: '.$data);
+ CLI_MSG('!topic on: '.$GLOBALS['C_CNANNEL'].', New topic: '.$data);
 }
 
 ?>

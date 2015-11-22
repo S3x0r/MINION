@@ -11,7 +11,7 @@ function plugin_save_nick()
  
  CHANNEL_MSG('Nick Saved.');
 
- MSG('!save_nick on: '.$GLOBALS['C_CNANNEL'].', New nick: '.$GLOBALS['args']);
+ CLI_MSG('!save_nick on: '.$GLOBALS['C_CNANNEL'].', New nick: '.$GLOBALS['args']);
 }
 
 ?>

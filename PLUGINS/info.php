@@ -13,6 +13,6 @@ function plugin_info()
  CHANNEL_MSG('----------------------------------------------');
  CHANNEL_MSG('   Author: S3x0r, contact: olisek@gmail.com');
 
- MSG('!info on: '.$GLOBALS['C_CNANNEL']);
+ CLI_MSG('!info on: '.$GLOBALS['C_CNANNEL']);
 }
 ?>

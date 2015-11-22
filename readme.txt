@@ -6,9 +6,10 @@
     Author: S3x0r, contact: olisek@gmail.com
 
 Important!
-Before running BOT you must configure your BOT in CONFIG.INI file.
+Before running BOT you must configure your BOT by using CONFIG.EXE program
+or edit CONFIG.INI file.
 
-OWNERS HOSTS - EDIT IT (CONFIG.INI) FOR USING BOT COMMANDS!
+OWNERS HOSTS - EDIT IT (CONFIG.EXE or CONFIG.INI) FOR USING BOT COMMANDS!
 
          nick ! ident@   host
            |      |       |

@@ -7,7 +7,7 @@ function plugin_deop()
 {
  fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['C_CNANNEL'].' -o '. $GLOBALS['args'] ."\n");
 
- MSG('!deop on: '.$GLOBALS['C_CNANNEL'].', who: '.$GLOBALS['args']);
+ CLI_MSG('!deop on: '.$GLOBALS['C_CNANNEL'].', who: '.$GLOBALS['args']);
 }
 
 ?>

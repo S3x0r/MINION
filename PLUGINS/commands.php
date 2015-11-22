@@ -15,7 +15,7 @@ function plugin_commands()
 
  CHANNEL_MSG('End.');
 
- MSG('!commands, !help on: '.$GLOBALS['C_CNANNEL']);
+ CLI_MSG('!commands, !help on: '.$GLOBALS['C_CNANNEL']);
 }
 //need fix
 ?>

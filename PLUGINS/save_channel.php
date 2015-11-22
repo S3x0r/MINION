@@ -11,7 +11,7 @@ function plugin_save_channel()
 
  CHANNEL_MSG('Channel Saved.');
 
- MSG('!save_channel on: '.$GLOBALS['C_CNANNEL'].', New channel: '.$GLOBALS['args']);
+ CLI_MSG('!save_channel on: '.$GLOBALS['C_CNANNEL'].', New channel: '.$GLOBALS['args']);
 }
 
 ?>

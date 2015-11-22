@@ -11,7 +11,7 @@ function plugin_save_ident()
 
  CHANNEL_MSG('Ident Saved.');
 
- MSG('!save_ident on: '.$GLOBALS['C_CNANNEL'].', New ident: '.$GLOBALS['args']);
+ CLI_MSG('!save_ident on: '.$GLOBALS['C_CNANNEL'].', New ident: '.$GLOBALS['args']);
 }
 
 ?>

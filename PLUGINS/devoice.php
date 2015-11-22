@@ -7,7 +7,7 @@ function plugin_devoice()
 {
  fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['C_CNANNEL'].' -v '.$GLOBALS['args']."\n");
 
- MSG('!devoice on: '.$GLOBALS['C_CNANNEL'].', who: '.$GLOBALS['args']);
+ CLI_MSG('!devoice on: '.$GLOBALS['C_CNANNEL'].', who: '.$GLOBALS['args']);
 }
 
 ?>

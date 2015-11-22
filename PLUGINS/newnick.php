@@ -7,7 +7,7 @@ function plugin_newnick()
 {
  fputs($GLOBALS['socket'],'NICK '.$GLOBALS['args']."\n");
 
- MSG('!newnick on: '.$GLOBALS['C_CNANNEL'].', new nick: '.$GLOBALS['args']);
+ CLI_MSG('!newnick on: '.$GLOBALS['C_CNANNEL'].', new nick: '.$GLOBALS['args']);
 }
 
 ?>

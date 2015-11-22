@@ -11,7 +11,7 @@ function plugin_save_port()
  
  CHANNEL_MSG('Port Saved.');
 
- MSG('!save_port on: '.$GLOBALS['C_CNANNEL'].', New port: '.$GLOBALS['args']);
+ CLI_MSG('!save_port on: '.$GLOBALS['C_CNANNEL'].', New port: '.$GLOBALS['args']);
 }
 
 ?>

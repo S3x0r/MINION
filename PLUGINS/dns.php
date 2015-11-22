@@ -9,6 +9,6 @@ function plugin_dns()
   
  CHANNEL_MSG('host: '.$host);
 
- MSG('!dns on: '.$GLOBALS['C_CNANNEL'].', dns: '.$GLOBALS['args'].'/ '.$host);
+ CLI_MSG('!dns on: '.$GLOBALS['C_CNANNEL'].', dns: '.$GLOBALS['args'].'/ '.$host);
 }
 ?>

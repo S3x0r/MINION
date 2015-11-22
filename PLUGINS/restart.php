@@ -6,8 +6,8 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 function plugin_restart()
 {
  fputs($GLOBALS['socket'],"QUIT :Restarting...\n");
- MSG('!restart on: '.$GLOBALS['C_CNANNEL']);
- MSG('Restarting BOT...');
+ CLI_MSG('!restart on: '.$GLOBALS['C_CNANNEL']);
+ CLI_MSG('Restarting BOT...');
  system('restart.bat');
  die();
 }

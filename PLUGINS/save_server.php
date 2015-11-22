@@ -11,7 +11,7 @@ function plugin_save_server()
 
  CHANNEL_MSG('Server Saved.');
 
- MSG('!save_server on: '.$GLOBALS['C_CNANNEL'].', New server: '.$GLOBALS['args']);
+ CLI_MSG('!save_server on: '.$GLOBALS['C_CNANNEL'].', New server: '.$GLOBALS['args']);
 }
 
 ?>

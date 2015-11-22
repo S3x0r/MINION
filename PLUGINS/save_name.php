@@ -11,7 +11,7 @@ function plugin_save_name()
 
  CHANNEL_MSG('Name Saved.');
 
- MSG('!save_name on: '.$GLOBALS['C_CNANNEL'].', New name: '.$GLOBALS['args']);
+ CLI_MSG('!save_name on: '.$GLOBALS['C_CNANNEL'].', New name: '.$GLOBALS['args']);
 }
 
 ?>

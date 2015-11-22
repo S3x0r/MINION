@@ -18,7 +18,7 @@ function plugin_cham()
 
  CHANNEL_MSG($who.': '.$text);
  
- MSG('!cham on: '.$GLOBALS['C_CNANNEL'].', who: '.$who);
+ CLI_MSG('!cham on: '.$GLOBALS['C_CNANNEL'].', who: '.$who);
 }
 /* add text file */
 ?>

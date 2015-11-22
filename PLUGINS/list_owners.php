@@ -19,7 +19,7 @@ function plugin_list_owners()
    CHANNEL_MSG($table[$i]);
  } 
  
- MSG('!list_owners on: '.$GLOBALS['C_CNANNEL']);
+ CLI_MSG('!list_owners on: '.$GLOBALS['C_CNANNEL']);
 }
 
 ?>
