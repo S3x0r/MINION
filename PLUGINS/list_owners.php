@@ -2,6 +2,7 @@
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
  $plugin_description = 'Shows BOT owners: !list_owners';
+ $plugin_command = 'list_owners';
 
 function plugin_list_owners()
 {

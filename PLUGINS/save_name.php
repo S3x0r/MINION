@@ -2,6 +2,7 @@
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
  $plugin_description = 'Saving name to config: !save_name <new_name>';
+ $plugin_command = 'save_name';
 
 function plugin_save_name()
 {

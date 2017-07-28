@@ -2,6 +2,7 @@
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
  $plugin_description = 'Saving new port to config: !save_port <new_port>';
+ $plugin_command = 'save_port';
 
 function plugin_save_port()
 {

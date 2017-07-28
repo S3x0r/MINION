@@ -2,6 +2,7 @@
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
  $plugin_description = 'Changing Topic in channel: !topic <topic>';
+ $plugin_command = 'topic';
 
 function plugin_topic()
 {

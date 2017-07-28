@@ -2,6 +2,7 @@
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
  $plugin_description = 'Deops someone: !deop <nick>';
+ $plugin_command = 'deop';
 
 function plugin_deop()
 {

@@ -1,4 +1,14 @@
-   
+ 
+   v0.2.0 changes: 
+   - !commands improved 
+   - !fetch improved
+   - fetch server added to config file
+
+   v0.1.9 changes:
+   - changed plugins system
+   - little plugins modifications
+   - NEW command !fetch plugin added (you can now download plugins from repository:)
+
    v0.1.8 changes:
    - update fix
 

@@ -2,7 +2,7 @@
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
  $plugin_description = 'Gives voice: !voice <nick>';
-
+ $plugin_command = 'voice';
 
 function plugin_voice()
 {

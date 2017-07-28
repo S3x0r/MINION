@@ -29,18 +29,19 @@ BOT Commands:
 add_owner -- Adds Owner host to config file: !add_owner <nick!id@host>
 cham -- Shows random text from file: !cham <nick>
 checkupdate -- Checking for updates: !checkupdate
-commands -- Shows BOT commands: !commands, !help
+commands -- Shows BOT commands: !commands
 deop -- Deops someone: !deop <nick>
 devoice -- Devoice user: !devoice <nick>
 dns -- Dns: !dns <address>
+fetch -- Downloads plugins from repository: !fetch <plugin>
 info -- Shows info: !info
-join -- Joins channel: !join <#channel>, !j <#channel>
-leave -- Leave channel: !leave <#channel>, !part <#channel>
+join -- Joins channel: !join <#channel>
+leave -- Leave channel: !leave <#channel>
 list_owners -- Shows BOT owners: !list_owners
 md5 -- Changing string to MD5: !md5 <string>
 newnick -- Changes nickname: !newnick <new_nick>
 op -- Gives op: !op <nick>
-quit -- Shutdown BOT: !quit, !die
+quit -- Shutdown BOT: !quit
 restart -- Restarts Bot: !restart
 save_channel -- Saving channel to config: !save_channel <#new_channel>
 save_ident -- Saving ident to config: !save_ident <new_ident>

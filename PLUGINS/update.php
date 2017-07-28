@@ -2,7 +2,8 @@
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
  $plugin_description = 'Updates the BOT if new version is available: !update';
- 
+ $plugin_command = 'update';
+
  $GLOBALS['dir']      = '../';
  $GLOBALS['v_addr']   = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
  $GLOBALS['v_source'] = 'http://github.com/S3x0r/davybot/archive/master.zip';

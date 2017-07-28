@@ -2,6 +2,7 @@
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
  $plugin_description = 'Saving nickname to config: !save_nick <new_nick>';
+ $plugin_command = 'save_nick';
 
 function plugin_save_nick()
 {

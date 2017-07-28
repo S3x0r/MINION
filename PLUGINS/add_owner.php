@@ -2,6 +2,7 @@
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
  $plugin_description = 'Adds Owner host to config file: !add_owner <nick!id@host>';
+ $plugin_command = 'add_owner';
 
 function plugin_add_owner()
 {

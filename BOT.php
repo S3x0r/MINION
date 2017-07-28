@@ -1,7 +1,6 @@
 <?php
-
 //------------------------------------------------------------------------------------------------
-define('VER', '0.1.9');
+define('VER', '0.2.0');
 //------------------------------------------------------------------------------------------------
 Start();
 //------------------------------------------------------------------------------------------------
@@ -64,6 +63,8 @@ function LoadConfig()
    $GLOBALS['C_CTCP_RESPONSE']  = $cfg->get("CTCP","ctcp_response");
    $GLOBALS['C_CTCP_VERSION']   = $cfg->get("CTCP","ctcp_version");
    $GLOBALS['C_CTCP_FINGER']    = $cfg->get("CTCP","ctcp_finger");
+  /* FETCH */
+   $GLOBALS['C_FETCH_SERVER']   = $cfg->get("FETCH","fetch_server");
   /* DEBUG */
    $GLOBALS['C_SHOW_RAW']       = $cfg->get("DEBUG","show_raw");
 
@@ -97,7 +98,7 @@ try_connect      = \'10\'
 connect_delay    = \'3\'
 
 [ADMIN]
-bot_owners       = \'S3x0r!S3x0r@validation.sls.microsoft.com, nick!ident@some.other.host.com\'
+bot_owners       = \'S3x0r!S3x0r@some.host, nick!ident@some.other.host.com\'
 
 [CHANNEL]
 channel          = \'#davybot\'
@@ -110,6 +111,9 @@ command_prefix   = \'!\'
 ctcp_response    = \'yes\'
 ctcp_version     = \'davybot\'
 ctcp_finger      = \'davybot\'
+
+[FETCH]
+fetch_server     = \'https://raw.githubusercontent.com/S3x0r/davybot_repository_plugins/master\'
 
 [DEBUG]
 show_raw         = \'no\'';
@@ -127,18 +131,29 @@ show_raw         = \'no\'';
 function LoadPlugins()
 {
  $a = count(glob("../PLUGINS/*.php",GLOB_BRACE));
-
+ $b = fopen('../plugins.ini', 'w');
+ 
  CLI_MSG("2. My Plugins($a):");
+ 
  echo "--------------------------------------------------------\n";
-  foreach(glob('../PLUGINS/*.php') as $plugin_name)
+  
+   foreach(glob('../PLUGINS/*.php') as $plugin_name)
   {
    include_once($plugin_name);
+   fwrite($b, $GLOBALS['C_CMD_PREFIX'].''.$plugin_command.' ');
    $plugin_name = basename($plugin_name, '.php');
    echo "$plugin_name -- $plugin_description\n";
   }
  echo "--------------------------------------------------------\n";
+ 
+ fclose($b);
 
-/* now we are connecting */
+ $GLOBALS['PLUGINS'] = file_get_contents("../plugins.ini"); 
+ $GLOBALS['PLUGINS'] = explode(" ", $GLOBALS['PLUGINS']);
+
+ if($GLOBALS['C_SHOW_RAW'] == 'yes') { print_r($GLOBALS['PLUGINS']); }
+
+ /* Now its time to connect */
  Connect();
 }
 //------------------------------------------------------------------------------------------------
@@ -208,7 +223,7 @@ while(1) {
         if (count ($ex) < 4)
                 continue;
         $rawcmd = explode (':', $ex[3]);
-        $args = NULL; for ($i = 4; $i < count($ex); $i++) { $args .= $ex[$i] . ' '; }
+        $args = NULL; for ($i = 4; $i < count($ex); $i++) { $args .= $ex[$i] . ''; }
         $wordlist = explode(' ', $args);
         if (isset($nick)) { $mask = $nick . "!" . $ident . "@" . $host; }
 
@@ -273,53 +288,13 @@ switch ($ex[1]){
              }
 	       }
 
-
  /* commands */
-		if(HasOwner($mask)) 
-		{
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'checkupdate')   {	plugin_checkupdate();    }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'add_owner')     {	plugin_add_owner();      }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'seen')          {	plugin_seen();           }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'dns')           {	plugin_dns();            }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'voice')         {	plugin_voice();          }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'devoice')       {	plugin_devoice();        }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'update')        {	plugin_update();         }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'restart')       {	plugin_restart();        }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'uptime')        {	plugin_uptime();         }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'md5')           {	plugin_md5();            }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'info')          {	plugin_info();           }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'op')            {	plugin_op();             }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'deop')          {	plugin_deop();           }
-
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'join')          {	plugin_joinc();          }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'j')             {	plugin_joinc();          }
-
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'leave')         {	plugin_leave();          }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'part')          {	plugin_leave();          }
-
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'quit')          {	plugin_quit();           }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'die')           {	plugin_quit();           }
-
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'topic')         {	plugin_topic();          }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'cham')          {	plugin_cham();           }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'newnick')       {	plugin_newnick();        }
-
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'commands')      {	plugin_commands();       }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'help')          {	plugin_commands();       }
-		
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'showconfig')    {	plugin_showconfig();     }
-
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'save_nick')	    {	plugin_save_nick();      }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'save_altnick')  {	plugin_save_altnick();   }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'save_ident')    {	plugin_save_ident();     }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'save_name')     {	plugin_save_name();      }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'save_port')     {	plugin_save_port();      }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'save_server')   {	plugin_save_server();    }
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'save_channel')  {	plugin_save_channel();   }
-
-		if ($rawcmd[1] == $GLOBALS['C_CMD_PREFIX'].'list_owners')    {	plugin_list_owners();    }
-		}
-       }
+	if(HasOwner($mask)) 
+	{
+		$pn = str_replace($GLOBALS['C_CMD_PREFIX'], '', $rawcmd[1]);
+		if (in_array($rawcmd[1], $GLOBALS['PLUGINS'])) { call_user_func('plugin_'.$pn); }
+	}
+   }
    exit;
  }
 }

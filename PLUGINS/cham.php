@@ -2,6 +2,7 @@
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
  $plugin_description = 'Shows random text from file: !cham <nick>';
+ $plugin_command = 'cham';
 
 function plugin_cham()
 {

@@ -2,6 +2,7 @@
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
  $plugin_description = 'Gives op: !op <nick>';
+ $plugin_command = 'op';
 
 function plugin_op()
 {

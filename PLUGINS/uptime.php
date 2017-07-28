@@ -2,6 +2,7 @@
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
  $plugin_description = 'Shows BOT uptime: !uptime';
+ $plugin_command = 'uptime';
 
 function plugin_uptime()
 {
@@ -15,4 +16,4 @@ function plugin_uptime()
  CLI_MSG('!Uptime on: '.$GLOBALS['C_CNANNEL']);
 }
 
-?> 
+?>

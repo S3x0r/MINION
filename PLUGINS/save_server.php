@@ -2,6 +2,7 @@
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
  $plugin_description = 'Saving new server to config: !save_server <new_server>';
+ $plugin_command = 'save_server';
 
 function plugin_save_server()
 {
