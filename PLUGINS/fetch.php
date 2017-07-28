@@ -11,21 +11,31 @@ function plugin_fetch()
 
    CHANNEL_MSG('Downloading plugin: "'.$GLOBALS['args'].'" from repository');
 
-   $file = file_get_contents($address);
-   $a = fopen('../PLUGINS/'.$GLOBALS['args'].'.php', 'w');
+	$check_file = '../PLUGINS/'.$GLOBALS['args'].'.php';
+
+	if(file_exists($check_file)) 
+		{
+		  CHANNEL_MSG('I already have this plugin');
+		}
+	
+   else {
+	      $file = file_get_contents($address);
+	      $a = fopen('../PLUGINS/'.$GLOBALS['args'].'.php', 'w');
   
-   if(!fwrite($a, $file)) { 
-							CHANNEL_MSG('no such plugin in repository'); 
-							fclose($a);
-							$delete = '../PLUGINS/'.$GLOBALS['args'].'.php';
-							unlink($delete);
-							CLI_MSG('!fetch: '.$GLOBALS['C_CNANNEL'].', plugin: '.$GLOBALS['args']);
-						  }
-							else {
-									fclose($a);
-									CHANNEL_MSG('Plugin added.');
-									CLI_MSG('!fetch: '.$GLOBALS['C_CNANNEL'].', plugin: '.$GLOBALS['args']);
-								 }
+        if(!fwrite($a, $file))
+			{ 
+			  CHANNEL_MSG('no such plugin in repository'); 
+			  fclose($a);
+			  $delete = '../PLUGINS/'.$GLOBALS['args'].'.php';
+			  unlink($delete);
+			  CLI_MSG('!fetch: '.$GLOBALS['C_CNANNEL'].', plugin: '.$GLOBALS['args']);
+			}
+			  else {
+			         fclose($a);
+					 CHANNEL_MSG('Plugin added.');
+					 CLI_MSG('!fetch: '.$GLOBALS['C_CNANNEL'].', plugin: '.$GLOBALS['args']);
+			       }
+	    }
 }
 
 ?>

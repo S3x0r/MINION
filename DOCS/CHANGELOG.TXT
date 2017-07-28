@@ -1,4 +1,8 @@
- 
+﻿
+   v0.2.1 changes:
+   - !fetch now checks if plugin already exist
+   - NEW command !save_fetch_server - Saving fetch server to config: !save_fetch_server <new_server>
+
    v0.2.0 changes: 
    - !commands improved 
    - !fetch improved

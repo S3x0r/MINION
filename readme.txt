@@ -44,6 +44,7 @@ op -- Gives op: !op <nick>
 quit -- Shutdown BOT: !quit
 restart -- Restarts Bot: !restart
 save_channel -- Saving channel to config: !save_channel <#new_channel>
+save_fetch_server - Saving fetch server to config: !save_fetch_server <new_server>
 save_ident -- Saving ident to config: !save_ident <new_ident>
 save_name -- Saving name to config: !save_name <new_name>
 save_nick -- Saving nickname to config: !save_nick <new_nick>
