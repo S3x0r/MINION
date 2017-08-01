@@ -33,7 +33,8 @@ commands -- Shows BOT commands: !commands
 deop -- Deops someone: !deop <nick>
 devoice -- Devoice user: !devoice <nick>
 dns -- Dns: !dns <address>
-fetch -- Downloads plugins from repository: !fetch <plugin>
+fetch list -- Lists plugins in repository
+fetch get <plugin> -- Downloads plugins from repository
 info -- Shows info: !info
 join -- Joins channel: !join <#channel>
 leave -- Leave channel: !leave <#channel>

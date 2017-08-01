@@ -1,6 +1,6 @@
 <?php
 //------------------------------------------------------------------------------------------------
-define('VER', '0.2.1');
+define('VER', '0.2.2');
 //------------------------------------------------------------------------------------------------
 Start();
 //------------------------------------------------------------------------------------------------
@@ -195,6 +195,8 @@ function Engine()
 global $args;
 global $nick;
 global $hostname;
+global $piece1;
+global $piece2;
 
 /* main socket loop */
 while(1) {
@@ -224,7 +226,12 @@ while(1) {
                 continue;
         $rawcmd = explode (':', $ex[3]);
         $args = NULL; for ($i = 4; $i < count($ex); $i++) { $args .= $ex[$i] . ''; }
-        $wordlist = explode(' ', $args);
+		//new
+        $args1 = NULL; for ($i = 4; $i < count($ex); $i++) { $args1 .= $ex[$i] . ' '; }
+        $pieces = explode(" ", $args1);
+        $piece1 = $pieces[0];
+		$piece2 = $pieces[1];
+		//-
         if (isset($nick)) { $mask = $nick . "!" . $ident . "@" . $host; }
 
 		$hostname = $ident . "@" . $host;

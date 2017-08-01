@@ -1,4 +1,9 @@
-﻿
+﻿  
+   v0.2.2 changes:
+   - !fetch list - switch added (lists all plugins from repository)
+   - !fetch get <plugin> - new switch added 
+   - little change in connection loop
+
    v0.2.1 changes:
    - !fetch now checks if plugin already exist
    - NEW command !save_fetch_server - Saving fetch server to config: !save_fetch_server <new_server>
