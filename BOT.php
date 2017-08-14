@@ -1,6 +1,6 @@
 <?php
 //------------------------------------------------------------------------------------------------
-define('VER', '0.2.2');
+define('VER', '0.2.3');
 //------------------------------------------------------------------------------------------------
 Start();
 //------------------------------------------------------------------------------------------------
@@ -54,6 +54,8 @@ function LoadConfig()
    $GLOBALS['C_CONNECT_DELAY']  = $cfg->get("SERVER","connect_delay"); 
   /* OWNERS */
    $GLOBALS['C_OWNERS']         = $cfg->get("ADMIN","bot_owners");
+  /* AUTOMATIC */
+   $GLOBALS['C_AUTO_REJOIN']    = $cfg->get("AUTOMATIC","auto_rejoin");
   /* CHANNEL */
    $GLOBALS['C_CNANNEL']        = $cfg->get("CHANNEL","channel");
    $GLOBALS['C_AUTO_JOIN']      = $cfg->get("CHANNEL","auto_join");
@@ -71,7 +73,15 @@ function LoadConfig()
   /* show raw or no */
    if($GLOBALS['C_SHOW_RAW'] == 'yes') { error_reporting(E_ALL ^ E_NOTICE); } else { error_reporting(0); }
 
-  /* set data */
+  /* set data.ini */
+   $data_file = '../data.ini';
+   $default_data = '[DATA]nickname =';
+   $f=fopen($data_file, 'w');
+   flock($f, 2);
+   fwrite($f, $default_data);
+   flock($f, 3);
+   fclose($f); 
+
    SaveData('../data.ini', 'DATA', 'nickname', $GLOBALS['C_NICKNAME']); /* saving nickname to data file */
    $GLOBALS['RND_NICKNAME'] = $GLOBALS['C_NICKNAME'].'|'.rand(0,99); /* set random nickname */
    $GLOBALS['StartTime'] = time(); /* starting time */
@@ -98,7 +108,10 @@ try_connect      = \'10\'
 connect_delay    = \'3\'
 
 [ADMIN]
-bot_owners       = \'S3x0r!S3x0r@some.host, nick!ident@some.other.host.com\'
+bot_owners       = \'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host\'
+
+[AUTOMATIC]
+auto_rejoin      = \'yes\'
 
 [CHANNEL]
 channel          = \'#davybot\'
@@ -123,7 +136,8 @@ show_raw         = \'no\'';
 	fwrite($f, $default_config);
 	flock($f, 3);
 	fclose($f); 
-   /* after created load config again :) */
+
+   /* after default config load it again :) */
 	LoadConfig();
   }
 }
@@ -214,6 +228,21 @@ while(1) {
             continue; 
         }
         
+/* rejoin when kicked */
+		if($GLOBALS['C_AUTO_REJOIN'] == 'yes') {
+	    	if($ex[1] == "KICK"){
+				if($ex[3] == $GLOBALS['C_NICKNAME']){
+					fputs($GLOBALS['socket'], "JOIN :".$ex[2]."\n");
+					continue;
+				}	} }
+
+
+/* fix it*/
+			if($ex[1] == "JOIN"){
+				fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['C_CNANNEL'].' +o '.$GLOBALS['C_OWNERS']."\n");
+					continue;
+			}
+
 		if (preg_match ('/^:(.*)\!(.*)\@(.*)$/', $ex[0], $source)) {
 
                 $nick   = $source[1];
@@ -235,7 +264,6 @@ while(1) {
         if (isset($nick)) { $mask = $nick . "!" . $ident . "@" . $host; }
 
 		$hostname = $ident . "@" . $host;
-
 //-----------
 switch ($ex[1]){
 	
@@ -265,7 +293,7 @@ switch ($ex[1]){
 
 	case 'QUIT': /* quit message */
 		CLI_MSG('* '.$nick.' ('.$ident.'@'.$host.') Quit');
-		//save_to_database(); /* Saving to database -> !seen */
+		//todo:save_to_database(); /* Saving to database -> !seen */
 		break;
 
 /* Need to FIX

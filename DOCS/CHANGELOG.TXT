@@ -1,4 +1,13 @@
-﻿  
+﻿   
+   v0.2.3 changes:
+   - rejoin when bot kicked
+   - rejoin switch in config file (yes/no)
+   - fixed little bug with data.ini
+   - fixed update plugin - working now :)
+     it checks if new version on server, if yes downloads it and extract
+     to one directory up ../davybot(version) and copy CONFIG.INI from
+     previous version, then executing new version.
+
    v0.2.2 changes:
    - !fetch list - switch added (lists all plugins from repository)
    - !fetch get <plugin> - new switch added 

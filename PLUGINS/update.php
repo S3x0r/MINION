@@ -4,9 +4,11 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
  $plugin_description = 'Updates the BOT if new version is available: !update';
  $plugin_command = 'update';
 
- $GLOBALS['dir']      = '../';
  $GLOBALS['v_addr']   = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
  $GLOBALS['v_source'] = 'http://github.com/S3x0r/davybot/archive/master.zip';
+ $GLOBALS['CheckVersion'] = file_get_contents($GLOBALS['v_addr']);
+ $GLOBALS['dir']      = '../../';
+ $GLOBALS['newdir']   = $GLOBALS['dir'].'davybot'.$GLOBALS['CheckVersion'];
 
 //------------------------------------------------------------------------------------------------
  function plugin_update()
@@ -16,13 +18,9 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 //------------------------------------------------------------------------------------------------
 function v_connect()
 {
-  global $CheckVersion;
-
-  $CheckVersion = file_get_contents($GLOBALS['v_addr']);
-
-	 if($CheckVersion !='')
+ if($GLOBALS['CheckVersion'] !='')
 		 {
-		  v_checkVersion();
+		 v_checkVersion();
 	     }
      
 	 else {
@@ -32,9 +30,7 @@ function v_connect()
 //------------------------------------------------------------------------------------------------
 function v_checkVersion()
 {
-  global $CheckVersion;
-
-  $version = explode("\n", $CheckVersion);
+  $version = explode("\n", $GLOBALS['CheckVersion']);
 	
   if($version[0] > VER) 
 	{
@@ -59,73 +55,62 @@ function v_tryDownload()
 	  v_extract();
 }
 //------------------------------------------------------------------------------------------------
+function recurse_copy($src,$dst) { 
+    $dir = opendir($src); 
+    @mkdir($dst); 
+    while(false !== ( $file = readdir($dir)) ) { 
+        if (( $file != '.' ) && ( $file != '..' )) { 
+            if ( is_dir($src . '/' . $file) ) { 
+                recurse_copy($src . '/' . $file,$dst . '/' . $file); 
+            } 
+            else { 
+                copy($src . '/' . $file,$dst . '/' . $file); 
+            } 
+        } 
+    } 
+    closedir($dir); 
+} 
+//------------------------------------------------------------------------------------------------
+function delete_files($target) {
+    if(is_dir($target)){
+        $files = glob( $target . '*', GLOB_MARK );
+        
+        foreach( $files as $file )
+        {
+            delete_files( $file );
+        }
+		unlink($GLOBALS['newdir'].'/davybot-master/.gitattributes');
+        rmdir( $target );
+    } elseif(is_file($target)) {
+        unlink( $target );  
+    }
+}
+//------------------------------------------------------------------------------------------------
 function v_extract()
 {
   CHANNEL_MSG('Extracting update');
 
-  $zipHandle = zip_open($GLOBALS['dir'].'update.zip');
-               
-   while ($aF = zip_read($zipHandle) ) 
-	{
-     $thisFileName = zip_entry_name($aF);
-	 $thisFileDir = dirname($thisFileName);
-					
-	 if( substr($thisFileName,-1,1) == $GLOBALS['dir']) continue;
+	$zip = new ZipArchive;
+	if ($zip->open($GLOBALS['dir'].'update.zip') === TRUE) {
+    $zip->extractTo($GLOBALS['newdir']);
+    $zip->close();
+    CHANNEL_MSG('Extracted.');
+	
+	recurse_copy($GLOBALS['newdir'].'/davybot-master', $GLOBALS['newdir']);
+	delete_files($GLOBALS['newdir'].'/davybot-master');
+	
+	//delete downloaded zip
+	unlink($GLOBALS['dir'].'update.zip');
+	
+	//copy CONFIG.INI from last version
+	copy('../CONFIG.INI', $GLOBALS['newdir'].'/CONFIG.INI');
 
-	 if(!is_dir($GLOBALS['dir'].''.$thisFileDir))
-      {
-	   mkdir($GLOBALS['dir'].''.$thisFileDir);
-	   //fputs($socket, 'PRIVMSG '.$channel." :Dir: ".$thisFileDir."\n");
-	  }
-					
-	 if(!is_dir($GLOBALS['dir'].''.$thisFileName))
-	  {
-       //fputs($socket, 'PRIVMSG '.$channel." : ".$thisFileName."\n");
-	   $contents = zip_entry_read($aF, zip_entry_filesize($aF));
-	   $contents = str_replace("\r\n", "\n", $contents);
-	   $updateThis = '';
-       $updateThis = fopen($GLOBALS['dir'].''.$thisFileName, 'w');
-	   fwrite($updateThis, $contents);
-	   fclose($updateThis);
-	   unset($contents);
-      }
-	 }
-	 CHANNEL_MSG('Extracted.');
-	 zip_close($zipHandle);
-	 v_createBat();
-}
-//------------------------------------------------------------------------------------------------
-function v_createBat()
-{
-  $data = '
-del /Q *
-rmdir /S /Q DOCS
-rmdir /S /Q PHP
-rmdir /S /Q PLUGINS
-mkdir DOCS
-mkdir PHP
-mkdir PLUGINS
-cd davybot-master
-copy * "../"
-xcopy /E DOCS "../DOCS"
-xcopy /E PHP "../PHP"
-xcopy /E PLUGINS "../PLUGINS"
-cd ..
-rmdir /S /Q davybot-master
-del /Q update.zip
-START_BOT.BAT
-del /Q INSTALL.BAT';
-
-	$f=fopen($GLOBALS['dir'].'INSTALL.BAT', 'w');
-	flock($f, 2);
-	fwrite($f, $data);
-	flock($f, 3);
-	fclose($f); 
-
-  CHANNEL_MSG('Installing...');
-  sleep(2);
+  // reconnect to run new version
   fputs($GLOBALS['socket'],"QUIT :Installing, reconnecting\n");
-  system('cd .. & INSTALL.BAT');
+  system('cd '.$GLOBALS['newdir'].' & START_BOT.BAT');
   die();
 
+} else {
+    CHANNEL_MSG('Failed to extract, aborting.');
+ }
 }
