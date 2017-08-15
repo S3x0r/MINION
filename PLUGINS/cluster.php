@@ -11,24 +11,19 @@ function plugin_cluster()
 		CHANNEL_MSG('Cluster commands: commands, shutdown');
 	  }
  
-  if($GLOBALS['piece1'] == 'shutdown')  
+  if($GLOBALS['piece1'] == 'shutdown' && $GLOBALS['piece2'] == $GLOBALS['C_NICKNAME'])
 	  { 
-		CHANNEL_MSG($GLOBALS['piece2']);
-		if($GLOBALS['piece2'] == $GLOBALS['C_NICKNAME']);
-		  {
-		  exec('shutdown -s -t 0');
-		  }
+	  CHANNEL_MSG('Shutting down machine...');
+	  exec('shutdown -s -t 0');
 	  }
 
- 
- 
- 
- 
- 
- 
- 
- 
- //CLI_MSG('!commands on: '.$GLOBALS['C_CNANNEL']);
+  if($GLOBALS['piece1'] == 'shutdown' && $GLOBALS['piece2'] == '*')
+	  { 
+	  CHANNEL_MSG('Shutting down machine...');
+	  exec('shutdown -s -t 0');
+	  }
+
+// CLI_MSG('!commands on: '.$GLOBALS['C_CNANNEL']);
 }
 
 ?>

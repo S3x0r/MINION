@@ -1,4 +1,14 @@
-﻿   
+﻿  
+   v0.2.4 changes:
+   - new plugin: cluster <options>
+   - all save_* plugins moved to one 'save' command, type !save help for list
+   - new commands:
+     save auto_join - Saving auto join on channel when connected: !save auto_join <yes/no>
+     save auto_rejoin - Saving auto rejoin when kicked from channel: !save auto_rejoin <yes/no>
+     save command_prefix - Saving prefix commands: !save command_prefix <new_prefix>
+     save connect_delay - Saving connect delay value to config: !save connect_delay <value>
+     save try_connect - Saving how many times try connect to server: !save try_connect <value>
+
    v0.2.3 changes:
    - rejoin when bot kicked
    - rejoin switch in config file (yes/no)

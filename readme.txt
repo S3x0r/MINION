@@ -44,13 +44,19 @@ newnick -- Changes nickname: !newnick <new_nick>
 op -- Gives op: !op <nick>
 quit -- Shutdown BOT: !quit
 restart -- Restarts Bot: !restart
-save_channel -- Saving channel to config: !save_channel <#new_channel>
-save_fetch_server - Saving fetch server to config: !save_fetch_server <new_server>
-save_ident -- Saving ident to config: !save_ident <new_ident>
-save_name -- Saving name to config: !save_name <new_name>
-save_nick -- Saving nickname to config: !save_nick <new_nick>
-save_port -- Saving new port to config: !save_port <new_port>
-save_server -- Saving new server to config: !save_server <new_server>
+save -- Saving to config file: !save help to list commands
+save auto_join - Saving auto join on channel when connected: !save auto_join <yes/no>
+save auto_rejoin - Saving auto rejoin when kicked from channel: !save auto_rejoin <yes/no>
+save command_prefix - Saving prefix commands: !save command_prefix <new_prefix>
+save connect_delay - Saving connect delay value to config: !save connect_delay <value>
+save channel -- Saving channel to config: !save_channel <#new_channel>
+save fetch_server - Saving fetch server to config: !save_fetch_server <new_server>
+save ident -- Saving ident to config: !save_ident <new_ident>
+save name -- Saving name to config: !save_name <new_name>
+save nick -- Saving nickname to config: !save_nick <new_nick>
+save port -- Saving new port to config: !save_port <new_port>
+save server -- Saving new server to config: !save_server <new_server>
+save try_connect - Saving how many times try connect to server: !save try_connect <value>
 showconfig -- Shows BOT configuration: !showconfig
 topic -- Changing Topic in channel: !topic <topic>
 update -- Updates the BOT if new version is available: !update
