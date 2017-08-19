@@ -27,6 +27,7 @@ You can change prefix in config file.
 
 BOT Commands:
 add_owner -- Adds Owner host to config file: !add_owner <nick!id@host>
+auto_op -- Adds host to auto_op list in config file: !auto_op <nick!ident@host>
 cham -- Shows random text from file: !cham <nick>
 checkupdate -- Checking for updates: !checkupdate
 commands -- Shows BOT commands: !commands

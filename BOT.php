@@ -1,6 +1,6 @@
 <?php
 //------------------------------------------------------------------------------------------------
-define('VER', '0.2.4');
+define('VER', '0.2.5');
 //------------------------------------------------------------------------------------------------
 Start();
 //------------------------------------------------------------------------------------------------
@@ -52,9 +52,11 @@ function LoadConfig()
    $GLOBALS['C_PORT']           = $cfg->get("SERVER","port");
    $GLOBALS['C_TRY_CONNECT']    = $cfg->get("SERVER","try_connect");
    $GLOBALS['C_CONNECT_DELAY']  = $cfg->get("SERVER","connect_delay"); 
-  /* OWNERS */
+  /* ADMIN */
+   $GLOBALS['C_AUTO_OP_LIST']   = $cfg->get("ADMIN","auto_op_list");
    $GLOBALS['C_OWNERS']         = $cfg->get("ADMIN","bot_owners");
   /* AUTOMATIC */
+   $GLOBALS['C_AUTO_OP']        = $cfg->get("AUTOMATIC","auto_op");
    $GLOBALS['C_AUTO_REJOIN']    = $cfg->get("AUTOMATIC","auto_rejoin");
   /* CHANNEL */
    $GLOBALS['C_CNANNEL']        = $cfg->get("CHANNEL","channel");
@@ -108,9 +110,11 @@ try_connect      = \'10\'
 connect_delay    = \'3\'
 
 [ADMIN]
+auto_op_list     = \'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host\'
 bot_owners       = \'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host\'
 
 [AUTOMATIC]
+auto_op          = \'yes\'
 auto_rejoin      = \'yes\'
 
 [CHANNEL]
@@ -227,21 +231,17 @@ while(1) {
             fputs($GLOBALS['socket'], "PONG ".$ex[1]."\n");
             continue; 
         }
-        
+//---
+
 /* rejoin when kicked */
 		if($GLOBALS['C_AUTO_REJOIN'] == 'yes') {
 	    	if($ex[1] == "KICK"){
 				if($ex[3] == $GLOBALS['C_NICKNAME']){
+					CLI_MSG("I was kicked from channel, joining again...");
 					fputs($GLOBALS['socket'], "JOIN :".$ex[2]."\n");
 					continue;
 				}	} }
-
-
-/* fix it*/
-			if($ex[1] == "JOIN"){
-				fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['C_CNANNEL'].' +o '.$GLOBALS['C_OWNERS']."\n");
-					continue;
-			}
+//---
 
 		if (preg_match ('/^:(.*)\!(.*)\@(.*)$/', $ex[0], $source)) {
 
@@ -251,7 +251,24 @@ while(1) {
         } else {
                 $server = str_replace(':', '', $ex[0]);
         }
-        if (count ($ex) < 4)
+
+/* auto op */
+		if($GLOBALS['C_AUTO_OP'] == 'yes') {
+			$auto_op_list_c = $GLOBALS['C_AUTO_OP_LIST'];
+			$pieces = explode(", ", $auto_op_list_c);
+
+			$mask2 = $nick.'!'.$ident.'@'.$host;
+
+			if($ex[1] == "JOIN" && in_array($mask2,  $pieces))
+			{	
+			 CLI_MSG("I have nick: ".$nick." on auto op list, giving op");
+			 fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['C_CNANNEL'].' +o '.$nick."\n");
+			 continue;
+			}
+		}
+//---		
+		
+		if (count ($ex) < 4)
                 continue;
         $rawcmd = explode (':', $ex[3]);
         $args = NULL; for ($i = 4; $i < count($ex); $i++) { $args .= $ex[$i] . ''; }
@@ -283,7 +300,8 @@ switch ($ex[1]){
 		 if (extension_loaded('wcli')) {
 		 wcli_set_console_title('davybot '.VER.' (server: '.$GLOBALS['C_SERVER'].':'.$GLOBALS['C_PORT'].' | nickname: '.$GLOBALS['C_NICKNAME'].' | channel: '.$GLOBALS['C_CNANNEL'].')');
 		 }
-
+		 
+		 /* if autojoin */
 		 if($GLOBALS['C_AUTO_JOIN'] == 'yes') { 
 		 CLI_MSG('5. Joining channel: '.$GLOBALS['C_CNANNEL']);
 		 JOIN_CHANNEL($GLOBALS['C_CNANNEL']);
@@ -304,7 +322,6 @@ switch ($ex[1]){
 */
 	}
 
-
  /* CTCP */
      if($GLOBALS['C_CTCP_RESPONSE'] == 'yes') {
              if ($rawcmd[1] == "VERSION") {
@@ -322,8 +339,8 @@ switch ($ex[1]){
                     fputs($GLOBALS['socket'], "NOTICE $nick :TIME ".$a."\n");
              }
 	       }
-
- /* commands */
+ 
+ /* plugins commands */
 	if(HasOwner($mask)) 
 	{
 		$pn = str_replace($GLOBALS['C_CMD_PREFIX'], '', $rawcmd[1]);

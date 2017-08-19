@@ -1,4 +1,9 @@
-﻿  
+﻿   v0.2.5 changes:
+   - auto op list added to config, if on op list (nick!ident@host) give op on channel
+   - auto op switch (yes/no) added to config
+   - new plugin: !auto_op - Adds host to auto_op list in config file: !auto_op <nick!ident@host>
+   - CONFIG.EXE temporary removed (need to be updated:)
+
    v0.2.4 changes:
    - new plugin: cluster <options>
    - all save_* plugins moved to one 'save' command, type !save help for list
