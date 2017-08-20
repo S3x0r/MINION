@@ -16,7 +16,7 @@ OWNERS HOSTS - EDIT IT (CONFIG.EXE or CONFIG.INI) FOR USING BOT COMMANDS!
 example: S3x0r!~S3x0r@85-123-48-249.dsl.dynamic.simnet.is
 
 
-Bot was writted to run from Windows systems, tested on Windows 7
+Bot was writted to run from Windows systems, tested on Windows 7, XP
 You dont need to download PHP, just run bot from START_BOT.BAT file
 
 You can now check for bot update, command: !checkupdate
