@@ -1,4 +1,4 @@
-﻿   v0.2.5 changes:
+﻿   v0.2.5 changes (19.08.2017):
    - auto op list added to config, if on op list (nick!ident@host) give op on channel
    - auto op switch (yes/no) added to config
    - new plugin: !auto_op - Adds host to auto_op list in config file: !auto_op <nick!ident@host>
@@ -123,7 +123,7 @@
    - moved admins to bot file
    - FIXED commands input by user, works now.
 
-   v0.0.5 changes:
+   v0.0.5 changes (27.09.2015):
    - moved source to GitHub
    - more in English
    - changed config system to ini file style
@@ -134,7 +134,7 @@
    - some cosmetic changes
    - fixed uptime plugin and other changes in plugins.
 
-   v0.0.4 changes:
+   v0.0.4 changes (22.11.2013):
    - php interpreter have now less MB
    - comments looks more natural
    - mail added in info
@@ -142,3 +142,6 @@
    - addded time in messages
    - cleaned some code: globals, etc.
    - !listadmins /New command added.
+
+   v0.0.3 changes (14.11.2013):
+   - initial public release (sourceforge)
