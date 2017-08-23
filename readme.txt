@@ -15,6 +15,8 @@ OWNERS HOSTS - EDIT IT (CONFIG.EXE or CONFIG.INI) FOR USING BOT COMMANDS!
            |      |       |
 example: S3x0r!~S3x0r@85-123-48-249.dsl.dynamic.simnet.is
 
+You can also msg to bot typing 'password <password_from_config>'
+you will be added to owner's hosts
 
 Bot was writted to run from Windows systems, tested on Windows 7, XP
 You dont need to download PHP, just run bot from START_BOT.BAT file

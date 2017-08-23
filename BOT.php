@@ -1,6 +1,6 @@
 <?php
 //------------------------------------------------------------------------------------------------
-define('VER', '0.2.6');
+define('VER', '0.2.7');
 //------------------------------------------------------------------------------------------------
 Start();
 //------------------------------------------------------------------------------------------------
@@ -59,6 +59,7 @@ function LoadConfig()
   /* ADMIN */
    $GLOBALS['C_AUTO_OP_LIST']   = $cfg->get("ADMIN","auto_op_list");
    $GLOBALS['C_OWNERS']         = $cfg->get("ADMIN","bot_owners");
+   $GLOBALS['C_OWNER_PASSWD']   = $cfg->get("ADMIN","owner_password");
   /* AUTOMATIC */
    $GLOBALS['C_AUTO_OP']        = $cfg->get("AUTOMATIC","auto_op");
    $GLOBALS['C_AUTO_REJOIN']    = $cfg->get("AUTOMATIC","auto_rejoin");
@@ -116,6 +117,7 @@ connect_delay    = \'3\'
 [ADMIN]
 auto_op_list     = \'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host\'
 bot_owners       = \'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host\'
+owner_password   = \'change_me!\'
 
 [AUTOMATIC]
 auto_op          = \'yes\'
@@ -223,14 +225,14 @@ global $piece2;
 /* main socket loop */
 while(1) {
     while(!feof($GLOBALS['socket'])) {
-        $mask   = NULL;
+        $mask = NULL;
         $data = fgets ($GLOBALS['socket'], 512);
         if($GLOBALS['C_SHOW_RAW'] == 'yes') { echo $data; }
 
         flush();
         $ex = explode(' ', trim($data));
 
-/* ping response */      
+/* ping response */
 		if($ex[0] == "PING") {
             fputs($GLOBALS['socket'], "PONG ".$ex[1]."\n");
             continue; 
@@ -270,14 +272,14 @@ while(1) {
 			 continue;
 			}
 		}
-//---		
-		
+//---
 		if (count ($ex) < 4)
                 continue;
         $rawcmd = explode (':', $ex[3]);
         $args = NULL; for ($i = 4; $i < count($ex); $i++) { $args .= $ex[$i] . ''; }
 		//new
         $args1 = NULL; for ($i = 4; $i < count($ex); $i++) { $args1 .= $ex[$i] . ' '; }
+
         $pieces = explode(" ", $args1);
         $piece1 = $pieces[0];
 		$piece2 = $pieces[1];
@@ -318,12 +320,6 @@ switch ($ex[1]){
 		//todo:save_to_database(); /* Saving to database -> !seen */
 		break;
 
-/* Need to FIX
-	 Changed Topic message 
-	case 'TOPIC':
-		CLI_MSG('* '.$nick.' changes topic to \''.$ex[3].'\'');
-		break;
-*/
 	}
 
  /* CTCP */
@@ -344,6 +340,33 @@ switch ($ex[1]){
              }
 	       }
  
+ /* if owner password -> add host to owner list in config */
+ if($rawcmd[1] == 'password' && $args == $GLOBALS['C_OWNER_PASSWD'])
+    {
+	 LoadData('../CONFIG.INI', 'ADMIN', 'bot_owners');
+
+     $owners_list = $GLOBALS['LOADED'];
+     $new         = trim($mask2);
+     $new_list    = $owners_list.', '.$new;
+
+     SaveData('../CONFIG.INI', 'ADMIN', 'bot_owners', $new_list);
+
+	 $commands = file_get_contents('../plugins.ini');
+
+     NICK_MSG('From now you are on my owners list, enjoy.');
+     NICK_MSG('My Commands:');
+     NICK_MSG($commands);
+
+     CLI_MSG('I have new owner in list: '.$GLOBALS['C_CNANNEL'].', added: '.$mask2);
+
+     fputs($GLOBALS['socket'],"QUIT :Restarting...\n");
+     CLI_MSG('Restarting BOT...');
+     system('restart.bat');
+     die();
+
+	 }
+//---
+
  /* plugins commands */
 	if(HasOwner($mask)) 
 	{
@@ -406,6 +429,11 @@ function CLI_MSG($msg)
 function CHANNEL_MSG($msg)
 {
  fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['C_CNANNEL']." :$msg\n");
+}
+//------------------------------------------------------------------------------------------------
+function NICK_MSG($msg)
+{
+ fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['nick']." :$msg\n");
 }
 //------------------------------------------------------------------------------------------------
 function JOIN_CHANNEL($channel)
