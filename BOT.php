@@ -1,6 +1,6 @@
 <?php
 //------------------------------------------------------------------------------------------------
-define('VER', '0.2.8');
+define('VER', '0.2.9');
 //------------------------------------------------------------------------------------------------
 Start();
 //------------------------------------------------------------------------------------------------
@@ -98,15 +98,9 @@ function LoadConfig()
     LoadConfig();
    }
 
-  /* set data.ini */
-   $data_file = '../data.ini';
-   $default_data = '[DATA]nickname =';
-   $f=fopen($data_file, 'w');
-   flock($f, 2);
-   fwrite($f, $default_data);
-   flock($f, 3);
-   fclose($f); 
-
+   /* set data.ini */
+   SaveToFile('../data.ini', '[DATA]nickname =', 'w');
+   
    SaveData('../data.ini', 'DATA', 'nickname', $GLOBALS['C_NICKNAME']); /* saving nickname to data file */
    $GLOBALS['RND_NICKNAME'] = $GLOBALS['C_NICKNAME'].'|'.rand(0,99); /* set random nickname */
    $GLOBALS['StartTime'] = time(); /* starting time */
@@ -150,7 +144,7 @@ command_prefix   = \'!\'
 
 [CTCP]
 ctcp_response    = \'yes\'
-ctcp_version     = \'davybot\'
+ctcp_version     = \'davybot ('.VER.')\'
 ctcp_finger      = \'davybot\'
 
 [FETCH]
@@ -159,11 +153,8 @@ fetch_server     = \'https://raw.githubusercontent.com/S3x0r/davybot_repository_
 [DEBUG]
 show_raw         = \'no\'';
 
-	$f=fopen($conf_file, 'w');
-	flock($f, 2);
-	fwrite($f, $default_config);
-	flock($f, 3);
-	fclose($f); 
+    /* Save default config to file if no config */
+    SaveToFile($conf_file, $default_config, 'w');
 
    /* after default config load it again :) */
 	LoadConfig();
@@ -322,7 +313,7 @@ switch ($ex[1]){
 		
 		 /* wcli extension */
 		 if (extension_loaded('wcli')) {
-		 wcli_set_console_title('davybot '.VER.' (server: '.$GLOBALS['C_SERVER'].':'.$GLOBALS['C_PORT'].' | nickname: '.$GLOBALS['C_NICKNAME'].' | channel: '.$GLOBALS['C_CNANNEL'].')');
+		 wcli_set_console_title('davybot '.VER.' (server: '.$GLOBALS['C_SERVER'].':'.$GLOBALS['C_PORT'].' | nickname: '.$GLOBALS['LOADED'].' | channel: '.$GLOBALS['C_CNANNEL'].')');
 		 }
 		 
 		 /* if autojoin */
@@ -423,6 +414,17 @@ function HasOwner($mask)
                 if (fnmatch($owner, $mask, 16))
                         return TRUE;
         return FALSE;
+}
+//------------------------------------------------------------------------------------------------
+function SaveToFile($f1, $f2, $f3)
+{
+  $file = $f1;
+  $data = $f2;
+  $f=fopen($file, $f3);
+  flock($f, 2);
+  fwrite($f, $data);
+  flock($f, 3);
+  fclose($f); 
 }
 //------------------------------------------------------------------------------------------------
 function SaveData($v1, $v2, $v3, $v4)
