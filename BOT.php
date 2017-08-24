@@ -1,6 +1,6 @@
 <?php
 //------------------------------------------------------------------------------------------------
-define('VER', '0.2.7');
+define('VER', '0.2.8');
 //------------------------------------------------------------------------------------------------
 Start();
 //------------------------------------------------------------------------------------------------
@@ -79,6 +79,24 @@ function LoadConfig()
 
   /* show raw or no */
    if($GLOBALS['C_SHOW_RAW'] == 'yes') { error_reporting(E_ALL ^ E_NOTICE); } else { error_reporting(0); }
+
+  /* if default master password, prompt for change it! */
+  if($GLOBALS['C_OWNER_PASSWD'] == 'change_me!')
+   { 
+     CLI_MSG('Default owner bot password detected!');
+	 CLI_MSG('For security please change it');
+
+	 if(!defined("STDIN")) {
+     define("STDIN", fopen('php://stdin','rb'));
+     }
+
+    echo 'New Password: ';
+    $new_pwd = fread(STDIN, 30);
+	$tr = rtrim($new_pwd, "\n\r");
+    SaveData('../CONFIG.INI', 'ADMIN', 'owner_password', $tr);
+
+    LoadConfig();
+   }
 
   /* set data.ini */
    $data_file = '../data.ini';
@@ -490,11 +508,11 @@ class iniParser {
 		if(is_writeable($file) ) {
 			$desc = fopen($file, "w");
 			foreach($this->_iniParsedArray as $sec => $array){
-				fwrite($desc, "[" . $sec . "]\n" );
+				fwrite($desc, "[" . $sec . "]\r\n" );
 				foreach($array as $key => $value) {
-					fwrite( $desc, "$key = '$value'\n" );
+					fwrite( $desc, "$key = '$value'\r\n" );
 				}
-				fwrite($desc, "\n");
+				fwrite($desc, "\r\n");
 			}
 			fclose($desc);
 			return true;
