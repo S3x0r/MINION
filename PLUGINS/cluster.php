@@ -6,6 +6,11 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
 function plugin_cluster()
 {
+
+  if(empty($GLOBALS['args'])) { CHANNEL_MSG('Usage: '.$GLOBALS['C_CMD_PREFIX'].'cluster <options>/<commands>'); } 
+  
+  else {
+
   if($GLOBALS['args'] == 'commands') 
 	  { 
 		CHANNEL_MSG('Cluster commands: commands, shutdown');
@@ -23,6 +28,7 @@ function plugin_cluster()
 	  exec('shutdown -s -t 0');
 	  }
 
+    }
 // CLI_MSG('!commands on: '.$GLOBALS['C_CNANNEL']);
 }
 

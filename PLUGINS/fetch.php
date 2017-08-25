@@ -6,6 +6,10 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
 function plugin_fetch()
 {
+  if(empty($GLOBALS['args'])) { CHANNEL_MSG('Usage: '.$GLOBALS['C_CMD_PREFIX'].'fetch <list> / fetch get <plugin>'); } 
+  
+  else {
+
   if($GLOBALS['args'] == 'list') 
 	  { 
         $addr_list = 'https://raw.githubusercontent.com/S3x0r/davybot_repository_plugins/master/plugin_list.db';
@@ -44,9 +48,9 @@ function plugin_fetch()
 			         fclose($a);
 					 CHANNEL_MSG('Plugin added.');
 					 CLI_MSG('!fetch: '.$GLOBALS['C_CNANNEL'].', plugin: '.$GLOBALS['piece2']);
-			       }
+   			       }
    }
-		}
+  }
+ }
 }
-
 ?>

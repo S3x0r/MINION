@@ -1,4 +1,12 @@
-  
+   
+   v0.3.0 changes (25.08.2017):
+   - changed from 'password' to -> 'register <password_from_config>'
+   - new plugin: !weather -- Shows actual weather: !weather <city>
+   - libssh2.dll, php_curl.dll added to PHP core dir
+   - !commands renamed to !help
+   - plugins: add_owner, auto_op, cham, cluster, deop, devoice, dns, fetch,
+     join, leave, md5, newnick, op, save, topic, voice --- little fix.
+
    v0.2.9 changes (25.08.2017):
    - ctcp version now reply bot version :)
    - small code cleanup

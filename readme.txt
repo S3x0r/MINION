@@ -15,7 +15,7 @@ OWNERS HOSTS - EDIT IT (CONFIG.EXE or CONFIG.INI) FOR USING BOT COMMANDS!
            |      |       |
 example: S3x0r!~S3x0r@85-123-48-249.dsl.dynamic.simnet.is
 
-You can also msg to bot typing 'password <password_from_config>'
+You can also msg to bot typing 'register <password_from_config>'
 you will be added to owner's hosts
 
 Bot was writted to run from Windows systems, tested on Windows 7, XP
@@ -32,12 +32,12 @@ add_owner -- Adds Owner host to config file: !add_owner <nick!id@host>
 auto_op -- Adds host to auto_op list in config file: !auto_op <nick!ident@host>
 cham -- Shows random text from file: !cham <nick>
 checkupdate -- Checking for updates: !checkupdate
-commands -- Shows BOT commands: !commands
 deop -- Deops someone: !deop <nick>
 devoice -- Devoice user: !devoice <nick>
 dns -- Dns: !dns <address>
 fetch list -- Lists plugins in repository
 fetch get <plugin> -- Downloads plugins from repository
+help -- Shows BOT commands: !help
 info -- Shows info: !info
 join -- Joins channel: !join <#channel>
 leave -- Leave channel: !leave <#channel>
@@ -65,3 +65,4 @@ topic -- Changing Topic in channel: !topic <topic>
 update -- Updates the BOT if new version is available: !update
 uptime -- Shows BOT uptime: !uptime
 voice -- Gives voice: !voice <nick>
+weather -- Shows actual weather: !weather <city>

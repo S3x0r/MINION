@@ -6,9 +6,14 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
 function plugin_voice()
 {
- fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['C_CNANNEL'].' +v '.$GLOBALS['args']."\n");
+
+  if(empty($GLOBALS['args'])) { CHANNEL_MSG('Usage: '.$GLOBALS['C_CMD_PREFIX'].'voice <nick>'); } 
+  
+  else {
+		 fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['C_CNANNEL'].' +v '.$GLOBALS['args']."\n");
  
- CLI_MSG('!voice on: '.$GLOBALS['C_CNANNEL'].', for: '.$GLOBALS['args']);
+		 CLI_MSG('!voice on: '.$GLOBALS['C_CNANNEL'].', for: '.$GLOBALS['args']);
+	   }
 }
 
 ?>

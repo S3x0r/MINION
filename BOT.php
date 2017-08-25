@@ -1,6 +1,6 @@
 <?php
 //------------------------------------------------------------------------------------------------
-define('VER', '0.2.9');
+define('VER', '0.3.0');
 //------------------------------------------------------------------------------------------------
 Start();
 //------------------------------------------------------------------------------------------------
@@ -349,8 +349,8 @@ switch ($ex[1]){
              }
 	       }
  
- /* if owner password -> add host to owner list in config */
- if($rawcmd[1] == 'password' && $args == $GLOBALS['C_OWNER_PASSWD'])
+ /* if owner register -> add host to owner list in config */
+ if($rawcmd[1] == 'register' && $args == $GLOBALS['C_OWNER_PASSWD'])
     {
 	 LoadData('../CONFIG.INI', 'ADMIN', 'bot_owners');
 

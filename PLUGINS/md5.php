@@ -6,12 +6,18 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
 function plugin_md5()
 {
- $data = str_replace(" ","",$GLOBALS['args']);
- $md5  = md5($data);
 
- CHANNEL_MSG('(MD5) \''.$data.'\' -> '.$md5);
+  if(empty($GLOBALS['args'])) { CHANNEL_MSG('Usage: '.$GLOBALS['C_CMD_PREFIX'].'md5 <string>'); } 
+  
+  else {
 
- CLI_MSG('!md5 on: '.$GLOBALS['C_CNANNEL'].', data: '.$data);
+		 $data = str_replace(" ","",$GLOBALS['args']);
+		 $md5  = md5($data);
+
+		 CHANNEL_MSG('(MD5) \''.$data.'\' -> '.$md5);
+
+		 CLI_MSG('!md5 on: '.$GLOBALS['C_CNANNEL'].', data: '.$data);
+       }
 }
 
 ?>

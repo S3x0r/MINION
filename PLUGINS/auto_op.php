@@ -6,17 +6,23 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
 function plugin_auto_op()
 {
- LoadData('../CONFIG.INI', 'ADMIN', 'auto_op_list');
 
- $auto_list   = $GLOBALS['LOADED'];
- $new         = trim($GLOBALS['args']);
- $new_list    = $auto_list.', '.$new;
+  if(empty($GLOBALS['args'])) { CHANNEL_MSG('Usage: '.$GLOBALS['C_CMD_PREFIX'].'auto_op <nick!ident@host>'); } 
+  
+  else {
 
- SaveData('../CONFIG.INI', 'ADMIN', 'auto_op_list', $new_list);
+         LoadData('../CONFIG.INI', 'ADMIN', 'auto_op_list');
 
- CHANNEL_MSG('Host added to auto op list.');
+		 $auto_list   = $GLOBALS['LOADED'];
+		 $new         = trim($GLOBALS['args']);
+		 $new_list    = $auto_list.', '.$new;
 
- CLI_MSG('!auto_op on: '.$GLOBALS['C_CNANNEL'].', added: '.$GLOBALS['args']);
+		 SaveData('../CONFIG.INI', 'ADMIN', 'auto_op_list', $new_list);
+
+		 CHANNEL_MSG('Host added to auto op list.');
+
+		 CLI_MSG('!auto_op on: '.$GLOBALS['C_CNANNEL'].', added: '.$GLOBALS['args']);
+       }
 }
 
 ?>

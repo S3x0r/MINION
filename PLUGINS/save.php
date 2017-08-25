@@ -7,6 +7,10 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 function plugin_save()
 {
 
+  if(empty($GLOBALS['args'])) { CHANNEL_MSG('Usage: '.$GLOBALS['C_CMD_PREFIX'].'save help to list commands'); } 
+  
+  else {
+
   if($GLOBALS['args'] == 'help') 
 	  { 
 		CHANNEL_MSG('Save commands:');
@@ -108,6 +112,7 @@ function plugin_save()
 	 CLI_MSG('!save try_connect on: '.$GLOBALS['C_CNANNEL'].', New try_connect: '.$GLOBALS['piece2']);
 	}
 
+  }
 }
 
 ?>

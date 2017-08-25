@@ -4,22 +4,33 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
  $plugin_description = 'Shows random text from file: !cham <nick>';
  $plugin_command = 'cham';
 
+/*
+    For use this plugin you must add somefile.txt in main bot directory
+
+*/
+
 function plugin_cham()
 {
- $file = '../somefile.txt';
+
+  if(empty($GLOBALS['args'])) { CHANNEL_MSG('Usage: '.$GLOBALS['C_CMD_PREFIX'].'cham <nick>'); } 
+  
+  else {
+
+		 $file = '../somefile.txt';
 	
- $texts = file_get_contents($file);
- $texts = explode("\n",$texts);
- $count = 0;
+		 $texts = file_get_contents($file);
+		 $texts = explode("\n",$texts);
+		 $count = 0;
 
- shuffle($texts);
- $text = $texts[$count++];
+		 shuffle($texts);
+		 $text = $texts[$count++];
 
- $who = trim($GLOBALS['args']);
+		 $who = trim($GLOBALS['args']);
 
- CHANNEL_MSG($who.': '.$text);
+		 CHANNEL_MSG($who.': '.$text);
  
- CLI_MSG('!cham on: '.$GLOBALS['C_CNANNEL'].', who: '.$who);
+		 CLI_MSG('!cham on: '.$GLOBALS['C_CNANNEL'].', who: '.$who);
+	   }
 }
-/* add text file */
+
 ?>
