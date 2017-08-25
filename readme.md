@@ -81,4 +81,3 @@ voice -- Gives voice: !voice nick
 weather -- Shows actual weather: !weather city
 </pre>
 </dl>
-![Powered by S3x0r](http://minionki.com.pl/powered.png)
