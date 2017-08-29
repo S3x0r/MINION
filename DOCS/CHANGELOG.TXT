@@ -1,4 +1,10 @@
    
+   v0.3.1 changes (29.08.2017):
+   - corrected start time
+   - new plugin: !winamp - you can now control winamp by bot :)
+   - save plugin code cleanup
+   - topic plugin bug fixed
+
    v0.3.0 changes (25.08.2017):
    - changed from 'password' to -> 'register <password_from_config>'
    - new plugin: !weather -- Shows actual weather: !weather <city>

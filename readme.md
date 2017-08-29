@@ -1,5 +1,5 @@
 ![Powered by S3x0r](http://minionki.com.pl/powered.png)
-### Easy to use IRC BOT in PHP language, ready to use from first time
+### Easy to use IRC BOT in PHP language, ready to use from first start
 
 <dl>
 <pre>
@@ -79,5 +79,6 @@ update -- Updates the BOT if new version is available: !update
 uptime -- Shows BOT uptime: !uptime
 voice -- Gives voice: !voice nick
 weather -- Shows actual weather: !weather city
+winamp -- Controls winamp: !winamp <help>
 </pre>
 </dl>

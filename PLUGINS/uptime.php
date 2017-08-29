@@ -8,7 +8,7 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 function plugin_uptime()
 {
  $now  = time();
- $time = $now - $GLOBALS['StartTime'];
+ $time = $now - START_TIME;
 
  $year=floor($time/(365*24*60*60));
  $time-=$year*(365*24*60*60);

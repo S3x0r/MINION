@@ -68,3 +68,4 @@ update -- Updates the BOT if new version is available: !update
 uptime -- Shows BOT uptime: !uptime
 voice -- Gives voice: !voice <nick>
 weather -- Shows actual weather: !weather <city>
+winamp -- Controls winamp: !winamp <help>

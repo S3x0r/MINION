@@ -1,6 +1,7 @@
 <?php
 //------------------------------------------------------------------------------------------------
-define('VER', '0.3.0');
+define('VER', '0.3.1');
+define('START_TIME',time());
 //------------------------------------------------------------------------------------------------
 Start();
 //------------------------------------------------------------------------------------------------
@@ -103,7 +104,6 @@ function LoadConfig()
    
    SaveData('../data.ini', 'DATA', 'nickname', $GLOBALS['C_NICKNAME']); /* saving nickname to data file */
    $GLOBALS['RND_NICKNAME'] = $GLOBALS['C_NICKNAME'].'|'.rand(0,99); /* set random nickname */
-   $GLOBALS['StartTime'] = time(); /* starting time */
    
    CLI_MSG("1. Configuration Loaded from: CONFIG.INI");
 
@@ -230,12 +230,14 @@ global $nick;
 global $hostname;
 global $piece1;
 global $piece2;
+global $ex;
+global $rawcmd;
 
 /* main socket loop */
 while(1) {
     while(!feof($GLOBALS['socket'])) {
         $mask = NULL;
-        $data = fgets ($GLOBALS['socket'], 512);
+        $data = fgets($GLOBALS['socket'], 512);
         if($GLOBALS['C_SHOW_RAW'] == 'yes') { echo $data; }
 
         flush();
@@ -282,12 +284,12 @@ while(1) {
 			}
 		}
 //---
-		if (count ($ex) < 4)
-                continue;
-        $rawcmd = explode (':', $ex[3]);
-        $args = NULL; for ($i = 4; $i < count($ex); $i++) { $args .= $ex[$i] . ''; }
-		//new
-        $args1 = NULL; for ($i = 4; $i < count($ex); $i++) { $args1 .= $ex[$i] . ' '; }
+		if(count ($ex) < 4)
+        continue;
+        
+		$rawcmd = explode (':', $ex[3]);
+        $args = NULL; for($i=4; $i < count($ex); $i++) { $args .= $ex[$i].''; }
+        $args1 = NULL; for($i=4; $i < count($ex); $i++) { $args1 .= $ex[$i].' '; }
 
         $pieces = explode(" ", $args1);
         $piece1 = $pieces[0];
@@ -328,8 +330,7 @@ switch ($ex[1]){
 		CLI_MSG('* '.$nick.' ('.$ident.'@'.$host.') Quit');
 		//todo:save_to_database(); /* Saving to database -> !seen */
 		break;
-
-	}
+}
 
  /* CTCP */
      if($GLOBALS['C_CTCP_RESPONSE'] == 'yes') {
@@ -385,6 +386,17 @@ switch ($ex[1]){
    }
    exit;
  }
+}
+//------------------------------------------------------------------------------------------------
+function msg_without_command()
+{
+  $input = NULL;
+  for($i=3; $i <= (count($GLOBALS['ex'])); $i++) { $input .= $GLOBALS['ex'][$i]." "; }
+      
+  $in = rtrim($input); 
+  $data = str_replace($GLOBALS['rawcmd'][1].' ', '', $in);
+
+  return $data;
 }
 //------------------------------------------------------------------------------------------------
 function HasAccess($mask)
