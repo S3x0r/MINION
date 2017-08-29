@@ -1,6 +1,6 @@
 <?php
 //------------------------------------------------------------------------------------------------
-define('VER', '0.3.1');
+define('VER', '0.3.2');
 define('START_TIME',time());
 //------------------------------------------------------------------------------------------------
 Start();
@@ -368,6 +368,9 @@ switch ($ex[1]){
      NICK_MSG($commands);
 
      CLI_MSG('I have new owner in list: '.$GLOBALS['C_CNANNEL'].', added: '.$mask2);
+
+     /* give op before restart */
+     fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['C_CNANNEL'].' +o '.$GLOBALS['nick']."\n");
 
      fputs($GLOBALS['socket'],"QUIT :Restarting...\n");
      CLI_MSG('Restarting BOT...');

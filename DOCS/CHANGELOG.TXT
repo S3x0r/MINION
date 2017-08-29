@@ -1,4 +1,16 @@
    
+   v0.3.2 changes (30.08.2017):
+   - new plugin: !morse -- converts <text> to morse code
+   - new plugin: !math -- Solves mathematical tasks: !math <eg. 8*8+6>
+   - new plugin: !youtube -- Shows youtube video title from link: !youtube <link>
+   - new plugin: !memusage -- Shows how much ram is being used by bot: !memusage
+   - new plugin: !htmltitle -- Shows webpage titile: !htmltitle <http://address>
+   - new plugin: !bash -- Shows quotes from bash.org: !bash
+   - plugin newnick little fix
+   - plugin restart improv -- bot give owner op before restart
+   - after sucessfull register <password> bot give op to owner and restart to update list
+   - after !quit bot give op to owner and terminate program
+
    v0.3.1 changes (29.08.2017):
    - corrected start time
    - new plugin: !winamp - you can now control winamp by bot :)

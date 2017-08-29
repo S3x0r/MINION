@@ -32,6 +32,7 @@ You can change prefix in config file.
 BOT Commands:
 add_owner -- Adds Owner host to config file: !add_owner <nick!id@host>
 auto_op -- Adds host to auto_op list in config file: !auto_op <nick!ident@host>
+bash -- Shows quotes from bash.org: !bash
 cham -- Shows random text from file: !cham <nick>
 checkupdate -- Checking for updates: !checkupdate
 deop -- Deops someone: !deop <nick>
@@ -40,11 +41,15 @@ dns -- Dns: !dns <address>
 fetch list -- Lists plugins in repository
 fetch get <plugin> -- Downloads plugins from repository
 help -- Shows BOT commands: !help
+htmltitle -- Shows webpage titile: !htmltitle <http://address>
 info -- Shows info: !info
 join -- Joins channel: !join <#channel>
 leave -- Leave channel: !leave <#channel>
 list_owners -- Shows BOT owners: !list_owners
+math -- Solves mathematical tasks: !math <eg. 8*8+6>
 md5 -- Changing string to MD5: !md5 <string>
+memusage -- Shows how much ram is being used by bot: !memusage
+morse -- Converts to morse code: !morse <text>
 newnick -- Changes nickname: !newnick <new_nick>
 op -- Gives op: !op <nick>
 quit -- Shutdown BOT: !quit
@@ -69,3 +74,4 @@ uptime -- Shows BOT uptime: !uptime
 voice -- Gives voice: !voice <nick>
 weather -- Shows actual weather: !weather <city>
 winamp -- Controls winamp: !winamp <help>
+youtube -- Shows youtube video title from link: !youtube <link>
