@@ -184,6 +184,7 @@ function Logs()
 {
   global $log_file;
 
+  if(!is_dir('../LOGS')) { mkdir('../LOGS'); }
   $log_file = '../LOGS/LOG-'.date('d.m.Y').'.TXT';
   $data = "------------------LOG CREATED: ".date('d.m.Y | H:i:s')."------------------\r\n";
   SaveToFile($log_file, $data, 'a');
