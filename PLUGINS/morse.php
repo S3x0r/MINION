@@ -34,7 +34,7 @@ function plugin_morse()
              }
        }
    CHANNEL_MSG($string.' converted to morse: '.rtrim($final));
-   CLI_MSG('!morse on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick']);
+   CLI_MSG('!morse on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 
  }
 }

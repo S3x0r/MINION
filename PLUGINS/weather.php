@@ -68,7 +68,7 @@ function plugin_weather()
 		}
 	}
 
-	 CLI_MSG('!weather on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick']);
+	 CLI_MSG('!weather on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 }
 
 

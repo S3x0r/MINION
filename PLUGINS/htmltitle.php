@@ -24,7 +24,7 @@ function plugin_htmltitle()
 				  }
 			}
   }
-    CLI_MSG('!htmltitle on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick']);
+    CLI_MSG('!htmltitle on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 }
 
 ?>

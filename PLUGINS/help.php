@@ -13,7 +13,7 @@ function plugin_help()
 
  CHANNEL_MSG('End.');
 
- CLI_MSG('!help on: '.$GLOBALS['C_CNANNEL']);
+ CLI_MSG('!help on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 }
 
 ?>

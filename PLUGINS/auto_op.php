@@ -21,7 +21,7 @@ function plugin_auto_op()
 
 		 CHANNEL_MSG('Host added to auto op list.');
 
-		 CLI_MSG('!auto_op on: '.$GLOBALS['C_CNANNEL'].', added: '.$GLOBALS['args']);
+		 CLI_MSG('!auto_op on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'].', added: '.$GLOBALS['args'], '1');
        }
 }
 

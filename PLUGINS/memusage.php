@@ -10,7 +10,7 @@ function plugin_memusage()
   $memory = byte_convert($mem);
 	
   CHANNEL_MSG('I\'m using '.$memory.' of RAM to run currently');
-  CLI_MSG('!memusage by: '.$GLOBALS['nick']);
+  CLI_MSG('!memusage by: '.$GLOBALS['nick'], '1');
 }
 
 function byte_convert($bytes)

@@ -1,4 +1,11 @@
    
+   v0.3.3 changes (31.08.2017):
+   - little information change in 'register <password>'
+   - some changes in readme files
+   - little code clean
+   - more cli informations from plugins
+   - we have now logging system :) LOGS folder :)
+
    v0.3.2 changes (30.08.2017):
    - new plugin: !morse -- converts <text> to morse code
    - new plugin: !math -- Solves mathematical tasks: !math <eg. 8*8+6>

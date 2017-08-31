@@ -21,7 +21,7 @@ function plugin_add_owner()
 
 		 CHANNEL_MSG('Owner Added.');
 
-		 CLI_MSG('!add_owner on: '.$GLOBALS['C_CNANNEL'].', added: '.$GLOBALS['args']);
+		 CLI_MSG('!add_owner on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'].', added: '.$GLOBALS['args'], '1');
 	   }
 }
 

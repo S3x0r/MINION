@@ -1,4 +1,3 @@
-![Powered by S3x0r](http://minionki.com.pl/powered.png)
 
      __                      __           __
  .--|  |.---.-.--.--.--.--. |  |--.-----.|  |_
@@ -8,17 +7,18 @@
     Author: S3x0r, contact: olisek@gmail.com
 
 Important!
-Before running BOT you must configure your BOT by using CONFIG.EXE program
-or edit CONFIG.INI file.
+Before running BOT you must configure your BOT by editing CONFIG.INI file.
 
-OWNERS HOSTS - EDIT IT (CONFIG.EXE or CONFIG.INI) FOR USING BOT COMMANDS!
+To be bot owner msg to bot by typing: /msg <botnickname> register <password_from_config>
+You will be added to owner hosts.
+
+You can also edit owner host in CONFIG.INI:
+
+OWNERS HOSTS - EDIT IT (CONFIG.INI) FOR USING BOT COMMANDS!
 
          nick ! ident@   host
            |      |       |
 example: S3x0r!~S3x0r@85-123-48-249.dsl.dynamic.simnet.is
-
-You can also msg to bot typing 'register <password_from_config>'
-you will be added to owner's hosts
 
 Bot was writted to run from Windows systems, tested on Windows 7, XP
 You dont need to download PHP, just run bot from START_BOT.BAT file

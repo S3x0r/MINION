@@ -13,6 +13,7 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 //------------------------------------------------------------------------------------------------
  function plugin_update()
  {
+  CLI_MSG('!update on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
   v_connect();
  }
 //------------------------------------------------------------------------------------------------

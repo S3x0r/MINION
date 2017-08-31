@@ -12,7 +12,7 @@ function plugin_leave()
   else {
 		 fputs($GLOBALS['socket'],'PART '.$GLOBALS['args']."\n");
 
-		 CLI_MSG('!leave on: '.$GLOBALS['C_CNANNEL'].', leaving: '.$GLOBALS['args']);
+		 CLI_MSG('!leave on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'].', leaving: '.$GLOBALS['args'], '1');
 	   }
 }
 

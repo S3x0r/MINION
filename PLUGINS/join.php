@@ -12,7 +12,7 @@ function plugin_join()
   else {
 		 JOIN_CHANNEL($GLOBALS['args']); 
 
-		 CLI_MSG('!join on: '.$GLOBALS['C_CNANNEL'].', joining: '.$GLOBALS['args']);
+		 CLI_MSG('!join on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'].', joining: '.$GLOBALS['args'], '1');
 	   }
 }
 

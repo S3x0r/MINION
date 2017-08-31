@@ -13,8 +13,12 @@
 </dl>
 
 ### Important!
-Before running BOT you must configure your BOT by using CONFIG.EXE program
-or edit CONFIG.INI file.
+Before running BOT you must configure your BOT by editing CONFIG.INI file.
+
+To be bot owner msg to bot by typing: /msg <bot_nickname> register <password_from_config>
+You will be added to owner hosts.
+
+You can also edit owner host in CONFIG.INI:
 
 <dl>
 <pre>
@@ -25,9 +29,6 @@ OWNERS HOSTS - EDIT IT (CONFIG.EXE or CONFIG.INI) FOR USING BOT COMMANDS!
 example: S3x0r!~S3x0r@80-13-38-219.dsl.dynamic.simnet.is
 </pre>
 </dl>
-
-You can also msg to bot typing 'register <password_from_config>'
-you will be added to owner's hosts.
 
 Bot was writted to run from Windows systems, tested on Windows 7, XP
 You dont need to download PHP, just run bot from START_BOT.BAT file.

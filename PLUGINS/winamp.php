@@ -15,6 +15,7 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
 function plugin_winamp()
 {
+  CLI_MSG('!winamp on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 
   if(empty($GLOBALS['args'])) { CHANNEL_MSG('Usage: '.$GLOBALS['C_CMD_PREFIX'].'winamp <help> to list commands'); } 
   

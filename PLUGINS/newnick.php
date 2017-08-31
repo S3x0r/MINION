@@ -17,7 +17,7 @@ function plugin_newnick()
 		 wcli_set_console_title('davybot '.VER.' (server: '.$GLOBALS['C_SERVER'].':'.$GLOBALS['C_PORT'].' | nickname: '.$GLOBALS['args'].' | channel: '.$GLOBALS['C_CNANNEL'].')');
 		 }
 	
-		 CLI_MSG('!newnick on: '.$GLOBALS['C_CNANNEL'].', new nick: '.$GLOBALS['args'].', by: '.$GLOBALS['nick']);
+		 CLI_MSG('!newnick on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'].', new nick: '.$GLOBALS['args'], '1');
 	   }
 }
 

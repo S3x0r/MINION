@@ -12,7 +12,7 @@ function plugin_op()
   else {
 		 fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['C_CNANNEL'].' +o '.$GLOBALS['args']."\n");
 
-		 CLI_MSG('!op on: '.$GLOBALS['C_CNANNEL'].', for: '.$GLOBALS['args']);
+		 CLI_MSG('!op on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'].', for: '.$GLOBALS['args'], '1');
 	   }
 }
 

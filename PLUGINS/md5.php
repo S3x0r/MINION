@@ -16,7 +16,7 @@ function plugin_md5()
 
 		 CHANNEL_MSG('(MD5) \''.$data.'\' -> '.$md5);
 
-		 CLI_MSG('!md5 on: '.$GLOBALS['C_CNANNEL'].', data: '.$data);
+		 CLI_MSG('!md5 on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'].', data: '.$data, '1');
        }
 }
 

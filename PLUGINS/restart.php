@@ -13,8 +13,8 @@ function plugin_restart()
   fputs($GLOBALS['socket'],"QUIT :Restarting...\n");
 
   /* send cli messages */
-  CLI_MSG('!restart on: '.$GLOBALS['C_CNANNEL'].' by: '.$GLOBALS['nick']);
-  CLI_MSG('Restarting BOT...');
+  CLI_MSG('!restart on: '.$GLOBALS['C_CNANNEL'].' by: '.$GLOBALS['nick'], '1');
+  CLI_MSG('Restarting BOT...', '1');
   
   /* execute batch script */
   system('restart.bat');

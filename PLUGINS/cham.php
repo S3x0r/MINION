@@ -29,7 +29,7 @@ function plugin_cham()
 
 		 CHANNEL_MSG($who.': '.$text);
  
-		 CLI_MSG('!cham on: '.$GLOBALS['C_CNANNEL'].', who: '.$who);
+		 CLI_MSG('!cham on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'].', who: '.$who, '1');
 	   }
 }
 

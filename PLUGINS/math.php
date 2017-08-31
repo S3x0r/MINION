@@ -19,7 +19,7 @@ function plugin_math()
                                    }
 
 
-		 CLI_MSG('!math on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick']);
+		 CLI_MSG('!math on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 	  }
 }
 

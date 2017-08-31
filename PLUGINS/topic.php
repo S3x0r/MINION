@@ -10,7 +10,7 @@ function plugin_topic()
   
    else {
 		  fputs($GLOBALS['socket'], 'TOPIC '.$GLOBALS['C_CNANNEL'].' '.msg_without_command()."\n");
-		  CLI_MSG('!topic on: '.$GLOBALS['C_CNANNEL'].', New topic: \''.msg_without_command().'\'');
+		  CLI_MSG('!topic on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'].', New topic: \''.msg_without_command().'\'', '1');
 	    }
 }
 

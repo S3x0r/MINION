@@ -13,7 +13,7 @@ function plugin_dns()
 		 $host = gethostbyaddr(trim($GLOBALS['args']));
   		 CHANNEL_MSG('host: '.$host);
 
-		 CLI_MSG('!dns on: '.$GLOBALS['C_CNANNEL'].', dns: '.$GLOBALS['args'].'/ '.$host);
+		 CLI_MSG('!dns on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'].', dns: '.$GLOBALS['args'].'/ '.$host, '1');
 	   }
 }
 ?>

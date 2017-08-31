@@ -32,7 +32,7 @@ function plugin_bash()
 		CHANNEL_MSG(str_replace('<br />', '', html_entity_decode($quotes[1][$i], ENT_QUOTES)));
 		}
 
-        CLI_MSG('!bash on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick']);
+        CLI_MSG('!bash on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 }
 
 ?>

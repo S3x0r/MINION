@@ -1,23 +1,23 @@
 <?php
 //------------------------------------------------------------------------------------------------
-define('VER', '0.3.2');
+define('VER', '0.3.3');
 define('START_TIME',time());
 //------------------------------------------------------------------------------------------------
 Start();
 //------------------------------------------------------------------------------------------------
 function Start()
 {
- if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
+  if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
  
- /* wcli extension */
- if (extension_loaded('wcli')) {
- wcli_clear();
- wcli_maximize();
- wcli_set_console_title('davybot ('.VER.')');
- wcli_hide_cursor();
- }
+  /* wcli extension */
+  if (extension_loaded('wcli')) {
+  wcli_clear();
+  wcli_maximize();
+  wcli_set_console_title('davybot ('.VER.')');
+  wcli_hide_cursor();
+  }
 
- $php_ver = phpversion();
+  $php_ver = phpversion();
 
  echo "
       __                      __           __ 
@@ -30,23 +30,25 @@ function Start()
       Web: https://github.com/S3x0r/davybot 
 	       PHP version: ".$php_ver."
  \n\n";
-
- LoadConfig();
+  
+  /* try to load config */
+  LoadConfig();
 }
 //------------------------------------------------------------------------------------------------ 
 function LoadConfig()
 {
- global $cfg;
+  global $cfg;
 
- $conf_file = '../CONFIG.INI';
+  $conf_file = '../CONFIG.INI';
   
   if(file_exists($conf_file)) {
    
+   /* set unlimited time for our bot :) */
    set_time_limit(0);
    
    $cfg = new iniParser($conf_file);
  
-  /* load configuration */
+  /* load configuration to variables */
 
   /* BOT */
    $GLOBALS['C_NICKNAME']       = $cfg->get("BOT","nickname");
@@ -73,6 +75,8 @@ function LoadConfig()
    $GLOBALS['C_CTCP_RESPONSE']  = $cfg->get("CTCP","ctcp_response");
    $GLOBALS['C_CTCP_VERSION']   = $cfg->get("CTCP","ctcp_version");
    $GLOBALS['C_CTCP_FINGER']    = $cfg->get("CTCP","ctcp_finger");
+  /* TIMEZONE */
+   $GLOBALS['C_TIMEZONE']       = $cfg->get("TIME","time_zone");
   /* FETCH */
    $GLOBALS['C_FETCH_SERVER']   = $cfg->get("FETCH","fetch_server");
   /* DEBUG */
@@ -84,37 +88,49 @@ function LoadConfig()
   /* if default master password, prompt for change it! */
   if($GLOBALS['C_OWNER_PASSWD'] == 'change_me!')
    { 
-     CLI_MSG('Default owner bot password detected!');
-	 CLI_MSG('For security please change it');
+     CLI_MSG('Default owner bot password detected!', '0');
+	 CLI_MSG('For security please change it', '0');
 
 	 if(!defined("STDIN")) {
      define("STDIN", fopen('php://stdin','rb'));
      }
 
-    echo 'New Password: ';
+    echo '[' . @date( 'H:i:s' ) . '] New Password: ';
     $new_pwd = fread(STDIN, 30);
 	$tr = rtrim($new_pwd, "\n\r");
     SaveData('../CONFIG.INI', 'ADMIN', 'owner_password', $tr);
+    
+	/* Set first time change variable */
+	$GLOBALS['if_first_time'] = '1';
 
     LoadConfig();
    }
+   
+   /* set timezone */
+   date_default_timezone_set($GLOBALS['C_TIMEZONE']);
 
-   /* set data.ini */
+   /* set data.ini defaults */
    SaveToFile('../data.ini', '[DATA]nickname =', 'w');
    
-   SaveData('../data.ini', 'DATA', 'nickname', $GLOBALS['C_NICKNAME']); /* saving nickname to data file */
-   $GLOBALS['RND_NICKNAME'] = $GLOBALS['C_NICKNAME'].'|'.rand(0,99); /* set random nickname */
+   /* saving nickname to data file */
+   SaveData('../data.ini', 'DATA', 'nickname', $GLOBALS['C_NICKNAME']);
+
+   /* set random nickname */
+   $GLOBALS['RND_NICKNAME'] = $GLOBALS['C_NICKNAME'].'|'.rand(0,99);
    
-   CLI_MSG("1. Configuration Loaded from: CONFIG.INI");
+   CLI_MSG("1. Configuration Loaded from: CONFIG.INI", '0');
+
+   /* logging init */
+   Logs();
 
    /* now time for plugins */
    LoadPlugins();
   }
   else {
-	  CLI_MSG("ERROR: No configuration file");
-	  CLI_MSG("Creating default configuration in: CONFIG.INI - !Configure it!\n");
+	  CLI_MSG("ERROR: No configuration file", '0');
+	  CLI_MSG("Creating default configuration in: CONFIG.INI - !Configure it!\n", '0');
 
-/* if no config - creating default one */
+/* if there is no config create default one */
 $default_config = '[BOT]
 nickname         = \'davybot\'
 name             = \'http://github.com/S3x0r/davybot\'
@@ -147,6 +163,9 @@ ctcp_response    = \'yes\'
 ctcp_version     = \'davybot ('.VER.')\'
 ctcp_finger      = \'davybot\'
 
+[TIME]
+time_zone        = \'Europe/Warsaw\'
+
 [FETCH]
 fetch_server     = \'https://raw.githubusercontent.com/S3x0r/davybot_repository_plugins/master\'
 
@@ -160,78 +179,89 @@ show_raw         = \'no\'';
 	LoadConfig();
   }
 }
+//------------------------------------------------------------------------------------------------ 
+function Logs()
+{
+  global $log_file;
+
+  $log_file = '../LOGS/LOG-'.date('d.m.Y').'.TXT';
+  $data = "------------------LOG CREATED: ".date('d.m.Y | H:i:s')."------------------\r\n";
+  SaveToFile($log_file, $data, 'a');
+}
 //------------------------------------------------------------------------------------------------
 function LoadPlugins()
 {
- $a = count(glob("../PLUGINS/*.php",GLOB_BRACE));
- $b = fopen('../plugins.ini', 'w');
- 
- CLI_MSG("2. My Plugins($a):");
- 
- echo "--------------------------------------------------------\n";
-  
-   foreach(glob('../PLUGINS/*.php') as $plugin_name)
+  $a = count(glob("../PLUGINS/*.php",GLOB_BRACE));
+  $b = fopen('../plugins.ini', 'w');
+
+  CLI_MSG("2. My Plugins($a):", '0');
+
+  echo "--------------------------------------------------------\n";
+
+  foreach(glob('../PLUGINS/*.php') as $plugin_name)
   {
-   include_once($plugin_name);
-   fwrite($b, $GLOBALS['C_CMD_PREFIX'].''.$plugin_command.' ');
-   $plugin_name = basename($plugin_name, '.php');
-   echo "$plugin_name -- $plugin_description\n";
+    include_once($plugin_name);
+    fwrite($b, $GLOBALS['C_CMD_PREFIX'].''.$plugin_command.' ');
+    $plugin_name = basename($plugin_name, '.php');
+    echo "$plugin_name -- $plugin_description\n";
   }
- echo "--------------------------------------------------------\n";
- 
- fclose($b);
+  echo "--------------------------------------------------------\n";
 
- $GLOBALS['PLUGINS'] = file_get_contents("../plugins.ini"); 
- $GLOBALS['PLUGINS'] = explode(" ", $GLOBALS['PLUGINS']);
+  fclose($b);
 
- if($GLOBALS['C_SHOW_RAW'] == 'yes') { print_r($GLOBALS['PLUGINS']); }
+  $GLOBALS['PLUGINS'] = file_get_contents("../plugins.ini"); 
+  $GLOBALS['PLUGINS'] = explode(" ", $GLOBALS['PLUGINS']);
 
- /* Now its time to connect */
- Connect();
+  if($GLOBALS['C_SHOW_RAW'] == 'yes') { print_r($GLOBALS['PLUGINS']); }
+
+  /* Now its time to connect */
+  Connect();
 }
 //------------------------------------------------------------------------------------------------
 function Connect()
 {
- CLI_MSG('3. Connecting to: '.$GLOBALS['C_SERVER'].', port: '.$GLOBALS['C_PORT']);
+  CLI_MSG('3. Connecting to: '.$GLOBALS['C_SERVER'].', port: '.$GLOBALS['C_PORT'], '0');
 
- $i = 0;
+  $i=0;
 
-/* loop if something goes wrong */
- while ($i++ < $GLOBALS['C_TRY_CONNECT'])
- {
-  $GLOBALS['socket'] = fsockopen($GLOBALS['C_SERVER'], $GLOBALS['C_PORT']);
+  /* loop if something goes wrong */
+  while ($i++ < $GLOBALS['C_TRY_CONNECT'])
+  {
+    $GLOBALS['socket'] = fsockopen($GLOBALS['C_SERVER'], $GLOBALS['C_PORT']);
 
-   if($GLOBALS['socket']==false) {
-	 CLI_MSG('Unable to connect to server, im trying to connect again...');
+    if($GLOBALS['socket']==false) {
+	 CLI_MSG('Unable to connect to server, im trying to connect again...', '0');
      sleep($GLOBALS['C_CONNECT_DELAY']); 
     if($i==$GLOBALS['C_TRY_CONNECT']) {
-     CLI_MSG('Unable to connect to server, exiting program.');
+     CLI_MSG('Unable to connect to server, exiting program.', '0');
 	 die(); /* TODO: send email that terminated program? */
 	 }
    }
 	else {
-          Identify();
+           Identify();
 	     }
   }
 }
 //------------------------------------------------------------------------------------------------
 function Identify()
 {
-/* sending user/nick to server */
-fputs($GLOBALS['socket'], 'USER '.$GLOBALS['C_NICKNAME'].' FORCE '.$GLOBALS['C_IDENT'].' :'.$GLOBALS['C_NAME']."\n");
-fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['C_NICKNAME']."\n");
-Engine();
+  /* sending user/nick to server */
+  fputs($GLOBALS['socket'], 'USER '.$GLOBALS['C_NICKNAME'].' FORCE '.$GLOBALS['C_IDENT'].' :'.$GLOBALS['C_NAME']."\n");
+  fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['C_NICKNAME']."\n");
+  
+  /* time for socket loop */
+  Engine();
 }
 //------------------------------------------------------------------------------------------------
 function Engine()
 {
-global $args;
-global $nick;
-global $hostname;
-global $piece1;
-global $piece2;
-global $ex;
-global $rawcmd;
+  global $args;
+  global $nick;
+  global $hostname;
+  global $piece1;
+  global $piece2;
+  global $ex;
+  global $rawcmd;
 
 /* main socket loop */
 while(1) {
@@ -254,7 +284,7 @@ while(1) {
 		if($GLOBALS['C_AUTO_REJOIN'] == 'yes') {
 	    	if($ex[1] == "KICK"){
 				if($ex[3] == $GLOBALS['C_NICKNAME']){
-					CLI_MSG("I was kicked from channel, joining again...");
+					CLI_MSG("I was kicked from channel, joining again...", '1');
 					fputs($GLOBALS['socket'], "JOIN :".$ex[2]."\n");
 					continue;
 				}	} }
@@ -278,7 +308,7 @@ while(1) {
 
 			if($ex[1] == "JOIN" && in_array($mask2,  $pieces))
 			{	
-			 CLI_MSG("I have nick: ".$nick." on auto op list, giving op");
+			 CLI_MSG("I have nick: ".$nick." on auto op list, giving op", '1');
 			 fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['C_CNANNEL'].' +o '.$nick."\n");
 			 continue;
 			}
@@ -303,7 +333,7 @@ switch ($ex[1]){
 	
 	case '433': /* if nick already exists */
 	case '432': /* if nick reserved */
-	    CLI_MSG('-- Nickname already used, changing to alternative nick: '.$GLOBALS['RND_NICKNAME']);
+	    CLI_MSG('-- Nickname already used, changing to alternative nick: '.$GLOBALS['RND_NICKNAME'], '1');
 		fputs($GLOBALS['socket'],'NICK '.$GLOBALS['RND_NICKNAME']."\n");
 		SaveData('../data.ini', 'DATA', 'nickname', $GLOBALS['RND_NICKNAME']);
         break;
@@ -311,8 +341,15 @@ switch ($ex[1]){
 	case '422': /* join if no motd */
 	case '376': /* join after motd */
 	     LoadData('../data.ini', 'DATA', 'nickname');
-		 CLI_MSG('4. OK im connected, my nickname is: '.$GLOBALS['LOADED']);
+		 CLI_MSG('4. OK im connected, my nickname is: '.$GLOBALS['LOADED'], '1');
 		
+		 /* register to bot info */
+		 if($GLOBALS['if_first_time'] == '1') {
+		 CLI_MSG('****************************************************', '0');
+		 CLI_MSG('Register to bot by typing /msg '.$GLOBALS['LOADED'].' register '.$GLOBALS['C_OWNER_PASSWD'], '0');
+		 CLI_MSG('****************************************************', '0');
+		 }
+
 		 /* wcli extension */
 		 if (extension_loaded('wcli')) {
 		 wcli_set_console_title('davybot '.VER.' (server: '.$GLOBALS['C_SERVER'].':'.$GLOBALS['C_PORT'].' | nickname: '.$GLOBALS['LOADED'].' | channel: '.$GLOBALS['C_CNANNEL'].')');
@@ -320,14 +357,14 @@ switch ($ex[1]){
 		 
 		 /* if autojoin */
 		 if($GLOBALS['C_AUTO_JOIN'] == 'yes') { 
-		 CLI_MSG('5. Joining channel: '.$GLOBALS['C_CNANNEL']);
+		 CLI_MSG('5. Joining channel: '.$GLOBALS['C_CNANNEL'], '1');
 		 JOIN_CHANNEL($GLOBALS['C_CNANNEL']);
 		 break;
 		 }
 		break;
 
 	case 'QUIT': /* quit message */
-		CLI_MSG('* '.$nick.' ('.$ident.'@'.$host.') Quit');
+		CLI_MSG('* '.$nick.' ('.$ident.'@'.$host.') Quit', '1');
 		//todo:save_to_database(); /* Saving to database -> !seen */
 		break;
 }
@@ -367,13 +404,13 @@ switch ($ex[1]){
      NICK_MSG('My Commands:');
      NICK_MSG($commands);
 
-     CLI_MSG('I have new owner in list: '.$GLOBALS['C_CNANNEL'].', added: '.$mask2);
+     CLI_MSG('I have new owner in list: '.$GLOBALS['C_CNANNEL'].', added: '.$mask2, '1');
 
      /* give op before restart */
      fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['C_CNANNEL'].' +o '.$GLOBALS['nick']."\n");
 
      fputs($GLOBALS['socket'],"QUIT :Restarting...\n");
-     CLI_MSG('Restarting BOT...');
+     CLI_MSG('Restarting BOT...', '1');
      system('restart.bat');
      die();
 
@@ -404,23 +441,24 @@ function msg_without_command()
 //------------------------------------------------------------------------------------------------
 function HasAccess($mask)
 {
-global $admins;
-        if ($mask == NULL)
-        if ($mask == NULL)
-                return FALSE;
-        foreach ($admins as $admin)
-                if (fnmatch($admin, $mask, 16))
-                        return TRUE;
-        return FALSE;
+  global $admins;
+
+  if ($mask == NULL)
+  if ($mask == NULL)
+  return FALSE;
+  foreach ($admins as $admin)
+  if (fnmatch($admin, $mask, 16))
+  return TRUE;
+  return FALSE;
 }
 //------------------------------------------------------------------------------------------------
 function HasOwner($mask)
 {
- global $owners;
+  global $owners;
 
- $owners_c = $GLOBALS['C_OWNERS'];
- $pieces = explode(", ", $owners_c);
- $owners = $pieces;
+  $owners_c = $GLOBALS['C_OWNERS'];
+  $pieces = explode(", ", $owners_c);
+  $owners = $pieces;
 
         if ($mask == NULL)
         if ($mask == NULL)
@@ -444,99 +482,103 @@ function SaveToFile($f1, $f2, $f3)
 //------------------------------------------------------------------------------------------------
 function SaveData($v1, $v2, $v3, $v4)
 {
- $cfg = new iniParser($v1);
- $cfg->setValue("$v2", "$v3", "$v4");
- $cfg->save();
+  $cfg = new iniParser($v1);
+  $cfg->setValue("$v2", "$v3", "$v4");
+  $cfg->save();
 }
 //------------------------------------------------------------------------------------------------
 function LoadData($v1, $v2, $v3)
 {
- $cfg = new iniParser($v1);
- $GLOBALS['LOADED'] = $cfg->get("$v2", "$v3");
+  $cfg = new iniParser($v1);
+  $GLOBALS['LOADED'] = $cfg->get("$v2", "$v3");
 }
 //------------------------------------------------------------------------------------------------
-function CLI_MSG($msg)
+function CLI_MSG($msg, $log)
 {
- $line = '[' . @date( 'H:i:s' ) . '] ' . $msg . "\r\n";
- echo $line;
+  $line = '[' . @date( 'H:i:s' ) . '] ' . $msg . "\r\n";
+
+  if($log=='1') { SaveToFile($GLOBALS['log_file'], $line, 'a'); }
+
+  echo $line;
 }
 //------------------------------------------------------------------------------------------------
 function CHANNEL_MSG($msg)
 {
- fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['C_CNANNEL']." :$msg\n");
+  fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['C_CNANNEL']." :$msg\n");
 }
 //------------------------------------------------------------------------------------------------
 function NICK_MSG($msg)
 {
- fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['nick']." :$msg\n");
+  fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['nick']." :$msg\n");
 }
 //------------------------------------------------------------------------------------------------
 function JOIN_CHANNEL($channel)
 {
- fputs($GLOBALS['socket'],'JOIN '.$channel."\n");
+  fputs($GLOBALS['socket'],'JOIN '.$channel."\n");
 }
 //------------------------------------------------------------------------------------------------
 /* configuration file parser */
 class iniParser {
 	
-	var $_iniFilename = '';
-	var $_iniParsedArray = array();
-	
-	function iniParser($file)
-	{
-		$this->_iniFilename = $file;
-		if($this->_iniParsedArray = parse_ini_file($file, true) ) {
-			return true;
-		} else {
-			return false;
-		} 
-	}
-	function getSection($key)
-	{
-	 return $this->_iniParsedArray[$key];
-	}
-	function getValue($sec, $key)
-	{
-		if(!isset($this->_iniParsedArray[$sec])) return false;
-		return $this->_iniParsedArray[$sec][$key];
-	}
-	function get($sec, $key=NULL)
-	{
-		if(is_null($key)) return $this->getSection($sec);
-		return $this->getValue($sec, $key);
-	}
-	function setSection($sec, $array)
-	{
-		if(!is_array($array)) return false;
-		return $this->_iniParsedArray[$sec] = $array;
-	}
-	function setValue($sec, $key, $value)
-	{
-	 if($this->_iniParsedArray[$sec][$key] = $value) return true;
-	}
-	function set($sec, $key, $value=NULL)
-	{
-		if(is_array($key) && is_null($value)) return $this->setSection($sec, $key);
-		return $this->setValue($sec, $key, $value);
-	}
-	function save( $file = null )
-	{
-		if($file == null) $file = $this->_iniFilename;
-		if(is_writeable($file) ) {
-			$desc = fopen($file, "w");
-			foreach($this->_iniParsedArray as $sec => $array){
-				fwrite($desc, "[" . $sec . "]\r\n" );
-				foreach($array as $key => $value) {
-					fwrite( $desc, "$key = '$value'\r\n" );
-				}
-				fwrite($desc, "\r\n");
-			}
-			fclose($desc);
-			return true;
-		} else {
-			return false;
-		}
-	}
+ var $_iniFilename = '';
+ var $_iniParsedArray = array();
+
+function iniParser($file)
+{
+  $this->_iniFilename = $file;
+  if($this->_iniParsedArray = parse_ini_file($file, true)) { return true; }
+  else { return false; }
+}
+
+function getSection($key)
+{
+  return $this->_iniParsedArray[$key];
+}
+
+function getValue($sec, $key)
+{
+  if(!isset($this->_iniParsedArray[$sec])) return false;
+  return $this->_iniParsedArray[$sec][$key];
+}
+
+function get($sec, $key=NULL)
+{
+  if(is_null($key)) return $this->getSection($sec);
+  return $this->getValue($sec, $key);
+}
+
+function setSection($sec, $array)
+{
+  if(!is_array($array)) return false;
+  return $this->_iniParsedArray[$sec] = $array;
+}
+
+function setValue($sec, $key, $value)
+{
+  if($this->_iniParsedArray[$sec][$key] = $value) return true;
+}
+
+function set($sec, $key, $value=NULL)
+{
+  if(is_array($key) && is_null($value)) return $this->setSection($sec, $key);
+  return $this->setValue($sec, $key, $value);
+}
+
+function save($file = null)
+{
+  if($file == null) $file = $this->_iniFilename;
+   if(is_writeable($file)) {
+	  $desc = fopen($file, "w");
+	  foreach($this->_iniParsedArray as $sec => $array) {
+	  fwrite($desc, "[" . $sec . "]\r\n" );
+	  foreach($array as $key => $value) {
+	  fwrite( $desc, "$key = '$value'\r\n" ); }
+	  fwrite($desc, "\r\n");
+	  }
+		fclose($desc);
+		return true;
+	  } else { return false; }
+}
 }
 
 ?>

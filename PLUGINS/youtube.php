@@ -23,7 +23,7 @@ function plugin_youtube()
          $pieceb = explode('">', $piecesb[1]);
 
          CHANNEL_MSG('Youtube Title: '.htmlspecialchars_decode($piece[0]));
-         CLI_MSG('!youtube on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick']);
+         CLI_MSG('!youtube on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 	   }
 
 }
