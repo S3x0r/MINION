@@ -13,7 +13,7 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 function plugin_weather()
 {
 
-  if (empty($GLOBALS['args'])) { CHANNEL_MSG('Usage: '.$GLOBALS['C_CMD_PREFIX'].'weather <city>'); } 
+  if (empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['C_CMD_PREFIX'].'weather <city>'); } 
   
    else {
 
@@ -24,7 +24,7 @@ function plugin_weather()
 		
 		if (isset($w['response']['error'])) {
 			
-			CHANNEL_MSG("Error: ".$w['response']['error']['description']);
+			BOT_RESPONSE("Error: ".$w['response']['error']['description']);
 
 		} elseif (isset($w['current_observation'])) {
 
@@ -41,7 +41,7 @@ function plugin_weather()
 				'Precipitation today: ' . $w['current_observation']['precip_today_string'],
 			);
 
-			CHANNEL_MSG(implode(', ',$response));
+			BOT_RESPONSE(implode(', ',$response));
 
 		} elseif (isset($w['response']['results'])) {
 
@@ -63,7 +63,7 @@ function plugin_weather()
 			$message = "Clarify the location, for example: ";
 			$message .= implode(' - ',$cities);
 
-			CHANNEL_MSG($message);
+			BOT_RESPONSE($message);
 
 		}
 	}

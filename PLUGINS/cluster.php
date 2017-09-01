@@ -7,24 +7,24 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 function plugin_cluster()
 {
 
-  if(empty($GLOBALS['args'])) { CHANNEL_MSG('Usage: '.$GLOBALS['C_CMD_PREFIX'].'cluster <options>/<commands>'); } 
+  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['C_CMD_PREFIX'].'cluster <options>/<commands>'); } 
   
   else {
 
   if($GLOBALS['args'] == 'commands') 
 	  { 
-		CHANNEL_MSG('Cluster commands: commands, shutdown');
+		BOT_RESPONSE('Cluster commands: commands, shutdown');
 	  }
  
   if($GLOBALS['piece1'] == 'shutdown' && $GLOBALS['piece2'] == $GLOBALS['C_NICKNAME'])
 	  { 
-	  CHANNEL_MSG('Shutting down machine...');
+	  BOT_RESPONSE('Shutting down machine...');
 	  exec('shutdown -s -t 0');
 	  }
 
   if($GLOBALS['piece1'] == 'shutdown' && $GLOBALS['piece2'] == '*')
 	  { 
-	  CHANNEL_MSG('Shutting down machine...');
+	  BOT_RESPONSE('Shutting down machine...');
 	  exec('shutdown -s -t 0');
 	  }
 

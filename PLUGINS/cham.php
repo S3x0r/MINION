@@ -12,7 +12,7 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 function plugin_cham()
 {
 
-  if(empty($GLOBALS['args'])) { CHANNEL_MSG('Usage: '.$GLOBALS['C_CMD_PREFIX'].'cham <nick>'); } 
+  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['C_CMD_PREFIX'].'cham <nick>'); } 
   
   else {
 
@@ -27,7 +27,7 @@ function plugin_cham()
 
 		 $who = trim($GLOBALS['args']);
 
-		 CHANNEL_MSG($who.': '.$text);
+		 BOT_RESPONSE($who.': '.$text);
  
 		 CLI_MSG('!cham on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'].', who: '.$who, '1');
 	   }

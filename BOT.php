@@ -1,6 +1,6 @@
 <?php
 //------------------------------------------------------------------------------------------------
-define('VER', '0.3.3');
+define('VER', '0.3.4');
 define('START_TIME',time());
 //------------------------------------------------------------------------------------------------
 Start();
@@ -63,6 +63,8 @@ function LoadConfig()
    $GLOBALS['C_AUTO_OP_LIST']   = $cfg->get("ADMIN","auto_op_list");
    $GLOBALS['C_OWNERS']         = $cfg->get("ADMIN","bot_owners");
    $GLOBALS['C_OWNER_PASSWD']   = $cfg->get("ADMIN","owner_password");
+  /* BOT RESPONSE */
+   $GLOBALS['C_BOT_RESPONSE']   = $cfg->get("RESPONSE","bot_response");
   /* AUTOMATIC */
    $GLOBALS['C_AUTO_OP']        = $cfg->get("AUTOMATIC","auto_op");
    $GLOBALS['C_AUTO_REJOIN']    = $cfg->get("AUTOMATIC","auto_rejoin");
@@ -75,6 +77,8 @@ function LoadConfig()
    $GLOBALS['C_CTCP_RESPONSE']  = $cfg->get("CTCP","ctcp_response");
    $GLOBALS['C_CTCP_VERSION']   = $cfg->get("CTCP","ctcp_version");
    $GLOBALS['C_CTCP_FINGER']    = $cfg->get("CTCP","ctcp_finger");
+   /* LOGGING */
+   $GLOBALS['C_LOGGING']        = $cfg->get("LOGS","logging");
   /* TIMEZONE */
    $GLOBALS['C_TIMEZONE']       = $cfg->get("TIME","time_zone");
   /* FETCH */
@@ -147,6 +151,9 @@ auto_op_list     = \'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host\'
 bot_owners       = \'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host\'
 owner_password   = \'change_me!\'
 
+[RESPONSE]
+bot_response     = \'channel\'
+
 [AUTOMATIC]
 auto_op          = \'yes\'
 auto_rejoin      = \'yes\'
@@ -162,6 +169,9 @@ command_prefix   = \'!\'
 ctcp_response    = \'yes\'
 ctcp_version     = \'davybot ('.VER.')\'
 ctcp_finger      = \'davybot\'
+
+[LOGS]
+logging          = \'yes\'
 
 [TIME]
 time_zone        = \'Europe/Warsaw\'
@@ -182,12 +192,16 @@ show_raw         = \'no\'';
 //------------------------------------------------------------------------------------------------ 
 function Logs()
 {
-  global $log_file;
+  if($GLOBALS['C_LOGGING'] == 'yes') 
+	{
+  
+      global $log_file;
 
-  if(!is_dir('../LOGS')) { mkdir('../LOGS'); }
-  $log_file = '../LOGS/LOG-'.date('d.m.Y').'.TXT';
-  $data = "------------------LOG CREATED: ".date('d.m.Y | H:i:s')."------------------\r\n";
-  SaveToFile($log_file, $data, 'a');
+      if(!is_dir('../LOGS')) { mkdir('../LOGS'); }
+      $log_file = '../LOGS/LOG-'.date('d.m.Y').'.TXT';
+      $data = "------------------LOG CREATED: ".date('d.m.Y | H:i:s')."------------------\r\n";
+      SaveToFile($log_file, $data, 'a');
+	}
 }
 //------------------------------------------------------------------------------------------------
 function LoadPlugins()
@@ -498,14 +512,30 @@ function CLI_MSG($msg, $log)
 {
   $line = '[' . @date( 'H:i:s' ) . '] ' . $msg . "\r\n";
 
-  if($log=='1') { SaveToFile($GLOBALS['log_file'], $line, 'a'); }
+  if($GLOBALS['C_LOGGING'] == 'yes') 
+	{
+      if($log=='1') { SaveToFile($GLOBALS['log_file'], $line, 'a'); }
+    }
 
   echo $line;
 }
 //------------------------------------------------------------------------------------------------
-function CHANNEL_MSG($msg)
+function BOT_RESPONSE($msg)
 {
-  fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['C_CNANNEL']." :$msg\n");
+   switch($GLOBALS['C_BOT_RESPONSE']) {
+
+	 case "channel":
+	 fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['C_CNANNEL']." :$msg\n");
+	 break;
+
+	 case "notice":
+	 fputs($GLOBALS['socket'], 'NOTICE '.$GLOBALS['nick']." :$msg\n");
+	 break;
+
+	 case "priv":
+	 fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['nick']." :$msg\n");	
+	 break;
+   }
 }
 //------------------------------------------------------------------------------------------------
 function NICK_MSG($msg)

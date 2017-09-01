@@ -7,7 +7,7 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 function plugin_newnick()
 {
 
-  if(empty($GLOBALS['args'])) { CHANNEL_MSG('Usage: '.$GLOBALS['C_CMD_PREFIX'].'newnick <new_nick>'); } 
+  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['C_CMD_PREFIX'].'newnick <new_nick>'); } 
   
   else {
 		 fputs($GLOBALS['socket'],'NICK '.$GLOBALS['args']."\n");

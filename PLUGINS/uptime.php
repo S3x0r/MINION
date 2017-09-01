@@ -28,7 +28,7 @@ function plugin_uptime()
  $second=floor($time);
  $time-=$second;
 
- CHANNEL_MSG("Bot uptime: $year year(s), $month month(s), $day day(s), $hour hour(s), $minute minute(s), $second second(s)"); 
+ BOT_RESPONSE("Bot uptime: $year year(s), $month month(s), $day day(s), $hour hour(s), $minute minute(s), $second second(s)"); 
  
  CLI_MSG('!Uptime on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 }

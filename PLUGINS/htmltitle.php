@@ -7,7 +7,7 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 function plugin_htmltitle()
 {
 
-  if(empty($GLOBALS['args'])) { CHANNEL_MSG('Usage: '.$GLOBALS['C_CMD_PREFIX'].'htmltitle <http://address>'); } 
+  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['C_CMD_PREFIX'].'htmltitle <http://address>'); } 
   
   else {
 	
@@ -20,7 +20,7 @@ function plugin_htmltitle()
 						  $matches[1].='...';
 					    }
 
-				CHANNEL_MSG('Title: ' . str_replace("\n", '', str_replace("\r", '', html_entity_decode($matches[1], ENT_QUOTES, 'utf-8'))));
+				BOT_RESPONSE('Title: ' . str_replace("\n", '', str_replace("\r", '', html_entity_decode($matches[1], ENT_QUOTES, 'utf-8'))));
 				  }
 			}
   }

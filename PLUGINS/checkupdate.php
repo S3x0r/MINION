@@ -18,7 +18,7 @@ function plugin_checkupdate()
 	     }
      
 	 else {
-		  CHANNEL_MSG('Cannot connect to update server, try next time.');
+		  BOT_RESPONSE('Cannot connect to update server, try next time.');
           }
 }
 //------------------------------------------------------------------------------------------------
@@ -30,14 +30,14 @@ function checkVersion()
 	
   if($version[0] > VER) 
 	{
-	  CHANNEL_MSG('New version available!');
-	  CHANNEL_MSG('My version: '.VER.', version on server: '.$version[0].'');
-	  CHANNEL_MSG('To update me use !update');
+	  BOT_RESPONSE('New version available!');
+	  BOT_RESPONSE('My version: '.VER.', version on server: '.$version[0].'');
+	  BOT_RESPONSE('To update me use !update');
     }
 	 
    else 
 	{
-	 CHANNEL_MSG('No new update, you have the latest version.');
+	 BOT_RESPONSE('No new update, you have the latest version.');
 	}
 }
 //------------------------------------------------------------------------------------------------

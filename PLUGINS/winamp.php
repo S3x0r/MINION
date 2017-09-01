@@ -17,20 +17,20 @@ function plugin_winamp()
 {
   CLI_MSG('!winamp on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 
-  if(empty($GLOBALS['args'])) { CHANNEL_MSG('Usage: '.$GLOBALS['C_CMD_PREFIX'].'winamp <help> to list commands'); } 
+  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['C_CMD_PREFIX'].'winamp <help> to list commands'); } 
   
   else {
 
     	switch($GLOBALS['args']) {
 
 			case "help": 
-			CHANNEL_MSG('Winamp commands:');
-			CHANNEL_MSG('winamp stop - Stop music: !winamp stop');
-			CHANNEL_MSG('winamp pause - Pause music: !winamp pause');
-			CHANNEL_MSG('winamp play - Play music: !winamp play');
-			CHANNEL_MSG('winamp next - Next song: !winamp next');
-			CHANNEL_MSG('winamp prev - Previous song: !winamp prev');
-			CHANNEL_MSG('winamp title - Show song title: !winamp title');
+			BOT_RESPONSE('Winamp commands:');
+			BOT_RESPONSE('winamp stop - Stop music: !winamp stop');
+			BOT_RESPONSE('winamp pause - Pause music: !winamp pause');
+			BOT_RESPONSE('winamp play - Play music: !winamp play');
+			BOT_RESPONSE('winamp next - Next song: !winamp next');
+			BOT_RESPONSE('winamp prev - Previous song: !winamp prev');
+			BOT_RESPONSE('winamp title - Show song title: !winamp title');
 			break;
 
 			case "stop": exec($GLOBALS['winamp_loc'].' /stop'); break;
@@ -46,7 +46,7 @@ function plugin_winamp()
 function sendTitle($target)
 {
   $title = exec($GLOBALS['winamp_loc'].' /title');
-  CHANNEL_MSG("Playing: ".$title, $target);
+  BOT_RESPONSE("Playing: ".$title, $target);
 }
 
 ?>

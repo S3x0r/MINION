@@ -13,11 +13,11 @@ function plugin_list_owners()
 
  $table = $owners;
  
- CHANNEL_MSG('My Admins:');
+ BOT_RESPONSE('My Admins:');
 
  for ($i=0; $i<count($table); $i++)
  {
-   CHANNEL_MSG($table[$i]);
+   BOT_RESPONSE($table[$i]);
  } 
  
  CLI_MSG('!list_owners on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'], '1');

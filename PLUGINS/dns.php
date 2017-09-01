@@ -7,11 +7,11 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 function plugin_dns()
 {
 
-  if(empty($GLOBALS['args'])) { CHANNEL_MSG('Usage: '.$GLOBALS['C_CMD_PREFIX'].'dns <address>'); } 
+  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['C_CMD_PREFIX'].'dns <address>'); } 
   
   else {
 		 $host = gethostbyaddr(trim($GLOBALS['args']));
-  		 CHANNEL_MSG('host: '.$host);
+  		 BOT_RESPONSE('host: '.$host);
 
 		 CLI_MSG('!dns on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'].', dns: '.$GLOBALS['args'].'/ '.$host, '1');
 	   }

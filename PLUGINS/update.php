@@ -25,7 +25,7 @@ function v_connect()
 	     }
      
 	 else {
-		  CHANNEL_MSG('Cannot connect to update server, try next time.');
+		  BOT_RESPONSE('Cannot connect to update server, try next time.');
           }
 }
 //------------------------------------------------------------------------------------------------
@@ -35,24 +35,24 @@ function v_checkVersion()
 	
   if($version[0] > VER) 
 	{
-	  CHANNEL_MSG('My version: '.VER.', version on server: '.$version[0].'');
+	  BOT_RESPONSE('My version: '.VER.', version on server: '.$version[0].'');
 	 v_tryDownload();
     }
 	 
    else 
 	{
-	 CHANNEL_MSG('No new update, you have the latest version.');
+	 BOT_RESPONSE('No new update, you have the latest version.');
 	}
 }
 //------------------------------------------------------------------------------------------------
 function v_tryDownload()
 {  
-      CHANNEL_MSG('Downloading update...');
+      BOT_RESPONSE('Downloading update...');
 	  $newUpdate = file_get_contents($GLOBALS['v_source']);
       $dlHandler = fopen($GLOBALS['dir'].'update.zip', 'w');
-      if(!fwrite($dlHandler, $newUpdate)) { CHANNEL_MSG('Could not save new update, operation aborted'); exit(); }
+      if(!fwrite($dlHandler, $newUpdate)) { BOT_RESPONSE('Could not save new update, operation aborted'); exit(); }
       fclose($dlHandler);
-      CHANNEL_MSG('Update Downloaded');
+      BOT_RESPONSE('Update Downloaded');
 	  v_extract();
 }
 //------------------------------------------------------------------------------------------------
@@ -89,13 +89,13 @@ function delete_files($target) {
 //------------------------------------------------------------------------------------------------
 function v_extract()
 {
-  CHANNEL_MSG('Extracting update');
+  BOT_RESPONSE('Extracting update');
 
 	$zip = new ZipArchive;
 	if ($zip->open($GLOBALS['dir'].'update.zip') === TRUE) {
     $zip->extractTo($GLOBALS['newdir']);
     $zip->close();
-    CHANNEL_MSG('Extracted.');
+    BOT_RESPONSE('Extracted.');
 	
 	recurse_copy($GLOBALS['newdir'].'/davybot-master', $GLOBALS['newdir']);
 	delete_files($GLOBALS['newdir'].'/davybot-master');
@@ -104,7 +104,7 @@ function v_extract()
 	unlink($GLOBALS['dir'].'update.zip');
 	
 	//copy CONFIG.INI from last version
-	copy('../CONFIG.INI', $GLOBALS['newdir'].'/CONFIG.INI');
+	copy('../CONFIG.INI', $GLOBALS['newdir'].'/OLD_CONFIG.INI');
 
   // reconnect to run new version
   fputs($GLOBALS['socket'],"QUIT :Installing, reconnecting\n");
@@ -112,6 +112,6 @@ function v_extract()
   die();
 
 } else {
-    CHANNEL_MSG('Failed to extract, aborting.');
+    BOT_RESPONSE('Failed to extract, aborting.');
  }
 }

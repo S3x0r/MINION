@@ -1,0 +1,50 @@
+
+  CONFIG.INI Explanation
+
+
+[BOT]
+nickname = 'davybot' <-- Bot nickname
+name = 'http://github.com/S3x0r/davybot' <-- Bot name
+ident = 'http://github.com/S3x0r/davybot' <-- Bot ident
+
+[SERVER]
+server = 'minionki.com.pl' <-- Server where to connect
+port = '6667' <-- Server port
+try_connect = '10' <-- Try connect 'n' times to server, if cannot then quit
+connect_delay = '3' <-- Delay before new connection to server
+
+[ADMIN]
+auto_op_list = 'nick!ident@first.host, nick!ident@second.host' <-- Bot gives op if hosts join channel 
+bot_owners = 'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host' <-- Bot owners hosts
+owner_password = 'change_me!' <-- /msg botnickname register owner_password, if ok bot add's you to bot_owners hosts
+
+[RESPONSE]
+bot_response = 'channel' <-- Where bot may response, you can choose 'channel', 'notice', 'priv'
+
+[AUTOMATIC]
+auto_op = 'yes' <-- give auto ops from auto_op_list? 'yes' / 'no'
+auto_rejoin = 'yes' <-- auto rejoin channel when kicked
+
+[CHANNEL]
+channel = '#davybot' <-- channel where to join when connected
+auto_join = 'yes' <-- auto join to channel when connected
+
+[COMMAND]
+command_prefix = '!' <-- Bot commands prefix eg. !info, you can change to what you want :)
+
+[CTCP]
+ctcp_response = 'yes' <-- Response to ctcp? 'yes' / 'no'
+ctcp_version = 'davybot' <-- Ctcp version response
+ctcp_finger = 'davybot' <-- Ctcp finger response
+
+[LOGS]
+logging = 'yes' <-- Log Cli messages to LOGS folder? 'yes' / 'no'
+
+[TIME]
+time_zone = 'Europe/Warsaw' <-- Time Zone
+
+[FETCH]
+fetch_server = 'https://raw.githubusercontent.com/S3x0r/davybot_repository_plugins/master' <-- Bot plugin repository
+
+[DEBUG]
+show_raw = 'no' <-- Show debug messages? 'yes' / 'no'

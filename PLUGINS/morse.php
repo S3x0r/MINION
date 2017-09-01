@@ -7,7 +7,7 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 function plugin_morse()
 {
 
-  if(empty($GLOBALS['args'])) { CHANNEL_MSG('Usage: '.$GLOBALS['C_CMD_PREFIX'].'morse <text>'); } 
+  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['C_CMD_PREFIX'].'morse <text>'); } 
   
   else {
 
@@ -33,7 +33,7 @@ function plugin_morse()
                $final .= $morse_code[$care]." ";
              }
        }
-   CHANNEL_MSG($string.' converted to morse: '.rtrim($final));
+   BOT_RESPONSE($string.' converted to morse: '.rtrim($final));
    CLI_MSG('!morse on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 
  }

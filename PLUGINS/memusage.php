@@ -9,7 +9,7 @@ function plugin_memusage()
   $mem = memory_get_usage(); 
   $memory = byte_convert($mem);
 	
-  CHANNEL_MSG('I\'m using '.$memory.' of RAM to run currently');
+  BOT_RESPONSE('I\'m using '.$memory.' of RAM to run currently');
   CLI_MSG('!memusage by: '.$GLOBALS['nick'], '1');
 }
 
