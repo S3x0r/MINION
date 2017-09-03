@@ -1,12 +1,12 @@
 <?php
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Changing Topic in channel: !topic <topic>';
+ $plugin_description = 'Changing Topic in channel: !topic <new_topic>';
  $plugin_command = 'topic';
 
 function plugin_topic()
 {
-  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'topic <topic>'); } 
+  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'topic <new_topic>'); } 
   
    else {
 		  fputs($GLOBALS['socket'], 'TOPIC '.$GLOBALS['CONFIG_CNANNEL'].' '.msg_without_command()."\n");

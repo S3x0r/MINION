@@ -1,13 +1,13 @@
 <?php
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Adds host to auto_op list in config file: !auto_op <nick!ident@host>';
+ $plugin_description = 'Adds host to auto_op list in config file: !auto_op <nick!ident@hostname>';
  $plugin_command = 'auto_op';
 
 function plugin_auto_op()
 {
 
-  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'auto_op <nick!ident@host>'); } 
+  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'auto_op <nick!ident@hostname>'); } 
   
   else {
 

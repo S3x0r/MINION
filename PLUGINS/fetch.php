@@ -6,7 +6,7 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
 function plugin_fetch()
 {
-  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'fetch <list> / fetch get <plugin>'); } 
+  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'fetch list / fetch get <plugin>'); } 
   
   else {
 
