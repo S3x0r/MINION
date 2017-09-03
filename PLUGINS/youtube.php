@@ -7,7 +7,7 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 function plugin_youtube()
 {
 
-  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['C_CMD_PREFIX'].'youtube <link>'); } 
+  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'youtube <link>'); } 
   
   else {
          $site = $GLOBALS['args'];
@@ -23,7 +23,7 @@ function plugin_youtube()
          $pieceb = explode('">', $piecesb[1]);
 
          BOT_RESPONSE('Youtube Title: '.htmlspecialchars_decode($piece[0]));
-         CLI_MSG('!youtube on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+         CLI_MSG('!youtube on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 	   }
 
 }

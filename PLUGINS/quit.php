@@ -7,7 +7,7 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 function plugin_quit()
 { 
   /* give op before restart */
-  fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['C_CNANNEL'].' +o '.$GLOBALS['nick']."\n");
+  fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' +o '.$GLOBALS['nick']."\n");
   
   fputs($GLOBALS['socket'],"QUIT :http://github.com/S3x0r/davybot\n");
   CLI_MSG('!quit received by: '.$GLOBALS['nick'], '1');

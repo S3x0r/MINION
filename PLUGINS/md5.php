@@ -7,7 +7,7 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 function plugin_md5()
 {
 
-  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['C_CMD_PREFIX'].'md5 <string>'); } 
+  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'md5 <string>'); } 
   
   else {
 
@@ -16,7 +16,7 @@ function plugin_md5()
 
 		 BOT_RESPONSE('(MD5) \''.$data.'\' -> '.$md5);
 
-		 CLI_MSG('!md5 on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'].', data: '.$data, '1');
+		 CLI_MSG('!md5 on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', data: '.$data, '1');
        }
 }
 

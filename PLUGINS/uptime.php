@@ -30,7 +30,7 @@ function plugin_uptime()
 
  BOT_RESPONSE("Bot uptime: $year year(s), $month month(s), $day day(s), $hour hour(s), $minute minute(s), $second second(s)"); 
  
- CLI_MSG('!Uptime on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+ CLI_MSG('!Uptime on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 }
 
 ?>

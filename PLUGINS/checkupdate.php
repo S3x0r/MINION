@@ -8,7 +8,7 @@ function plugin_checkupdate()
 {
   global $CheckVersion;
 
-  CLI_MSG('!checkupdate on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+  CLI_MSG('!checkupdate on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 
   $CheckVersion = file_get_contents($GLOBALS['v_addr']);
 

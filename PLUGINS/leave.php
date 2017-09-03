@@ -7,12 +7,12 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 function plugin_leave()
 {
 
-  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['C_CMD_PREFIX'].'leave <#channel>'); } 
+  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'leave <#channel>'); } 
   
   else {
 		 fputs($GLOBALS['socket'],'PART '.$GLOBALS['args']."\n");
 
-		 CLI_MSG('!leave on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'].', leaving: '.$GLOBALS['args'], '1');
+		 CLI_MSG('!leave on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', leaving: '.$GLOBALS['args'], '1');
 	   }
 }
 

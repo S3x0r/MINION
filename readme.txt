@@ -40,10 +40,12 @@ devoice -- Devoice user: !devoice <nick>
 dns -- Dns: !dns <address>
 fetch list -- Lists plugins in repository
 fetch get <plugin> -- Downloads plugins from repository
+hash -- Changing string to choosed algorithm: !hash help to list algorithms
 help -- Shows BOT commands: !help
 htmltitle -- Shows webpage titile: !htmltitle <http://address>
 info -- Shows info: !info
 join -- Joins channel: !join <#channel>
+kick -- Kicks from channel: !kick <#channel> <who>
 leave -- Leave channel: !leave <#channel>
 list_owners -- Shows BOT owners: !list_owners
 math -- Solves mathematical tasks: !math <eg. 8*8+6>
@@ -52,11 +54,12 @@ memusage -- Shows how much ram is being used by bot: !memusage
 morse -- Converts to morse code: !morse <text>
 newnick -- Changes nickname: !newnick <new_nick>
 op -- Gives op: !op <nick>
+ping -- Pings a host: !ping <host>
 quit -- Shutdown BOT: !quit
 restart -- Restarts Bot: !restart
 save -- Saving to config file: !save help to list commands
 save auto_join - Saving auto join on channel when connected: !save auto_join <yes/no>
-save auto_rejoin - Saving auto rejoin when kicked from channel: !save auto_rejoin <yes/no>
+save auto_rejoin - Saving auto rejoin whn kicked from channel: !save auto_rejoin <yes/no>
 save command_prefix - Saving prefix commands: !save command_prefix <new_prefix>
 save connect_delay - Saving connect delay value to config: !save connect_delay <value>
 save channel -- Saving channel to config: !save_channel <#new_channel>

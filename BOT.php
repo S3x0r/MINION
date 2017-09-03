@@ -1,6 +1,6 @@
 <?php
 //------------------------------------------------------------------------------------------------
-define('VER', '0.3.4');
+define('VER', '0.3.5');
 define('START_TIME',time());
 //------------------------------------------------------------------------------------------------
 Start();
@@ -51,46 +51,46 @@ function LoadConfig()
   /* load configuration to variables */
 
   /* BOT */
-   $GLOBALS['C_NICKNAME']       = $cfg->get("BOT","nickname");
-   $GLOBALS['C_NAME']           = $cfg->get("BOT","name");
-   $GLOBALS['C_IDENT']          = $cfg->get("BOT","ident");
+   $GLOBALS['CONFIG_NICKNAME']       = $cfg->get("BOT","nickname");
+   $GLOBALS['CONFIG_NAME']           = $cfg->get("BOT","name");
+   $GLOBALS['CONFIG_IDENT']          = $cfg->get("BOT","ident");
   /* SERVER */ 
-   $GLOBALS['C_SERVER']         = $cfg->get("SERVER","server");
-   $GLOBALS['C_PORT']           = $cfg->get("SERVER","port");
-   $GLOBALS['C_TRY_CONNECT']    = $cfg->get("SERVER","try_connect");
-   $GLOBALS['C_CONNECT_DELAY']  = $cfg->get("SERVER","connect_delay"); 
+   $GLOBALS['CONFIG_SERVER']         = $cfg->get("SERVER","server");
+   $GLOBALS['CONFIG_PORT']           = $cfg->get("SERVER","port");
+   $GLOBALS['CONFIG_TRY_CONNECT']    = $cfg->get("SERVER","try_connect");
+   $GLOBALS['CONFIG_CONNECT_DELAY']  = $cfg->get("SERVER","connect_delay"); 
   /* ADMIN */
-   $GLOBALS['C_AUTO_OP_LIST']   = $cfg->get("ADMIN","auto_op_list");
-   $GLOBALS['C_OWNERS']         = $cfg->get("ADMIN","bot_owners");
-   $GLOBALS['C_OWNER_PASSWD']   = $cfg->get("ADMIN","owner_password");
+   $GLOBALS['CONFIG_AUTO_OP_LIST']   = $cfg->get("ADMIN","auto_op_list");
+   $GLOBALS['CONFIG_OWNERS']         = $cfg->get("ADMIN","bot_owners");
+   $GLOBALS['CONFIG_OWNER_PASSWD']   = $cfg->get("ADMIN","owner_password");
   /* BOT RESPONSE */
-   $GLOBALS['C_BOT_RESPONSE']   = $cfg->get("RESPONSE","bot_response");
+   $GLOBALS['CONFIG_BOT_RESPONSE']   = $cfg->get("RESPONSE","bot_response");
   /* AUTOMATIC */
-   $GLOBALS['C_AUTO_OP']        = $cfg->get("AUTOMATIC","auto_op");
-   $GLOBALS['C_AUTO_REJOIN']    = $cfg->get("AUTOMATIC","auto_rejoin");
+   $GLOBALS['CONFIG_AUTO_OP']        = $cfg->get("AUTOMATIC","auto_op");
+   $GLOBALS['CONFIG_AUTO_REJOIN']    = $cfg->get("AUTOMATIC","auto_rejoin");
   /* CHANNEL */
-   $GLOBALS['C_CNANNEL']        = $cfg->get("CHANNEL","channel");
-   $GLOBALS['C_AUTO_JOIN']      = $cfg->get("CHANNEL","auto_join");
+   $GLOBALS['CONFIG_CNANNEL']        = $cfg->get("CHANNEL","channel");
+   $GLOBALS['CONFIG_AUTO_JOIN']      = $cfg->get("CHANNEL","auto_join");
   /* COMMAND PREFIX */ 
-   $GLOBALS['C_CMD_PREFIX']     = $cfg->get("COMMAND","command_prefix");
+   $GLOBALS['CONFIG_CMD_PREFIX']     = $cfg->get("COMMAND","command_prefix");
   /* CTCP */
-   $GLOBALS['C_CTCP_RESPONSE']  = $cfg->get("CTCP","ctcp_response");
-   $GLOBALS['C_CTCP_VERSION']   = $cfg->get("CTCP","ctcp_version");
-   $GLOBALS['C_CTCP_FINGER']    = $cfg->get("CTCP","ctcp_finger");
+   $GLOBALS['CONFIG_CTCP_RESPONSE']  = $cfg->get("CTCP","ctcp_response");
+   $GLOBALS['CONFIG_CTCP_VERSION']   = $cfg->get("CTCP","ctcp_version");
+   $GLOBALS['CONFIG_CTCP_FINGER']    = $cfg->get("CTCP","ctcp_finger");
    /* LOGGING */
-   $GLOBALS['C_LOGGING']        = $cfg->get("LOGS","logging");
+   $GLOBALS['CONFIG_LOGGING']        = $cfg->get("LOGS","logging");
   /* TIMEZONE */
-   $GLOBALS['C_TIMEZONE']       = $cfg->get("TIME","time_zone");
+   $GLOBALS['CONFIG_TIMEZONE']       = $cfg->get("TIME","time_zone");
   /* FETCH */
-   $GLOBALS['C_FETCH_SERVER']   = $cfg->get("FETCH","fetch_server");
+   $GLOBALS['CONFIG_FETCH_SERVER']   = $cfg->get("FETCH","fetch_server");
   /* DEBUG */
-   $GLOBALS['C_SHOW_RAW']       = $cfg->get("DEBUG","show_raw");
+   $GLOBALS['CONFIG_SHOW_RAW']       = $cfg->get("DEBUG","show_raw");
 
   /* show raw or no */
-   if($GLOBALS['C_SHOW_RAW'] == 'yes') { error_reporting(E_ALL ^ E_NOTICE); } else { error_reporting(0); }
+   if($GLOBALS['CONFIG_SHOW_RAW'] == 'yes') { error_reporting(E_ALL ^ E_NOTICE); } else { error_reporting(0); }
 
   /* if default master password, prompt for change it! */
-  if($GLOBALS['C_OWNER_PASSWD'] == 'change_me!')
+  if($GLOBALS['CONFIG_OWNER_PASSWD'] == 'change_me!')
    { 
      CLI_MSG('Default owner bot password detected!', '0');
 	 CLI_MSG('For security please change it', '0');
@@ -111,16 +111,16 @@ function LoadConfig()
    }
    
    /* set timezone */
-   date_default_timezone_set($GLOBALS['C_TIMEZONE']);
+   date_default_timezone_set($GLOBALS['CONFIG_TIMEZONE']);
 
    /* set data.ini defaults */
    SaveToFile('../data.ini', '[DATA]nickname =', 'w');
    
    /* saving nickname to data file */
-   SaveData('../data.ini', 'DATA', 'nickname', $GLOBALS['C_NICKNAME']);
+   SaveData('../data.ini', 'DATA', 'nickname', $GLOBALS['CONFIG_NICKNAME']);
 
    /* set random nickname */
-   $GLOBALS['RND_NICKNAME'] = $GLOBALS['C_NICKNAME'].'|'.rand(0,99);
+   $GLOBALS['RND_NICKNAME'] = $GLOBALS['CONFIG_NICKNAME'].'|'.rand(0,99);
    
    CLI_MSG("1. Configuration Loaded from: CONFIG.INI", '0');
 
@@ -192,9 +192,8 @@ show_raw         = \'no\'';
 //------------------------------------------------------------------------------------------------ 
 function Logs()
 {
-  if($GLOBALS['C_LOGGING'] == 'yes') 
+  if($GLOBALS['CONFIG_LOGGING'] == 'yes') 
 	{
-  
       global $log_file;
 
       if(!is_dir('../LOGS')) { mkdir('../LOGS'); }
@@ -216,7 +215,7 @@ function LoadPlugins()
   foreach(glob('../PLUGINS/*.php') as $plugin_name)
   {
     include_once($plugin_name);
-    fwrite($b, $GLOBALS['C_CMD_PREFIX'].''.$plugin_command.' ');
+    fwrite($b, $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ');
     $plugin_name = basename($plugin_name, '.php');
     echo "$plugin_name -- $plugin_description\n";
   }
@@ -227,7 +226,7 @@ function LoadPlugins()
   $GLOBALS['PLUGINS'] = file_get_contents("../plugins.ini"); 
   $GLOBALS['PLUGINS'] = explode(" ", $GLOBALS['PLUGINS']);
 
-  if($GLOBALS['C_SHOW_RAW'] == 'yes') { print_r($GLOBALS['PLUGINS']); }
+  if($GLOBALS['CONFIG_SHOW_RAW'] == 'yes') { print_r($GLOBALS['PLUGINS']); }
 
   /* Now its time to connect */
   Connect();
@@ -235,19 +234,19 @@ function LoadPlugins()
 //------------------------------------------------------------------------------------------------
 function Connect()
 {
-  CLI_MSG('3. Connecting to: '.$GLOBALS['C_SERVER'].', port: '.$GLOBALS['C_PORT'], '0');
+  CLI_MSG('3. Connecting to: '.$GLOBALS['CONFIG_SERVER'].', port: '.$GLOBALS['CONFIG_PORT'], '0');
 
   $i=0;
 
   /* loop if something goes wrong */
-  while ($i++ < $GLOBALS['C_TRY_CONNECT'])
+  while ($i++ < $GLOBALS['CONFIG_TRY_CONNECT'])
   {
-    $GLOBALS['socket'] = fsockopen($GLOBALS['C_SERVER'], $GLOBALS['C_PORT']);
+    $GLOBALS['socket'] = fsockopen($GLOBALS['CONFIG_SERVER'], $GLOBALS['CONFIG_PORT']);
 
     if($GLOBALS['socket']==false) {
 	 CLI_MSG('Unable to connect to server, im trying to connect again...', '0');
-     sleep($GLOBALS['C_CONNECT_DELAY']); 
-    if($i==$GLOBALS['C_TRY_CONNECT']) {
+     sleep($GLOBALS['CONFIG_CONNECT_DELAY']); 
+    if($i==$GLOBALS['CONFIG_TRY_CONNECT']) {
      CLI_MSG('Unable to connect to server, exiting program.', '0');
 	 die(); /* TODO: send email that terminated program? */
 	 }
@@ -261,8 +260,8 @@ function Connect()
 function Identify()
 {
   /* sending user/nick to server */
-  fputs($GLOBALS['socket'], 'USER '.$GLOBALS['C_NICKNAME'].' FORCE '.$GLOBALS['C_IDENT'].' :'.$GLOBALS['C_NAME']."\n");
-  fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['C_NICKNAME']."\n");
+  fputs($GLOBALS['socket'], 'USER '.$GLOBALS['CONFIG_NICKNAME'].' FORCE '.$GLOBALS['CONFIG_IDENT'].' :'.$GLOBALS['CONFIG_NAME']."\n");
+  fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['CONFIG_NICKNAME']."\n");
   
   /* time for socket loop */
   Engine();
@@ -283,7 +282,7 @@ while(1) {
     while(!feof($GLOBALS['socket'])) {
         $mask = NULL;
         $data = fgets($GLOBALS['socket'], 512);
-        if($GLOBALS['C_SHOW_RAW'] == 'yes') { echo $data; }
+        if($GLOBALS['CONFIG_SHOW_RAW'] == 'yes') { echo $data; }
 
         flush();
         $ex = explode(' ', trim($data));
@@ -296,9 +295,9 @@ while(1) {
 //---
 
 /* rejoin when kicked */
-		if($GLOBALS['C_AUTO_REJOIN'] == 'yes') {
+		if($GLOBALS['CONFIG_AUTO_REJOIN'] == 'yes') {
 	    	if($ex[1] == "KICK"){
-				if($ex[3] == $GLOBALS['C_NICKNAME']){
+				if($ex[3] == $GLOBALS['CONFIG_NICKNAME']){
 					CLI_MSG("I was kicked from channel, joining again...", '1');
 					fputs($GLOBALS['socket'], "JOIN :".$ex[2]."\n");
 					continue;
@@ -315,8 +314,8 @@ while(1) {
         }
 
 /* auto op */
-		if($GLOBALS['C_AUTO_OP'] == 'yes') {
-			$auto_op_list_c = $GLOBALS['C_AUTO_OP_LIST'];
+		if($GLOBALS['CONFIG_AUTO_OP'] == 'yes') {
+			$auto_op_list_c = $GLOBALS['CONFIG_AUTO_OP_LIST'];
 			$pieces = explode(", ", $auto_op_list_c);
 
 			$mask2 = $nick.'!'.$ident.'@'.$host;
@@ -324,7 +323,7 @@ while(1) {
 			if($ex[1] == "JOIN" && in_array($mask2,  $pieces))
 			{	
 			 CLI_MSG("I have nick: ".$nick." on auto op list, giving op", '1');
-			 fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['C_CNANNEL'].' +o '.$nick."\n");
+			 fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' +o '.$nick."\n");
 			 continue;
 			}
 		}
@@ -361,19 +360,19 @@ switch ($ex[1]){
 		 /* register to bot info */
 		 if($GLOBALS['if_first_time'] == '1') {
 		 CLI_MSG('****************************************************', '0');
-		 CLI_MSG('Register to bot by typing /msg '.$GLOBALS['LOADED'].' register '.$GLOBALS['C_OWNER_PASSWD'], '0');
+		 CLI_MSG('Register to bot by typing /msg '.$GLOBALS['LOADED'].' register '.$GLOBALS['CONFIG_OWNER_PASSWD'], '0');
 		 CLI_MSG('****************************************************', '0');
 		 }
 
 		 /* wcli extension */
 		 if (extension_loaded('wcli')) {
-		 wcli_set_console_title('davybot '.VER.' (server: '.$GLOBALS['C_SERVER'].':'.$GLOBALS['C_PORT'].' | nickname: '.$GLOBALS['LOADED'].' | channel: '.$GLOBALS['C_CNANNEL'].')');
+		 wcli_set_console_title('davybot '.VER.' (server: '.$GLOBALS['CONFIG_SERVER'].':'.$GLOBALS['CONFIG_PORT'].' | nickname: '.$GLOBALS['LOADED'].' | channel: '.$GLOBALS['CONFIG_CNANNEL'].')');
 		 }
 		 
 		 /* if autojoin */
-		 if($GLOBALS['C_AUTO_JOIN'] == 'yes') { 
-		 CLI_MSG('5. Joining channel: '.$GLOBALS['C_CNANNEL'], '1');
-		 JOIN_CHANNEL($GLOBALS['C_CNANNEL']);
+		 if($GLOBALS['CONFIG_AUTO_JOIN'] == 'yes') { 
+		 CLI_MSG('5. Joining channel: '.$GLOBALS['CONFIG_CNANNEL'], '1');
+		 JOIN_CHANNEL($GLOBALS['CONFIG_CNANNEL']);
 		 break;
 		 }
 		break;
@@ -385,25 +384,32 @@ switch ($ex[1]){
 }
 
  /* CTCP */
-     if($GLOBALS['C_CTCP_RESPONSE'] == 'yes') {
-             if ($rawcmd[1] == "VERSION") {
-                    fputs($GLOBALS['socket'], "NOTICE $nick :VERSION ".$GLOBALS['C_CTCP_VERSION']."\n");
-             }
-             elseif ($rawcmd[1] == "FINGER") {
-                    fputs($GLOBALS['socket'], "NOTICE $nick :FINGER ".$GLOBALS['C_CTCP_FINGER']."\n");
-             }
-             elseif ($rawcmd[1] == "PING") {
-                    $a = str_replace(" ","",$args);
-                    fputs($GLOBALS['socket'], "NOTICE $nick :PING ".$a."\n");
-             }
-             elseif ($rawcmd[1] == "TIME") {
-                    $a = date("F j, Y, g:i a");
-                    fputs($GLOBALS['socket'], "NOTICE $nick :TIME ".$a."\n");
-             }
-	       }
- 
+     if($GLOBALS['CONFIG_CTCP_RESPONSE'] == 'yes') {
+      
+	  switch ($rawcmd[1]){
+	
+		case 'VERSION':
+		fputs($GLOBALS['socket'], "NOTICE $nick :VERSION ".$GLOBALS['CONFIG_CTCP_VERSION']."\n");
+		break;
+
+		case 'FINGER':
+		fputs($GLOBALS['socket'], "NOTICE $nick :FINGER ".$GLOBALS['CONFIG_CTCP_FINGER']."\n");
+		break;
+
+		case 'PING':
+		$a = str_replace(" ","",$args);
+        fputs($GLOBALS['socket'], "NOTICE $nick :PING ".$a."\n");
+		break;
+
+		case 'TIME':
+        $a = date("F j, Y, g:i a");
+        fputs($GLOBALS['socket'], "NOTICE $nick :TIME ".$a."\n");
+		break;
+	  }
+	}	
+
  /* if owner register -> add host to owner list in config */
- if($rawcmd[1] == 'register' && $args == $GLOBALS['C_OWNER_PASSWD'])
+ if($rawcmd[1] == 'register' && $args == $GLOBALS['CONFIG_OWNER_PASSWD'])
     {
 	 LoadData('../CONFIG.INI', 'ADMIN', 'bot_owners');
 
@@ -419,10 +425,10 @@ switch ($ex[1]){
      NICK_MSG('My Commands:');
      NICK_MSG($commands);
 
-     CLI_MSG('I have new owner in list: '.$GLOBALS['C_CNANNEL'].', added: '.$mask2, '1');
+     CLI_MSG('I have new owner in list: '.$GLOBALS['CONFIG_CNANNEL'].', added: '.$mask2, '1');
 
      /* give op before restart */
-     fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['C_CNANNEL'].' +o '.$GLOBALS['nick']."\n");
+     fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' +o '.$GLOBALS['nick']."\n");
 
      fputs($GLOBALS['socket'],"QUIT :Restarting...\n");
      CLI_MSG('Restarting BOT...', '1');
@@ -435,7 +441,7 @@ switch ($ex[1]){
  /* plugins commands */
 	if(HasOwner($mask)) 
 	{
-		$pn = str_replace($GLOBALS['C_CMD_PREFIX'], '', $rawcmd[1]);
+		$pn = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
 		if (in_array($rawcmd[1], $GLOBALS['PLUGINS'])) { call_user_func('plugin_'.$pn); }
 	}
    }
@@ -471,7 +477,7 @@ function HasOwner($mask)
 {
   global $owners;
 
-  $owners_c = $GLOBALS['C_OWNERS'];
+  $owners_c = $GLOBALS['CONFIG_OWNERS'];
   $pieces = explode(", ", $owners_c);
   $owners = $pieces;
 
@@ -512,7 +518,7 @@ function CLI_MSG($msg, $log)
 {
   $line = '[' . @date( 'H:i:s' ) . '] ' . $msg . "\r\n";
 
-  if($GLOBALS['C_LOGGING'] == 'yes') 
+  if($GLOBALS['CONFIG_LOGGING'] == 'yes') 
 	{
       if($log=='1') { SaveToFile($GLOBALS['log_file'], $line, 'a'); }
     }
@@ -522,17 +528,17 @@ function CLI_MSG($msg, $log)
 //------------------------------------------------------------------------------------------------
 function BOT_RESPONSE($msg)
 {
-   switch($GLOBALS['C_BOT_RESPONSE']) {
+   switch($GLOBALS['CONFIG_BOT_RESPONSE']) {
 
-	 case "channel":
-	 fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['C_CNANNEL']." :$msg\n");
+	 case 'channel':
+	 fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['CONFIG_CNANNEL']." :$msg\n");
 	 break;
 
-	 case "notice":
+	 case 'notice':
 	 fputs($GLOBALS['socket'], 'NOTICE '.$GLOBALS['nick']." :$msg\n");
 	 break;
 
-	 case "priv":
+	 case 'priv':
 	 fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['nick']." :$msg\n");	
 	 break;
    }

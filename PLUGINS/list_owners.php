@@ -20,7 +20,7 @@ function plugin_list_owners()
    BOT_RESPONSE($table[$i]);
  } 
  
- CLI_MSG('!list_owners on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+ CLI_MSG('!list_owners on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 }
 
 ?>

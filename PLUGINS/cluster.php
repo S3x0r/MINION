@@ -7,7 +7,7 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 function plugin_cluster()
 {
 
-  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['C_CMD_PREFIX'].'cluster <options>/<commands>'); } 
+  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'cluster <options>/<commands>'); } 
   
   else {
 
@@ -16,7 +16,7 @@ function plugin_cluster()
 		BOT_RESPONSE('Cluster commands: commands, shutdown');
 	  }
  
-  if($GLOBALS['piece1'] == 'shutdown' && $GLOBALS['piece2'] == $GLOBALS['C_NICKNAME'])
+  if($GLOBALS['piece1'] == 'shutdown' && $GLOBALS['piece2'] == $GLOBALS['CONFIG_NICKNAME'])
 	  { 
 	  BOT_RESPONSE('Shutting down machine...');
 	  exec('shutdown -s -t 0');
@@ -29,7 +29,7 @@ function plugin_cluster()
 	  }
 
     }
-// CLI_MSG('!commands on: '.$GLOBALS['C_CNANNEL']);
+// CLI_MSG('!commands on: '.$GLOBALS['CONFIG_CNANNEL']);
 }
 
 ?>

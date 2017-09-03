@@ -7,7 +7,7 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 function plugin_add_owner()
 {
 
-  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['C_CMD_PREFIX'].'add_owner <nick!ident@host>'); } 
+  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'add_owner <nick!ident@host>'); } 
   
   else {
 
@@ -21,7 +21,7 @@ function plugin_add_owner()
 
 		 BOT_RESPONSE('Owner Added.');
 
-		 CLI_MSG('!add_owner on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'].', added: '.$GLOBALS['args'], '1');
+		 CLI_MSG('!add_owner on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', added: '.$GLOBALS['args'], '1');
 	   }
 }
 

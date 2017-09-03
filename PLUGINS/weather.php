@@ -13,7 +13,7 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 function plugin_weather()
 {
 
-  if (empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['C_CMD_PREFIX'].'weather <city>'); } 
+  if (empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'weather <city>'); } 
   
    else {
 
@@ -68,7 +68,7 @@ function plugin_weather()
 		}
 	}
 
-	 CLI_MSG('!weather on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+	 CLI_MSG('!weather on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 }
 
 

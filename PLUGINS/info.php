@@ -14,6 +14,6 @@ function plugin_info()
  BOT_RESPONSE('----------------------------------------------');
  BOT_RESPONSE('   Author: S3x0r, contact: olisek@gmail.com');
 
- CLI_MSG('!info on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+ CLI_MSG('!info on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 }
 ?>

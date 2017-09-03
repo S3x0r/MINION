@@ -6,7 +6,7 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
 function plugin_fetch()
 {
-  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['C_CMD_PREFIX'].'fetch <list> / fetch get <plugin>'); } 
+  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'fetch <list> / fetch get <plugin>'); } 
   
   else {
 
@@ -21,7 +21,7 @@ function plugin_fetch()
 
  else if($GLOBALS['piece1'] == 'get') {
 
-   $address = $GLOBALS['C_FETCH_SERVER'].'/'.$GLOBALS['piece2'].'.php';  
+   $address = $GLOBALS['CONFIG_FETCH_SERVER'].'/'.$GLOBALS['piece2'].'.php';  
 
    BOT_RESPONSE('Downloading plugin: "'.$GLOBALS['piece2'].'" from repository');
 
@@ -42,12 +42,12 @@ function plugin_fetch()
 			  fclose($a);
 			  $delete = '../PLUGINS/'.$GLOBALS['piece2'].'.php';
 			  unlink($delete);
-			  CLI_MSG('!fetch: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'].', plugin: '.$GLOBALS['piece2'], '1');
+			  CLI_MSG('!fetch: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', plugin: '.$GLOBALS['piece2'], '1');
 			}
 			  else {
 			         fclose($a);
 					 BOT_RESPONSE('Plugin added.');
-					 CLI_MSG('!fetch: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'].', plugin: '.$GLOBALS['piece2'], '1');
+					 CLI_MSG('!fetch: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', plugin: '.$GLOBALS['piece2'], '1');
    			       }
    }
   }

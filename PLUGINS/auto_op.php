@@ -7,7 +7,7 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 function plugin_auto_op()
 {
 
-  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['C_CMD_PREFIX'].'auto_op <nick!ident@host>'); } 
+  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'auto_op <nick!ident@host>'); } 
   
   else {
 
@@ -21,7 +21,7 @@ function plugin_auto_op()
 
 		 BOT_RESPONSE('Host added to auto op list.');
 
-		 CLI_MSG('!auto_op on: '.$GLOBALS['C_CNANNEL'].', by: '.$GLOBALS['nick'].', added: '.$GLOBALS['args'], '1');
+		 CLI_MSG('!auto_op on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', added: '.$GLOBALS['args'], '1');
        }
 }
 
