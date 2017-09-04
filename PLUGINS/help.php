@@ -8,7 +8,7 @@ function plugin_help()
 {
  BOT_RESPONSE('My Commands:');
 
- $commands = file_get_contents('../plugins.ini');
+ $commands = file_get_contents('plugins.ini');
  BOT_RESPONSE($commands);
 
  BOT_RESPONSE('End.');

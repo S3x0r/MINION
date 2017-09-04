@@ -16,7 +16,7 @@ function plugin_cham()
   
   else {
 
-		 $file = '../somefile.txt';
+		 $file = 'somefile.txt';
 	
 		 $texts = file_get_contents($file);
 		 $texts = explode("\n",$texts);

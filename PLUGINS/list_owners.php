@@ -6,7 +6,7 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
 function plugin_list_owners()
 {
- LoadData('../CONFIG.INI', 'ADMIN', 'bot_owners');
+ LoadData($GLOBALS['config_file'], 'ADMIN', 'bot_owners');
 
  $pieces = explode(", ", $GLOBALS['LOADED']);
  $owners = $pieces;

@@ -11,13 +11,13 @@ function plugin_add_owner()
   
   else {
 
-         LoadData('../CONFIG.INI', 'ADMIN', 'bot_owners');
+         LoadData($GLOBALS['config_file'], 'ADMIN', 'bot_owners');
 
 		 $owners_list = $GLOBALS['LOADED'];
 		 $new         = trim($GLOBALS['args']);
 		 $new_list    = $owners_list.', '.$new;
 
-	     SaveData('../CONFIG.INI', 'ADMIN', 'bot_owners', $new_list);
+	     SaveData($GLOBALS['config_file'], 'ADMIN', 'bot_owners', $new_list);
 
 		 BOT_RESPONSE('Owner Added.');
 

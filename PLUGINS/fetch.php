@@ -25,7 +25,7 @@ function plugin_fetch()
 
    BOT_RESPONSE('Downloading plugin: "'.$GLOBALS['piece2'].'" from repository');
 
-	$check_file = '../PLUGINS/'.$GLOBALS['piece2'].'.php';
+	$check_file = 'PLUGINS/'.$GLOBALS['piece2'].'.php';
 
 	if(file_exists($check_file)) 
 		{
@@ -34,13 +34,13 @@ function plugin_fetch()
 	
    else {
 	      $file = file_get_contents($address);
-	      $a = fopen('../PLUGINS/'.$GLOBALS['piece2'].'.php', 'w');
+	      $a = fopen('PLUGINS/'.$GLOBALS['piece2'].'.php', 'w');
   
         if(!fwrite($a, $file))
 			{ 
 			  BOT_RESPONSE('no such plugin in repository'); 
 			  fclose($a);
-			  $delete = '../PLUGINS/'.$GLOBALS['piece2'].'.php';
+			  $delete = 'PLUGINS/'.$GLOBALS['piece2'].'.php';
 			  unlink($delete);
 			  CLI_MSG('!fetch: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', plugin: '.$GLOBALS['piece2'], '1');
 			}

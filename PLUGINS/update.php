@@ -7,7 +7,7 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
  $GLOBALS['v_addr']   = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
  $GLOBALS['v_source'] = 'http://github.com/S3x0r/davybot/archive/master.zip';
  $GLOBALS['CheckVersion'] = file_get_contents($GLOBALS['v_addr']);
- $GLOBALS['dir']      = '../../';
+ $GLOBALS['dir']      = '../';
  $GLOBALS['newdir']   = $GLOBALS['dir'].'davybot'.$GLOBALS['CheckVersion'];
 
 //------------------------------------------------------------------------------------------------
@@ -103,8 +103,8 @@ function v_extract()
 	//delete downloaded zip
 	unlink($GLOBALS['dir'].'update.zip');
 	
-	//copy CONFIG.INI from last version
-	copy('../CONFIG.INI', $GLOBALS['newdir'].'/OLD_CONFIG.INI');
+	//copy CONFIG from last version
+	copy($GLOBALS['config_file'], $GLOBALS['newdir'].'/OLD_CONFIG.INI');
 
   // reconnect to run new version
   fputs($GLOBALS['socket'],"QUIT :Installing, reconnecting\n");

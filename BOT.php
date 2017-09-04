@@ -1,15 +1,18 @@
 <?php
 //------------------------------------------------------------------------------------------------
-define('VER', '0.3.5');
+define('VER', '0.3.6');
 define('START_TIME',time());
 //------------------------------------------------------------------------------------------------
-Start();
+Start('../');
 //------------------------------------------------------------------------------------------------
-function Start()
+function Start($path)
 {
   if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
- 
-  /* wcli extension */
+
+  /* change default directory path */
+  chdir($path);
+
+  /* wcli extension */ 
   if (extension_loaded('wcli')) {
   wcli_clear();
   wcli_maximize();
@@ -32,21 +35,20 @@ function Start()
  \n\n";
   
   /* try to load config */
-  LoadConfig();
+  LoadConfig('CONFIG.INI');
 }
 //------------------------------------------------------------------------------------------------ 
-function LoadConfig()
+function LoadConfig($filename)
 {
   global $cfg;
+  global $config_file;
 
-  $conf_file = '../CONFIG.INI';
+  if(isset($_SERVER["argv"][1])) { $config_file = $_SERVER["argv"][1]; }
+  else { $config_file = $filename; }
   
-  if(file_exists($conf_file)) {
+  if(file_exists($config_file)) {
    
-   /* set unlimited time for our bot :) */
-   set_time_limit(0);
-   
-   $cfg = new iniParser($conf_file);
+   $cfg = new iniParser($config_file);
  
   /* load configuration to variables */
 
@@ -88,7 +90,7 @@ function LoadConfig()
 
   /* show raw or no */
    if($GLOBALS['CONFIG_SHOW_RAW'] == 'yes') { error_reporting(E_ALL ^ E_NOTICE); } else { error_reporting(0); }
-
+//------------------------------------------------------------------------------------------------
   /* if default master password, prompt for change it! */
   if($GLOBALS['CONFIG_OWNER_PASSWD'] == 'change_me!')
    { 
@@ -102,39 +104,59 @@ function LoadConfig()
     echo '[' . @date( 'H:i:s' ) . '] New Password: ';
     $new_pwd = fread(STDIN, 30);
 	$tr = rtrim($new_pwd, "\n\r");
-    SaveData('../CONFIG.INI', 'ADMIN', 'owner_password', $tr);
+    SaveData($config_file, 'ADMIN', 'owner_password', $tr);
     
 	/* Set first time change variable */
 	$GLOBALS['if_first_time'] = '1';
-
-    LoadConfig();
+	
+	/* load config again */
+    LoadConfig($config_file);
    }
+//------------------------------------------------------------------------------------------------    
+   /* from what file config loaded */
+   CLI_MSG('1. Configuration Loaded from: '.$config_file, '0');
    
-   /* set timezone */
-   date_default_timezone_set($GLOBALS['CONFIG_TIMEZONE']);
-
-   /* set data.ini defaults */
-   SaveToFile('../data.ini', '[DATA]nickname =', 'w');
-   
-   /* saving nickname to data file */
-   SaveData('../data.ini', 'DATA', 'nickname', $GLOBALS['CONFIG_NICKNAME']);
-
-   /* set random nickname */
-   $GLOBALS['RND_NICKNAME'] = $GLOBALS['CONFIG_NICKNAME'].'|'.rand(0,99);
-   
-   CLI_MSG("1. Configuration Loaded from: CONFIG.INI", '0');
+   /* Set default data */
+   SetDefaultData();
 
    /* logging init */
-   Logs();
+   if($GLOBALS['CONFIG_LOGGING'] == 'yes') { Logs(); }
 
    /* now time for plugins */
    LoadPlugins();
   }
-  else {
-	  CLI_MSG("ERROR: No configuration file", '0');
-	  CLI_MSG("Creating default configuration in: CONFIG.INI - !Configure it!\n", '0');
+//------------------------------------------------------------------------------------------------  
+ else {
+	    CLI_MSG("ERROR: No configuration file", '0');
+	    CLI_MSG("Creating default configuration in: CONFIG.INI - !Configure it!\n", '0');
+	  
+	    /* Create default config */
+	    CreateDefaultConfig('CONFIG.INI');
+	  }
+//------------------------------------------------------------------------------------------------ 
+}
+//------------------------------------------------------------------------------------------------
+function SetDefaultData()
+{
+  /* set unlimited time for our bot :) */
+  set_time_limit(0);
 
-/* if there is no config create default one */
+  /* set timezone */
+  date_default_timezone_set($GLOBALS['CONFIG_TIMEZONE']);
+
+  /* set data.ini defaults */
+  SaveToFile('data.ini', '[DATA]nickname =', 'w');
+   
+  /* saving nickname to data file */
+  SaveData('data.ini', 'DATA', 'nickname', $GLOBALS['CONFIG_NICKNAME']);
+
+  /* set random nickname */
+  $GLOBALS['RND_NICKNAME'] = $GLOBALS['CONFIG_NICKNAME'].'|'.rand(0,99);
+}
+//------------------------------------------------------------------------------------------------
+function CreateDefaultConfig($filename)
+{
+/* default config */
 $default_config = '[BOT]
 nickname         = \'davybot\'
 name             = \'http://github.com/S3x0r/davybot\'
@@ -183,36 +205,41 @@ fetch_server     = \'https://raw.githubusercontent.com/S3x0r/davybot_repository_
 show_raw         = \'no\'';
 
     /* Save default config to file if no config */
-    SaveToFile($conf_file, $default_config, 'w');
+    SaveToFile($filename, $default_config, 'w');
 
-   /* after default config load it again :) */
-	LoadConfig();
-  }
+	if(file_exists($filename))
+	{
+      /* Load config again */
+      LoadConfig($filename);
+	}
+
+	else if(!file_exists($filename))
+	{
+	  CLI_MSG('ERROR: Cannot make default config! Exiting.', '1');
+	  die();
+	}
 }
 //------------------------------------------------------------------------------------------------ 
 function Logs()
 {
-  if($GLOBALS['CONFIG_LOGGING'] == 'yes') 
-	{
-      global $log_file;
+  global $log_file;
 
-      if(!is_dir('../LOGS')) { mkdir('../LOGS'); }
-      $log_file = '../LOGS/LOG-'.date('d.m.Y').'.TXT';
-      $data = "------------------LOG CREATED: ".date('d.m.Y | H:i:s')."------------------\r\n";
-      SaveToFile($log_file, $data, 'a');
-	}
+  if(!is_dir('LOGS')) { mkdir('LOGS'); }
+  $log_file = 'LOGS/LOG-'.date('d.m.Y').'.TXT';
+  $data = "------------------LOG CREATED: ".date('d.m.Y | H:i:s')."------------------\r\n";
+  SaveToFile($log_file, $data, 'a');
 }
 //------------------------------------------------------------------------------------------------
 function LoadPlugins()
 {
-  $a = count(glob("../PLUGINS/*.php",GLOB_BRACE));
-  $b = fopen('../plugins.ini', 'w');
+  $a = count(glob("PLUGINS/*.php",GLOB_BRACE));
+  $b = fopen('plugins.ini', 'w');
 
   CLI_MSG("2. My Plugins($a):", '0');
 
   echo "--------------------------------------------------------\n";
 
-  foreach(glob('../PLUGINS/*.php') as $plugin_name)
+  foreach(glob('PLUGINS/*.php') as $plugin_name)
   {
     include_once($plugin_name);
     fwrite($b, $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ');
@@ -223,7 +250,7 @@ function LoadPlugins()
 
   fclose($b);
 
-  $GLOBALS['PLUGINS'] = file_get_contents("../plugins.ini"); 
+  $GLOBALS['PLUGINS'] = file_get_contents("plugins.ini"); 
   $GLOBALS['PLUGINS'] = explode(" ", $GLOBALS['PLUGINS']);
 
   if($GLOBALS['CONFIG_SHOW_RAW'] == 'yes') { print_r($GLOBALS['PLUGINS']); }
@@ -274,6 +301,8 @@ function Engine()
   global $hostname;
   global $piece1;
   global $piece2;
+  global $piece3;
+  global $piece4;
   global $ex;
   global $rawcmd;
 
@@ -338,6 +367,8 @@ while(1) {
         $pieces = explode(" ", $args1);
         $piece1 = $pieces[0];
 		$piece2 = $pieces[1];
+		$piece3 = $pieces[2];
+		$piece4 = $pieces[3];
 		//-
         if (isset($nick)) { $mask = $nick . "!" . $ident . "@" . $host; }
 
@@ -349,12 +380,12 @@ switch ($ex[1]){
 	case '432': /* if nick reserved */
 	    CLI_MSG('-- Nickname already used, changing to alternative nick: '.$GLOBALS['RND_NICKNAME'], '1');
 		fputs($GLOBALS['socket'],'NICK '.$GLOBALS['RND_NICKNAME']."\n");
-		SaveData('../data.ini', 'DATA', 'nickname', $GLOBALS['RND_NICKNAME']);
+		SaveData('data.ini', 'DATA', 'nickname', $GLOBALS['RND_NICKNAME']);
         break;
 
 	case '422': /* join if no motd */
 	case '376': /* join after motd */
-	     LoadData('../data.ini', 'DATA', 'nickname');
+	     LoadData('data.ini', 'DATA', 'nickname');
 		 CLI_MSG('4. OK im connected, my nickname is: '.$GLOBALS['LOADED'], '1');
 		
 		 /* register to bot info */
@@ -411,28 +442,28 @@ switch ($ex[1]){
  /* if owner register -> add host to owner list in config */
  if($rawcmd[1] == 'register' && $args == $GLOBALS['CONFIG_OWNER_PASSWD'])
     {
-	 LoadData('../CONFIG.INI', 'ADMIN', 'bot_owners');
+	 LoadData($GLOBALS['config_file'], 'ADMIN', 'bot_owners');
 
      $owners_list = $GLOBALS['LOADED'];
      $new         = trim($mask2);
      $new_list    = $owners_list.', '.$new;
 
-     SaveData('../CONFIG.INI', 'ADMIN', 'bot_owners', $new_list);
+     SaveData($GLOBALS['config_file'], 'ADMIN', 'bot_owners', $new_list);
 
-	 $commands = file_get_contents('../plugins.ini');
+	 $commands = file_get_contents('plugins.ini');
 
      NICK_MSG('From now you are on my owners list, enjoy.');
      NICK_MSG('My Commands:');
      NICK_MSG($commands);
 
-     CLI_MSG('I have new owner in list: '.$GLOBALS['CONFIG_CNANNEL'].', added: '.$mask2, '1');
+     CLI_MSG('I have new owner on list, '.$GLOBALS['CONFIG_CNANNEL'].', added: '.$mask2, '1');
 
      /* give op before restart */
      fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' +o '.$GLOBALS['nick']."\n");
 
      fputs($GLOBALS['socket'],"QUIT :Restarting...\n");
      CLI_MSG('Restarting BOT...', '1');
-     system('restart.bat');
+     system('START_BOT.BAT');
      die();
 
 	 }

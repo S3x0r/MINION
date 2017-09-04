@@ -17,7 +17,7 @@ function plugin_restart()
   CLI_MSG('Restarting BOT...', '1');
   
   /* execute batch script */
-  system('restart.bat');
+  system('START_BOT.BAT');
 
   /* kill old script */
   die();

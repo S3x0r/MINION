@@ -23,6 +23,8 @@ example: S3x0r!~S3x0r@85-123-48-249.dsl.dynamic.simnet.is
 Bot was writted to run from Windows systems, tested on Windows 7, XP
 You dont need to download PHP, just run bot from START_BOT.BAT file
 
+To run bot with diffrent config file: php.exe "../BOT.php" some_other_config.ini
+
 You can now check for bot update, command: !checkupdate
 And command: !update for downloading and installing new version.
 
@@ -56,6 +58,7 @@ newnick -- Changes nickname: !newnick <new_nick>
 op -- Gives op: !op <nick>
 ping -- Pings a host: !ping <host>
 quit -- Shutdown BOT: !quit
+raw -- Sends raw string to server: !raw <string>
 restart -- Restarts Bot: !restart
 save -- Saving to config file: !save <help> to list commands
 save auto_join - Saving auto join on channel when connected: !save auto_join <yes/no>
