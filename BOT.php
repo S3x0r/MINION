@@ -721,7 +721,7 @@ function save($file = null)
 //------------------------------------------------------------------------------------------------
 function CountLines($exts=array('php'))
 {
-  $fpath = '../'; $files=array(); 
+  $fpath = '.'; $files=array(); 
 
   $it=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($fpath));
   foreach($it as $file)
