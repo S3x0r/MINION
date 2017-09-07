@@ -1,6 +1,6 @@
 <?php
 //------------------------------------------------------------------------------------------------
-define('VER', '0.3.7');
+define('VER', '0.3.8');
 define('START_TIME',time());
 set_error_handler('ErrorHandler');
 error_reporting(E_ALL ^ E_NOTICE);
@@ -308,8 +308,9 @@ function Engine()
 /* main socket loop */
 while(1) {
     while(!feof($GLOBALS['socket'])) {
-        $mask = NULL;
-        $data = fgets($GLOBALS['socket'], 512);
+     $mask = NULL;
+     $data = fgets($GLOBALS['socket'], 512);
+
         if($GLOBALS['CONFIG_SHOW_RAW'] == 'yes') { echo $data; }
 
         flush();
@@ -320,7 +321,6 @@ while(1) {
             fputs($GLOBALS['socket'], "PONG ".$ex[1]."\n");
             continue; 
         }
-//---
 
 /* rejoin when kicked */
 		if($GLOBALS['CONFIG_AUTO_REJOIN'] == 'yes') {
@@ -330,7 +330,6 @@ while(1) {
 					fputs($GLOBALS['socket'], "JOIN :".$ex[2]."\n");
 					continue;
 				}	} }
-//---
 
 		if (preg_match ('/^:(.*)\!(.*)\@(.*)$/', $ex[0], $source)) {
 
@@ -355,7 +354,7 @@ while(1) {
 			 continue;
 			}
 		}
-//---
+
 		if(count ($ex) < 4)
         continue;
         
@@ -476,6 +475,7 @@ switch ($ex[1]){
    }
    exit;
  }
+
 }
 //------------------------------------------------------------------------------------------------
 function msg_without_command()
@@ -677,7 +677,6 @@ function save($file = null)
 		fclose($desc);
 		return true;
 	  } else { return false; }
+ }
 }
-}
-
 ?>

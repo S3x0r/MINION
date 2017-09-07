@@ -45,6 +45,7 @@ fetch get <plugin> -- Downloads plugins from repository
 hash -- Changing string to choosed algorithm: !hash <help> to list algorithms
 help -- Shows BOT commands: !help
 htmltitle -- Shows webpage titile: !htmltitle <http://address>
+http_status -- Shows http status: !http_status <number>
 info -- Shows info: !info
 join -- Joins channel: !join <#channel>
 kick -- Kicks from channel: !kick <#channel> <who>
@@ -80,6 +81,7 @@ update -- Updates the BOT if new version is available: !update
 uptime -- Shows BOT uptime: !uptime
 voice -- Gives voice: !voice <nick>
 weather -- Shows actual weather: !weather <city>
+wikipedia -- Searchs wikipedia: !wikipedia <lang> <string>
 winamp -- Controls winamp: !winamp <help>
 winamp stop - Stop music: !winamp stop
 winamp pause - Pause music: !winamp pause

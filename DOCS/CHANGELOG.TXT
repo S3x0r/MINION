@@ -1,4 +1,8 @@
-   
+
+   v0.3.8 changes (07.09.2017):
+    - new plugin: !http_status -- Shows http status: !http_status <number>
+    - new plugin: !wikipedia -- Searchs wikipedia: !wikipedia <lang> <string>
+
    v0.3.7 changes (07.09.2017):
     - new plugin: !ripe -- Checks ip or host address and shows results: !ripe <ip or host>
     - !uptime plugin improved/updated
