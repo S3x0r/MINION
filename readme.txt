@@ -60,6 +60,7 @@ ping -- Pings a host: !ping <host>
 quit -- Shutdown BOT: !quit
 raw -- Sends raw string to server: !raw <string>
 restart -- Restarts Bot: !restart
+ripe -- Checks ip or host address and shows results: !ripe <ip or host>
 save -- Saving to config file: !save <help> to list commands
 save auto_join - Saving auto join on channel when connected: !save auto_join <yes/no>
 save auto_rejoin - Saving auto rejoin when kicked from channel: !save auto_rejoin <yes/no>

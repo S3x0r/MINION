@@ -1,7 +1,9 @@
 <?php
 //------------------------------------------------------------------------------------------------
-define('VER', '0.3.6');
+define('VER', '0.3.7');
 define('START_TIME',time());
+set_error_handler('ErrorHandler');
+error_reporting(E_ALL ^ E_NOTICE);
 //------------------------------------------------------------------------------------------------
 Start('../');
 //------------------------------------------------------------------------------------------------
@@ -88,8 +90,6 @@ function LoadConfig($filename)
   /* DEBUG */
    $GLOBALS['CONFIG_SHOW_RAW']       = $cfg->get("DEBUG","show_raw");
 
-  /* show raw or no */
-   if($GLOBALS['CONFIG_SHOW_RAW'] == 'yes') { error_reporting(E_ALL ^ E_NOTICE); } else { error_reporting(0); }
 //------------------------------------------------------------------------------------------------
   /* if default master password, prompt for change it! */
   if($GLOBALS['CONFIG_OWNER_PASSWD'] == 'change_me!')
@@ -106,9 +106,9 @@ function LoadConfig($filename)
 	$tr = rtrim($new_pwd, "\n\r");
     SaveData($config_file, 'ADMIN', 'owner_password', $tr);
     
-	/* Set first time change variable */
-	$GLOBALS['if_first_time'] = '1';
-	
+    /* Set first time change variable */
+    $GLOBALS['if_first_time_pwd_change'] = '1';
+
 	/* load config again */
     LoadConfig($config_file);
    }
@@ -242,18 +242,17 @@ function LoadPlugins()
   foreach(glob('PLUGINS/*.php') as $plugin_name)
   {
     include_once($plugin_name);
-    fwrite($b, $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ');
+	fwrite($b, $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ');
     $plugin_name = basename($plugin_name, '.php');
     echo "$plugin_name -- $plugin_description\n";
   }
+
   echo "--------------------------------------------------------\n";
 
   fclose($b);
-
+  
   $GLOBALS['PLUGINS'] = file_get_contents("plugins.ini"); 
   $GLOBALS['PLUGINS'] = explode(" ", $GLOBALS['PLUGINS']);
-
-  if($GLOBALS['CONFIG_SHOW_RAW'] == 'yes') { print_r($GLOBALS['PLUGINS']); }
 
   /* Now its time to connect */
   Connect();
@@ -381,15 +380,15 @@ switch ($ex[1]){
 	    CLI_MSG('-- Nickname already used, changing to alternative nick: '.$GLOBALS['RND_NICKNAME'], '1');
 		fputs($GLOBALS['socket'],'NICK '.$GLOBALS['RND_NICKNAME']."\n");
 		SaveData('data.ini', 'DATA', 'nickname', $GLOBALS['RND_NICKNAME']);
-        break;
-
+        continue;
+//------------------------------------------------------------------------------------------------
 	case '422': /* join if no motd */
 	case '376': /* join after motd */
 	     LoadData('data.ini', 'DATA', 'nickname');
 		 CLI_MSG('4. OK im connected, my nickname is: '.$GLOBALS['LOADED'], '1');
 		
 		 /* register to bot info */
-		 if($GLOBALS['if_first_time'] == '1') {
+		 if($GLOBALS['if_first_time_pwd_change'] == '1') {
 		 CLI_MSG('****************************************************', '0');
 		 CLI_MSG('Register to bot by typing /msg '.$GLOBALS['LOADED'].' register '.$GLOBALS['CONFIG_OWNER_PASSWD'], '0');
 		 CLI_MSG('****************************************************', '0');
@@ -399,19 +398,18 @@ switch ($ex[1]){
 		 if (extension_loaded('wcli')) {
 		 wcli_set_console_title('davybot '.VER.' (server: '.$GLOBALS['CONFIG_SERVER'].':'.$GLOBALS['CONFIG_PORT'].' | nickname: '.$GLOBALS['LOADED'].' | channel: '.$GLOBALS['CONFIG_CNANNEL'].')');
 		 }
-		 
+
 		 /* if autojoin */
 		 if($GLOBALS['CONFIG_AUTO_JOIN'] == 'yes') { 
 		 CLI_MSG('5. Joining channel: '.$GLOBALS['CONFIG_CNANNEL'], '1');
 		 JOIN_CHANNEL($GLOBALS['CONFIG_CNANNEL']);
-		 break;
 		 }
-		break;
-
+		continue;
+//------------------------------------------------------------------------------------------------
 	case 'QUIT': /* quit message */
 		CLI_MSG('* '.$nick.' ('.$ident.'@'.$host.') Quit', '1');
-		//todo:save_to_database(); /* Saving to database -> !seen */
-		break;
+		continue;
+//------------------------------------------------------------------------------------------------
 }
 
  /* CTCP */
@@ -583,6 +581,39 @@ function NICK_MSG($msg)
 function JOIN_CHANNEL($channel)
 {
   fputs($GLOBALS['socket'],'JOIN '.$channel."\n");
+}
+//------------------------------------------------------------------------------------------------
+function ErrorHandler($errno, $errstr, $errfile, $errline)
+{
+	if (!(error_reporting() & $errno)) {
+        // This error code is not included in error_reporting, so let it fall
+        // through to the standard PHP error handler
+        return false;
+    }
+
+    switch ($errno) {
+    case E_USER_ERROR:
+        CLI_MSG("My ERROR [$errno] $errstr", '1');
+        CLI_MSG("Fatal error on line $errline in file $errfile, PHP".PHP_VERSION." (".PHP_OS.")", '1');
+        CLI_MSG("Aborting...", '1');
+        exit(1);
+        break;
+
+    case E_USER_WARNING:
+        CLI_MSG("My WARNING [$errno] $errstr", '1');
+        break;
+
+    case E_USER_NOTICE:
+        CLI_MSG("My NOTICE [$errno] $errstr", '1');
+        break;
+
+    default:
+        CLI_MSG("Unknown error type: [$errno] $errstr", '1');
+        break;
+    }
+
+    /* Don't execute PHP internal error handler */
+    return true;
 }
 //------------------------------------------------------------------------------------------------
 /* configuration file parser */

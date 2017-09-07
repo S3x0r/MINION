@@ -6,7 +6,6 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
  $GLOBALS['v_addr']   = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
  $GLOBALS['v_source'] = 'http://github.com/S3x0r/davybot/archive/master.zip';
- $GLOBALS['CheckVersion'] = file_get_contents($GLOBALS['v_addr']);
  $GLOBALS['dir']      = '../';
  $GLOBALS['newdir']   = $GLOBALS['dir'].'davybot'.$GLOBALS['CheckVersion'];
 
@@ -19,6 +18,8 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 //------------------------------------------------------------------------------------------------
 function v_connect()
 {
+  $GLOBALS['CheckVersion'] = file_get_contents($GLOBALS['v_addr']);
+
  if($GLOBALS['CheckVersion'] !='')
 		 {
 		 v_checkVersion();

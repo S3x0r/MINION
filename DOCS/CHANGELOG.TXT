@@ -1,15 +1,21 @@
    
+   v0.3.7 changes (07.09.2017):
+    - new plugin: !ripe -- Checks ip or host address and shows results: !ripe <ip or host>
+    - !uptime plugin improved/updated
+    - we have now errors handler and more in logs if occured
+    - !update plugin little fix
+
    v0.3.6 changes (04.09.2017):
-    - new plugin !raw <string> -- Sends raw string to server
+    - new plugin: !raw <string> -- Sends raw string to server
     - you can now load bot with diffrent config from CLI
       to run: php "../BOT.php" some_other_config.ini
     - added to !quit plugin ending log message
     - some core code changed
 
    v0.3.5 changes (03.09.2017):
-    - new plugin !kick <#channel> <who> --  Kicks from channel
-    - new plugin !hash <help> -- changing string to choosed algorithm
-    - new plugin !ping <host> -- Pings a host
+    - new plugin: !kick <#channel> <who> --  Kicks from channel
+    - new plugin: !hash <help> -- changing string to choosed algorithm
+    - new plugin: !ping <host> -- Pings a host
     - little code clean and text changes
 
    v0.3.4 changes (01.09.2017):
