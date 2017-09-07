@@ -1,6 +1,6 @@
 <?php
 //------------------------------------------------------------------------------------------------
-define('VER', '0.3.8');
+define('VER', '0.3.9');
 define('START_TIME',time());
 set_error_handler('ErrorHandler');
 error_reporting(E_ALL ^ E_NOTICE);
@@ -33,6 +33,7 @@ function Start($path)
 
     Author: S3x0r, contact: olisek@gmail.com 
       Web: https://github.com/S3x0r/davybot 
+	   Total Lines of code: ".TotalLines()." :)
 	       PHP version: ".$php_ver."
  \n\n";
   
@@ -114,7 +115,8 @@ function LoadConfig($filename)
    }
 //------------------------------------------------------------------------------------------------    
    /* from what file config loaded */
-   CLI_MSG('1. Configuration Loaded from: '.$config_file, '0');
+   CLI_MSG('Configuration Loaded from: '.$config_file, '0');
+   echo "------------------------------------------------------------------------------\n";
    
    /* Set default data */
    SetDefaultData();
@@ -127,8 +129,8 @@ function LoadConfig($filename)
   }
 //------------------------------------------------------------------------------------------------  
  else {
-	    CLI_MSG("ERROR: No configuration file", '0');
-	    CLI_MSG("Creating default configuration in: CONFIG.INI - !Configure it!\n", '0');
+	    CLI_MSG("ERROR: Configuration file missing!", '0');
+	    CLI_MSG("Creating default config in: CONFIG.INI - (need to be configured)\n", '0');
 	  
 	    /* Create default config */
 	    CreateDefaultConfig('CONFIG.INI');
@@ -232,14 +234,14 @@ function Logs()
 //------------------------------------------------------------------------------------------------
 function LoadPlugins()
 {
-  $a = count(glob("PLUGINS/*.php",GLOB_BRACE));
-  $b = fopen('plugins.ini', 'w');
+  $count1 = count(glob("PLUGINS/OWNER/*.php",GLOB_BRACE));
+  $b = fopen('plugins_owner.ini', 'w');
 
-  CLI_MSG("2. My Plugins($a):", '0');
+  CLI_MSG("Owner Plugins ($count1):", '0');
 
-  echo "--------------------------------------------------------\n";
+  echo "------------------------------------------------------------------------------\n";
 
-  foreach(glob('PLUGINS/*.php') as $plugin_name)
+  foreach(glob('PLUGINS/OWNER/*.php') as $plugin_name)
   {
     include_once($plugin_name);
 	fwrite($b, $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ');
@@ -247,12 +249,36 @@ function LoadPlugins()
     echo "$plugin_name -- $plugin_description\n";
   }
 
-  echo "--------------------------------------------------------\n";
+  echo "------------------------------------------------------------------------------\n";
 
   fclose($b);
+//------
+  $count2 = count(glob("PLUGINS/USER/*.php",GLOB_BRACE));
+  $b = fopen('plugins_user.ini', 'w');
+
+  CLI_MSG("User Plugins ($count2):", '0');
+
+  echo "------------------------------------------------------------------------------\n";
   
-  $GLOBALS['PLUGINS'] = file_get_contents("plugins.ini"); 
-  $GLOBALS['PLUGINS'] = explode(" ", $GLOBALS['PLUGINS']);
+  foreach(glob('PLUGINS/USER/*.php') as $plugin_name)
+  {
+	include_once($plugin_name);
+	fwrite($b, $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' '); 
+	$plugin_name = basename($plugin_name, '.php');
+    echo "$plugin_name -- $plugin_description\n";
+   }
+ 
+  $tot = $count1+$count2;
+    
+  echo "----------------------------------------------------------Total: ($tot)---------\n";
+  
+  fclose($b);
+  
+  $GLOBALS['PLUGINS_OWNERS'] = file_get_contents("plugins_owner.ini"); 
+  $GLOBALS['PLUGINS_OWNERS'] = explode(" ", $GLOBALS['PLUGINS_OWNERS']);
+
+  $GLOBALS['PLUGINS_USERS'] = file_get_contents("plugins_user.ini"); 
+  $GLOBALS['PLUGINS_USERS'] = explode(" ", $GLOBALS['PLUGINS_USERS']);
 
   /* Now its time to connect */
   Connect();
@@ -260,7 +286,7 @@ function LoadPlugins()
 //------------------------------------------------------------------------------------------------
 function Connect()
 {
-  CLI_MSG('3. Connecting to: '.$GLOBALS['CONFIG_SERVER'].', port: '.$GLOBALS['CONFIG_PORT'], '0');
+  CLI_MSG('Connecting to: '.$GLOBALS['CONFIG_SERVER'].', port: '.$GLOBALS['CONFIG_PORT'], '0');
 
   $i=0;
 
@@ -270,10 +296,10 @@ function Connect()
     $GLOBALS['socket'] = fsockopen($GLOBALS['CONFIG_SERVER'], $GLOBALS['CONFIG_PORT']);
 
     if($GLOBALS['socket']==false) {
-	 CLI_MSG('Unable to connect to server, im trying to connect again...', '0');
+	 CLI_MSG('Unable to connect to server, im trying to connect again...', '1');
      sleep($GLOBALS['CONFIG_CONNECT_DELAY']); 
     if($i==$GLOBALS['CONFIG_TRY_CONNECT']) {
-     CLI_MSG('Unable to connect to server, exiting program.', '0');
+     CLI_MSG('Unable to connect to server, exiting program.', '1');
 	 die(); /* TODO: send email that terminated program? */
 	 }
    }
@@ -304,6 +330,7 @@ function Engine()
   global $piece4;
   global $ex;
   global $rawcmd;
+  global $mask;
 
 /* main socket loop */
 while(1) {
@@ -384,7 +411,7 @@ switch ($ex[1]){
 	case '422': /* join if no motd */
 	case '376': /* join after motd */
 	     LoadData('data.ini', 'DATA', 'nickname');
-		 CLI_MSG('4. OK im connected, my nickname is: '.$GLOBALS['LOADED'], '1');
+		 CLI_MSG('OK im connected, my nickname is: '.$GLOBALS['LOADED'], '1');
 		
 		 /* register to bot info */
 		 if($GLOBALS['if_first_time_pwd_change'] == '1') {
@@ -400,8 +427,9 @@ switch ($ex[1]){
 
 		 /* if autojoin */
 		 if($GLOBALS['CONFIG_AUTO_JOIN'] == 'yes') { 
-		 CLI_MSG('5. Joining channel: '.$GLOBALS['CONFIG_CNANNEL'], '1');
+		 CLI_MSG('Joining channel: '.$GLOBALS['CONFIG_CNANNEL'], '1');
 		 JOIN_CHANNEL($GLOBALS['CONFIG_CNANNEL']);
+		 $GLOBALS['bot_in_channel']='1';
 		 }
 		continue;
 //------------------------------------------------------------------------------------------------
@@ -447,11 +475,14 @@ switch ($ex[1]){
 
      SaveData($GLOBALS['config_file'], 'ADMIN', 'bot_owners', $new_list);
 
-	 $commands = file_get_contents('plugins.ini');
+	 $owner_commands = file_get_contents('plugins_owner.ini');
+     $user_commands  = file_get_contents('plugins_user.ini');
 
      NICK_MSG('From now you are on my owners list, enjoy.');
-     NICK_MSG('My Commands:');
-     NICK_MSG($commands);
+     NICK_MSG('Owner Commands:');
+     NICK_MSG($owner_commands);
+	 NICK_MSG('User Commands:');
+	 NICK_MSG($user_commands);
 
      CLI_MSG('I have new owner on list, '.$GLOBALS['CONFIG_CNANNEL'].', added: '.$mask2, '1');
 
@@ -467,15 +498,23 @@ switch ($ex[1]){
 //---
 
  /* plugins commands */
-	if(HasOwner($mask)) 
+	if(HasOwner($mask))
 	{
 		$pn = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
-		if (in_array($rawcmd[1], $GLOBALS['PLUGINS'])) { call_user_func('plugin_'.$pn); }
+		if(in_array($rawcmd[1], $GLOBALS['PLUGINS_OWNERS'])) { call_user_func('plugin_'.$pn); }
+		if(in_array($rawcmd[1], $GLOBALS['PLUGINS_USERS'])) { call_user_func('plugin_'.$pn); }
 	}
-   }
+	else if(!HasOwner($mask))
+	{
+	  $pn = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
+	  if(in_array($rawcmd[1], $GLOBALS['PLUGINS_USERS'])) { call_user_func('plugin_'.$pn); }
+	}
+
+   if(!function_exists('plugin_')) { function plugin_() { } }
+
+  }
    exit;
  }
-
 }
 //------------------------------------------------------------------------------------------------
 function msg_without_command()
@@ -679,4 +718,26 @@ function save($file = null)
 	  } else { return false; }
  }
 }
+//------------------------------------------------------------------------------------------------
+function CountLines($exts=array('php'))
+{
+  $fpath = '../'; $files=array(); 
+
+  $it=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($fpath));
+  foreach($it as $file)
+	  {
+        if($file->isDir()) { continue; }
+		$parts = explode('.', $file->getFilename());
+		$extension=end($parts);
+        if(in_array($extension, $exts))
+        { $files[$file->getPathname()]=count(file($file->getPathname())); }
+      } 
+  return $files;
+}
+//------------------------------------------------------------------------------------------------
+function TotalLines()
+{
+  return array_sum(CountLines());
+}
+//------------------------------------------------------------------------------------------------
 ?>
