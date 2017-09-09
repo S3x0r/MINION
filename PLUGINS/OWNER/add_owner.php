@@ -19,6 +19,10 @@ function plugin_add_owner()
 	if($owners_list != '') { $new_list = $owners_list.', '.$new; }
 	SaveData($GLOBALS['config_file'], 'ADMIN', 'bot_owners', $new_list);
 
+    /* update variable with new owners */
+    $cfg = new iniParser($GLOBALS['config_file']);
+    $GLOBALS['CONFIG_OWNERS'] = $cfg->get("ADMIN","bot_owners");
+
     /* inform nick about it */
 	$owner_commands = file_get_contents('plugins_owner.ini');
     $user_commands  = file_get_contents('plugins_user.ini');

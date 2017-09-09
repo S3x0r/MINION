@@ -1,6 +1,6 @@
 <?php
 //------------------------------------------------------------------------------------------------
-define('VER', '0.4.0');
+define('VER', '0.4.1');
 
 define('START_TIME',time());
 define('PHP_VER',phpversion());
@@ -491,22 +491,23 @@ switch ($ex[1]){
 	 $owner_commands = file_get_contents('plugins_owner.ini');
      $user_commands  = file_get_contents('plugins_user.ini');
 
+     /* inform user about this */
      NICK_MSG('From now you are on my owners list, enjoy.');
      NICK_MSG('Owner Commands:');
      NICK_MSG($owner_commands);
 	 NICK_MSG('User Commands:');
 	 NICK_MSG($user_commands);
-
+     
+	 /* cli msg */
      CLI_MSG('New OWNER added, '.$GLOBALS['CONFIG_CNANNEL'].', added: '.$mask, '1');
 	 CLI_MSG('New AUTO_OP added, '.$GLOBALS['CONFIG_CNANNEL'].', added: '.$mask, '1');
     
-	 /* give op before restart */
+	 /* give op */
      fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' +o '.$GLOBALS['nick']."\n");
 
-     fputs($GLOBALS['socket'],"QUIT :Restarting...\n");
-     CLI_MSG('Restarting BOT...', '1');
-     system('START_BOT.BAT');
-     die();
+     /* update variable with new owners */
+     $cfg = new iniParser($GLOBALS['config_file']);
+     $GLOBALS['CONFIG_OWNERS'] = $cfg->get("ADMIN","bot_owners");
 
 	 }
 //---

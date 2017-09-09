@@ -14,7 +14,7 @@ function plugin_info()
  NICK_MSG('----------------------------------------------');
  NICK_MSG('   Author: S3x0r, contact: olisek@gmail.com');
  NICK_MSG('----------------------------------------------');
- NICK_MSG('PHP version: '.PHP_VER);
+// NICK_MSG('PHP version: '.PHP_VER);
 
  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'info on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 }

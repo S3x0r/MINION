@@ -1,4 +1,8 @@
    
+   v0.4.1 changes (09.09.2017):
+    - register 'password' - bot dont need to restart anymore, after reg. you can use bot cmds
+    - plugins: !add_owner, !auto_op, !save * - also dont need bot to restart to take effect.
+
    v0.4.0 changes (09.09.2017):
     - new plugin: !plugin -- Plugins manipulation: !plugin help to list commands
       plugin delete - Deletes plugin from directory: !plugin delete <plugin_name>

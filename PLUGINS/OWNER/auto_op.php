@@ -21,6 +21,11 @@ function plugin_auto_op()
 		 
 	SaveData($GLOBALS['config_file'], 'ADMIN', 'auto_op_list', $new_list);
 
+    /* update variable with new owners */
+    $cfg = new iniParser($GLOBALS['config_file']);
+    $GLOBALS['CONFIG_AUTO_OP_LIST'] = $cfg->get("ADMIN","auto_op_list");
+
+
     /* Inform nick about it */
 	fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :From now you are on my auto op list, enjoy.\n");
 	
