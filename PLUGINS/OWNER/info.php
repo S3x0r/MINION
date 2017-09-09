@@ -1,19 +1,21 @@
 <?php
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Shows info: !info';
+ $plugin_description = 'Shows info: '.$GLOBALS['CONFIG_CMD_PREFIX'].'info';
  $plugin_command = 'info';
 
 function plugin_info()
 {
- BOT_RESPONSE('    __                      __           __');
- BOT_RESPONSE('.--|  |.---.-.--.--.--.--. |  |--.-----.|  |_');
- BOT_RESPONSE('|  _  ||  _  |  |  |  |  | |  _  |  _  ||   _|');
- BOT_RESPONSE('|_____||___._|\___/|___  | |_____|_____||____|');
- BOT_RESPONSE('                   |_____|    version '.VER);
- BOT_RESPONSE('----------------------------------------------');
- BOT_RESPONSE('   Author: S3x0r, contact: olisek@gmail.com');
+ NICK_MSG('    __                      __           __');
+ NICK_MSG('.--|  |.---.-.--.--.--.--. |  |--.-----.|  |_');
+ NICK_MSG('|  _  ||  _  |  |  |  |  | |  _  |  _  ||   _|');
+ NICK_MSG('|_____||___._|\___/|___  | |_____|_____||____|');
+ NICK_MSG('                   |_____|    version '.VER);
+ NICK_MSG('----------------------------------------------');
+ NICK_MSG('   Author: S3x0r, contact: olisek@gmail.com');
+ NICK_MSG('----------------------------------------------');
+ NICK_MSG('PHP version: '.PHP_VER);
 
- CLI_MSG('!info on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+ CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'info on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 }
 ?>

@@ -1,7 +1,7 @@
 <?php
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Shows http status: !http_status <number>';
+ $plugin_description = 'Shows http status: '.$GLOBALS['CONFIG_CMD_PREFIX'].'http_status <number>';
  $plugin_command = 'http_status';
 
 function plugin_http_status()
@@ -12,7 +12,7 @@ function plugin_http_status()
   else {
 		 BOT_RESPONSE(httpstatus($GLOBALS['args']));
  
-		 CLI_MSG('!http_status on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', code: '.$GLOBALS['args'], '1');
+		 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'http_status on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', code: '.$GLOBALS['args'], '1');
 	   }
 }
 

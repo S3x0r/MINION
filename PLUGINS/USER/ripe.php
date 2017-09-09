@@ -1,7 +1,7 @@
 <?php
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Checks ip or host address and shows results: !ripe <ip or host>';
+ $plugin_description = 'Checks ip or host address and shows results: '.$GLOBALS['CONFIG_CMD_PREFIX'].'ripe <ip or host>';
  $plugin_command = 'ripe';
 
 
@@ -11,7 +11,7 @@ function plugin_ripe()
   
   else { 
 	     BOT_RESPONSE(ripe_check_ip($GLOBALS['args']));
-         CLI_MSG('!ripe on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', address: '.$GLOBALS['args'], '1');
+         CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'ripe on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', address: '.$GLOBALS['args'], '1');
 	   }
 }
 

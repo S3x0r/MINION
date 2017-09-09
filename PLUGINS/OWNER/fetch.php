@@ -1,7 +1,7 @@
 <?php
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Downloads plugins from repository: !fetch list, !fetch get <plugin>';
+ $plugin_description = 'Downloads plugins from repository: '.$GLOBALS['CONFIG_CMD_PREFIX'].'fetch list, '.$GLOBALS['CONFIG_CMD_PREFIX'].'fetch get <plugin>';
  $plugin_command = 'fetch';
 
 function plugin_fetch()

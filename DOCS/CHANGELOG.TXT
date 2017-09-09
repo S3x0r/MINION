@@ -1,3 +1,31 @@
+   
+   v0.4.0 changes (09.09.2017):
+    - new plugin: !plugin -- Plugins manipulation: !plugin help to list commands
+      plugin delete - Deletes plugin from directory: !plugin delete <plugin_name>
+      plugin move - Move plugin from OWNER dir to USER directory: !plugin move <plugin_name>.
+    - after 'register <password>' to bot it will add you also to auto op list
+    - auto_op little fix (removed ', ' if first host in config)
+    - plugin !add_owner now informs nick if added to owners + some fixes
+    - plugin !auto_op now informs nick if added to auto op list + some fixes
+    - plugins !checkupdate,!cluster,!deop,!devoice,!join,!kick,!leave,!list_owners,
+      !memusage,!newnick,!op,!plugin,!quit,!raw,!restart,!save,!topic,!update,!voice,
+      !winamp,!bash,!cham,!dns,!hash,!help,!htmltitle,!http_status,!math,!md5,!morse,
+      !ping,!ripe,!uptime,!weather,!wikipedia,!youtube -- little fixes
+    - plugins !info, !showconfig, !save output now in private message + little fix
+    - plugin !save have now more commands:
+      save auto_op - Saving auto op when join channel: !save auto_op <yes/no>
+      save auto_op_list - Saving auto op list in config: !save auto_op_list <nick!ident@host, ...>
+      save bot_owners - Saving bot owners list in config: !save bot_owners <nick!ident@host, ...>
+      save bot_response - Saving where bot outputs messages: !save bot_response <channel/notice/priv>
+      save ctcp_finger - Saving ctcp finger in config: !save ctcp_finger <string>
+      save ctcp_response - Saving ctcp response in config: !save ctcp_response <yes/no>
+      save ctcp_version - Saving ctcp version in config: '!save ctcp_version <string>
+      save logging - Saving logging in config: !save logging <yes/no>
+      save owner_password - Saving bot owner password in config: !save owner_password <password>
+      save show_raw - Saving show raw in config: !save show_raw <yes/no>
+      save time_zone - Saving time zone in config: !save time_zone <eg. Europe/Warsaw>
+    - plugin !showconfig - have now more config output
+    - plugin !update - have now more CLI output
 
    v0.3.9 changes (07.09.2017):
     - some messages on CLI window changed

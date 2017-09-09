@@ -1,7 +1,7 @@
 <?php
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Restarts Bot: !restart';
+ $plugin_description = 'Restarts Bot: '.$GLOBALS['CONFIG_CMD_PREFIX'].'restart';
  $plugin_command = 'restart';
 
 function plugin_restart()
@@ -13,7 +13,7 @@ function plugin_restart()
   fputs($GLOBALS['socket'],"QUIT :Restarting...\n");
 
   /* send cli messages */
-  CLI_MSG('!restart on: '.$GLOBALS['CONFIG_CNANNEL'].' by: '.$GLOBALS['nick'], '1');
+  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'restart on: '.$GLOBALS['CONFIG_CNANNEL'].' by: '.$GLOBALS['nick'], '1');
   CLI_MSG('Restarting BOT...', '1');
   
   /* execute batch script */

@@ -1,7 +1,7 @@
 <?php
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Controls winamp: !winamp <help>';
+ $plugin_description = 'Controls winamp: '.$GLOBALS['CONFIG_CMD_PREFIX'].'winamp <help>';
  $plugin_command = 'winamp';
 
 /* 
@@ -15,7 +15,7 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
 function plugin_winamp()
 {
-  CLI_MSG('!winamp on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'winamp on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 
   if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'winamp <help> to list commands'); } 
   
@@ -33,12 +33,12 @@ function plugin_winamp()
 			BOT_RESPONSE('winamp title - Show song title: !winamp title');
 			break;
 
-			case "stop": exec($GLOBALS['winamp_loc'].' /stop'); break;
-			case "pause": exec($GLOBALS['winamp_loc'].' /pause'); break;
-			case "play": exec($GLOBALS['winamp_loc'].' /play'); sendTitle($target); break;
-			case "next": exec($GLOBALS['winamp_loc'].' /next'); sendTitle($target); break;
-			case "prev": exec($GLOBALS['winamp_loc'].' /prev'); sendTitle($target); break;
-			case "title": sendTitle($target); break;
+			case 'stop': exec($GLOBALS['winamp_loc'].' /stop'); break;
+			case 'pause': exec($GLOBALS['winamp_loc'].' /pause'); break;
+			case 'play': exec($GLOBALS['winamp_loc'].' /play'); sendTitle($target); break;
+			case 'next': exec($GLOBALS['winamp_loc'].' /next'); sendTitle($target); break;
+			case 'prev': exec($GLOBALS['winamp_loc'].' /prev'); sendTitle($target); break;
+			case 'title': sendTitle($target); break;
 		}
  }
 }

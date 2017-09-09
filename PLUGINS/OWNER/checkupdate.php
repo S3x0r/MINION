@@ -1,16 +1,17 @@
 <?php
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Checking for updates: !checkupdate';
+ $plugin_description = 'Checking for updates: '.$GLOBALS['CONFIG_CMD_PREFIX'].'checkupdate';
  $plugin_command = 'checkupdate';
 //------------------------------------------------------------------------------------------------
 function plugin_checkupdate()
 {
   global $CheckVersion;
+  $addr = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
 
-  CLI_MSG('!checkupdate on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'checkupdate on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 
-  $CheckVersion = file_get_contents($GLOBALS['v_addr']);
+  $CheckVersion = file_get_contents($addr);
 
 	 if($CheckVersion !='')
 		 {

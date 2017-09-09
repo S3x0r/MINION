@@ -1,7 +1,7 @@
 <?php
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Searchs wikipedia: !wikipedia <lang> <string>';
+ $plugin_description = 'Searchs wikipedia: '.$GLOBALS['CONFIG_CMD_PREFIX'].'wikipedia <lang> <string>';
  $plugin_command = 'wikipedia';
 
 function plugin_wikipedia()
@@ -23,7 +23,7 @@ function plugin_wikipedia()
         }
        }
   
-  CLI_MSG('!wikipedia on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', search: '.$query, '1');
+  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'wikipedia on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', search: '.$query, '1');
 }
 
 ?>

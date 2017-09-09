@@ -1,7 +1,7 @@
 <?php
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Shows how much ram is being used by bot: !memusage';
+ $plugin_description = 'Shows how much ram is being used by bot: '.$GLOBALS['CONFIG_CMD_PREFIX'].'memusage';
  $plugin_command = 'memusage';
 
 function plugin_memusage()
@@ -10,7 +10,7 @@ function plugin_memusage()
   $memory = byte_convert($mem);
 	
   BOT_RESPONSE('I\'m using '.$memory.' of RAM to run currently');
-  CLI_MSG('!memusage by: '.$GLOBALS['nick'], '1');
+  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'memusage by: '.$GLOBALS['nick'], '1');
 }
 
 function byte_convert($bytes)

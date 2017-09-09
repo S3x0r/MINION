@@ -1,7 +1,7 @@
 <?php
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Pings a host: !ping <host>';
+ $plugin_description = 'Pings a host: '.$GLOBALS['CONFIG_CMD_PREFIX'].'ping <host>';
  $plugin_command = 'ping';
 
 function plugin_ping()
@@ -26,7 +26,7 @@ function plugin_ping()
 			    }
 			  }
 	   }
-		 CLI_MSG('!ping on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', address: '.$GLOBALS['args'], '1');
+		 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'ping on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', address: '.$GLOBALS['args'], '1');
 	   }
 }
 

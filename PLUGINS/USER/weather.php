@@ -1,7 +1,7 @@
 <?php
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Shows actual weather: !weather <city>';
+ $plugin_description = 'Shows actual weather: '.$GLOBALS['CONFIG_CMD_PREFIX'].'weather <city>';
  $plugin_command = 'weather';
 
 /*
@@ -68,7 +68,7 @@ function plugin_weather()
 		}
 	}
 
-	 CLI_MSG('!weather on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+	 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'weather on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 }
 
 

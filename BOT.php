@@ -1,7 +1,10 @@
 <?php
 //------------------------------------------------------------------------------------------------
-define('VER', '0.3.9');
+define('VER', '0.4.0');
+
 define('START_TIME',time());
+define('PHP_VER',phpversion());
+
 set_error_handler('ErrorHandler');
 error_reporting(E_ALL ^ E_NOTICE);
 //------------------------------------------------------------------------------------------------
@@ -22,8 +25,6 @@ function Start($path)
   wcli_hide_cursor();
   }
 
-  $php_ver = phpversion();
-
  echo "
       __                      __           __ 
   .--|  |.---.-.--.--.--.--. |  |--.-----.|  |_
@@ -34,7 +35,7 @@ function Start($path)
     Author: S3x0r, contact: olisek@gmail.com 
       Web: https://github.com/S3x0r/davybot 
 	   Total Lines of code: ".TotalLines()." :)
-	       PHP version: ".$php_ver."
+	       PHP version: ".PHP_VER."
  \n\n";
   
   /* try to load config */
@@ -470,10 +471,22 @@ switch ($ex[1]){
 	 LoadData($GLOBALS['config_file'], 'ADMIN', 'bot_owners');
 
      $owners_list = $GLOBALS['LOADED'];
-     $new         = trim($mask2);
-     $new_list    = $owners_list.', '.$new;
+     $new         = trim($mask);
+	 if($owners_list == '') { $new_list = $new.''; }
+	 if($owners_list != '') { $new_list = $owners_list.', '.$new; }
 
      SaveData($GLOBALS['config_file'], 'ADMIN', 'bot_owners', $new_list);
+
+     /* Add host to auto op list */
+	 LoadData($GLOBALS['config_file'], 'ADMIN', 'auto_op_list');
+
+     $auto_list   = $GLOBALS['LOADED'];
+     $new         = trim($mask);
+	 if($auto_list == '') { $new_list = $new.''; }
+	 if($auto_list != '') { $new_list = $auto_list.', '.$new; }
+
+	 SaveData($GLOBALS['config_file'], 'ADMIN', 'auto_op_list', $new_list);
+     //-
 
 	 $owner_commands = file_get_contents('plugins_owner.ini');
      $user_commands  = file_get_contents('plugins_user.ini');
@@ -484,9 +497,10 @@ switch ($ex[1]){
 	 NICK_MSG('User Commands:');
 	 NICK_MSG($user_commands);
 
-     CLI_MSG('I have new owner on list, '.$GLOBALS['CONFIG_CNANNEL'].', added: '.$mask2, '1');
-
-     /* give op before restart */
+     CLI_MSG('New OWNER added, '.$GLOBALS['CONFIG_CNANNEL'].', added: '.$mask, '1');
+	 CLI_MSG('New AUTO_OP added, '.$GLOBALS['CONFIG_CNANNEL'].', added: '.$mask, '1');
+    
+	 /* give op before restart */
      fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' +o '.$GLOBALS['nick']."\n");
 
      fputs($GLOBALS['socket'],"QUIT :Restarting...\n");

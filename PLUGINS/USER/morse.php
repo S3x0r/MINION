@@ -1,7 +1,7 @@
 <?php
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Converts to morse code: !morse <text>';
+ $plugin_description = 'Converts to morse code: '.$GLOBALS['CONFIG_CMD_PREFIX'].'morse <text>';
  $plugin_command = 'morse';
 
 function plugin_morse()
@@ -34,7 +34,7 @@ function plugin_morse()
              }
        }
    BOT_RESPONSE($string.' converted to morse: '.rtrim($final));
-   CLI_MSG('!morse on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+   CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'morse on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 
  }
 }

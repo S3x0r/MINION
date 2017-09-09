@@ -18,12 +18,16 @@ OWNERS HOSTS - EDIT IT (CONFIG.INI) FOR USING BOT COMMANDS!
 
          nick ! ident@   host
            |      |       |
-example: S3x0r!~S3x0r@85-123-48-249.dsl.dynamic.simnet.is
+example: S3x0r!~S3x0r@12-123-48-249.dsl.dynamic.simnet.is
 
 Bot was writted to run from Windows systems, tested on Windows 7, XP
 You dont need to download PHP, just run bot from START_BOT.BAT file
 
 To run bot with diffrent config file: php.exe "../BOT.php" some_other_config.ini
+
+Plugins from 'USER' directory are for all users, everybody can use it
+Owners can use plugins 'OWNER' & 'USER'
+If you want to block some plugin from users just move it from 'USER' to 'OWNER'
 
 You can now check for bot update, command: !checkupdate
 And command: !update for downloading and installing new version.
@@ -57,6 +61,9 @@ memusage -- Shows how much ram is being used by bot: !memusage
 morse -- Converts to morse code: !morse <text>
 newnick -- Changes nickname: !newnick <new_nick>
 op -- Gives op: !op <nick>
+plugin -- Plugins manipulation: !plugin help to list commands
+plugin delete - Deletes plugin from directory: !plugin delete <plugin_name>
+plugin move - Move plugin from OWNER dir to USER directory: !plugin move <plugin_name>
 ping -- Pings a host: !ping <host>
 quit -- Shutdown BOT: !quit
 raw -- Sends raw string to server: !raw <string>
@@ -64,16 +71,27 @@ restart -- Restarts Bot: !restart
 ripe -- Checks ip or host address and shows results: !ripe <ip or host>
 save -- Saving to config file: !save <help> to list commands
 save auto_join - Saving auto join on channel when connected: !save auto_join <yes/no>
+save auto_op - Saving auto op when join channel: !save auto_op <yes/no>
+save auto_op_list - Saving auto op list in config: !save auto_op_list <nick!ident@host, ...>
 save auto_rejoin - Saving auto rejoin when kicked from channel: !save auto_rejoin <yes/no>
+save bot_owners - Saving bot owners list in config: !save bot_owners <nick!ident@host, ...>
+save bot_response - Saving where bot outputs messages: !save bot_response <channel/notice/priv>
 save command_prefix - Saving prefix commands: !save command_prefix <new_prefix>
 save connect_delay - Saving connect delay value to config: !save connect_delay <value>
+save ctcp_finger - Saving ctcp finger in config: !save ctcp_finger <string>
+save ctcp_response - Saving ctcp response in config: !save ctcp_response <yes/no>
+save ctcp_version - Saving ctcp version in config: '!save ctcp_version <string>
 save channel - Saving channel to config: !save_channel <#new_channel>
 save fetch_server - Saving fetch server to config: !save_fetch_server <new_server>
 save ident - Saving ident to config: !save_ident <new_ident>
+save logging - Saving logging in config: !save logging <yes/no>
 save name - Saving name to config: !save_name <new_name>
 save nick - Saving nickname to config: !save_nick <new_nick>
+save owner_password - Saving bot owner password in config: !save owner_password <password>
 save port - Saving new port to config: !save_port <new_port>
 save server - Saving new server to config: !save_server <new_server>
+save show_raw - Saving show raw in config: !save show_raw <yes/no>
+save time_zone - Saving time zone in config: !save time_zone <eg. Europe/Warsaw>
 save try_connect - Saving how many times try connect to server: !save try_connect <value>
 showconfig -- Shows BOT configuration: !showconfig
 topic -- Changing Topic in channel: !topic <new_topic>

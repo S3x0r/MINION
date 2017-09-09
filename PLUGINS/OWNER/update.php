@@ -1,7 +1,7 @@
 <?php
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Updates the BOT if new version is available: !update';
+ $plugin_description = 'Updates the BOT if new version is available: '.$GLOBALS['CONFIG_CMD_PREFIX'].'update';
  $plugin_command = 'update';
 
  $GLOBALS['v_addr']   = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
@@ -12,7 +12,7 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 //------------------------------------------------------------------------------------------------
  function plugin_update()
  {
-  CLI_MSG('!update on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'update on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
   v_connect();
  }
 //------------------------------------------------------------------------------------------------
@@ -27,6 +27,7 @@ function v_connect()
      
 	 else {
 		  BOT_RESPONSE('Cannot connect to update server, try next time.');
+	      CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'update on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', Cannot connect to update server', '1');
           }
 }
 //------------------------------------------------------------------------------------------------
@@ -43,6 +44,7 @@ function v_checkVersion()
    else 
 	{
 	 BOT_RESPONSE('No new update, you have the latest version.');
+	 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'update on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', No new update', '1');
 	}
 }
 //------------------------------------------------------------------------------------------------
@@ -51,7 +53,7 @@ function v_tryDownload()
       BOT_RESPONSE('Downloading update...');
 	  $newUpdate = file_get_contents($GLOBALS['v_source']);
       $dlHandler = fopen($GLOBALS['dir'].'update.zip', 'w');
-      if(!fwrite($dlHandler, $newUpdate)) { BOT_RESPONSE('Could not save new update, operation aborted'); exit(); }
+      if(!fwrite($dlHandler, $newUpdate)) { BOT_RESPONSE('Could not save new update, operation aborted');   CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'update on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', ERROR: could not save new update!', '1'); exit(); }
       fclose($dlHandler);
       BOT_RESPONSE('Update Downloaded');
 	  v_extract();
@@ -109,10 +111,12 @@ function v_extract()
 
   // reconnect to run new version
   fputs($GLOBALS['socket'],"QUIT :Installing, reconnecting\n");
+  CLI_MSG('Installing new update & restart BOT...', '1');
   system('cd '.$GLOBALS['newdir'].' & START_BOT.BAT');
   die();
 
 } else {
     BOT_RESPONSE('Failed to extract, aborting.');
+	CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'update on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', Failed to extract update, aborting!', '1');
  }
 }

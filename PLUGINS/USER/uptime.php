@@ -2,7 +2,7 @@
  
 if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Shows BOT uptime: !uptime';
+ $plugin_description = 'Shows BOT uptime: '.$GLOBALS['CONFIG_CMD_PREFIX'].'uptime';
  $plugin_command = 'uptime';
 
 function plugin_uptime()
@@ -11,7 +11,7 @@ function plugin_uptime()
 
   BOT_RESPONSE("I've been running since ".date('d.m.Y, H:i:s', START_TIME)." and been running for ".$time);
 
-  CLI_MSG('!Uptime on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'Uptime on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 }
 
 function uptime_parse($seconds)
