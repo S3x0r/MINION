@@ -1,4 +1,11 @@
    
+   v0.4.2 changes(12.09.2017):
+    - bot don't need data.ini anymore, alt-nick in variable now
+    - if default password detected prompt to change it - if password is shorter than 6 chars
+      inform about it and wait for new pwd.
+    - new option in config file: 'keep_nick = 'yes/no', This setting makes the bot try to get
+      his original nickname back if its primary nickname is already in use.
+
    v0.4.1 changes (09.09.2017):
     - register 'password' - bot dont need to restart anymore, after reg. you can use bot cmds
     - plugins: !add_owner, !auto_op, !save * - also dont need bot to restart to take effect.

@@ -24,6 +24,7 @@ bot_response = 'channel' <-- Where bot may response, you can choose 'channel', '
 [AUTOMATIC]
 auto_op = 'yes' <-- give auto ops from auto_op_list? 'yes' / 'no'
 auto_rejoin = 'yes' <-- auto rejoin channel when kicked
+keep_nick = 'yes' <-- This setting makes the bot try to get his original nickname back if its primary nickname is already in use.
 
 [CHANNEL]
 channel = '#davybot' <-- channel where to join when connected

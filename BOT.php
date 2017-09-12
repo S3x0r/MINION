@@ -1,10 +1,11 @@
 <?php
 //------------------------------------------------------------------------------------------------
-define('VER', '0.4.1');
+define('VER', '0.4.2');
 
 define('START_TIME',time());
 define('PHP_VER',phpversion());
 
+set_time_limit(0);
 set_error_handler('ErrorHandler');
 error_reporting(E_ALL ^ E_NOTICE);
 //------------------------------------------------------------------------------------------------
@@ -74,6 +75,7 @@ function LoadConfig($filename)
   /* AUTOMATIC */
    $GLOBALS['CONFIG_AUTO_OP']        = $cfg->get("AUTOMATIC","auto_op");
    $GLOBALS['CONFIG_AUTO_REJOIN']    = $cfg->get("AUTOMATIC","auto_rejoin");
+   $GLOBALS['CONFIG_KEEP_NICK']      = $cfg->get("AUTOMATIC","keep_nick");
   /* CHANNEL */
    $GLOBALS['CONFIG_CNANNEL']        = $cfg->get("CHANNEL","channel");
    $GLOBALS['CONFIG_AUTO_JOIN']      = $cfg->get("CHANNEL","auto_join");
@@ -105,6 +107,12 @@ function LoadConfig($filename)
 
     echo '[' . @date( 'H:i:s' ) . '] New Password: ';
     $new_pwd = fread(STDIN, 30);
+
+    if($new_pwd <6) { 
+    echo '[' . @date( 'H:i:s' ) . "] Password too short, password must be at least 6 characters long\n";
+    echo '[' . @date( 'H:i:s' ) . '] New Password: ';
+    $new_pwd = fread(STDIN, 30); }
+
 	$tr = rtrim($new_pwd, "\n\r");
     SaveData($config_file, 'ADMIN', 'owner_password', $tr);
     
@@ -141,20 +149,8 @@ function LoadConfig($filename)
 //------------------------------------------------------------------------------------------------
 function SetDefaultData()
 {
-  /* set unlimited time for our bot :) */
-  set_time_limit(0);
-
   /* set timezone */
   date_default_timezone_set($GLOBALS['CONFIG_TIMEZONE']);
-
-  /* set data.ini defaults */
-  SaveToFile('data.ini', '[DATA]nickname =', 'w');
-   
-  /* saving nickname to data file */
-  SaveData('data.ini', 'DATA', 'nickname', $GLOBALS['CONFIG_NICKNAME']);
-
-  /* set random nickname */
-  $GLOBALS['RND_NICKNAME'] = $GLOBALS['CONFIG_NICKNAME'].'|'.rand(0,99);
 }
 //------------------------------------------------------------------------------------------------
 function CreateDefaultConfig($filename)
@@ -182,6 +178,7 @@ bot_response     = \'channel\'
 [AUTOMATIC]
 auto_op          = \'yes\'
 auto_rejoin      = \'yes\'
+keep_nick        = \'yes\'
 
 [CHANNEL]
 channel          = \'#davybot\'
@@ -404,27 +401,31 @@ switch ($ex[1]){
 	
 	case '433': /* if nick already exists */
 	case '432': /* if nick reserved */
-	    CLI_MSG('-- Nickname already used, changing to alternative nick: '.$GLOBALS['RND_NICKNAME'], '1');
-		fputs($GLOBALS['socket'],'NICK '.$GLOBALS['RND_NICKNAME']."\n");
-		SaveData('data.ini', 'DATA', 'nickname', $GLOBALS['RND_NICKNAME']);
-        continue;
+		 /* keep nick */
+		 if($GLOBALS['CONFIG_KEEP_NICK']=='yes') { 
+		 $GLOBALS['NICKNAME_FROM_CONFIG'] = $GLOBALS['CONFIG_NICKNAME']; 
+         $GLOBALS['I_USE_RND_NICKNAME']='1';
+		 $GLOBALS['first_time'] = time(); }
+		   
+         /* set random nick */		 
+		 $GLOBALS['CONFIG_NICKNAME'] = $GLOBALS['CONFIG_NICKNAME'].'|'.rand(0,99);
+	     CLI_MSG('-- Nickname already in use, changing to alternative nick: '.$GLOBALS['CONFIG_NICKNAME'], '1');
+		 fputs($GLOBALS['socket'],'NICK '.$GLOBALS['CONFIG_NICKNAME']."\n");
+		 continue;
 //------------------------------------------------------------------------------------------------
 	case '422': /* join if no motd */
 	case '376': /* join after motd */
-	     LoadData('data.ini', 'DATA', 'nickname');
-		 CLI_MSG('OK im connected, my nickname is: '.$GLOBALS['LOADED'], '1');
+		 CLI_MSG('OK im connected, my nickname is: '.$GLOBALS['CONFIG_NICKNAME'], '1');
 		
 		 /* register to bot info */
 		 if($GLOBALS['if_first_time_pwd_change'] == '1') {
 		 CLI_MSG('****************************************************', '0');
-		 CLI_MSG('Register to bot by typing /msg '.$GLOBALS['LOADED'].' register '.$GLOBALS['CONFIG_OWNER_PASSWD'], '0');
+		 CLI_MSG('Register to bot by typing /msg '.$GLOBALS['CONFIG_NICKNAME'].' register '.$GLOBALS['CONFIG_OWNER_PASSWD'], '0');
 		 CLI_MSG('****************************************************', '0');
 		 }
 
 		 /* wcli extension */
-		 if (extension_loaded('wcli')) {
-		 wcli_set_console_title('davybot '.VER.' (server: '.$GLOBALS['CONFIG_SERVER'].':'.$GLOBALS['CONFIG_PORT'].' | nickname: '.$GLOBALS['LOADED'].' | channel: '.$GLOBALS['CONFIG_CNANNEL'].')');
-		 }
+         wcliExt();
 
 		 /* if autojoin */
 		 if($GLOBALS['CONFIG_AUTO_JOIN'] == 'yes') { 
@@ -464,7 +465,7 @@ switch ($ex[1]){
 		break;
 	  }
 	}	
-
+//------------------------------------------------------------------------------------------------
  /* if owner register -> add host to owner list in config */
  if($rawcmd[1] == 'register' && $args == $GLOBALS['CONFIG_OWNER_PASSWD'])
     {
@@ -510,8 +511,7 @@ switch ($ex[1]){
      $GLOBALS['CONFIG_OWNERS'] = $cfg->get("ADMIN","bot_owners");
 
 	 }
-//---
-
+//------------------------------------------------------------------------------------------------
  /* plugins commands */
 	if(HasOwner($mask))
 	{
@@ -526,10 +526,33 @@ switch ($ex[1]){
 	}
 
    if(!function_exists('plugin_')) { function plugin_() { } }
-
+//------------------------------------------------------------------------------------------------
+/* keep nick */
+if($GLOBALS['CONFIG_KEEP_NICK']=='yes' && $GLOBALS['I_USE_RND_NICKNAME']=='1')
+{
+  if(time()-$GLOBALS['first_time'] > 60) {
+  fputs($GLOBALS['socket'], "ISON :".$GLOBALS['NICKNAME_FROM_CONFIG']."\n");
+  $GLOBALS['first_time'] = time(); }
+   
+  if($ex[1] == '303' && $ex[3] == ':') { 
+  fputs($GLOBALS['socket'], "NICK ".$GLOBALS['NICKNAME_FROM_CONFIG']."\n");
+  $GLOBALS['CONFIG_NICKNAME'] = $GLOBALS['NICKNAME_FROM_CONFIG'];
+  $GLOBALS['I_USE_RND_NICKNAME'] = '0';
+  CLI_MSG('I recovered my original nickname :)', '1');
+  /* wcli extension */
+  wcliExt();
   }
-   exit;
+}
+//------------------------------------------------------------------------------------------------
+  }
+  exit;
  }
+}
+//------------------------------------------------------------------------------------------------
+function wcliExt()
+{
+  if(extension_loaded('wcli')) {
+  wcli_set_console_title('davybot '.VER.' (server: '.$GLOBALS['CONFIG_SERVER'].':'.$GLOBALS['CONFIG_PORT'].' | nickname: '.$GLOBALS['CONFIG_NICKNAME'].' | channel: '.$GLOBALS['CONFIG_CNANNEL'].')'); }
 }
 //------------------------------------------------------------------------------------------------
 function msg_without_command()
