@@ -24,8 +24,8 @@ function plugin_add_owner()
     $GLOBALS['CONFIG_OWNERS'] = $cfg->get("ADMIN","bot_owners");
 
     /* inform nick about it */
-	$owner_commands = file_get_contents('plugins_owner.ini');
-    $user_commands  = file_get_contents('plugins_user.ini');
+	$owner_commands = implode(' ', $GLOBALS['OWNER_PLUGINS']);
+    $user_commands  = implode(' ', $GLOBALS['USER_PLUGINS']);
 
     fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :From now you are on my owners list, enjoy.\n");
     fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :Owner Commands:\n");

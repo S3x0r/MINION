@@ -1,6 +1,6 @@
 <?php
 //------------------------------------------------------------------------------------------------
-define('VER', '0.4.2');
+define('VER', '0.4.3');
 
 define('START_TIME',time());
 define('PHP_VER',phpversion());
@@ -27,17 +27,40 @@ function Start($path)
   }
 
  echo "
-      __                      __           __ 
-  .--|  |.---.-.--.--.--.--. |  |--.-----.|  |_
-  |  _  ||  _  |  |  |  |  | |  _  |  _  ||   _|
-  |_____||___._|\___/|___  | |_____|_____||____|
-                     |_____|    version ".VER."
+	B@B@B@B@@@B@B@B@B@B@B@B@@@B@B@B@B@B@@@@@@@B@B@B@B@B@@@B@B
+	@B@BGB@B@B@B@B@@@B@@@B@B@B@@@B@B@B@B@B@@@B@B@B@@@B@@@@@B@
+	B@B@  :@Bi:@B@B@B@@@B@BGS522s22SXMB@B@B@B@B@B@B@B@@@B@B@B
+	@: r   :   H@B@B@B@9sr;rrs5ssss2H2229M@@@B@B@B@B@B@B@B@@@
+	B         S@B@@@B,      ,::rsGB5:,  ,:i9@@B@B@B@B@B@, B@B
+	@B@M,     @B@X@X   rMB@Mr:,:MS          iB@B@B2  B@   @@@
+	B@@@B@    :@BGB  sB@B@;sBBrii  rB@B@B2:, :B@B@i         s
+	@@@B@@@ii:sB@9X ,@@B,    BSi  9Bi ,B@B@r,  M@B@B        S
+	B@@@B@B@92,@9,X  @B@,   ,@2i  @     B@GX:,  B@@,     X@@B
+	@B@@@B@BMs:r@r;i i@B@G2M@S::, @s  ,X@G92,   ,B@    B@B@B@
+	@@B@B@M@B2r:sssr: i29@B5i,  r :@B@B@BXr,,   ,@;::rM@B@B@B
+	@B@B@B@B@Gs:rHSSsi:,,,,     ,:,,rssri,,,iir,9s  rB@B@B@B@
+	B@B@B@B@B@si:XSSSsrsi::,,,::,:::,,,, ,,:;rsr,  :B@B@B@B@B
+	@B@B@B@@@BG: :XXG: :rsssSS9S9XS2ssr::irrrrrr  ,B@B@B@B@B@
+	B@B@B@B@B@Bs  :SGM                 :rrrsr,    G@B@@@B@B@@
+	@B@@@B@B@B@Xs  :SM@               ,ssss,     r@B@B@B@B@B@
+	B@B@B@@@B@B2Hs  :SM@@sr:,      :sMG22s,   ,r:@@@B@B@B@B@B
+	@B@B@B@B@B@2s9s,  ,::r222sHSX222srri:   ,rrirB@B@B@B@B@B@
+	B@B@B@B@B@B2s292                       :rri:2@B@B@B@B@B@B
+	@B@B@B@@@B@Ss29s,  ,, ,         ,     rrrii,M@@B@@@B@B@B@
+	B@B@B@B@B@@MsXGs,,,,, ,,:i:,,,       ,ssrriiB@B@B@@@B@B@B
+	@B@B@B@@@B@r:r5r ,,,, ,,,,, ,,       ,rii:,,@B@B@@@B@B@B@
+	B@B@B@B@B@@:   ,,:,,,,          ,,          G@@@B@B@B@B@B
+	@B@B@B@B@B@B   ,,,,,,,,   ,                X@B@B@B@B@B@@@
+	B@B@B@B@B@B@B        , , ,,               9@B@B@B@B@B@B@B
+	@B@B@@@B@B@B@Br                         i@@B@B@B@B@B@B@B@
+	B@B@B@B@B@@@B@B@Br:                  rM@B@B@B@B@B@B@B@B@@
+	@B@B@B@B@@@B@B@@@B@B@2           :GB@BBG9XXSSS9X9999G9GGM
+	B@B@@@B@B@B@B@@@B@B@@s           Srri;i;rrrssssssss22S5HS
+	@B@B@B@B@B@BBMMGG9G:              :,::::iir;rs22SXGGMMMMB
 
-    Author: S3x0r, contact: olisek@gmail.com 
-      Web: https://github.com/S3x0r/davybot 
-	   Total Lines of code: ".TotalLines()." :)
-	       PHP version: ".PHP_VER."
- \n\n";
+     davybot - ver: ".VER.", author: S3x0r, contact: olisek@gmail.com 
+                       Total Lines of code: ".TotalLines()." :)
+\n";
   
   /* try to load config */
   LoadConfig('CONFIG.INI');
@@ -96,26 +119,37 @@ function LoadConfig($filename)
 
 //------------------------------------------------------------------------------------------------
   /* if default master password, prompt for change it! */
-  if($GLOBALS['CONFIG_OWNER_PASSWD'] == 'change_me!')
+  if($GLOBALS['CONFIG_OWNER_PASSWD'] == '47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed')
    { 
-     CLI_MSG('Default owner bot password detected!', '0');
-	 CLI_MSG('For security please change it', '0');
-
-	 if(!defined("STDIN")) {
-     define("STDIN", fopen('php://stdin','rb'));
-     }
+    CLI_MSG('Default owner bot password detected!', '0');
+	CLI_MSG('For security please change it', '0');
 
     echo '[' . @date( 'H:i:s' ) . '] New Password: ';
-    $new_pwd = fread(STDIN, 30);
 
-    if($new_pwd <6) { 
+    $STDIN =  fopen('php://stdin','r');
+	$new_pwd = fread($STDIN, 30);
+
+    while(strlen($new_pwd) < 8) {
     echo '[' . @date( 'H:i:s' ) . "] Password too short, password must be at least 6 characters long\n";
     echo '[' . @date( 'H:i:s' ) . '] New Password: ';
-    $new_pwd = fread(STDIN, 30); }
-
-	$tr = rtrim($new_pwd, "\n\r");
-    SaveData($config_file, 'ADMIN', 'owner_password', $tr);
+    unset($new_pwd);
+	$new_pwd = fread($STDIN, 30); 
+    }
     
+	/* keep pwd as normal text */
+	$GLOBALS['pwd'] = rtrim($new_pwd, "\n\r");
+
+    /* hash pwd */
+	$hashed = hash('sha256', $GLOBALS['pwd']);
+	
+	/* save pwd to file */
+	SaveData($config_file, 'ADMIN', 'owner_password', $hashed);
+    
+	/* remove pwd checking vars */
+	unset($new_pwd);
+	unset($STDIN);
+	unset($hashed);
+
     /* Set first time change variable */
     $GLOBALS['if_first_time_pwd_change'] = '1';
 
@@ -149,8 +183,34 @@ function LoadConfig($filename)
 //------------------------------------------------------------------------------------------------
 function SetDefaultData()
 {
-  /* set timezone */
-  date_default_timezone_set($GLOBALS['CONFIG_TIMEZONE']);
+   /* if variable empty in config load default one */
+   if(empty($GLOBALS['CONFIG_NICKNAME']))      { $GLOBALS['CONFIG_NICKNAME'] = 'davybot';                          }
+   if(empty($GLOBALS['CONFIG_NAME']))          { $GLOBALS['CONFIG_NAME'] = 'http://github.com/S3x0r/davybot';      }
+   if(empty($GLOBALS['CONFIG_IDENT']))         { $GLOBALS['CONFIG_IDENT'] = 'http://github.com/S3x0r/davybot';     }
+   if(empty($GLOBALS['CONFIG_SERVER']))        { $GLOBALS['CONFIG_SERVER'] = 'minionki.com.pl';                    }
+   if(empty($GLOBALS['CONFIG_PORT']))          { $GLOBALS['CONFIG_PORT'] = '6667';                                 }
+   if(empty($GLOBALS['CONFIG_TRY_CONNECT']))   { $GLOBALS['CONFIG_TRY_CONNECT'] = '10';                            }
+   if(empty($GLOBALS['CONFIG_CONNECT_DELAY'])) { $GLOBALS['CONFIG_CONNECT_DELAY'] = '3';                           }
+   //if(empty($GLOBALS['CONFIG_AUTO_OP_LIST']))  { $GLOBALS['CONFIG_AUTO_OP_LIST'] = 'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host'; }
+   //if(empty($GLOBALS['CONFIG_OWNERS']))        { $GLOBALS['CONFIG_OWNERS'] = 'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host';       }
+   if(empty($GLOBALS['CONFIG_OWNERS_PASSWD'])) { $GLOBALS['CONFIG_OWNERS_PASSWD'] = '47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed';                  }
+   if(empty($GLOBALS['CONFIG_BOT_RESPONSE']))  { $GLOBALS['CONFIG_BOT_RESPONSE'] = 'channel';                      }
+   if(empty($GLOBALS['CONFIG_AUTO_OP']))       { $GLOBALS['CONFIG_AUTO_OP'] = 'yes';                               }
+   if(empty($GLOBALS['CONFIG_AUTO_REJOIN']))   { $GLOBALS['CONFIG_AUTO_REJOIN'] = 'yes';                           }
+   if(empty($GLOBALS['CONFIG_KEEP_NICK']))     { $GLOBALS['CONFIG_KEEP_NICK'] = 'yes';                             }
+   if(empty($GLOBALS['CONFIG_CNANNEL']))       { $GLOBALS['CONFIG_CNANNEL'] = '#davybot';                          }
+   if(empty($GLOBALS['CONFIG_AUTO_JOIN']))     { $GLOBALS['CONFIG_AUTO_JOIN'] = 'yes';                             }
+   if(empty($GLOBALS['CONFIG_CMD_PREFIX']))    { $GLOBALS['CONFIG_CMD_PREFIX'] = '!';                              }
+   if(empty($GLOBALS['CONFIG_CTCP_RESPONSE'])) { $GLOBALS['CONFIG_CTCP_RESPONSE'] = 'yes';                         }
+   //if(empty($GLOBALS['CONFIG_CTCP_VERSION']))  { $GLOBALS['CONFIG_CTCP_VERSION'] = 'davybot ('.VER.')';            }
+   //if(empty($GLOBALS['CONFIG_CTCP_FINGER']))   { $GLOBALS['CONFIG_CTCP_FINGER'] = 'davybot';                       }
+   if(empty($GLOBALS['CONFIG_LOGGING']))       { $GLOBALS['CONFIG_LOGGING'] = 'yes';                               }
+   if(empty($GLOBALS['CONFIG_TIMEZONE']))      { $GLOBALS['CONFIG_TIMEZONE'] = 'Europe/Warsaw';                    }
+   if(empty($GLOBALS['CONFIG_FETCH_SERVER']))  { $GLOBALS['CONFIG_FETCH_SERVER'] = 'https://raw.githubusercontent.com/S3x0r/davybot_repository_plugins/master';                                    }
+   if(empty($GLOBALS['CONFIG_SHOW_RAW']))      { $GLOBALS['CONFIG_SHOW_RAW'] = 'no';                               }
+
+   /* set timezone */
+   date_default_timezone_set($GLOBALS['CONFIG_TIMEZONE']);
 }
 //------------------------------------------------------------------------------------------------
 function CreateDefaultConfig($filename)
@@ -170,7 +230,7 @@ connect_delay    = \'3\'
 [ADMIN]
 auto_op_list     = \'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host\'
 bot_owners       = \'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host\'
-owner_password   = \'change_me!\'
+owner_password   = \'47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed\'
 
 [RESPONSE]
 bot_response     = \'channel\'
@@ -189,7 +249,7 @@ command_prefix   = \'!\'
 
 [CTCP]
 ctcp_response    = \'yes\'
-ctcp_version     = \'davybot ('.VER.')\'
+ctcp_version     = \'davybot ('.VER.') minions powered!\'
 ctcp_finger      = \'davybot\'
 
 [LOGS]
@@ -206,6 +266,9 @@ show_raw         = \'no\'';
 
     /* Save default config to file if no config */
     SaveToFile($filename, $default_config, 'w');
+
+    /* remove variable */
+	unset($default_config);
 
 	if(file_exists($filename))
 	{
@@ -225,15 +288,19 @@ function Logs()
   global $log_file;
 
   if(!is_dir('LOGS')) { mkdir('LOGS'); }
+
   $log_file = 'LOGS/LOG-'.date('d.m.Y').'.TXT';
+
   $data = "------------------LOG CREATED: ".date('d.m.Y | H:i:s')."------------------\r\n";
+
   SaveToFile($log_file, $data, 'a');
+
+  unset($data);
 }
 //------------------------------------------------------------------------------------------------
 function LoadPlugins()
 {
   $count1 = count(glob("PLUGINS/OWNER/*.php",GLOB_BRACE));
-  $b = fopen('plugins_owner.ini', 'w');
 
   CLI_MSG("Owner Plugins ($count1):", '0');
 
@@ -242,17 +309,15 @@ function LoadPlugins()
   foreach(glob('PLUGINS/OWNER/*.php') as $plugin_name)
   {
     include_once($plugin_name);
-	fwrite($b, $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ');
+	$GLOBALS['OWNER_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ';
     $plugin_name = basename($plugin_name, '.php');
     echo "$plugin_name -- $plugin_description\n";
   }
 
   echo "------------------------------------------------------------------------------\n";
 
-  fclose($b);
-//------
+//------------------------------------------------------------------------------------------------
   $count2 = count(glob("PLUGINS/USER/*.php",GLOB_BRACE));
-  $b = fopen('plugins_user.ini', 'w');
 
   CLI_MSG("User Plugins ($count2):", '0');
 
@@ -261,22 +326,24 @@ function LoadPlugins()
   foreach(glob('PLUGINS/USER/*.php') as $plugin_name)
   {
 	include_once($plugin_name);
-	fwrite($b, $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' '); 
+	$GLOBALS['USER_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' '; 
 	$plugin_name = basename($plugin_name, '.php');
     echo "$plugin_name -- $plugin_description\n";
-   }
- 
+  }
   $tot = $count1+$count2;
     
   echo "----------------------------------------------------------Total: ($tot)---------\n";
   
-  fclose($b);
-  
-  $GLOBALS['PLUGINS_OWNERS'] = file_get_contents("plugins_owner.ini"); 
-  $GLOBALS['PLUGINS_OWNERS'] = explode(" ", $GLOBALS['PLUGINS_OWNERS']);
+  $GLOBALS['OWNER_PLUGINS'] = explode(" ", $GLOBALS['OWNER_PLUGINS']);
+  $GLOBALS['USER_PLUGINS'] = explode(" ", $GLOBALS['USER_PLUGINS']);
 
-  $GLOBALS['PLUGINS_USERS'] = file_get_contents("plugins_user.ini"); 
-  $GLOBALS['PLUGINS_USERS'] = explode(" ", $GLOBALS['PLUGINS_USERS']);
+  /* remove variables */
+  unset($count1);
+  unset($count2);
+  unset($tot);
+  unset($plugin_name);
+  unset($plugin_command);
+  unset($plugin_description);
 
   /* Now its time to connect */
   Connect();
@@ -303,7 +370,8 @@ function Connect()
    }
 	else {
            Identify();
-	     }
+	       unset($i);
+		 }
   }
 }
 //------------------------------------------------------------------------------------------------
@@ -418,10 +486,12 @@ switch ($ex[1]){
 		 CLI_MSG('OK im connected, my nickname is: '.$GLOBALS['CONFIG_NICKNAME'], '1');
 		
 		 /* register to bot info */
-		 if($GLOBALS['if_first_time_pwd_change'] == '1') {
+		 if(isset($GLOBALS['if_first_time_pwd_change'])) {
 		 CLI_MSG('****************************************************', '0');
-		 CLI_MSG('Register to bot by typing /msg '.$GLOBALS['CONFIG_NICKNAME'].' register '.$GLOBALS['CONFIG_OWNER_PASSWD'], '0');
+		 CLI_MSG('Register to bot by typing /msg '.$GLOBALS['CONFIG_NICKNAME'].' register '.$GLOBALS['pwd'], '0');
 		 CLI_MSG('****************************************************', '0');
+		 unset($GLOBALS['pwd']);
+		 unset($GLOBALS['if_first_time_pwd_change']);
 		 }
 
 		 /* wcli extension */
@@ -431,7 +501,6 @@ switch ($ex[1]){
 		 if($GLOBALS['CONFIG_AUTO_JOIN'] == 'yes') { 
 		 CLI_MSG('Joining channel: '.$GLOBALS['CONFIG_CNANNEL'], '1');
 		 JOIN_CHANNEL($GLOBALS['CONFIG_CNANNEL']);
-		 $GLOBALS['bot_in_channel']='1';
 		 }
 		continue;
 //------------------------------------------------------------------------------------------------
@@ -467,14 +536,18 @@ switch ($ex[1]){
 	}	
 //------------------------------------------------------------------------------------------------
  /* if owner register -> add host to owner list in config */
- if($rawcmd[1] == 'register' && $args == $GLOBALS['CONFIG_OWNER_PASSWD'])
+ if($rawcmd[1] == 'register')
     {
+     $hashed = hash('sha256', $args);
+     
+	 if($hashed == $GLOBALS['CONFIG_OWNER_PASSWD']) {
+
 	 LoadData($GLOBALS['config_file'], 'ADMIN', 'bot_owners');
 
      $owners_list = $GLOBALS['LOADED'];
      $new         = trim($mask);
-	 if($owners_list == '') { $new_list = $new.''; }
-	 if($owners_list != '') { $new_list = $owners_list.', '.$new; }
+	 if(empty($owners_list)) { $new_list = $new.''; }
+	 if(!empty($owners_list)) { $new_list = $owners_list.', '.$new; }
 
      SaveData($GLOBALS['config_file'], 'ADMIN', 'bot_owners', $new_list);
 
@@ -483,14 +556,14 @@ switch ($ex[1]){
 
      $auto_list   = $GLOBALS['LOADED'];
      $new         = trim($mask);
-	 if($auto_list == '') { $new_list = $new.''; }
-	 if($auto_list != '') { $new_list = $auto_list.', '.$new; }
+	 if(empty($auto_list)) { $new_list = $new.''; }
+	 if(!empty($auto_list)) { $new_list = $auto_list.', '.$new; }
 
 	 SaveData($GLOBALS['config_file'], 'ADMIN', 'auto_op_list', $new_list);
      //-
 
-	 $owner_commands = file_get_contents('plugins_owner.ini');
-     $user_commands  = file_get_contents('plugins_user.ini');
+	 $owner_commands = implode(' ', $GLOBALS['OWNER_PLUGINS']);
+     $user_commands  = implode(' ', $GLOBALS['USER_PLUGINS']);
 
      /* inform user about this */
      NICK_MSG('From now you are on my owners list, enjoy.');
@@ -510,19 +583,28 @@ switch ($ex[1]){
      $cfg = new iniParser($GLOBALS['config_file']);
      $GLOBALS['CONFIG_OWNERS'] = $cfg->get("ADMIN","bot_owners");
 
-	 }
+     /* remove variables */
+	 unset($hashed);
+     unset($owners_list);
+     unset($new);
+     unset($new_list);
+     unset($auto_list);
+     unset($owner_commands);
+     unset($user_commands);
+     }
+	}
 //------------------------------------------------------------------------------------------------
  /* plugins commands */
 	if(HasOwner($mask))
 	{
 		$pn = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
-		if(in_array($rawcmd[1], $GLOBALS['PLUGINS_OWNERS'])) { call_user_func('plugin_'.$pn); }
-		if(in_array($rawcmd[1], $GLOBALS['PLUGINS_USERS'])) { call_user_func('plugin_'.$pn); }
+		if(in_array($rawcmd[1], $GLOBALS['OWNER_PLUGINS'])) { call_user_func('plugin_'.$pn); }
+		if(in_array($rawcmd[1], $GLOBALS['USER_PLUGINS'])) { call_user_func('plugin_'.$pn); }
 	}
 	else if(!HasOwner($mask))
 	{
 	  $pn = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
-	  if(in_array($rawcmd[1], $GLOBALS['PLUGINS_USERS'])) { call_user_func('plugin_'.$pn); }
+	  if(in_array($rawcmd[1], $GLOBALS['USER_PLUGINS'])) { call_user_func('plugin_'.$pn); }
 	}
 
    if(!function_exists('plugin_')) { function plugin_() { } }

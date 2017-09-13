@@ -1,4 +1,11 @@
    
+   v0.4.3 changes (13.09.2017):
+    - if some data from config.ini is missing, default will be loaded
+    - bot don't need plugins*.ini files anymore, they are stored in variables now
+    - owner_password in config is now hashed with SHA256
+    - new start logo :)
+    - little code cleanup
+
    v0.4.2 changes(12.09.2017):
     - bot don't need data.ini anymore, alt-nick in variable now
     - if default password detected prompt to change it - if password is shorter than 6 chars

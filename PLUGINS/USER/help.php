@@ -8,8 +8,8 @@ function plugin_help()
 {
   if(HasOwner($GLOBALS['mask']))
    {
-     $owner_cmd = file_get_contents('plugins_owner.ini');
-     $user_cmd  = file_get_contents('plugins_user.ini');
+     $owner_cmd = implode(' ', $GLOBALS['OWNER_PLUGINS']);
+     $user_cmd  = implode(' ', $GLOBALS['USER_PLUGINS']);
 
      BOT_RESPONSE('Owner Commands:');
      BOT_RESPONSE($owner_cmd);
