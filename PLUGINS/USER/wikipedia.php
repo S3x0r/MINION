@@ -9,7 +9,7 @@ function plugin_wikipedia()
   if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'wikipedia <lang> <string>'); } 
   
   else {
-         $query = $GLOBALS['piece2'].' '.$GLOBALS['piece3'].' '.$GLOBALS['piece4'];
+		 $query = $GLOBALS['piece2'].' '.$GLOBALS['piece3'].' '.$GLOBALS['piece4'];
          $json  = file_get_contents('https://'.$GLOBALS['piece1'].'.wikipedia.org/w/api.php?action=opensearch&list=search&search='.urlencode($query));
          $json  = json_decode($json);
 

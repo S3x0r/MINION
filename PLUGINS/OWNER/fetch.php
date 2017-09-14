@@ -20,19 +20,21 @@ function plugin_fetch()
 	  }
 
  else if($GLOBALS['piece1'] == 'get') {
+ 
+  if(!empty($GLOBALS['piece2'])) {
 
-   $address = $GLOBALS['CONFIG_FETCH_SERVER'].'/'.$GLOBALS['piece2'].'.php';  
-
-   BOT_RESPONSE('Downloading plugin: "'.$GLOBALS['piece2'].'" from repository');
-
-	$check_file = 'PLUGINS/'.$GLOBALS['piece2'].'.php';
+    $address = $GLOBALS['CONFIG_FETCH_SERVER'].'/'.$GLOBALS['piece2'].'.php';  
+    BOT_RESPONSE('Downloading plugin: "'.$GLOBALS['piece2'].'" from repository');
+    $check_file = 'PLUGINS/'.$GLOBALS['piece2'].'.php';
 
 	if(file_exists($check_file)) 
 		{
 		  BOT_RESPONSE('I already have this plugin, aborting.');
 		}
-	
+  }
    else {
+ 
+	   if(!empty($GLOBALS['piece2'])) {
 	      $file = file_get_contents($address);
 	      $a = fopen('PLUGINS/'.$GLOBALS['piece2'].'.php', 'w');
   
@@ -48,7 +50,8 @@ function plugin_fetch()
 			         fclose($a);
 					 BOT_RESPONSE('Plugin added.');
 					 CLI_MSG('!fetch: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', plugin: '.$GLOBALS['piece2'], '1');
-   			       }
+			  }
+				   }
    }
   }
  }

@@ -19,8 +19,8 @@ function plugin_help()
   
   else if(!HasOwner($GLOBALS['mask']))
    {
-     $user_cmd = file_get_contents('plugins_user.ini');
-
+	 $user_cmd  = implode(' ', $GLOBALS['USER_PLUGINS']);
+	
 	 BOT_RESPONSE('User Commands:');
      BOT_RESPONSE($user_cmd);
    }

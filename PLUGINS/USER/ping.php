@@ -19,7 +19,7 @@ function plugin_ping()
 		 $ping = ping($ip);
 		  if($ping)
 			  {
-				$ping[0] = $who.': '.$ping[0];
+				$ping[0] = $GLOBALS['nick'].': '.$ping[0];
 				foreach ($ping as $thisline) 
 				{
 				  BOT_RESPONSE($thisline);

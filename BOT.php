@@ -1,13 +1,13 @@
 <?php
 //------------------------------------------------------------------------------------------------
-define('VER', '0.4.3');
+define('VER', '0.4.4');
 
 define('START_TIME',time());
 define('PHP_VER',phpversion());
 
 set_time_limit(0);
 set_error_handler('ErrorHandler');
-error_reporting(E_ALL ^ E_NOTICE);
+error_reporting(-1);
 //------------------------------------------------------------------------------------------------
 Start('../');
 //------------------------------------------------------------------------------------------------
@@ -117,6 +117,9 @@ function LoadConfig($filename)
   /* DEBUG */
    $GLOBALS['CONFIG_SHOW_RAW']       = $cfg->get("DEBUG","show_raw");
 
+   /* Set default data */
+   SetDefaultData();
+
 //------------------------------------------------------------------------------------------------
   /* if default master password, prompt for change it! */
   if($GLOBALS['CONFIG_OWNER_PASSWD'] == '47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed')
@@ -161,9 +164,6 @@ function LoadConfig($filename)
    CLI_MSG('Configuration Loaded from: '.$config_file, '0');
    echo "------------------------------------------------------------------------------\n";
    
-   /* Set default data */
-   SetDefaultData();
-
    /* logging init */
    if($GLOBALS['CONFIG_LOGGING'] == 'yes') { Logs(); }
 
@@ -172,7 +172,10 @@ function LoadConfig($filename)
   }
 //------------------------------------------------------------------------------------------------  
  else {
-	    CLI_MSG("ERROR: Configuration file missing!", '0');
+	    /* set default logging */
+	    $GLOBALS['CONFIG_LOGGING'] = 'yes';
+		
+		CLI_MSG("ERROR: Configuration file missing!", '0');
 	    CLI_MSG("Creating default config in: CONFIG.INI - (need to be configured)\n", '0');
 	  
 	    /* Create default config */
@@ -278,7 +281,7 @@ show_raw         = \'no\'';
 
 	else if(!file_exists($filename))
 	{
-	  CLI_MSG('ERROR: Cannot make default config! Exiting.', '1');
+	  CLI_MSG('ERROR: Cannot make default config! Exiting.', '0');
 	  die();
 	}
 }
@@ -301,6 +304,7 @@ function Logs()
 function LoadPlugins()
 {
   $count1 = count(glob("PLUGINS/OWNER/*.php",GLOB_BRACE));
+  $GLOBALS['OWNER_PLUGINS'] = null;
 
   CLI_MSG("Owner Plugins ($count1):", '0');
 
@@ -320,6 +324,7 @@ function LoadPlugins()
   $count2 = count(glob("PLUGINS/USER/*.php",GLOB_BRACE));
 
   CLI_MSG("User Plugins ($count2):", '0');
+  $GLOBALS['USER_PLUGINS'] = null;
 
   echo "------------------------------------------------------------------------------\n";
   
@@ -368,7 +373,7 @@ function Connect()
 	 die(); /* TODO: send email that terminated program? */
 	 }
    }
-	else {
+	else { 
            Identify();
 	       unset($i);
 		 }
@@ -388,6 +393,7 @@ function Identify()
 function Engine()
 {
   global $args;
+  global $args1;
   global $nick;
   global $hostname;
   global $piece1;
@@ -398,10 +404,15 @@ function Engine()
   global $rawcmd;
   global $mask;
 
+  /* set initial */
+  $ident = null;
+  $host  = null;
+  $GLOBALS['I_USE_RND_NICKNAME'] = null;
+
 /* main socket loop */
 while(1) {
     while(!feof($GLOBALS['socket'])) {
-     $mask = NULL;
+     $mask = null;
      $data = fgets($GLOBALS['socket'], 512);
 
         if($GLOBALS['CONFIG_SHOW_RAW'] == 'yes') { echo $data; }
@@ -435,6 +446,10 @@ while(1) {
 
 /* auto op */
 		if($GLOBALS['CONFIG_AUTO_OP'] == 'yes') {
+            
+			$cfg = new iniParser($GLOBALS['config_file']);
+            $GLOBALS['CONFIG_AUTO_OP_LIST'] = $cfg->get("ADMIN","auto_op_list");
+
 			$auto_op_list_c = $GLOBALS['CONFIG_AUTO_OP_LIST'];
 			$pieces = explode(", ", $auto_op_list_c);
 
@@ -455,17 +470,19 @@ while(1) {
         $args = NULL; for($i=4; $i < count($ex); $i++) { $args .= $ex[$i].''; }
         $args1 = NULL; for($i=4; $i < count($ex); $i++) { $args1 .= $ex[$i].' '; }
 
-        $pieces = explode(" ", $args1);
-        $piece1 = $pieces[0];
-		$piece2 = $pieces[1];
-		$piece3 = $pieces[2];
-		$piece4 = $pieces[3];
-		//-
         if (isset($nick)) { $mask = $nick . "!" . $ident . "@" . $host; }
+
+        $pieces = explode(" ", $args1);
+        
+		if(isset($pieces[0])) { $piece1 = $pieces[0]; } else { $piece1 = ''; }
+        if(isset($pieces[1])) { $piece2 = $pieces[1]; } else { $piece2 = ''; }
+        if(isset($pieces[2])) { $piece3 = $pieces[2]; } else { $piece3 = ''; }
+        if(isset($pieces[3])) { $piece4 = $pieces[3]; } else { $piece4 = ''; }
 
 		$hostname = $ident . "@" . $host;
 //-----------
-switch ($ex[1]){
+if(isset($ex[1])) {
+ switch ($ex[1]){
 	
 	case '433': /* if nick already exists */
 	case '432': /* if nick reserved */
@@ -508,35 +525,39 @@ switch ($ex[1]){
 		CLI_MSG('* '.$nick.' ('.$ident.'@'.$host.') Quit', '1');
 		continue;
 //------------------------------------------------------------------------------------------------
+ }
 }
-
  /* CTCP */
-     if($GLOBALS['CONFIG_CTCP_RESPONSE'] == 'yes') {
+     if($GLOBALS['CONFIG_CTCP_RESPONSE'] == 'yes' && isset($rawcmd[1])) {
       
 	  switch ($rawcmd[1]){
 	
 		case 'VERSION':
 		fputs($GLOBALS['socket'], "NOTICE $nick :VERSION ".$GLOBALS['CONFIG_CTCP_VERSION']."\n");
+		CLI_MSG('CTCP VERSION BY: '.$GLOBALS['nick'], '1');
 		break;
 
 		case 'FINGER':
 		fputs($GLOBALS['socket'], "NOTICE $nick :FINGER ".$GLOBALS['CONFIG_CTCP_FINGER']."\n");
+		CLI_MSG('CTCP FINGER BY: '.$GLOBALS['nick'], '1');
 		break;
 
 		case 'PING':
 		$a = str_replace(" ","",$args);
         fputs($GLOBALS['socket'], "NOTICE $nick :PING ".$a."\n");
+		CLI_MSG('CTCP PING BY: '.$GLOBALS['nick'], '1');
 		break;
 
 		case 'TIME':
         $a = date("F j, Y, g:i a");
         fputs($GLOBALS['socket'], "NOTICE $nick :TIME ".$a."\n");
+		CLI_MSG('CTCP TIME BY: '.$GLOBALS['nick'], '1');
 		break;
 	  }
 	}	
 //------------------------------------------------------------------------------------------------
  /* if owner register -> add host to owner list in config */
- if($rawcmd[1] == 'register')
+ if(isset($rawcmd[1]) && $rawcmd[1] == 'register')
     {
      $hashed = hash('sha256', $args);
      
@@ -595,13 +616,13 @@ switch ($ex[1]){
 	}
 //------------------------------------------------------------------------------------------------
  /* plugins commands */
-	if(HasOwner($mask))
+	if(HasOwner($mask) && isset($rawcmd[1]))
 	{
 		$pn = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
 		if(in_array($rawcmd[1], $GLOBALS['OWNER_PLUGINS'])) { call_user_func('plugin_'.$pn); }
 		if(in_array($rawcmd[1], $GLOBALS['USER_PLUGINS'])) { call_user_func('plugin_'.$pn); }
 	}
-	else if(!HasOwner($mask))
+	else if(!HasOwner($mask) && isset($rawcmd[1]))
 	{
 	  $pn = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
 	  if(in_array($rawcmd[1], $GLOBALS['USER_PLUGINS'])) { call_user_func('plugin_'.$pn); }

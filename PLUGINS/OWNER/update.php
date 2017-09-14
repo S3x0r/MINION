@@ -4,15 +4,16 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
  $plugin_description = 'Updates the BOT if new version is available: '.$GLOBALS['CONFIG_CMD_PREFIX'].'update';
  $plugin_command = 'update';
 
- $GLOBALS['v_addr']   = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
- $GLOBALS['v_source'] = 'http://github.com/S3x0r/davybot/archive/master.zip';
- $GLOBALS['dir']      = '../';
- $GLOBALS['newdir']   = $GLOBALS['dir'].'davybot'.$GLOBALS['CheckVersion'];
-
 //------------------------------------------------------------------------------------------------
  function plugin_update()
  {
   CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'update on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+
+  $GLOBALS['v_addr']   = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
+  $GLOBALS['v_source'] = 'http://github.com/S3x0r/davybot/archive/master.zip';
+  $GLOBALS['dir']      = '../';
+  $GLOBALS['newdir']   = $GLOBALS['dir'].'davybot'.$GLOBALS['CheckVersion'];
+  
   v_connect();
  }
 //------------------------------------------------------------------------------------------------
