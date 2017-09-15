@@ -1,5 +1,7 @@
 <?php
-define('VER', '0.4.5');
+if (PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
+//---------------------------------------------------------------------------------------------------------
+define('VER', '0.4.6');
 //---------------------------------------------------------------------------------------------------------
 define('START_TIME', time());
 define('PHP_VER', phpversion());
@@ -8,13 +10,15 @@ set_time_limit(0);
 set_error_handler('ErrorHandler');
 error_reporting(-1);
 //---------------------------------------------------------------------------------------------------------
-Start('../');
+Start();
 //---------------------------------------------------------------------------------------------------------
-function Start($path) {
+function Start() {
 
-    if (PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
-
-    /* change default directory path */
+    /* check os type and set path */
+    if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') { $path = '../'; }
+    else { $path = '.'; }
+	
+	/* change default directory path */
     chdir($path);
 
     /* wcli extension */ 
@@ -355,7 +359,7 @@ function LoadPlugins() {
 //---------------------------------------------------------------------------------------------------------
 function Connect() {
 
-    CLI_MSG('Connecting to: '.$GLOBALS['CONFIG_SERVER'].', port: '.$GLOBALS['CONFIG_PORT'], '0');
+    CLI_MSG('Connecting to: '.$GLOBALS['CONFIG_SERVER'].', port: '.$GLOBALS['CONFIG_PORT']."\n", '1');
 
     $i=0;
 
@@ -470,8 +474,9 @@ function Engine() {
 		$rawcmd = explode (':', $ex[3]);
         $args = NULL; for($i=4; $i < count($ex); $i++) { $args .= $ex[$i].''; }
         $args1 = NULL; for($i=4; $i < count($ex); $i++) { $args1 .= $ex[$i].' '; }
-
-        if (isset($nick)) { $mask = $nick . "!" . $ident . "@" . $host; }
+        $srv_msg = NULL; for($i=3; $i < count($ex); $i++) { $srv_msg .= str_replace(':', '', $ex[$i]).' '; }
+        
+		if (isset($nick)) { $mask = $nick . "!" . $ident . "@" . $host; }
 
         $pieces = explode(" ", $args1);
         
@@ -485,6 +490,10 @@ function Engine() {
     if (isset($ex[1])) {
     switch ($ex[1]){
 	
+    case '001': CLI_MSG('>'.$srv_msg, '1'); break; /* server welcome message */
+    case '002': CLI_MSG('>'.$srv_msg, '1'); break; /* host, version server */
+	case '003': CLI_MSG('>'.$srv_msg, '1'); break; /* server creation time */
+	case '332': CLI_MSG('> Topic on: '.$srv_msg, '1'); break; /* topic */
 	case '433': /* if nick already exists */
 	case '432': /* if nick reserved */
 		 /* keep nick */
@@ -501,6 +510,7 @@ function Engine() {
 //---------------------------------------------------------------------------------------------------------
     case '422': /* join if no motd */
     case '376': /* join after motd */
+		 echo "\n";
 		 CLI_MSG('OK im connected, my nickname is: '.$GLOBALS['CONFIG_NICKNAME'], '1');
 		
 		 /* register to bot info */

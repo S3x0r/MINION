@@ -20,8 +20,13 @@ OWNERS HOSTS - EDIT IT (CONFIG.INI) FOR USING BOT COMMANDS!
            |      |       |
 example: S3x0r!~S3x0r@12-123-48-249.dsl.dynamic.simnet.is
 
-Bot was writted to run from Windows systems, tested on Windows 7, XP
-You dont need to download PHP, just run bot from START_BOT.BAT file
+Bot was writted to run from Windows systems (tested on Windows 7, XP)
+but you can also run it from Linux/Unix by typing: 'php -f BOT.php'
+To have all plugins working (on Linux/Unix) you need to enable
+two extension modules in your php.ini config, modules: php_openssl, php_curl
+and set allow_url_fopen=1 in php.ini
+
+From windows you dont need to download PHP, just run bot from START_BOT.BAT file
 
 To run bot with diffrent config file: php.exe "../BOT.php" some_other_config.ini
 

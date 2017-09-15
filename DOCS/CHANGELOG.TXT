@@ -1,4 +1,9 @@
    
+   v0.4.6 changes (15.09.2017):
+    - more output from server now in cli + logs
+    - Bot is now platform independent, you can also run it from Linux/Unix
+    - plugin !update - fixed
+
    v0.4.5 changes (15.09.2017):
     - more code optimization
 
