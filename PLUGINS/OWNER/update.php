@@ -150,7 +150,7 @@ function v_extract() {
     $GLOBALS['CONFIG_CMD_PREFIX']     = $cfg->get("COMMAND","command_prefix");
     /* CTCP */
     $GLOBALS['CONFIG_CTCP_RESPONSE']  = $cfg->get("CTCP","ctcp_response");
-    $GLOBALS['CONFIG_CTCP_VERSION']   = $cfg->get("CTCP","ctcp_version");
+    //$GLOBALS['CONFIG_CTCP_VERSION']   = $cfg->get("CTCP","ctcp_version");
     $GLOBALS['CONFIG_CTCP_FINGER']    = $cfg->get("CTCP","ctcp_finger");
     /* LOGGING */
     $GLOBALS['CONFIG_LOGGING']        = $cfg->get("LOGS","logging");
@@ -182,7 +182,7 @@ function v_extract() {
 	SaveData($new_cf, 'CHANNEL', 'auto_join', $GLOBALS['CONFIG_AUTO_JOIN']);
     SaveData($new_cf, 'COMMAND', 'command_prefix', $GLOBALS['CONFIG_CMD_PREFIX']);
     SaveData($new_cf, 'CTCP', 'ctcp_response', $GLOBALS['CONFIG_CTCP_RESPONSE']);
-	SaveData($new_cf, 'CTCP', 'ctcp_version', $GLOBALS['CONFIG_CTCP_VERSION']);
+	//SaveData($new_cf, 'CTCP', 'ctcp_version', $GLOBALS['CONFIG_CTCP_VERSION']);
 	SaveData($new_cf, 'CTCP', 'ctcp_finger', $GLOBALS['CONFIG_CTCP_FINGER']);
     SaveData($new_cf, 'LOGS', 'logging', $GLOBALS['CONFIG_LOGGING']);
 	SaveData($new_cf, 'TIME', 'time_zone', $GLOBALS['CONFIG_TIMEZONE']);
@@ -198,7 +198,7 @@ function v_extract() {
    
     /* if windows */
 	if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') { system('cd '.$GLOBALS['newdir'].' & START_BOT.BAT'); }
-	else { system('cd '.$GLOBALS['newdir'].' & php -f '.$GLOBALS['newdir'].'/BOT.php'); }
+	else { system('cd '.$GLOBALS['newdir'].' & php -f BOT.php'); }
     
 	die();
 
