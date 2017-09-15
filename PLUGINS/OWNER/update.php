@@ -198,8 +198,7 @@ function v_extract() {
    
     /* if windows */
 	if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') { system('cd '.$GLOBALS['newdir'].' & START_BOT.BAT'); }
-	else { system('cd '.$GLOBALS['newdir'].' & php -f BOT.php'); }
-    
+	else { system('cd '.$GLOBALS['newdir'].' & php -f '.$GLOBALS['newdir'].'/BOT.php '.$GLOBALS['newdir'].'/CONFIG.INI'); }
 	die();
 
 } else {
