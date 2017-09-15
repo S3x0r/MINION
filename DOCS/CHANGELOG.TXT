@@ -1,4 +1,7 @@
    
+   v0.4.5 changes (15.09.2017):
+    - more code optimization
+
    v0.4.4 changes (14.09.2017):
     - we have full error reporting now
     - auto_op update fix
