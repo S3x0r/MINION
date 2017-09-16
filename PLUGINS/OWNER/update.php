@@ -9,17 +9,16 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
  {
   CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'update on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
 
-  $GLOBALS['v_addr']   = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
-  $GLOBALS['v_source'] = 'http://github.com/S3x0r/davybot/archive/master.zip';
-  $GLOBALS['dir']      = '../';
-  $GLOBALS['newdir']   = $GLOBALS['dir'].'davybot'.$GLOBALS['CheckVersion'];
-  
   v_connect();
  }
 //------------------------------------------------------------------------------------------------
 function v_connect()
 {
+
+  $GLOBALS['v_addr']   = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
   $GLOBALS['CheckVersion'] = file_get_contents($GLOBALS['v_addr']);
+  $GLOBALS['newdir']   = '../davybot'.$GLOBALS['CheckVersion'];
+  $GLOBALS['v_source'] = 'http://github.com/S3x0r/davybot/archive/master.zip';
 
  if($GLOBALS['CheckVersion'] !='')
 		 {
@@ -56,7 +55,7 @@ function v_tryDownload()
 	  CLI_MSG('[BOT] Downloading update...', '1');
 
 	  $newUpdate = file_get_contents($GLOBALS['v_source']);
-      $dlHandler = fopen($GLOBALS['dir'].'update.zip', 'w');
+      $dlHandler = fopen('update.zip', 'w');
       
 	  if(!fwrite($dlHandler, $newUpdate)) {
 		  BOT_RESPONSE('Could not save new update, operation aborted');
@@ -95,7 +94,6 @@ function delete_files($target) {
         {
             delete_files( $file );
         }
-		unlink($GLOBALS['newdir'].'/davybot-master/.gitattributes');
         rmdir( $target );
     } elseif(is_file($target)) {
         unlink( $target );  
@@ -109,59 +107,53 @@ function v_extract() {
 
     /* Extracting update */
 	$zip = new ZipArchive;
-	if ($zip->open($GLOBALS['dir'].'update.zip') === TRUE) {
-    $zip->extractTo($GLOBALS['newdir']);
+	if ($zip->open('update.zip') === TRUE) {
+    $zip->extractTo('.');
     $zip->close();
-    
+  
 	BOT_RESPONSE('Extracted.');
 	CLI_MSG('[BOT] Extracted.', '1');
+
+	unlink('davybot-master/.gitattributes');
 	
-	recurse_copy($GLOBALS['newdir'].'/davybot-master', $GLOBALS['newdir']);
-	delete_files($GLOBALS['newdir'].'/davybot-master');
-	
-	//delete downloaded zip
-	unlink($GLOBALS['dir'].'update.zip');
+	/* copy from extracted dir to -> new dir */
+	recurse_copy("davybot-master/",$GLOBALS['newdir']);
+
+	/* delete downloaded zip */
+	unlink('update.zip');
+	unlink($GLOBALS['newdir'].'/.gitattributes');
+
+    /* delete extracted dir */  
+	delete_files('davybot-master');
 	
 	//read config and put to new version conf
 	$cfg = new iniParser($GLOBALS['config_file']);
-    /* BOT */
     $GLOBALS['CONFIG_NICKNAME']       = $cfg->get("BOT","nickname");
     $GLOBALS['CONFIG_NAME']           = $cfg->get("BOT","name");
     $GLOBALS['CONFIG_IDENT']          = $cfg->get("BOT","ident");
-    /* SERVER */ 
     $GLOBALS['CONFIG_SERVER']         = $cfg->get("SERVER","server");
     $GLOBALS['CONFIG_PORT']           = $cfg->get("SERVER","port");
     $GLOBALS['CONFIG_TRY_CONNECT']    = $cfg->get("SERVER","try_connect");
     $GLOBALS['CONFIG_CONNECT_DELAY']  = $cfg->get("SERVER","connect_delay"); 
-    /* ADMIN */
     $GLOBALS['CONFIG_AUTO_OP_LIST']   = $cfg->get("ADMIN","auto_op_list");
     $GLOBALS['CONFIG_OWNERS']         = $cfg->get("ADMIN","bot_owners");
     $GLOBALS['CONFIG_OWNER_PASSWD']   = $cfg->get("ADMIN","owner_password");
-    /* BOT RESPONSE */
     $GLOBALS['CONFIG_BOT_RESPONSE']   = $cfg->get("RESPONSE","bot_response");
-    /* AUTOMATIC */
     $GLOBALS['CONFIG_AUTO_OP']        = $cfg->get("AUTOMATIC","auto_op");
     $GLOBALS['CONFIG_AUTO_REJOIN']    = $cfg->get("AUTOMATIC","auto_rejoin");
     $GLOBALS['CONFIG_KEEP_NICK']      = $cfg->get("AUTOMATIC","keep_nick");
-    /* CHANNEL */
     $GLOBALS['CONFIG_CNANNEL']        = $cfg->get("CHANNEL","channel");
     $GLOBALS['CONFIG_AUTO_JOIN']      = $cfg->get("CHANNEL","auto_join");
-    /* COMMAND PREFIX */ 
     $GLOBALS['CONFIG_CMD_PREFIX']     = $cfg->get("COMMAND","command_prefix");
-    /* CTCP */
     $GLOBALS['CONFIG_CTCP_RESPONSE']  = $cfg->get("CTCP","ctcp_response");
     //$GLOBALS['CONFIG_CTCP_VERSION']   = $cfg->get("CTCP","ctcp_version");
     $GLOBALS['CONFIG_CTCP_FINGER']    = $cfg->get("CTCP","ctcp_finger");
-    /* LOGGING */
     $GLOBALS['CONFIG_LOGGING']        = $cfg->get("LOGS","logging");
-    /* TIMEZONE */
     $GLOBALS['CONFIG_TIMEZONE']       = $cfg->get("TIME","time_zone");
-    /* FETCH */
     $GLOBALS['CONFIG_FETCH_SERVER']   = $cfg->get("FETCH","fetch_server");
-    /* DEBUG */
     $GLOBALS['CONFIG_SHOW_RAW']       = $cfg->get("DEBUG","show_raw");
 
-	/* save to new config */ 
+	// save to new config
     $new_cf = $GLOBALS['newdir'].'/CONFIG.INI';
 
     SaveData($new_cf, 'BOT', 'nickname', $GLOBALS['CONFIG_NICKNAME']);
@@ -196,8 +188,9 @@ function v_extract() {
     fputs($GLOBALS['socket'],"QUIT :Installing update...\n");
     CLI_MSG('[BOT] Restarting bot to new version...', '1');
    
-    /* if windows */
+    // if windows
 	if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') { system('cd '.$GLOBALS['newdir'].' & START_BOT.BAT'); }
+
 	else { system('cd '.$GLOBALS['newdir'].' & php -f '.$GLOBALS['newdir'].'/BOT.php '.$GLOBALS['newdir'].'/CONFIG.INI'); }
 	die();
 
