@@ -18,7 +18,7 @@ function Start() {
     if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') { $path = '../'; }
     else { $path = '.'; $GLOBALS['OS_TYPE']='other'; }
 
-	/* change default directory path */
+    /* change default directory path */
     chdir($path);
 
     /* wcli extension */
@@ -128,38 +128,38 @@ function LoadConfig($filename) {
    if ($GLOBALS['CONFIG_OWNER_PASSWD'] == '47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed')
    {
      CLI_MSG('Default owner bot password detected!', '0');
-	 CLI_MSG('For security please change it', '0');
+     CLI_MSG('For security please change it', '0');
 
      echo '[' . @date( 'H:i:s' ) . '] New Password: ';
 
      $STDIN =  fopen('php://stdin','r');
-	 $new_pwd = fread($STDIN, 30);
+     $new_pwd = fread($STDIN, 30);
 
      while(strlen($new_pwd) < 8) {
      echo '[' . @date( 'H:i:s' ) . "] Password too short, password must be at least 6 characters long\n";
      echo '[' . @date( 'H:i:s' ) . '] New Password: ';
      unset($new_pwd);
-	 $new_pwd = fread($STDIN, 30);
+     $new_pwd = fread($STDIN, 30);
      }
 
-	 /* keep pwd as normal text */
-	 $GLOBALS['pwd'] = rtrim($new_pwd, "\n\r");
+     /* keep pwd as normal text */
+     $GLOBALS['pwd'] = rtrim($new_pwd, "\n\r");
 
      /* hash pwd */
-	 $hashed = hash('sha256', $GLOBALS['pwd']);
+     $hashed = hash('sha256', $GLOBALS['pwd']);
 
-	 /* save pwd to file */
-	 SaveData($config_file, 'ADMIN', 'owner_password', $hashed);
+     /* save pwd to file */
+     SaveData($config_file, 'ADMIN', 'owner_password', $hashed);
 
-	 /* remove pwd checking vars */
-	 unset($new_pwd);
-	 unset($STDIN);
-	 unset($hashed);
+     /* remove pwd checking vars */
+     unset($new_pwd);
+     unset($STDIN);
+     unset($hashed);
 
      /* Set first time change variable */
      $GLOBALS['if_first_time_pwd_change'] = '1';
 
-	 /* load config again */
+     /* load config again */
      LoadConfig($config_file);
    }
 //---------------------------------------------------------------------------------------------------------  
@@ -274,19 +274,19 @@ show_raw         = \'no\'';
     SaveToFile($filename, $default_config, 'w');
 
     /* remove variable */
-	unset($default_config);
+    unset($default_config);
 
-	if (file_exists($filename))
-	{
-      /* Load config again */
-      LoadConfig($filename);
-	}
+    if (file_exists($filename))
+     {
+       /* Load config again */
+       LoadConfig($filename);
+     }
 
-	else if (!file_exists($filename))
-	{
-	  CLI_MSG('ERROR: Cannot make default config! Exiting.', '0');
-	  die();
-	}
+     else if (!file_exists($filename))
+     {
+       CLI_MSG('ERROR: Cannot make default config! Exiting.', '0');
+       die();
+     }
 }
 //---------------------------------------------------------------------------------------------------------
 function Logs() {
@@ -316,7 +316,7 @@ function LoadPlugins() {
     foreach(glob('PLUGINS/OWNER/*.php') as $plugin_name)
     {
       include_once($plugin_name);
-	  $GLOBALS['OWNER_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ';
+      $GLOBALS['OWNER_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ';
       $plugin_name = basename($plugin_name, '.php');
       echo "$plugin_name -- $plugin_description\n";
     }
@@ -333,9 +333,9 @@ function LoadPlugins() {
   
     foreach(glob('PLUGINS/USER/*.php') as $plugin_name)
     {
-	  include_once($plugin_name);
-	  $GLOBALS['USER_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' '; 
-	  $plugin_name = basename($plugin_name, '.php');
+      include_once($plugin_name);
+      $GLOBALS['USER_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' '; 
+      $plugin_name = basename($plugin_name, '.php');
       echo "$plugin_name -- $plugin_description\n";
     }
     $tot = $count1+$count2;
@@ -369,18 +369,18 @@ function Connect() {
       $GLOBALS['socket'] = fsockopen($GLOBALS['CONFIG_SERVER'], $GLOBALS['CONFIG_PORT']);
 
       if ($GLOBALS['socket']==false) {
-	   CLI_MSG('Unable to connect to server, im trying to connect again...', '1');
+       CLI_MSG('Unable to connect to server, im trying to connect again...', '1');
        sleep($GLOBALS['CONFIG_CONNECT_DELAY']); 
       if ($i==$GLOBALS['CONFIG_TRY_CONNECT']) {
        CLI_MSG('Unable to connect to server, exiting program.', '1');
-	   die(); /* TODO: send email that terminated program? */
-	  }
+       die(); /* TODO: send email that terminated program? */
+      }
      }
-	else { 
-           Identify();
-	       unset($i);
-		 }
-    }
+      else { 
+             Identify();
+             unset($i);
+           }
+   }
 }
 //---------------------------------------------------------------------------------------------------------
 function Identify() {
@@ -418,16 +418,16 @@ function Engine() {
      $mask = null;
      $data = fgets($GLOBALS['socket'], 512);
 
-        if ($GLOBALS['CONFIG_SHOW_RAW'] == 'yes') { echo $data; }
+     if ($GLOBALS['CONFIG_SHOW_RAW'] == 'yes') { echo $data; }
 
-        flush();
-        $ex = explode(' ', trim($data));
+     flush();
+     $ex = explode(' ', trim($data));
 
-    /* ping response */
-		if (isset($ex[0]) && $ex[0] == 'PING') {
-            fputs($GLOBALS['socket'], "PONG ".$ex[1]."\n");
-            continue; 
-        }
+     /* ping response */
+     if (isset($ex[0]) && $ex[0] == 'PING') {
+         fputs($GLOBALS['socket'], "PONG ".$ex[1]."\n");
+         continue; 
+     }
 
     /* rejoin when kicked */
 		if ($GLOBALS['CONFIG_AUTO_REJOIN'] == 'yes') {
@@ -471,7 +471,7 @@ function Engine() {
 		if (count ($ex) < 4)
         continue;
         
-		$rawcmd = explode (':', $ex[3]);
+        $rawcmd = explode (':', $ex[3]);
         $args = NULL; for($i=4; $i < count($ex); $i++) { $args .= $ex[$i].''; }
         $args1 = NULL; for($i=4; $i < count($ex); $i++) { $args1 .= $ex[$i].' '; }
         $srv_msg = NULL; for($i=3; $i < count($ex); $i++) { $srv_msg .= str_replace(':', '', $ex[$i]).' '; }
@@ -485,22 +485,22 @@ function Engine() {
         if (isset($pieces[2])) { $piece3 = $pieces[2]; } else { $piece3 = ''; }
         if (isset($pieces[3])) { $piece4 = $pieces[3]; } else { $piece4 = ''; }
 
-		$hostname = $ident . "@" . $host;
+        $hostname = $ident . "@" . $host;
 
     if (isset($ex[1])) {
     switch ($ex[1]){
 	
     case '001': CLI_MSG('>'.$srv_msg, '1'); break; /* server welcome message */
     case '002': CLI_MSG('>'.$srv_msg, '1'); break; /* host, version server */
-	case '003': CLI_MSG('>'.$srv_msg, '1'); break; /* server creation time */
-	case '332': CLI_MSG('> Topic on: '.$srv_msg, '1'); break; /* topic */
-	case '433': /* if nick already exists */
-	case '432': /* if nick reserved */
+    case '003': CLI_MSG('>'.$srv_msg, '1'); break; /* server creation time */
+    case '332': CLI_MSG('> Topic on: '.$srv_msg, '1'); break; /* topic */
+    case '433': /* if nick already exists */
+    case '432': /* if nick reserved */
 		 /* keep nick */
-		 if ($GLOBALS['CONFIG_KEEP_NICK']=='yes') { 
-		 $GLOBALS['NICKNAME_FROM_CONFIG'] = $GLOBALS['CONFIG_NICKNAME']; 
+         if ($GLOBALS['CONFIG_KEEP_NICK']=='yes') { 
+         $GLOBALS['NICKNAME_FROM_CONFIG'] = $GLOBALS['CONFIG_NICKNAME']; 
          $GLOBALS['I_USE_RND_NICKNAME']='1';
-		 $GLOBALS['first_time'] = time(); }
+         $GLOBALS['first_time'] = time(); }
 		   
          /* set random nick */		 
 		 $GLOBALS['CONFIG_NICKNAME'] = $GLOBALS['CONFIG_NICKNAME'].'|'.rand(0,99);
@@ -538,34 +538,34 @@ function Engine() {
 //---------------------------------------------------------------------------------------------------------
  }
 }
-    /* CTCP */
-     if ($GLOBALS['CONFIG_CTCP_RESPONSE'] == 'yes' && isset($rawcmd[1])) {
+  /* CTCP */
+  if ($GLOBALS['CONFIG_CTCP_RESPONSE'] == 'yes' && isset($rawcmd[1])) {
       
-	  switch ($rawcmd[1]){
+   switch ($rawcmd[1]){
 	
-		case 'VERSION':
-		fputs($GLOBALS['socket'], "NOTICE $nick :VERSION ".$GLOBALS['CONFIG_CTCP_VERSION']."\n");
-		CLI_MSG('CTCP VERSION BY: '.$GLOBALS['nick'], '1');
-		break;
+    case 'VERSION':
+    fputs($GLOBALS['socket'], "NOTICE $nick :VERSION ".$GLOBALS['CONFIG_CTCP_VERSION']."\n");
+    CLI_MSG('CTCP VERSION BY: '.$GLOBALS['nick'], '1');
+    break;
 
-		case 'FINGER':
-		fputs($GLOBALS['socket'], "NOTICE $nick :FINGER ".$GLOBALS['CONFIG_CTCP_FINGER']."\n");
-		CLI_MSG('CTCP FINGER BY: '.$GLOBALS['nick'], '1');
-		break;
+    case 'FINGER':
+    fputs($GLOBALS['socket'], "NOTICE $nick :FINGER ".$GLOBALS['CONFIG_CTCP_FINGER']."\n");
+    CLI_MSG('CTCP FINGER BY: '.$GLOBALS['nick'], '1');
+    break;
 
-		case 'PING':
-		$a = str_replace(" ","",$args);
-        fputs($GLOBALS['socket'], "NOTICE $nick :PING ".$a."\n");
-		CLI_MSG('CTCP PING BY: '.$GLOBALS['nick'], '1');
-		break;
+    case 'PING':
+    $a = str_replace(" ","",$args);
+    fputs($GLOBALS['socket'], "NOTICE $nick :PING ".$a."\n");
+    CLI_MSG('CTCP PING BY: '.$GLOBALS['nick'], '1');
+    break;
 
-		case 'TIME':
-        $a = date("F j, Y, g:i a");
-        fputs($GLOBALS['socket'], "NOTICE $nick :TIME ".$a."\n");
-		CLI_MSG('CTCP TIME BY: '.$GLOBALS['nick'], '1');
-		break;
-     }
-    }	
+    case 'TIME':
+    $a = date("F j, Y, g:i a");
+    fputs($GLOBALS['socket'], "NOTICE $nick :TIME ".$a."\n");
+    CLI_MSG('CTCP TIME BY: '.$GLOBALS['nick'], '1');
+    break;
+    }
+   }	
 //---------------------------------------------------------------------------------------------------------
     /* if owner register -> add host to owner list in config */
     if (isset($rawcmd[1]) && $rawcmd[1] == 'register')
@@ -615,7 +615,7 @@ function Engine() {
       $GLOBALS['CONFIG_OWNERS'] = $cfg->get("ADMIN","bot_owners");
 
       /* remove variables */
-	  unset($hashed);
+      unset($hashed);
       unset($owners_list);
       unset($new);
       unset($new_list);
@@ -636,7 +636,7 @@ function Engine() {
      {
        $pn = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
        if (in_array($rawcmd[1], $GLOBALS['USER_PLUGINS'])) { call_user_func('plugin_'.$pn); }
-	 }
+     }
 
     if (!function_exists('plugin_')) { function plugin_() { } }
 //---------------------------------------------------------------------------------------------------------
@@ -738,7 +738,7 @@ function CLI_MSG($msg, $log) {
     $line = '[' . @date( 'H:i:s' ) . '] ' . $msg . "\r\n";
 
     if ($GLOBALS['CONFIG_LOGGING'] == 'yes') 
-	{
+    {
       if ($log=='1') { SaveToFile($GLOBALS['log_file'], $line, 'a'); }
     }
 
