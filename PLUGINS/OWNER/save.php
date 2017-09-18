@@ -1,15 +1,14 @@
 <?php
-if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
+if (PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Saving to config file: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save help to list commands';
- $plugin_command = 'save';
+    $plugin_description = 'Saving to config file: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save help to list commands';
+    $plugin_command = 'save';
 
-function plugin_save()
-{
+function plugin_save() {
 
-  if(empty($GLOBALS['args'])) { NICK_MSG('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save <help> to list commands'); } 
+    if (empty($GLOBALS['args'])) { NICK_MSG('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save <help> to list commands'); } 
   
-  else {
+    else {
 
     switch($GLOBALS['args']) {
 
@@ -40,9 +39,9 @@ function plugin_save()
 		NICK_MSG('save try_connect - Saving how many times try connect to server: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save try_connect <value>');
 		break;
 
-	}
+    }
 
-   switch($GLOBALS['piece1']) {
+    switch($GLOBALS['piece1']) {
 
 	 case 'auto_join':
      SaveData($GLOBALS['config_file'], 'CHANNEL', 'auto_join', $GLOBALS['piece2']);

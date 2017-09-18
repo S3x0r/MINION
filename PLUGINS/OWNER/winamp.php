@@ -1,8 +1,8 @@
 <?php
-if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
+if (PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Controls winamp: '.$GLOBALS['CONFIG_CMD_PREFIX'].'winamp <help>';
- $plugin_command = 'winamp';
+    $plugin_description = 'Controls winamp: '.$GLOBALS['CONFIG_CMD_PREFIX'].'winamp <help>';
+    $plugin_command = 'winamp';
 
 /* 
    NEED TO CONFIGURE!
@@ -13,13 +13,13 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 //---
 
 
-function plugin_winamp()
-{
-  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'winamp on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+function plugin_winamp() {
 
-  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'winamp <help> to list commands'); } 
+    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'winamp on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+
+    if (empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'winamp <help> to list commands'); } 
   
-  else {
+     else {
 
     	switch($GLOBALS['args']) {
 
@@ -39,14 +39,13 @@ function plugin_winamp()
 			case 'next': exec($GLOBALS['winamp_loc'].' /next'); sendTitle($target); break;
 			case 'prev': exec($GLOBALS['winamp_loc'].' /prev'); sendTitle($target); break;
 			case 'title': sendTitle($target); break;
-		}
- }
+		    }
+          }
 }
 
-function sendTitle($target)
-{
-  $title = exec($GLOBALS['winamp_loc'].' /title');
-  BOT_RESPONSE("Playing: ".$title, $target);
-}
+function sendTitle($target) {
 
+    $title = exec($GLOBALS['winamp_loc'].' /title');
+    BOT_RESPONSE("Playing: ".$title, $target);
+}
 ?>

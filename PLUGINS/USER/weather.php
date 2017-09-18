@@ -1,8 +1,8 @@
 <?php
-if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
+if (PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Shows actual weather: '.$GLOBALS['CONFIG_CMD_PREFIX'].'weather <city>';
- $plugin_command = 'weather';
+    $plugin_description = 'Shows actual weather: '.$GLOBALS['CONFIG_CMD_PREFIX'].'weather <city>';
+    $plugin_command = 'weather';
 
 /*
  
@@ -10,17 +10,16 @@ if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use 
 
  */
 
-function plugin_weather()
-{
+function plugin_weather() {
 
-  if (empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'weather <city>'); } 
+    if (empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'weather <city>'); } 
   
-   else {
+     else {
 
-		$query = str_replace(" ","_", $GLOBALS['args']);
-		$query = urlencode($query);
+	       $query = str_replace(" ","_", $GLOBALS['args']);
+		   $query = urlencode($query);
 
-		$w = json_decode(get_contents('http://api.wunderground.com/api/d05f04ecd492639d/conditions/q/' . $query . '.json'),TRUE);
+		   $w = json_decode(get_contents('http://api.wunderground.com/api/d05f04ecd492639d/conditions/q/' . $query . '.json'),TRUE);
 		
 		if (isset($w['response']['error'])) {
 			
@@ -73,23 +72,22 @@ function plugin_weather()
 
 
 function get_contents($url,$post=NULL) {
-	$ch = curl_init();
-	curl_setopt_array($ch,array(
-		CURLOPT_FOLLOWLOCATION=>TRUE,
-		CURLOPT_MAXREDIRS=>5,
-		CURLOPT_RETURNTRANSFER=>TRUE,
-		CURLOPT_URL=>$url,
-		CURLOPT_USERAGENT=>'irc',
-		CURLOPT_CONNECTTIMEOUT=>10,
+
+    $ch = curl_init();
+    curl_setopt_array($ch,array(
+    CURLOPT_FOLLOWLOCATION=>TRUE,
+    CURLOPT_MAXREDIRS=>5,
+    CURLOPT_RETURNTRANSFER=>TRUE,
+    CURLOPT_URL=>$url,
+    CURLOPT_USERAGENT=>'irc',
+    CURLOPT_CONNECTTIMEOUT=>10,
 	));
-	if (is_array($post)) {
-		curl_setopt($ch,CURLOPT_POST,TRUE);
-		curl_setopt($ch,CURLOPT_POSTFIELDS,$post);
+    if (is_array($post)) {
+     curl_setopt($ch,CURLOPT_POST,TRUE);
+     curl_setopt($ch,CURLOPT_POSTFIELDS,$post);
 	}
-	$output = curl_exec($ch);
-	curl_close($ch);
-	return $output;
+    $output = curl_exec($ch);
+    curl_close($ch);
+    return $output;
 }
-
-
 ?>

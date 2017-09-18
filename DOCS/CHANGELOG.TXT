@@ -1,4 +1,7 @@
    
+   v0.4.7 changes (18.09.2017):
+    - plugin !restart - updated to use with linux/unix also
+   
    v0.4.6 changes (15.09.2017):
     - more output from server now in cli + logs
     - Bot is now platform independent, you can also run it from Linux/Unix

@@ -1,71 +1,70 @@
 <?php
-if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
+if (PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Updates the BOT if new version is available: '.$GLOBALS['CONFIG_CMD_PREFIX'].'update';
- $plugin_command = 'update';
+    $plugin_description = 'Updates the BOT if new version is available: '.$GLOBALS['CONFIG_CMD_PREFIX'].'update';
+    $plugin_command = 'update';
 
 //------------------------------------------------------------------------------------------------
- function plugin_update()
- {
-  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'update on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+function plugin_update() {
 
-  v_connect();
- }
+    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'update on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+
+    v_connect();
+}
 //------------------------------------------------------------------------------------------------
-function v_connect()
-{
+function v_connect() {
 
-  $GLOBALS['v_addr']   = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
-  $GLOBALS['CheckVersion'] = file_get_contents($GLOBALS['v_addr']);
-  $GLOBALS['newdir']   = '../davybot'.$GLOBALS['CheckVersion'];
-  $GLOBALS['v_source'] = 'http://github.com/S3x0r/davybot/archive/master.zip';
+    $GLOBALS['v_addr']   = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
+    $GLOBALS['CheckVersion'] = file_get_contents($GLOBALS['v_addr']);
+    $GLOBALS['newdir']   = '../davybot'.$GLOBALS['CheckVersion'];
+    $GLOBALS['v_source'] = 'http://github.com/S3x0r/davybot/archive/master.zip';
 
- if($GLOBALS['CheckVersion'] !='')
+    if ($GLOBALS['CheckVersion'] !='')
 		 {
-		 v_checkVersion();
+           v_checkVersion();
 	     }
      
-	 else {
-		  BOT_RESPONSE('Cannot connect to update server, try next time.');
-	      CLI_MSG('[BOT] Cannot connect to update server', '1');
-          }
+    else {
+           BOT_RESPONSE('Cannot connect to update server, try next time.');
+	       CLI_MSG('[BOT] Cannot connect to update server', '1');
+         }
 }
 //------------------------------------------------------------------------------------------------
-function v_checkVersion()
-{
-  $version = explode("\n", $GLOBALS['CheckVersion']);
+function v_checkVersion() {
+
+    $version = explode("\n", $GLOBALS['CheckVersion']);
 	
-  if($version[0] > VER) 
-	{
-	  BOT_RESPONSE('My version: '.VER.', version on server: '.$version[0].'');
-	  CLI_MSG('[BOT] New bot update on server: '.$version[0], '1');
-	 v_tryDownload();
-    }
+    if ($version[0] > VER) 
+	 {
+	   BOT_RESPONSE('My version: '.VER.', version on server: '.$version[0].'');
+	   CLI_MSG('[BOT] New bot update on server: '.$version[0], '1');
+	   v_tryDownload();
+     }
 	 
-   else 
-	{
-	 BOT_RESPONSE('No new update, you have the latest version.');
-	 CLI_MSG('[BOT] There is no new update', '1');
-	}
+    else 
+	     {
+	       BOT_RESPONSE('No new update, you have the latest version.');
+	       CLI_MSG('[BOT] There is no new update', '1');
+	     }
 }
 //------------------------------------------------------------------------------------------------
-function v_tryDownload()
-{  
-      BOT_RESPONSE('Downloading update...');
-	  CLI_MSG('[BOT] Downloading update...', '1');
+function v_tryDownload() {
+	
+    BOT_RESPONSE('Downloading update...');
+	CLI_MSG('[BOT] Downloading update...', '1');
 
-	  $newUpdate = file_get_contents($GLOBALS['v_source']);
-      $dlHandler = fopen('update.zip', 'w');
+	$newUpdate = file_get_contents($GLOBALS['v_source']);
+    $dlHandler = fopen('update.zip', 'w');
       
-	  if(!fwrite($dlHandler, $newUpdate)) {
-		  BOT_RESPONSE('Could not save new update, operation aborted');
-		  CLI_MSG('[BOT] Could not save new update, operation aborted', '1'); 
-		  }
+	if (!fwrite($dlHandler, $newUpdate)) {
+	   BOT_RESPONSE('Could not save new update, operation aborted');
+		CLI_MSG('[BOT] Could not save new update, operation aborted', '1'); 
+	}
 
-      fclose($dlHandler);
-      BOT_RESPONSE('Update Downloaded');
-	  CLI_MSG('[BOT] Update Downloaded', '1');
-	  v_extract();
+    fclose($dlHandler);
+    BOT_RESPONSE('Update Downloaded');
+	CLI_MSG('[BOT] Update Downloaded', '1');
+	v_extract();
 }
 //------------------------------------------------------------------------------------------------
 function recurse_copy($src,$dst) { 
@@ -87,7 +86,7 @@ function recurse_copy($src,$dst) {
 //------------------------------------------------------------------------------------------------
 function delete_files($target) {
 
-    if(is_dir($target)){
+    if (is_dir($target)){
         $files = glob( $target . '*', GLOB_MARK );
         
         foreach( $files as $file )
@@ -95,7 +94,7 @@ function delete_files($target) {
             delete_files( $file );
         }
         rmdir( $target );
-    } elseif(is_file($target)) {
+    } elseif (is_file($target)) {
         unlink( $target );  
     }
 }
@@ -193,9 +192,11 @@ function v_extract() {
 
 	else { system('cd '.$GLOBALS['newdir'].' & php -f '.$GLOBALS['newdir'].'/BOT.php '.$GLOBALS['newdir'].'/CONFIG.INI'); }
 	die();
-
-} else {
+    }
+	
+	else {
     BOT_RESPONSE('Failed to extract, aborting.');
 	CLI_MSG('[BOT] Failed to extract update, aborting!', '1');
- }
+    }
 }
+?>

@@ -1,23 +1,22 @@
 <?php
-if(PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
+if (PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
 
- $plugin_description = 'Shows http status: '.$GLOBALS['CONFIG_CMD_PREFIX'].'http_status <number>';
- $plugin_command = 'http_status';
+    $plugin_description = 'Shows http status: '.$GLOBALS['CONFIG_CMD_PREFIX'].'http_status <number>';
+    $plugin_command = 'http_status';
 
-function plugin_http_status()
-{
+function plugin_http_status() {
 
-  if(empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'http_status <number>'); } 
+    if (empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'http_status <number>'); } 
   
-  else {
+    else {
 		 BOT_RESPONSE(httpstatus($GLOBALS['args']));
  
 		 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'http_status on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', code: '.$GLOBALS['args'], '1');
-	   }
+	     }
 }
 
-function httpstatus($args)
-{
+function httpstatus($args) {
+
   $codes = array(
   "100" => "Continue (1xx Informational)",
   "101" => "Switching Protocols (1xx Informational)",
@@ -103,10 +102,10 @@ function httpstatus($args)
   "530" => "Site is frozen (5xx Server Error, Unofficial, Pantheon)"
   );
 
-    if((int)$args < 100 || (int)$args > 599) {
+    if ((int)$args < 100 || (int)$args > 599) {
         return 'This is not a valid HTTP status code';
     } else {
-        if(array_key_exists((int)$args,$codes)) {
+        if (array_key_exists((int)$args,$codes)) {
             return (int)$args.' means: '.$codes[(int)$args];
         } else {
             return 'This HTTP status code is not in use';
