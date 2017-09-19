@@ -1,4 +1,10 @@
    
+   v0.4.8 changes (19.09.2017):
+    - new option in !plugin - 'plugin unload' - Unload plugin from BOT: !plugin unload <plugin_name>
+    - new option in !plugin - 'plugin load' - Loads plugin to BOT: !plugin load <plugin_name>
+    - new plugin !unload -- Unloads plugin from BOT: unload <plugin_name>
+    - new plugin !load -- Loads plugin to BOT: load <plugin_name>
+
    v0.4.7 changes (18.09.2017):
     - plugin !restart - updated to use with linux/unix also
    

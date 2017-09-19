@@ -14,29 +14,29 @@ function plugin_save() {
 
 		case 'help': 
 		NICK_MSG('Save commands:');
-		NICK_MSG('save auto_join - Saving auto join on channel when connected: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save auto_join <yes/no>');
-		NICK_MSG('save auto_op - Saving auto op when join channel: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save auto_op <yes/no>');
-		NICK_MSG('save auto_op_list - Saving auto op list in config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save auto_op_list <nick!ident@host, ...>');
-		NICK_MSG('save auto_rejoin - Saving auto rejoin when kicked from channel: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save auto_rejoin <yes/no>');
-		NICK_MSG('save bot_owners - Saving bot owners list in config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save bot_owners <nick!ident@host, ...>');
-		NICK_MSG('save bot_response - Saving where bot outputs messages: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save bot_response <channel/notice/priv>');
-		NICK_MSG('save channel - Saving channel to config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save channel <#new_channel>');
+		NICK_MSG('save auto_join      - Saving auto join on channel when connected: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save auto_join <yes/no>');
+		NICK_MSG('save auto_op        - Saving auto op when join channel: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save auto_op <yes/no>');
+		NICK_MSG('save auto_op_list   - Saving auto op list in config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save auto_op_list <nick!ident@host, ...>');
+		NICK_MSG('save auto_rejoin    - Saving auto rejoin when kicked from channel: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save auto_rejoin <yes/no>');
+		NICK_MSG('save bot_owners     - Saving bot owners list in config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save bot_owners <nick!ident@host, ...>');
+		NICK_MSG('save bot_response   - Saving where bot outputs messages: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save bot_response <channel/notice/priv>');
+		NICK_MSG('save channel        - Saving channel to config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save channel <#new_channel>');
 		NICK_MSG('save command_prefix - Saving prefix commands: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save command_prefix <new_prefix>');
-		NICK_MSG('save connect_delay - Saving connect delay value to config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save connect_delay <value>');
-		NICK_MSG('save ctcp_finger - Saving ctcp finger in config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save ctcp_finger <string>');
-		NICK_MSG('save ctcp_response - Saving ctcp response in config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save ctcp_response <yes/no>');
-		NICK_MSG('save ctcp_version - Saving ctcp version in config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save ctcp_version <string>');
-		NICK_MSG('save fetch_server - Saving fetch server to config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save fetch_server <new_server>');
-		NICK_MSG('save ident - Saving ident to config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save ident <new_ident>');
-		NICK_MSG('save logging - Saving logging in config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save logging <yes/no>');
-		NICK_MSG('save name - Saving name to config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save name <new_name>');
-		NICK_MSG('save nick - Saving nickname to config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save nick <new_nick>');
+		NICK_MSG('save connect_delay  - Saving connect delay value to config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save connect_delay <value>');
+		NICK_MSG('save ctcp_finger    - Saving ctcp finger in config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save ctcp_finger <string>');
+		NICK_MSG('save ctcp_response  - Saving ctcp response in config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save ctcp_response <yes/no>');
+		NICK_MSG('save ctcp_version   - Saving ctcp version in config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save ctcp_version <string>');
+		NICK_MSG('save fetch_server   - Saving fetch server to config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save fetch_server <new_server>');
+		NICK_MSG('save ident          - Saving ident to config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save ident <new_ident>');
+		NICK_MSG('save logging        - Saving logging in config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save logging <yes/no>');
+		NICK_MSG('save name           - Saving name to config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save name <new_name>');
+		NICK_MSG('save nick           - Saving nickname to config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save nick <new_nick>');
 		NICK_MSG('save owner_password - Saving bot owner password in config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save owner_password <password>');
-		NICK_MSG('save port - Saving port to config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save port <new_port>');
-		NICK_MSG('save show_raw - Saving show raw in config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save show_raw <yes/no>');
-		NICK_MSG('save server - Saving server to config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save server <new_server>');
-		NICK_MSG('save time_zone - Saving time zone in config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save time_zone <eg. Europe/Warsaw>');
-		NICK_MSG('save try_connect - Saving how many times try connect to server: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save try_connect <value>');
+		NICK_MSG('save port           - Saving port to config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save port <new_port>');
+		NICK_MSG('save show_raw       - Saving show raw in config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save show_raw <yes/no>');
+		NICK_MSG('save server         - Saving server to config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save server <new_server>');
+		NICK_MSG('save time_zone      - Saving time zone in config: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save time_zone <eg. Europe/Warsaw>');
+		NICK_MSG('save try_connect    - Saving how many times try connect to server: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save try_connect <value>');
 		break;
 
     }

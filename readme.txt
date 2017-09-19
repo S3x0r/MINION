@@ -60,6 +60,7 @@ join -- Joins channel: !join <#channel>
 kick -- Kicks from channel: !kick <#channel> <who>
 leave -- Leave channel: !leave <#channel>
 list_owners -- Shows BOT owners: !list_owners
+load -- Loads plugin to BOT: load <plugin_name>
 math -- Solves mathematical tasks: !math <eg. 8*8+6>
 md5 -- Changing string to MD5: !md5 <string>
 memusage -- Shows how much ram is being used by bot: !memusage
@@ -69,6 +70,8 @@ op -- Gives op: !op <nick>
 plugin -- Plugins manipulation: !plugin help to list commands
 plugin delete - Deletes plugin from directory: !plugin delete <plugin_name>
 plugin move - Move plugin from OWNER dir to USER directory: !plugin move <plugin_name>
+plugin load - Loads plugin to BOT: !plugin load <plugin_name>
+plugin unload - Unload plugin from BOT: !plugin unload <plugin_name>
 ping -- Pings a host: !ping <host>
 quit -- Shutdown BOT: !quit
 raw -- Sends raw string to server: !raw <string>
@@ -100,6 +103,7 @@ save time_zone - Saving time zone in config: !save time_zone <eg. Europe/Warsaw>
 save try_connect - Saving how many times try connect to server: !save try_connect <value>
 showconfig -- Shows BOT configuration: !showconfig
 topic -- Changing Topic in channel: !topic <new_topic>
+unload -- Unloads plugin from BOT: unload <plugin_name>
 update -- Updates the BOT if new version is available: !update
 uptime -- Shows BOT uptime: !uptime
 voice -- Gives voice: !voice <nick>

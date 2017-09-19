@@ -14,8 +14,8 @@ function plugin_cluster() {
 
 		case 'help': 
 		BOT_RESPONSE('Cluster commands:');
-		BOT_RESPONSE('cluster help - Shows this help');
-		BOT_RESPONSE('cluster shutdown - Bot shutdowns computer: '.$GLOBALS['CONFIG_CMD_PREFIX'].'cluster shutdown <bot_nickname>');
+		BOT_RESPONSE('cluster help       - Shows this help');
+		BOT_RESPONSE('cluster shutdown   - Bot shutdowns computer: '.$GLOBALS['CONFIG_CMD_PREFIX'].'cluster shutdown <bot_nickname>');
 		BOT_RESPONSE('cluster shutdown * - Bot shutdowns all bots computers: '.$GLOBALS['CONFIG_CMD_PREFIX'].'cluster shutdown *');
 		break;
 
