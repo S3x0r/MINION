@@ -61,72 +61,16 @@ function plugin_plugin() {
         case 'unload':   
         if (!empty($GLOBALS['piece2']))
          {
-			$other = $GLOBALS['piece2'];
-			/* add to var !+plugin */
-			$with_prefix = $GLOBALS['CONFIG_CMD_PREFIX'].$GLOBALS['piece2'];
-            
-			if (in_array($with_prefix, $GLOBALS['OWNER_PLUGINS']) || in_array($with_prefix, $GLOBALS['USER_PLUGINS'])) 
-             {                    
-                if (($key = array_search($with_prefix, $GLOBALS['OWNER_PLUGINS'])) !== false) {
-					unset($GLOBALS['OWNER_PLUGINS'][$key]);
-				    if (!in_array($with_prefix, $GLOBALS['OWNER_PLUGINS'])) 
-							 { BOT_RESPONSE('Plugin: \''.$other.'\' unloaded'); }
-		        }
-	 	        if (($key = array_search($with_prefix, $GLOBALS['USER_PLUGINS'])) !== false) {
-					unset($GLOBALS['USER_PLUGINS'][$key]); 
-				    if (!in_array($with_prefix, $GLOBALS['USER_PLUGINS'])) 
-							 { BOT_RESPONSE('Plugin: \''.$other.'\' unloaded'); }
-				}
-			    CLI_MSG('[BOT] !plugin unload on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', PLUGIN: '.$other, '1');
-             } else { BOT_RESPONSE('No such plugin to unload, wrong name?'); }
+            UnloadPlugin($GLOBALS['piece2']);
 		 } 
 		break;
 //---------------------------------------------------------------------------------------------------------
         case 'load': 
 		if (!empty($GLOBALS['piece2']))
          {
-		    $other = $GLOBALS['piece2'];
-			/* add to var !+plugin */
-			$with_prefix = $GLOBALS['CONFIG_CMD_PREFIX'].$GLOBALS['piece2'];
-                
-			if (in_array($with_prefix, $GLOBALS['OWNER_PLUGINS']) || in_array($with_prefix, $GLOBALS['USER_PLUGINS'])) 
-             {  
-			    BOT_RESPONSE('Plugin already Loaded!');
-			 }					
-
-     		  /* if there is no plugin name in plugins array */ 
-			  else if (!in_array($with_prefix, $GLOBALS['OWNER_PLUGINS']) || !in_array($with_prefix, $GLOBALS['USER_PLUGINS'])) 
-               {
-			      /* if no plugin in array & file exists in dir */ 
-                  if (file_exists('PLUGINS/OWNER/'.$other.'.php')) { 
-					
-                   /* include that file */
-				   include_once('PLUGINS/OWNER/'.$other.'.php');
-						 
-				   /* add prefix & plugin name to plugins array */
-				   array_push($GLOBALS['OWNER_PLUGINS'], $with_prefix);
-						 
-				   /* bot responses */
-				   BOT_RESPONSE('Plugin: \''.$other.'\' Loaded.'); 
-			       CLI_MSG('[BOT] !load on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', PLUGIN: '.$other, '1');
-				  }
-
-				   /* if no plugin in array & file exists in dir */ 
-				   if (file_exists('PLUGINS/USER/'.$other.'.php')) { 
-
-                   /* include that file */
-				   include_once('PLUGINS/USER/'.$other.'.php');
-
-				   /* add prefix & plugin name to plugins array */
-				   array_push($GLOBALS['USER_PLUGINS'], $with_prefix);
-
-				   /* bot responses */
-				   BOT_RESPONSE('Plugin: \''.$other.'\' Loaded.');
-	     	       CLI_MSG('[BOT] !load on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', PLUGIN: '.$other, '1');
-				   }
-	              }
-				 } 
-				 break;
+            LoadPlugin($GLOBALS['piece2']);
+		 } 
+		break;
 //---------------------------------------------------------------------------------------------------------
    }
   }

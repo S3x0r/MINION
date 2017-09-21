@@ -41,6 +41,9 @@ ctcp_finger = 'davybot' <-- Ctcp finger response
 [LOGS]
 logging = 'yes' <-- Log Cli messages to LOGS folder? 'yes' / 'no'
 
+[LANG]
+language = 'EN' <-- Set BOT language / 'EN' / 'PL'
+
 [TIME]
 time_zone = 'Europe/Warsaw' <-- Time Zone
 

@@ -6,6 +6,8 @@ if (PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use
 
 function plugin_ping() {
 
+    try {
+
     if (empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'ping <host>'); } 
   
      else {
@@ -28,9 +30,17 @@ function plugin_ping() {
 	    }
 		 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'ping on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', address: '.$GLOBALS['args'], '1');
 	   }
+	}
+	  catch (Exception $e) {
+
+		  BOT_RESPONSE('[ERROR] Exception: '.$e);
+          CLI_MSG('[ERROR] Exception: $e');
+	  }
 }
 
 function ping($hostname) {
+
+    try {
 
     exec('ping '.escapeshellarg($hostname), $list);
     
@@ -41,6 +51,12 @@ function ping($hostname) {
 	 else
 	  {
         return(array($list[2], $list[3]));
+	  }
+	}
+	  catch (Exception $e) {
+        
+		  BOT_RESPONSE('[ERROR] Exception: '.$e);
+          CLI_MSG('[ERROR] Exception: $e');
 	  }
 }
 ?>

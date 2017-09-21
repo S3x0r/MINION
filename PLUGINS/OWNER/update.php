@@ -148,6 +148,7 @@ function v_extract() {
     //$GLOBALS['CONFIG_CTCP_VERSION']   = $cfg->get("CTCP","ctcp_version");
     $GLOBALS['CONFIG_CTCP_FINGER']    = $cfg->get("CTCP","ctcp_finger");
     $GLOBALS['CONFIG_LOGGING']        = $cfg->get("LOGS","logging");
+	$GLOBALS['CONFIG_LANGUAGE']       = $cfg->get("LANG","language");
     $GLOBALS['CONFIG_TIMEZONE']       = $cfg->get("TIME","time_zone");
     $GLOBALS['CONFIG_FETCH_SERVER']   = $cfg->get("FETCH","fetch_server");
     $GLOBALS['CONFIG_SHOW_RAW']       = $cfg->get("DEBUG","show_raw");
@@ -176,6 +177,7 @@ function v_extract() {
 	//SaveData($new_cf, 'CTCP', 'ctcp_version', $GLOBALS['CONFIG_CTCP_VERSION']);
 	SaveData($new_cf, 'CTCP', 'ctcp_finger', $GLOBALS['CONFIG_CTCP_FINGER']);
     SaveData($new_cf, 'LOGS', 'logging', $GLOBALS['CONFIG_LOGGING']);
+	SaveData($new_cf, 'LANG', 'language', $GLOBALS['CONFIG_LANGUAGE']);
 	SaveData($new_cf, 'TIME', 'time_zone', $GLOBALS['CONFIG_TIMEZONE']);
     SaveData($new_cf, 'FETCH', 'fetch_server', $GLOBALS['CONFIG_FETCH_SERVER']);
 	SaveData($new_cf, 'DEBUG', 'show_raw', $GLOBALS['CONFIG_SHOW_RAW']);
