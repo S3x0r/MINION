@@ -1,40 +1,39 @@
 <?php
-if (PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
+if (PHP_SAPI !== 'cli') {
+    die('This script can\'t be run from a web browser. Use CLI to run it.');
+}
 
     $plugin_description = 'Converts to morse code: '.$GLOBALS['CONFIG_CMD_PREFIX'].'morse <text>';
     $plugin_command = 'morse';
 
-function plugin_morse() {
+function plugin_morse()
+{
 
-    if (empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'morse <text>'); } 
-  
-     else {
+    if (empty($GLOBALS['args'])) {
+        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'morse <text>');
+    } else {
+              $morse_code = array('a'  =>  '.-', 'b'  =>  '-...', 'c'  =>  '-.-.', 'd'  =>  '-..', 'e'  =>  '.',
+                                  'f'  =>  '..-.', 'g'  =>  '--.', 'h'  =>  '....', 'i'  =>  '..', 'j'  =>  '.---',
+                                  'k'  =>  '-.-', 'l'  =>  '.-..', 'm'  =>  '--', 'n'  =>  '-.', 'o'  =>  '---',
+                                  'p'  =>  '.--.', 'q'  =>  '--.-', 'r'  =>  '.-.', 's'  =>  '...', 't'  =>  '-',
+                                  'u'  =>  '..-', 'v'  =>  '...-', 'w'  =>  '.--', 'x'  =>  '-..-',
+                                  'y'  =>  '-.--', 'z'  =>  '--..', '0'  =>  '-----', '1'  =>  '.----',
+                                  '2'  =>  '..---', '3'  =>  '...--', '4'  =>  '....-', '5'  =>  '.....',
+                                  '6'  =>  '-....', '7'  =>  '--...', '8'  =>  '---..', '9'  =>  '----.',
+                                  '.'  =>  '.-.-.-', ','  =>  '--..--', '?'  =>  '..--..', '\''  =>  '.----.',
+                                  '!'  =>  '-.-.--', '/'  =>  '-..-.', '-'  =>  '-....-', '"'  =>  '.-..-.',
+                                  '('  =>  '-.--.-', ')'  =>  '-.--.-', ' '  =>  '/',);
 
-    $morse_code = array('a'  =>  '.-', 'b'  =>  '-...', 'c'  =>  '-.-.', 'd'  =>  '-..', 'e'  =>  '.',
-                        'f'  =>  '..-.', 'g'  =>  '--.', 'h'  =>  '....', 'i'  =>  '..', 'j'  =>  '.---',
-                        'k'  =>  '-.-', 'l'  =>  '.-..', 'm'  =>  '--', 'n'  =>  '-.', 'o'  =>  '---',
-                        'p'  =>  '.--.', 'q'  =>  '--.-', 'r'  =>  '.-.', 's'  =>  '...', 't'  =>  '-',
-                        'u'  =>  '..-', 'v'  =>  '...-', 'w'  =>  '.--', 'x'  =>  '-..-', 'y'  =>  '-.--',
-                        'z'  =>  '--..', '0'  =>  '-----', '1'  =>  '.----', '2'  =>  '..---', '3'  =>  '...--',
-                        '4'  =>  '....-', '5'  =>  '.....', '6'  =>  '-....', '7'  =>  '--...', '8'  =>  '---..',
-                        '9'  =>  '----.', '.'  =>  '.-.-.-', ','  =>  '--..--', '?'  =>  '..--..', '\''  =>  '.----.',
-                        '!'  =>  '-.-.--', '/'  =>  '-..-.', '-'  =>  '-....-', '"'  =>  '.-..-.', '('  =>  '-.--.-',
-                        ')'  =>  '-.--.-', ' '  =>  '/',);
-
-    $string = strtolower(msg_without_command());
-    $len = strlen($string);
-    $final = NULL;
-    for($pos = 0; $pos < $len; $pos++) 
-	   {
-         $care = $string[$pos];
-         if (array_key_exists($care, $morse_code))
-			 {
-               $final .= $morse_code[$care]." ";
-             }
-       }
-    BOT_RESPONSE($string.' converted to morse: '.rtrim($final));
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'morse on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
-
- }
+        $string = strtolower(msg_without_command());
+        $len = strlen($string);
+        $final = null;
+        for ($pos = 0; $pos < $len; $pos++) {
+             $care = $string[$pos];
+            if (array_key_exists($care, $morse_code)) {
+                $final .= $morse_code[$care]." ";
+            }
+        }
+        BOT_RESPONSE($string.' converted to morse: '.rtrim($final));
+        CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'morse on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+    }
 }
-?>

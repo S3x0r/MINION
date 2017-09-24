@@ -1,5 +1,7 @@
 <?php
-if (PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use CLI to run it.'); }
+if (PHP_SAPI !== 'cli') {
+    die('This script can\'t be run from a web browser. Use CLI to run it.');
+}
 
     $plugin_description = 'Shows random text from file: '.$GLOBALS['CONFIG_CMD_PREFIX'].'cham <nick>';
     $plugin_command = 'cham';
@@ -9,26 +11,26 @@ if (PHP_SAPI !== 'cli') { die('This script can\'t be run from a web browser. Use
 
 */
 
-function plugin_cham() {
+function plugin_cham()
+{
 
-    if (empty($GLOBALS['args'])) { BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'cham <nick>'); } 
-  
-    else {
+    if (empty($GLOBALS['args'])) {
+        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'cham <nick>');
+    } else {
+              $file = 'somefile.txt';
 
-		 $file = 'somefile.txt';
-	
-		 $texts = file_get_contents($file);
-		 $texts = explode("\n",$texts);
-		 $count = 0;
+              $texts = file_get_contents($file);
+              $texts = explode("\n", $texts);
+              $count = 0;
 
-		 shuffle($texts);
-		 $text = $texts[$count++];
+              shuffle($texts);
+              $text = $texts[$count++];
 
-		 $who = trim($GLOBALS['args']);
+              $who = trim($GLOBALS['args']);
 
-		 BOT_RESPONSE($who.': '.$text);
+              BOT_RESPONSE($who.': '.$text);
  
-		 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'cham on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', who: '.$who, '1');
-	   }
+              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'cham on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.
+                  $GLOBALS['nick'].', who: '.$who, '1');
+    }
 }
-?>

@@ -59,5 +59,3 @@ define('TR_58', 'Jestem poˆ¥czony, m¢j pseudonim to:');
 define('TR_59', 'Komendy Wˆa˜ciciela:');
 define('TR_60', 'Komendy U¾ytkownika:');
 define('TR_61', 'Wtyczka zaˆadowana:');
-
-?>

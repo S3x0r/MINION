@@ -54,5 +54,3 @@ define('TR_58', 'OK im connected, my nickname is:');
 define('TR_59', 'Owner Commands:');
 define('TR_60', 'User Commands:');
 define('TR_61', 'Plugin Loaded:');
-
-?>

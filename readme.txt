@@ -14,8 +14,6 @@ You will be added to owner hosts.
 
 You can also edit owner host in CONFIG.INI:
 
-OWNERS HOSTS - EDIT IT (CONFIG.INI) FOR USING BOT COMMANDS!
-
          nick ! ident@   host
            |      |       |
 example: S3x0r!~S3x0r@12-123-48-249.dsl.dynamic.simnet.is
@@ -28,7 +26,7 @@ and set allow_url_fopen=1 in php.ini
 
 From windows you dont need to download PHP, just run bot from START_BOT.BAT file
 
-To run bot with diffrent config file: php.exe "../BOT.php" some_other_config.ini
+To run bot with diffrent config file: php.exe "../BOT.php" -c some_other_config.ini
 
 Plugins from 'USER' directory are for all users, everybody can use it
 Owners can use plugins 'OWNER' & 'USER'
