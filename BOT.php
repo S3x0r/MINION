@@ -8,7 +8,7 @@ Start();
 function Start()
 {
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '0.5.0');
+    define('VER', '0.5.1');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());
@@ -28,6 +28,11 @@ function Start()
     /* change default directory path */
     chdir($path);
 
+    /* cli switch -s */
+    if (isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == '-s') {
+        $GLOBALS['silent_mode'] = 'yes';
+    }
+
     /* cli switch -v */
     if (isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == '-v') {
         echo "\ndavybot version: ".VER."\n";
@@ -38,6 +43,7 @@ function Start()
     if (isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == '-h') {
         echo "\nBot cli commands usage: BOT.php [option]\n
     -c <config_file> loads config
+    -s silent mode (no output from bot)
     -v prints bot version
     -h this help\n\n";
         die();
@@ -48,13 +54,17 @@ function Start()
 
     /* wcli extension */
     if (extension_loaded('wcli')) {
-        wcli_clear();
-        wcli_maximize();
-        wcli_set_console_title('davybot ('.VER.')');
-        wcli_hide_cursor();
+        if (empty($GLOBALS['silent_mode'])) {
+            wcli_clear();
+            wcli_maximize();
+            wcli_set_console_title('davybot ('.VER.')');
+            wcli_hide_cursor();
+        }
     }
 
-    echo "
+    
+    if (empty($GLOBALS['silent_mode'])) {
+        echo "
     B@B@B@B@@@B@B@B@B@B@B@B@@@B@B@B@B@B@@@@@@@B@B@B@B@B@@@B@B
     @B@BGB@B@B@B@B@@@B@@@B@B@B@@@B@B@B@B@B@@@B@B@B@@@B@@@@@B@
     B@B@  :@Bi:@B@B@B@@@B@BGS522s22SXMB@B@B@B@B@B@B@B@@@B@B@B
@@ -89,6 +99,7 @@ function Start()
     davybot - ver: ".VER.", ".TR_10." S3x0r, ".TR_11." olisek@gmail.com
                    ".TR_12." ".TotalLines()." :)
     \n";
+    }
 
     /* try to load config */
     LoadConfig('CONFIG.INI');
@@ -163,6 +174,7 @@ function LoadConfig($filename)
         /* CHANNEL */
         $GLOBALS['CONFIG_CNANNEL']        = $cfg->get("CHANNEL", "channel");
         $GLOBALS['CONFIG_AUTO_JOIN']      = $cfg->get("CHANNEL", "auto_join");
+        $GLOBALS['CONFIG_CHANNEL_KEY']    = $cfg->get("CHANNEL", "channel_key");
         /* COMMAND PREFIX */
         $GLOBALS['CONFIG_CMD_PREFIX']     = $cfg->get("COMMAND", "command_prefix");
         /* CTCP */
@@ -223,9 +235,10 @@ function LoadConfig($filename)
         }
 //---------------------------------------------------------------------------------------------------------  
         /* from what file config loaded */
-        CLI_MSG(TR_17.' '.$config_file, '0');
-        echo "------------------------------------------------------------------------------\n";
-
+        if (empty($GLOBALS['silent_mode'])) {
+            CLI_MSG(TR_17.' '.$config_file, '0');
+            echo "------------------------------------------------------------------------------\n";
+        }
         /* logging init */
         if ($GLOBALS['CONFIG_LOGGING'] == 'yes') {
             Logs();
@@ -251,12 +264,6 @@ function SetDefaultData()
     /* if variable empty in config load default one */
     if (empty($GLOBALS['CONFIG_NICKNAME'])) {
         $GLOBALS['CONFIG_NICKNAME'] = 'davybot';
-    }
-    if (empty($GLOBALS['CONFIG_NAME'])) {
-        $GLOBALS['CONFIG_NAME'] = 'http://github.com/S3x0r/davybot';
-    }
-    if (empty($GLOBALS['CONFIG_IDENT'])) {
-        $GLOBALS['CONFIG_IDENT'] = 'http://github.com/S3x0r/davybot';
     }
     if (empty($GLOBALS['CONFIG_SERVER'])) {
         $GLOBALS['CONFIG_SERVER'] = 'minionki.com.pl';
@@ -285,9 +292,6 @@ function SetDefaultData()
     if (empty($GLOBALS['CONFIG_KEEP_NICK'])) {
         $GLOBALS['CONFIG_KEEP_NICK'] = 'yes';
     }
-    if (empty($GLOBALS['CONFIG_CNANNEL'])) {
-        $GLOBALS['CONFIG_CNANNEL'] = '#davybot';
-    }
     if (empty($GLOBALS['CONFIG_AUTO_JOIN'])) {
         $GLOBALS['CONFIG_AUTO_JOIN'] = 'yes';
     }
@@ -315,6 +319,9 @@ function SetDefaultData()
 
     /* set timezone */
     date_default_timezone_set($GLOBALS['CONFIG_TIMEZONE']);
+
+    /* set some vars */
+    $GLOBALS['try_channel_key'] = '1';
 }
 //---------------------------------------------------------------------------------------------------------
 function CreateDefaultConfig($filename)
@@ -347,6 +354,7 @@ keep_nick        = \'yes\'
 [CHANNEL]
 channel          = \'#davybot\'
 auto_join        = \'yes\'
+channel_key      = \'\'
 
 [COMMAND]
 command_prefix   = \'!\'
@@ -408,37 +416,44 @@ function LoadPlugins()
     $count1 = count(glob("PLUGINS/OWNER/*.php", GLOB_BRACE));
     $GLOBALS['OWNER_PLUGINS'] = null;
 
-    CLI_MSG(TR_23." ($count1):", '0');
-
-    echo "------------------------------------------------------------------------------\n";
-
+    if (empty($GLOBALS['silent_mode'])) {
+        CLI_MSG(TR_23." ($count1):", '0');
+        echo "------------------------------------------------------------------------------\n";
+    }
     foreach (glob('PLUGINS/OWNER/*.php') as $plugin_name) {
         include_once($plugin_name);
         $GLOBALS['OWNER_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ';
         $plugin_name = basename($plugin_name, '.php');
-        echo "$plugin_name -- $plugin_description\n";
+        if (empty($GLOBALS['silent_mode'])) {
+            echo "$plugin_name -- $plugin_description\n";
+        }
     }
-
-    echo "------------------------------------------------------------------------------\n";
-
+    if (empty($GLOBALS['silent_mode'])) {
+        echo "------------------------------------------------------------------------------\n";
+    }
 //---------------------------------------------------------------------------------------------------------
     $count2 = count(glob("PLUGINS/USER/*.php", GLOB_BRACE));
 
-    CLI_MSG(TR_24." ($count2):", '0');
     $GLOBALS['USER_PLUGINS'] = null;
 
-    echo "------------------------------------------------------------------------------\n";
-  
+    if (empty($GLOBALS['silent_mode'])) {
+        CLI_MSG(TR_24." ($count2):", '0');
+        echo "------------------------------------------------------------------------------\n";
+    }
     foreach (glob('PLUGINS/USER/*.php') as $plugin_name) {
         include_once($plugin_name);
         $GLOBALS['USER_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ';
         $plugin_name = basename($plugin_name, '.php');
-        echo "$plugin_name -- $plugin_description\n";
+        if (empty($GLOBALS['silent_mode'])) {
+            echo "$plugin_name -- $plugin_description\n";
+        }
     }
     $tot = $count1+$count2;
     
-    echo "----------------------------------------------------------".TR_25." ($tot)---------\n";
-  
+    if (empty($GLOBALS['silent_mode'])) {
+        echo "----------------------------------------------------------".TR_25." ($tot)---------\n";
+    }
+
     $GLOBALS['OWNER_PLUGINS'] = explode(" ", $GLOBALS['OWNER_PLUGINS']);
     $GLOBALS['USER_PLUGINS'] = explode(" ", $GLOBALS['USER_PLUGINS']);
 
@@ -515,19 +530,21 @@ function Engine()
             $data = fgets($GLOBALS['socket'], 512);
 //---------------------------------------------------------------------------------------------------------
             if ($GLOBALS['CONFIG_SHOW_RAW'] == 'yes') {
-                echo $data;
+                if (empty($GLOBALS['silent_mode'])) {
+                    echo $data;
+                }
             }
 //---------------------------------------------------------------------------------------------------------
             flush();
             $ex = explode(' ', trim($data));
 //---------------------------------------------------------------------------------------------------------
-            /* ping response */
+/* ping response */
             if (isset($ex[0]) && $ex[0] == 'PING') {
                 fputs($GLOBALS['socket'], "PONG ".$ex[1]."\n");
                 continue;
             }
 //---------------------------------------------------------------------------------------------------------
-            /* rejoin when kicked */
+/* rejoin when kicked */
             if ($GLOBALS['CONFIG_AUTO_REJOIN'] == 'yes') {
                 if (isset($ex[1]) && $ex[1] == 'KICK') {
                     if (isset($ex[3]) && $ex[3] == $GLOBALS['CONFIG_NICKNAME']) {
@@ -542,11 +559,37 @@ function Engine()
                 $nick   = $source[1];
                 $ident  = $source[2];
                 $host   = $source[3];
+                $nick_host = $ident.'@'.$host;
             } else {
                       $server = str_replace(':', '', $ex[0]);
             }
 //---------------------------------------------------------------------------------------------------------
-            /* auto op */
+/* if someone JOIN */
+            if (isset($ex[1]) && $ex[1] == 'JOIN') {
+                CLI_MSG('* '.$nick.' ('.$nick_host.') has joined '.$GLOBALS['CONFIG_CNANNEL'], '1');
+            }
+//---------------------------------------------------------------------------------------------------------
+ /* if someone PART */
+            if (isset($ex[1]) && $ex[1] == 'PART') {
+                CLI_MSG('* '.$nick.' ('.$nick_host.') has leaved '.$GLOBALS['CONFIG_CNANNEL'], '1');
+            }
+//---------------------------------------------------------------------------------------------------------
+/* if someone KICKED */
+            if (isset($ex[1]) && $ex[1] == 'KICK') {
+                CLI_MSG('* '.$nick.' ('.$nick_host.') kicked '.$ex[3].' from '.$GLOBALS['CONFIG_CNANNEL'], '1');
+            }
+//---------------------------------------------------------------------------------------------------------
+/* if MODE */
+            if (isset($ex[1]) && $ex[1] == 'MODE') {
+                CLI_MSG('* '.$nick.' ('.$nick_host.') sets mode: '.$ex[3], '1');
+            }
+//---------------------------------------------------------------------------------------------------------
+/* if someone QUIT */
+            if (isset($ex[1]) && $ex[1] == 'QUIT') {
+                CLI_MSG('* '.$nick.' ('.$nick_host.') Quit', '1');
+            }
+//---------------------------------------------------------------------------------------------------------
+/* auto op */
             if ($GLOBALS['CONFIG_AUTO_OP'] == 'yes') {
                 $cfg = new IniParser($GLOBALS['config_file']);
                 $GLOBALS['CONFIG_AUTO_OP_LIST'] = $cfg->get("ADMIN", "auto_op_list");
@@ -613,7 +656,7 @@ function Engine()
                 $piece4 = '';
             }
 
-            $hostname = $ident . "@" . $host;
+            $hostname = $ident.'@'.$host;
 
             if (isset($ex[1])) {
                 switch ($ex[1]) {
@@ -636,7 +679,7 @@ function Engine()
                     case '332':
                         CLI_MSG('> Topic on: '.$srv_msg, '1');
                         break;
-
+//---------------------------------------------------------------------------------------------------------
                     case '433': /* if nick already exists */
                     case '432': /* if nick reserved */
                         /* keep nick */
@@ -675,9 +718,28 @@ function Engine()
                             JOIN_CHANNEL($GLOBALS['CONFIG_CNANNEL']);
                         }
                         continue;
+ //---------------------------------------------------------------------------------------------------------
+                    case '471': /* if +limit on channel */
+                          CLI_MSG('[BOT] I cannot join, channel is full', '1');
+                        continue;
 //---------------------------------------------------------------------------------------------------------
-                    case 'QUIT': /* quit message */
-                        CLI_MSG('* '.$nick.' ('.$ident.'@'.$host.') Quit', '1');
+                    case '473': /* if +invite on channel */
+                          CLI_MSG('[BOT] I cannot join, channel is invite only', '1');
+                        continue;
+//---------------------------------------------------------------------------------------------------------
+                    case '474': /* if bot +banned on channel */
+                          CLI_MSG('[BOT] I cannot join, im banned on channel', '1');
+                        continue;
+//---------------------------------------------------------------------------------------------------------
+                    case '475': /* if +key on channel */
+                        if (isset($GLOBALS['try_channel_key'])) {
+                            if (isset($GLOBALS['CONFIG_CHANNEL_KEY'])) {
+                                JOIN_CHANNEL($GLOBALS['CONFIG_CNANNEL'].' '.$GLOBALS['CONFIG_CHANNEL_KEY']);
+                                unset($GLOBALS['try_channel_key']);
+                            }
+                        } else {
+                             CLI_MSG('[BOT] I cannot join, bad channel key in config or key not set', '1');
+                        }
                         continue;
 //---------------------------------------------------------------------------------------------------------
                 }
@@ -685,38 +747,38 @@ function Engine()
             /* CTCP */
             if ($GLOBALS['CONFIG_CTCP_RESPONSE'] == 'yes' && isset($rawcmd[1])) {
                 switch ($rawcmd[1]) {
-                    case 'VERSION':
+                    case 'version':
                         fputs($GLOBALS['socket'], "NOTICE $nick :VERSION ".$GLOBALS['CONFIG_CTCP_VERSION']."\n");
                         CLI_MSG('CTCP VERSION '.TR_48.' '.$GLOBALS['nick'], '1');
                         break;
 
-                    case 'CLIENTINFO':
+                    case 'clientinfo':
                         fputs($GLOBALS['socket'], "NOTICE $nick :CLIENTINFO ".$GLOBALS['CONFIG_CTCP_VERSION']."\n");
                         CLI_MSG('CTCP CLIENTINFO '.TR_48.' '.$GLOBALS['nick'], '1');
                         break;
 
-                    case 'SOURCE':
+                    case 'source':
                         fputs($GLOBALS['socket'], "NOTICE $nick :SOURCE https://github.com/S3x0r/davybot\n");
                         CLI_MSG('CTCP SOURCE '.TR_48.' '.$GLOBALS['nick'], '1');
                         break;
 
-                    case 'USERINFO':
+                    case 'userinfo':
                         fputs($GLOBALS['socket'], "NOTICE $nick :USERINFO Powered by Minions!\n");
                         CLI_MSG('CTCP USERINFO '.TR_48.' '.$GLOBALS['nick'], '1');
                         break;
 
-                    case 'FINGER':
+                    case 'finger':
                         fputs($GLOBALS['socket'], "NOTICE $nick :FINGER ".$GLOBALS['CONFIG_CTCP_FINGER']."\n");
                         CLI_MSG('CTCP FINGER '.TR_48.' '.$GLOBALS['nick'], '1');
                         break;
 
-                    case 'PING':
+                    case 'ping':
                         $a = str_replace(" ", "", $args);
                         fputs($GLOBALS['socket'], "NOTICE $nick :PING ".$a."\n");
                         CLI_MSG('CTCP PING '.TR_48.' '.$GLOBALS['nick'], '1');
                         break;
 
-                    case 'TIME':
+                    case 'time':
                         $a = date("F j, Y, g:i a");
                         fputs($GLOBALS['socket'], "NOTICE $nick :TIME ".$a."\n");
                         CLI_MSG('CTCP TIME '.TR_48.' '.$GLOBALS['nick'], '1');
@@ -848,7 +910,7 @@ function Engine()
                     fputs($GLOBALS['socket'], "NICK ".$GLOBALS['NICKNAME_FROM_CONFIG']."\n");
                     $GLOBALS['CONFIG_NICKNAME'] = $GLOBALS['NICKNAME_FROM_CONFIG'];
                     $GLOBALS['I_USE_RND_NICKNAME'] = '0';
-                    CLI_MSG('[INFO]: '.TR_37, '1');
+                    CLI_MSG('[BOT]: '.TR_37, '1');
                     /* wcli extension */
                     wcliExt();
                 }
@@ -939,9 +1001,11 @@ function LoadPlugin($plugin)
 function wcliExt()
 {
     if (extension_loaded('wcli')) {
-        wcli_set_console_title('davybot '.VER.' ('.TR_51.' '.$GLOBALS['CONFIG_SERVER'].':'
-        .$GLOBALS['CONFIG_PORT'].' | '.TR_52.' '.$GLOBALS['CONFIG_NICKNAME'].' | '.TR_53.' '
-        .$GLOBALS['CONFIG_CNANNEL'].')');
+        if (empty($GLOBALS['silent_mode'])) {
+            wcli_set_console_title('davybot '.VER.' ('.TR_51.' '.$GLOBALS['CONFIG_SERVER'].':'
+            .$GLOBALS['CONFIG_PORT'].' | '.TR_52.' '.$GLOBALS['CONFIG_NICKNAME'].' | '.TR_53.' '
+            .$GLOBALS['CONFIG_CNANNEL'].')');
+        }
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -1022,15 +1086,16 @@ function LoadData($v1, $v2, $v3)
 //---------------------------------------------------------------------------------------------------------
 function CLI_MSG($msg, $log)
 {
-    $line='['.@date('H:i:s').'] '.$msg."\r\n";
+    if (empty($GLOBALS['silent_mode'])) {
+        $line='['.@date('H:i:s').'] '.$msg."\r\n";
 
-    if ($GLOBALS['CONFIG_LOGGING'] == 'yes') {
-        if ($log=='1') {
-            SaveToFile($GLOBALS['log_file'], $line, 'a');
+        if ($GLOBALS['CONFIG_LOGGING'] == 'yes') {
+            if ($log=='1') {
+                SaveToFile($GLOBALS['log_file'], $line, 'a');
+            }
         }
+        echo $line;
     }
-
-    echo $line;
 }
 //---------------------------------------------------------------------------------------------------------
 function BOT_RESPONSE($msg)

@@ -1,4 +1,12 @@
    
+   v0.5.1 changes (27.09.2017):   
+   - added channel_key='' to config.ini, if channel is set +k you can write there password
+   - ctcp response fix
+   - if bot banned, key on channel, invite channel, limit channel, bot will inform this on cli+logs
+   - new cli command: 
+     BOT.php -s (Silent mode, no output messages from BOT to cli)
+   - more cli info on join, part, kick, quit, mode
+   
    v0.5.0 changes (25.09.2017):
     - code optimized to PSR2 standard
     - more response in CTCP: USERINFO ,CLIENTINFO, SOURCE
