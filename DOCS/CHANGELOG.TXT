@@ -1,4 +1,9 @@
    
+   v0.5.2 changes (02.10.2017):
+   - new cli command: 
+     BOT.php -p <password> (it will hash your password to SHA256)
+   - some little changes in code
+
    v0.5.1 changes (27.09.2017):   
    - added channel_key='' to config.ini, if channel is set +k you can write there password
    - ctcp response fix

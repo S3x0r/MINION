@@ -8,7 +8,7 @@ Start();
 function Start()
 {
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '0.5.1');
+    define('VER', '0.5.2');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());
@@ -28,29 +28,45 @@ function Start()
     /* change default directory path */
     chdir($path);
 
-    /* cli switch -s */
-    if (isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == '-s') {
-        $GLOBALS['silent_mode'] = 'yes';
-    }
-
-    /* cli switch -v */
-    if (isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == '-v') {
-        echo "\ndavybot version: ".VER."\n";
-        die();
-    }
-    
-    /* cli switch -h */
-    if (isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == '-h') {
-        echo "\nBot cli commands usage: BOT.php [option]\n
-    -c <config_file> loads config
-    -s silent mode (no output from bot)
-    -v prints bot version
-    -h this help\n\n";
-        die();
-    }
-
     /* Load translation file */
     SetLanguage();
+
+    /* CLI arguments */
+    if (isset($_SERVER['argv'][1])) {
+        switch ($_SERVER['argv'][1]) {
+            case '-h':
+                echo "\n  ".TR_62."\n\n",
+                     "  -c ".TR_63."\n",
+                     "  -p ".TR_64."\n",
+                     "  -s ".TR_65."\n",
+                     "  -v ".TR_66."\n",
+                     "  -h ".TR_67."\n\n";
+                die();
+                break;
+
+            case '-p':
+                echo TR_68."\n\n".TR_69." ";
+                $STDIN = fopen('php://stdin', 'r');
+                $pwd = fread($STDIN, 30);
+                while (strlen($pwd) < 8) {
+                       echo TR_16."\n".TR_69." ";
+                       unset($pwd);
+                       $pwd = fread($STDIN, 30);
+                }
+                $hash = hash('sha256', rtrim($pwd, "\n\r"));
+                echo TR_70." $hash\n";
+                die();
+
+            case '-s':
+                $GLOBALS['silent_mode'] = 'yes';
+                break;
+
+            case '-v':
+                echo "\n".TR_71." ".VER."\n";
+                die();
+                break;
+        }
+    }
 
     /* wcli extension */
     if (extension_loaded('wcli')) {
@@ -62,7 +78,7 @@ function Start()
         }
     }
 
-    
+    /* Logo & info :) */
     if (empty($GLOBALS['silent_mode'])) {
         echo "
     B@B@B@B@@@B@B@B@B@B@B@B@@@B@B@B@B@B@@@@@@@B@B@B@B@B@@@B@B
@@ -404,7 +420,7 @@ function Logs()
 
     $log_file = 'LOGS/LOG-'.date('d.m.Y').'.TXT';
 
-    $data = "------------------".TR_22." ".date('d.m.Y | H:i:s')."------------------\r\n";
+    $data = "-------------------------".TR_22." ".date('d.m.Y | H:i:s')."-------------------------\r\n";
 
     SaveToFile($log_file, $data, 'a');
 
@@ -566,7 +582,10 @@ function Engine()
 //---------------------------------------------------------------------------------------------------------
 /* if someone JOIN */
             if (isset($ex[1]) && $ex[1] == 'JOIN') {
-                CLI_MSG('* '.$nick.' ('.$nick_host.') has joined '.$GLOBALS['CONFIG_CNANNEL'], '1');
+                if ($nick == $GLOBALS['CONFIG_NICKNAME']) {
+                } else {
+                          CLI_MSG('* '.$nick.' ('.$nick_host.') has joined '.$GLOBALS['CONFIG_CNANNEL'], '1');
+                }
             }
 //---------------------------------------------------------------------------------------------------------
  /* if someone PART */
@@ -581,7 +600,10 @@ function Engine()
 //---------------------------------------------------------------------------------------------------------
 /* if MODE */
             if (isset($ex[1]) && $ex[1] == 'MODE') {
-                CLI_MSG('* '.$nick.' ('.$nick_host.') sets mode: '.$ex[3], '1');
+                if (empty($nick_host)) {
+                } else {
+                          CLI_MSG('* '.$nick.' ('.$nick_host.') sets mode: '.$ex[3], '1');
+                }
             }
 //---------------------------------------------------------------------------------------------------------
 /* if someone QUIT */
@@ -697,7 +719,9 @@ function Engine()
 //---------------------------------------------------------------------------------------------------------
                     case '422': /* join if no motd */
                     case '376': /* join after motd */
-                        echo "\n";
+                        if (empty($GLOBALS['silent_mode'])) {
+                            echo "\n";
+                        }
                         CLI_MSG(TR_58.' '.$GLOBALS['CONFIG_NICKNAME'], '1');
 
                         /* register to bot info */
@@ -900,7 +924,7 @@ function Engine()
                 }
             }
 //---------------------------------------------------------------------------------------------------------
-            /* keep nick */
+            /* keep nick - check every 60 sec */
             if ($GLOBALS['CONFIG_KEEP_NICK']=='yes' && $GLOBALS['I_USE_RND_NICKNAME']=='1') {
                 if (time()-$GLOBALS['first_time'] > 60) {
                     fputs($GLOBALS['socket'], "ISON :".$GLOBALS['NICKNAME_FROM_CONFIG']."\n");
