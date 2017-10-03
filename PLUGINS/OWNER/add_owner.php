@@ -35,10 +35,9 @@ function plugin_add_owner()
            $user_commands  = implode(' ', $GLOBALS['USER_PLUGINS']);
 
            fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :From now you are on my owners list, enjoy.\n");
-           fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :Owner Commands:\n");
-           fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :$owner_commands\n");
-           fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :User Commands:\n");
-           fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :$user_commands\n");
+           fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :Core Commands: !load !unload\n");
+           fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :Owner Commands: $owner_commands\n");
+           fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :User Commands: $user_commands\n");
  
            BOT_RESPONSE('Host: \''.$GLOBALS['args'].'\' added to owners.');
 

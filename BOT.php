@@ -1,6 +1,6 @@
 <?php
 if (PHP_SAPI !== 'cli') {
-    die('This script can\'t be run from a web browser. Use CLI to run it.');
+    die('<h2>This script can\'t be run from a web browser. Use CLI to run it -> php BOT.php</h2>');
 }
 //---------------------------------------------------------------------------------------------------------
 Start();
@@ -8,7 +8,7 @@ Start();
 function Start()
 {
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '0.5.2');
+    define('VER', '0.5.3');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());
@@ -19,14 +19,11 @@ function Start()
     
     /* check os type and set path */
     if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-        $path = '../';
+        chdir('../');
     } else {
-             $path = '.';
+             chdir('.');
              $GLOBALS['OS_TYPE'] = 'other';
     }
-
-    /* change default directory path */
-    chdir($path);
 
     /* Load translation file */
     SetLanguage();
@@ -208,6 +205,18 @@ function LoadConfig($filename)
         /* DEBUG */
         $GLOBALS['CONFIG_SHOW_RAW']       = $cfg->get("DEBUG", "show_raw");
 
+        /* check if we have enough data to connect */
+        if (empty($GLOBALS['CONFIG_NICKNAME'])) {
+            CLI_MSG('[ERROR] I need nickname! No nickname in config file, Exiting.', '0');
+            sleep(6);
+            die();
+        }
+        if (empty($GLOBALS['CONFIG_SERVER'])) {
+            CLI_MSG('[ERROR] No server in config file! Exiting.', '0');
+            sleep(6);
+            die();
+        }
+
         /* Set default data */
         SetDefaultData();
 
@@ -278,12 +287,6 @@ function LoadConfig($filename)
 function SetDefaultData()
 {
     /* if variable empty in config load default one */
-    if (empty($GLOBALS['CONFIG_NICKNAME'])) {
-        $GLOBALS['CONFIG_NICKNAME'] = 'davybot';
-    }
-    if (empty($GLOBALS['CONFIG_SERVER'])) {
-        $GLOBALS['CONFIG_SERVER'] = 'minionki.com.pl';
-    }
     if (empty($GLOBALS['CONFIG_PORT'])) {
         $GLOBALS['CONFIG_PORT'] = '6667';
     }
@@ -834,70 +837,7 @@ function Engine()
 //---------------------------------------------------------------------------------------------------------
             /* register 'password' Core command */
             if (isset($rawcmd[1]) && $rawcmd[1] == 'register') {
-                $hashed = hash('sha256', $args);
-     
-                if ($hashed == $GLOBALS['CONFIG_OWNER_PASSWD']) {
-                    LoadData($GLOBALS['config_file'], 'ADMIN', 'bot_owners');
-
-                    $owners_list = $GLOBALS['LOADED'];
-                    $new         = trim($mask);
-
-                    if (empty($owners_list)) {
-                        $new_list = $new.'';
-                    }
-
-                    if (!empty($owners_list)) {
-                        $new_list = $owners_list.', '.$new;
-                    }
-
-                    SaveData($GLOBALS['config_file'], 'ADMIN', 'bot_owners', $new_list);
-
-                    /* Add host to auto op list */
-                    LoadData($GLOBALS['config_file'], 'ADMIN', 'auto_op_list');
-
-                    $auto_list   = $GLOBALS['LOADED'];
-                    $new         = trim($mask);
-
-                    if (empty($auto_list)) {
-                        $new_list = $new.'';
-                    }
-
-                    if (!empty($auto_list)) {
-                        $new_list = $auto_list.', '.$new;
-                    }
-
-                    SaveData($GLOBALS['config_file'], 'ADMIN', 'auto_op_list', $new_list);
-
-                    $owner_commands = implode(' ', $GLOBALS['OWNER_PLUGINS']);
-                    $user_commands  = implode(' ', $GLOBALS['USER_PLUGINS']);
-
-                    /* inform user about this */
-                    NICK_MSG(TR_36);
-                    NICK_MSG(TR_59);
-                    NICK_MSG($owner_commands);
-                    NICK_MSG(TR_60);
-                    NICK_MSG($user_commands);
-
-                    /* cli msg */
-                    CLI_MSG(TR_43.', '.$GLOBALS['CONFIG_CNANNEL'].', '.TR_47.' '.$mask, '1');
-                    CLI_MSG(TR_44.', '.$GLOBALS['CONFIG_CNANNEL'].', '.TR_47.' '.$mask, '1');
-
-                    /* give op */
-                    fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' +o '.$GLOBALS['nick']."\n");
-
-                    /* update variable with new owners */
-                    $cfg = new IniParser($GLOBALS['config_file']);
-                    $GLOBALS['CONFIG_OWNERS'] = $cfg->get("ADMIN", "bot_owners");
-
-                    /* remove variables */
-                    unset($hashed);
-                    unset($owners_list);
-                    unset($new);
-                    unset($new_list);
-                    unset($auto_list);
-                    unset($owner_commands);
-                    unset($user_commands);
-                }
+                RegisterToBot();
             }
 //---------------------------------------------------------------------------------------------------------
             /* plugins commands */
@@ -1019,6 +959,90 @@ function LoadPlugin($plugin)
     } catch (Exception $e) {
                              BOT_RESPONSE(TR_49.' LoadPlugin() '.TR_50);
                              CLI_MSG('[ERROR]: '.TR_49.' LoadPlugin() '.TR_50, '1');
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function RegisterToBot()
+{
+    try {
+        /* check if user is not already owner */
+        if (!HasOwner($GLOBALS['mask'])) {
+            /* hash message from user to use for comparsion */
+            $hashed = hash('sha256', $GLOBALS['args']);
+        
+            /* if user password match password in config do the rest */
+            if ($hashed == $GLOBALS['CONFIG_OWNER_PASSWD']) {
+                LoadData($GLOBALS['config_file'], 'ADMIN', 'bot_owners');
+            
+                /* load owner list from config */
+                $owners_list = $GLOBALS['LOADED'];
+                $new         = trim($GLOBALS['mask']);
+
+                if (empty($owners_list)) {
+                    $new_list = $new.'';
+                }
+
+                if (!empty($owners_list)) {
+                    $new_list = $owners_list.', '.$new;
+                }
+
+                SaveData($GLOBALS['config_file'], 'ADMIN', 'bot_owners', $new_list);
+
+                /* Add host to auto op list */
+                LoadData($GLOBALS['config_file'], 'ADMIN', 'auto_op_list');
+
+                $auto_list   = $GLOBALS['LOADED'];
+                $new         = trim($GLOBALS['mask']);
+
+                if (empty($auto_list)) {
+                    $new_list = $new.'';
+                }
+
+                if (!empty($auto_list)) {
+                    $new_list = $auto_list.', '.$new;
+                }
+
+                SaveData($GLOBALS['config_file'], 'ADMIN', 'auto_op_list', $new_list);
+
+                $owner_commands = implode(' ', $GLOBALS['OWNER_PLUGINS']);
+                $user_commands  = implode(' ', $GLOBALS['USER_PLUGINS']);
+
+                /* send information to user about commands */
+                NICK_MSG(TR_36);
+                NICK_MSG('Core Commands: !load !unload');
+                NICK_MSG(TR_59.' '.$owner_commands);
+                NICK_MSG(TR_60.' '.$user_commands);
+
+                /* cli msg */
+                CLI_MSG(TR_43.', '.$GLOBALS['CONFIG_CNANNEL'].', '.TR_47.' '.$GLOBALS['mask'], '1');
+                CLI_MSG(TR_44.', '.$GLOBALS['CONFIG_CNANNEL'].', '.TR_47.' '.$GLOBALS['mask'], '1');
+
+                /* give op */
+                fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' +o '.$GLOBALS['nick']."\n");
+
+                /* update variable with new owners */
+                $cfg = new IniParser($GLOBALS['config_file']);
+                $GLOBALS['CONFIG_OWNERS'] = $cfg->get("ADMIN", "bot_owners");
+
+                /* remove variables */
+                unset($hashed);
+                unset($owners_list);
+                unset($new);
+                unset($new_list);
+                unset($auto_list);
+                unset($owner_commands);
+                unset($user_commands);
+            }
+        } else {
+                  $hashed = hash('sha256', $GLOBALS['args']);
+            /* if user is already an owner */
+            if ($hashed == $GLOBALS['CONFIG_OWNER_PASSWD']) {
+                NICK_MSG('You are already my owner');
+            }
+        }
+    } catch (Exception $e) {
+                             BOT_RESPONSE(TR_49.' RegisterToBot() '.TR_50);
+                             CLI_MSG('[ERROR]: '.TR_49.' RegisterToBot() '.TR_50, '1');
     }
 }
 //---------------------------------------------------------------------------------------------------------

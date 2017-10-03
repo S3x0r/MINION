@@ -1,4 +1,11 @@
    
+   v0.5.3 changes (03.10.2017):
+   - new plugin: !rem_owner <nick!ident@host> - removes owner from config owners list
+   - plugins !help, !add_owner - updated
+   - plugin !htmltitle dont need 'http://' anymore, use: address only
+   - if no nickname or server given in config - send info and exits
+   - little code changes and some bugs fixed
+
    v0.5.2 changes (02.10.2017):
    - new cli command: 
      BOT.php -p <password> (it will hash your password to SHA256)

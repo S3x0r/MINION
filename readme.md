@@ -63,7 +63,7 @@ fetch list -- Lists plugins in repository
 fetch get <plugin> -- Downloads plugins from repository
 hash -- Changing string to choosed algorithm: !hash <help> to list algorithms
 help -- Shows BOT commands: !help
-htmltitle -- Shows webpage titile: !htmltitle <http://address>
+htmltitle -- Shows webpage titile: !htmltitle <address>
 http_status -- Shows http status: !http_status <number>
 info -- Shows info: !info
 join -- Joins channel: !join <#channel>
@@ -85,6 +85,7 @@ plugin unload - Unload plugin from BOT: !plugin unload <plugin_name>
 ping -- Pings a host: !ping <host>
 quit -- Shutdown BOT: !quit
 raw -- Sends raw string to server: !raw <string>
+rem_owner -- Removes owner from config owners list: !rem_owner <nick!ident@host>
 restart -- Restarts Bot: !restart
 ripe -- Checks ip or host address and shows results: !ripe <ip or host>
 save -- Saving to config file: !save <help> to list commands
