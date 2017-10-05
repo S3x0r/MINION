@@ -9,6 +9,9 @@ if (PHP_SAPI !== 'cli') {
 function plugin_showconfig()
 {
 
+    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'showconfig on: '.$GLOBALS['CONFIG_CNANNEL'].
+        ', by: '.$GLOBALS['nick'], '1');
+
     NICK_MSG('My Config:');
 
     NICK_MSG('Nick: '.$GLOBALS['CONFIG_NICKNAME'].' Name: '.$GLOBALS['CONFIG_NAME'].
@@ -33,7 +36,4 @@ function plugin_showconfig()
     .$GLOBALS['CONFIG_SHOW_RAW'].' Time zone: '.$GLOBALS['CONFIG_TIMEZONE'].'');
 
     NICK_MSG('Fetch server: '.$GLOBALS['CONFIG_FETCH_SERVER'].'');
-
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'showconfig on: '.$GLOBALS['CONFIG_CNANNEL'].
-        ', by: '.$GLOBALS['nick'], '1');
 }

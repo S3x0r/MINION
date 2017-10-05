@@ -1,4 +1,10 @@
    
+   v0.5.5 changes (05.10.2017):
+   - plugin !save command_prefix - bug fixed
+   - some output not included new command prefix - fixed
+   - some plugins updated
+   - api.php file added to hold helper functions for plugins
+ 
    v0.5.4 changes (05.10.2017):
    - added 1.5 seconds delay after bot response new line in channel, and 1 second on priv & notice
    - added channel_delay, private_delay, notice_delay to config file, you can control messages delay now

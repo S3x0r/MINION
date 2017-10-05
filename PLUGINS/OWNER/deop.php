@@ -9,11 +9,11 @@ if (PHP_SAPI !== 'cli') {
 function plugin_deop()
 {
 
-    if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'deop <nick>');
+    if (OnEmptyArg('deop <nick>')) {
     } else {
-              fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' -o '. $GLOBALS['args'] ."\n");
               CLI_MSG('!deop on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', deoped: '
               .$GLOBALS['args'], '1');
+
+              fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' -o '. $GLOBALS['args'] ."\n");
     }
 }

@@ -9,8 +9,7 @@ if (PHP_SAPI !== 'cli') {
 function plugin_save()
 {
 
-    if (empty($GLOBALS['args'])) {
-        NICK_MSG('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'save <help> to list commands');
+    if (OnEmptyArg('save <help> to list commands')) {
     } else {
         switch ($GLOBALS['args']) {
             case 'help':
@@ -149,12 +148,16 @@ function plugin_save()
                 break;
 
             case 'command_prefix':
+                 /* update plugins array */      
+                 UpdatePrefix('OWNER', $GLOBALS['piece2']);
+                 UpdatePrefix('USER', $GLOBALS['piece2']);
+            
                  SaveData($GLOBALS['config_file'], 'COMMAND', 'command_prefix', $GLOBALS['piece2']);
-     
+
                  /* update variable with new owners */
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_CMD_PREFIX'] = $cfg->get("COMMAND", "command_prefix");
- 
+
                  NICK_MSG('Command_prefix Saved.');
                  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save command_prefix on: '.$GLOBALS['CONFIG_CNANNEL'].
                      ', by: '.$GLOBALS['nick'].', New command_prefix: '.$GLOBALS['piece2'], '1');

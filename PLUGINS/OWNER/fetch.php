@@ -10,8 +10,7 @@ if (PHP_SAPI !== 'cli') {
 function plugin_fetch()
 {
 
-    if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'fetch list / fetch get <plugin>');
+    if (OnEmptyArg('fetch list / fetch get <plugin>')) {
     } else {
         if ($GLOBALS['args'] == 'list') {
             $addr_list = 'https://raw.githubusercontent.com/S3x0r/davybot_repository_plugins/master/plugin_list.db';

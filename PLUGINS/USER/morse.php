@@ -9,8 +9,7 @@ if (PHP_SAPI !== 'cli') {
 function plugin_morse()
 {
 
-    if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'morse <text>');
+    if (OnEmptyArg('morse <text>')) {
     } else {
               $morse_code = array('a'  =>  '.-', 'b'  =>  '-...', 'c'  =>  '-.-.', 'd'  =>  '-..', 'e'  =>  '.',
                                   'f'  =>  '..-.', 'g'  =>  '--.', 'h'  =>  '....', 'i'  =>  '..', 'j'  =>  '.---',
@@ -33,7 +32,7 @@ function plugin_morse()
                 $final .= $morse_code[$care]." ";
             }
         }
-        BOT_RESPONSE($string.' converted to morse: '.rtrim($final));
         CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'morse on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+        BOT_RESPONSE($string.' converted to morse: '.rtrim($final));
     }
 }

@@ -8,14 +8,17 @@ if (PHP_SAPI !== 'cli') {
 
 function plugin_dns()
 {
+    try {
+           if (OnEmptyArg('dns <address>')) {
+           } else {
+                    $host = gethostbyaddr(trim($GLOBALS['args']));
+                    BOT_RESPONSE('host: '.$host);
 
-    if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'dns <address>');
-    } else {
-              $host = gethostbyaddr(trim($GLOBALS['args']));
-              BOT_RESPONSE('host: '.$host);
-
-              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'dns on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.
-                  $GLOBALS['nick'].', dns: '.$GLOBALS['args'].'/ '.$host, '1');
+                    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'dns on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.
+                    $GLOBALS['nick'].', dns: '.$GLOBALS['args'].'/ '.$host, '1');
+           }
+    } catch (Exception $e) {
+                          BOT_RESPONSE(TR_49.' plugin_dns() '.TR_50);
+                          CLI_MSG('[ERROR]: '.TR_49.' plugin_dns() '.TR_50, '1');
     }
 }

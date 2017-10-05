@@ -8,7 +8,7 @@ Start();
 function Start()
 {
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '0.5.4');
+    define('VER', '0.5.5');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());
@@ -27,6 +27,9 @@ function Start()
 
     /* Load translation file */
     SetLanguage();
+
+    /* include API file */
+    require('api.php');
 
     /* CLI arguments */
     if (isset($_SERVER['argv'][1])) {
@@ -551,7 +554,10 @@ function LoadPlugins()
         echo "----------------------------------------------------------".TR_25." ($tot)---------\n";
     }
 
+    /* OWNER Plugins array */
     $GLOBALS['OWNER_PLUGINS'] = explode(" ", $GLOBALS['OWNER_PLUGINS']);
+    
+    /* USER Plugins array */
     $GLOBALS['USER_PLUGINS'] = explode(" ", $GLOBALS['USER_PLUGINS']);
 
     /* remove variables */
@@ -1087,7 +1093,8 @@ function RegisterToBot()
 
                 /* send information to user about commands */
                 NICK_MSG(TR_36);
-                NICK_MSG('Core Commands: !load !unload');
+                NICK_MSG('Core Commands: '.$GLOBALS['CONFIG_CMD_PREFIX'].'load '.
+                    $GLOBALS['CONFIG_CMD_PREFIX'].'unload');
                 NICK_MSG(TR_59.' '.$owner_commands);
                 NICK_MSG(TR_60.' '.$user_commands);
 
@@ -1204,10 +1211,10 @@ function SaveData($v1, $v2, $v3, $v4)
     $cfg->save();
 }
 //---------------------------------------------------------------------------------------------------------
-function LoadData($v1, $v2, $v3)
+function LoadData($config_file, $section, $config)
 {
-    $cfg = new IniParser($v1);
-    $GLOBALS['LOADED'] = $cfg->get("$v2", "$v3");
+    $cfg = new IniParser($config_file);
+    $GLOBALS['LOADED'] = $cfg->get("$section", "$config");
 }
 //---------------------------------------------------------------------------------------------------------
 function CLI_MSG($msg, $log)

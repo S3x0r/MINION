@@ -9,11 +9,11 @@ if (PHP_SAPI !== 'cli') {
 function plugin_join()
 {
 
-    if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'join <#channel>');
+    if (OnEmptyArg('join <#channel>')) {
     } else {
-        JOIN_CHANNEL($GLOBALS['args']);
         CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'join on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '
         .$GLOBALS['nick'].', joining: '.$GLOBALS['args'], '1');
+        
+        JOIN_CHANNEL($GLOBALS['args']);
     }
 }

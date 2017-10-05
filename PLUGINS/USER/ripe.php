@@ -10,12 +10,12 @@ if (PHP_SAPI !== 'cli') {
 function plugin_ripe()
 {
 
-    if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'ripe <ip or host>');
+    if (OnEmptyArg('ripe <ip or host>')) {
     } else {
-              BOT_RESPONSE(ripe_check_ip($GLOBALS['args']));
               CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'ripe on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '
               .$GLOBALS['nick'].', address: '.$GLOBALS['args'], '1');
+
+              BOT_RESPONSE(ripe_check_ip($GLOBALS['args']));
     }
 }
 

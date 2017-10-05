@@ -12,7 +12,7 @@ function plugin_restart()
     /* give op before restart */
     fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' +o '.$GLOBALS['nick']."\n");
   
-    /* send restart to server */
+    /* quit from irc server */
     fputs($GLOBALS['socket'], "QUIT :Restarting...\n");
 
     /* send cli messages */

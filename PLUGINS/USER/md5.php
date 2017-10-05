@@ -9,15 +9,14 @@ if (PHP_SAPI !== 'cli') {
 function plugin_md5()
 {
 
-    if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'md5 <string>');
+    if (OnEmptyArg('md5 <string>')) {
     } else {
               $data = str_replace(" ", "", $GLOBALS['args']);
               $md5  = md5($data);
 
-              BOT_RESPONSE('(MD5) \''.$data.'\' -> '.$md5);
-
               CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'md5 on: '.$GLOBALS['CONFIG_CNANNEL'].
                   ', by: '.$GLOBALS['nick'].', data: '.$data, '1');
+
+              BOT_RESPONSE('(MD5) \''.$data.'\' -> '.$md5);
     }
 }

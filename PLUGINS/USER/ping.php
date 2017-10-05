@@ -9,14 +9,13 @@ if (PHP_SAPI !== 'cli') {
 function plugin_ping()
 {
     try {
-        if (empty($GLOBALS['args'])) {
-            BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'ping <host>');
+    if (OnEmptyArg('ping <host>')) {
         } else {
                   $ip = gethostbyname($GLOBALS['args']);
                  
             if ((!preg_match('/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/', $ip)) and
                (($ip == $GLOBALS['args']) or ($ip === false))) {
-                BOT_RESPONSE('Unknown host :'.$GLOBALS['args']);
+                BOT_RESPONSE('Unknown host: \''.$GLOBALS['args'].'\'');
             } else {
                       $ping = ping($ip);
                 if ($ping) {
@@ -30,8 +29,8 @@ function plugin_ping()
                   ', by: '.$GLOBALS['nick'].', address: '.$GLOBALS['args'], '1');
         }
     } catch (Exception $e) {
-             BOT_RESPONSE('[ERROR] Exception: '.$e);
-             CLI_MSG('[ERROR] Exception: $e');
+             BOT_RESPONSE('[ERROR] Exception: plugin_ping() '.$e);
+             CLI_MSG('[ERROR] Exception: plugin_ping() '.$e);
     }
 }
 
@@ -45,7 +44,7 @@ function ping($hostname)
                   return(array($list[2], $list[3]));
         }
     } catch (Exception $e) {
-             BOT_RESPONSE('[ERROR] Exception: '.$e);
-             CLI_MSG('[ERROR] Exception: $e');
+             BOT_RESPONSE('[ERROR] Exception: ping() '.$e);
+             CLI_MSG('[ERROR] Exception: ping() '.$e);
     }
 }

@@ -9,11 +9,12 @@ if (PHP_SAPI !== 'cli') {
 function plugin_memusage()
 {
 
+    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'memusage by: '.$GLOBALS['nick'], '1');
+
     $mem = memory_get_usage();
     $memory = byte_convert($mem);
 
     BOT_RESPONSE('I\'m using '.$memory.' of RAM to run currently');
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'memusage by: '.$GLOBALS['nick'], '1');
 }
 
 function byte_convert($bytes)

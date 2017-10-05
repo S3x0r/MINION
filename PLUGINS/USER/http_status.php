@@ -9,12 +9,12 @@ if (PHP_SAPI !== 'cli') {
 function plugin_http_status()
 {
 
-    if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'http_status <number>');
+    if (OnEmptyArg('http_status <number>')) {
     } else {
-              BOT_RESPONSE(httpstatus($GLOBALS['args']));
               CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'http_status on: '.$GLOBALS['CONFIG_CNANNEL'].
                   ', by: '.$GLOBALS['nick'].', code: '.$GLOBALS['args'], '1');
+
+              BOT_RESPONSE(httpstatus($GLOBALS['args']));
     }
 }
 

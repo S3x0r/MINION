@@ -9,18 +9,18 @@ if (PHP_SAPI !== 'cli') {
 function plugin_math()
 {
 
-    if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'math <eg. 8*8+6>');
+    if (OnEmptyArg('math <eg. 8*8+6>')) {
     } else {
               $input = rtrim($GLOBALS['args']);
               $input = preg_replace('/([0-9.]+)\*\*([0-9.]+)/', 'pow($1, $2)', $input);
               $sum = math($input);
         if ($sum == "null") {
         } else {
+                  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'math on: '.$GLOBALS['CONFIG_CNANNEL'].
+                  ', by: '.$GLOBALS['nick'], '1');
+                  
                   BOT_RESPONSE('Value is: '.$sum);
         }
-           CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'math on: '.$GLOBALS['CONFIG_CNANNEL'].
-               ', by: '.$GLOBALS['nick'], '1');
     }
 }
 

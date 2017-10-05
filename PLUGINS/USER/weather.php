@@ -15,15 +15,14 @@ if (PHP_SAPI !== 'cli') {
 function plugin_weather()
 {
 
-    if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'weather <city>');
+    if (OnEmptyArg('weather <city>')) {
     } else {
               $query = str_replace(" ", "_", $GLOBALS['args']);
               $query = urlencode($query);
               $w = json_decode(get_contents('http://api.wunderground.com/api/d05f04ecd492639d/conditions/q/'.
                   $query.'.json'), true);
         if (isset($w['response']['error'])) {
-            BOT_RESPONSE("Error: ".$w['response']['error']['description']);
+            BOT_RESPONSE("weather: ".$w['response']['error']['description']);
         } elseif (isset($w['current_observation'])) {
                   $response = array(
                   $w['current_observation']['display_location']['full'],

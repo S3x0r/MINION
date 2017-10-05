@@ -9,11 +9,11 @@ if (PHP_SAPI !== 'cli') {
 function plugin_devoice()
 {
 
-    if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'devoice <nick>');
+    if (OnEmptyArg('devoice <nick>')) {
     } else {
-              fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' -v '.$GLOBALS['args']."\n");
               CLI_MSG('!devoice on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].
                   ', devoiced: '.$GLOBALS['args'], '1');
+
+              fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' -v '.$GLOBALS['args']."\n");
     }
 }

@@ -31,7 +31,7 @@ function checkVersion()
     if ($version[0] > VER) {
         BOT_RESPONSE('New version available!');
         BOT_RESPONSE('My version: '.VER.', version on server: '.$version[0].'');
-        BOT_RESPONSE('To update me use !update');
+        BOT_RESPONSE('To update me use '.$GLOBALS['CONFIG_CMD_PREFIX'].'update');
     } else {
               BOT_RESPONSE('No new update, you have the latest version.');
     }

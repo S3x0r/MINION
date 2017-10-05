@@ -21,9 +21,7 @@ function plugin_winamp()
     CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'winamp on: '.$GLOBALS['CONFIG_CNANNEL'].
         ', by: '.$GLOBALS['nick'], '1');
 
-    if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].
-        'winamp <help> to list commands');
+    if (OnEmptyArg('winamp <help> to list commands')) {
     } else {
         switch ($GLOBALS['args']) {
             case 'help':

@@ -7,18 +7,18 @@ if (PHP_SAPI !== 'cli') {
     $plugin_command = 'cham';
 
 /*
-    For use this plugin you must add somefile.txt in main bot directory
+    For use this plugin you must add file to $file var in main bot directory
 
 */
 
 function plugin_cham()
 {
 
-    if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'cham <nick>');
+    if (OnEmptyArg('cham <nick>')) {
     } else {
-              $file = 'somefile.txt';
+              $file = ''; //  <----- here
 
+              if(!empty($file)) {
               $texts = file_get_contents($file);
               $texts = explode("\n", $texts);
               $count = 0;
@@ -27,10 +27,14 @@ function plugin_cham()
               $text = $texts[$count++];
 
               $who = trim($GLOBALS['args']);
+              
+              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'cham on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.
+              $GLOBALS['nick'].', who: '.$who, '1');
 
               BOT_RESPONSE($who.': '.$text);
- 
-              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'cham on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.
-                  $GLOBALS['nick'].', who: '.$who, '1');
+
+              } else {
+                        BOT_RESPONSE('no file specified to use plugin');
+              }
     }
 }

@@ -9,6 +9,9 @@ if (PHP_SAPI !== 'cli') {
 function plugin_info()
 {
 
+    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'info on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '
+    .$GLOBALS['nick'], '1');
+
     NICK_MSG('    __                      __           __');
     NICK_MSG('.--|  |.---.-.--.--.--.--. |  |--.-----.|  |_');
     NICK_MSG('|  _  ||  _  |  |  |  |  | |  _  |  _  ||   _|');
@@ -19,6 +22,4 @@ function plugin_info()
     NICK_MSG('----------------------------------------------');
 // NICK_MSG('PHP version: '.PHP_VER);
 
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'info on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '
-    .$GLOBALS['nick'], '1');
 }

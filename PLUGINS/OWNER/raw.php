@@ -9,8 +9,7 @@ if (PHP_SAPI !== 'cli') {
 function plugin_raw()
 {
     
-    if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'raw <string>');
+    if (OnEmptyArg('raw <string>')) {
     } else {
              $msg = $GLOBALS['piece1'].' '.$GLOBALS['piece2'].' '.$GLOBALS['piece3'].' '.$GLOBALS['piece4']."\n";
              fputs($GLOBALS['socket'], $msg);

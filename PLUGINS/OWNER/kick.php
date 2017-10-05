@@ -9,11 +9,11 @@ if (PHP_SAPI !== 'cli') {
 function plugin_kick()
 {
 
-    if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'kick <#channel> <who>');
+    if (OnEmptyArg('kick <#channel> <who>')) {
     } else {
-              fputs($GLOBALS['socket'], 'KICK '.$GLOBALS['piece1'].' :'.$GLOBALS['piece2']."\n");
               CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'kick on: '.$GLOBALS['piece1'].', by: '
               .$GLOBALS['nick'].', kicked: '.$GLOBALS['piece2'], '1');
+
+              fputs($GLOBALS['socket'], 'KICK '.$GLOBALS['piece1'].' :'.$GLOBALS['piece2']."\n");
     }
 }

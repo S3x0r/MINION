@@ -9,8 +9,7 @@ if (PHP_SAPI !== 'cli') {
 function plugin_youtube()
 {
 
-    if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'youtube <link>');
+    if (OnEmptyArg('youtube <link>')) {
     } else {
               $site = $GLOBALS['args'];
               $content = file_get_contents($site);
@@ -24,8 +23,9 @@ function plugin_youtube()
               $piecesb = explode($searchb, $content);
               $pieceb = explode('">', $piecesb[1]);
 
-              BOT_RESPONSE('Youtube Title: '.htmlspecialchars_decode($piece[0]));
               CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'youtube on: '.$GLOBALS['CONFIG_CNANNEL'].
                   ', by: '.$GLOBALS['nick'], '1');
+
+              BOT_RESPONSE('Youtube Title: '.htmlspecialchars_decode($piece[0]));
     }
 }

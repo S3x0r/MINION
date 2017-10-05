@@ -9,8 +9,7 @@ if (PHP_SAPI !== 'cli') {
 function plugin_plugin()
 {
 //---------------------------------------------------------------------------------------------------------
-    if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'plugin <help> to list commands');
+    if (OnEmptyArg('plugin <help> to list commands')) {
     } else {
         switch ($GLOBALS['args']) {
 //---------------------------------------------------------------------------------------------------------

@@ -8,8 +8,7 @@ if (PHP_SAPI !== 'cli') {
 
 function plugin_cluster()
 {
-    if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'cluster <help> to list commands');
+    if (OnEmptyArg('cluster <help> to list commands')) {
     } else {
         switch ($GLOBALS['args']) {
             case 'help':

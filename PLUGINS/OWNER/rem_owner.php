@@ -10,8 +10,7 @@ if (PHP_SAPI !== 'cli') {
 function plugin_rem_owner()
 {
 
-    if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'rem_owner <nick!ident@hostname>');
+    if (OnEmptyArg('rem_owner <nick!ident@hostname>')) {
     } else {
               /* read owners from config */
               LoadData($GLOBALS['config_file'], 'ADMIN', 'bot_owners');

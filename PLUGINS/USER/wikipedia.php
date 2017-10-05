@@ -9,8 +9,7 @@ if (PHP_SAPI !== 'cli') {
 function plugin_wikipedia()
 {
 
-    if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'wikipedia <lang> <string>');
+    if (OnEmptyArg('wikipedia <lang> <string>')) {
     } else {
               $query = $GLOBALS['piece2'].' '.$GLOBALS['piece3'].' '.$GLOBALS['piece4'];
               $json  = file_get_contents('https://'.$GLOBALS['piece1'].
@@ -21,12 +20,12 @@ function plugin_wikipedia()
             if (isset($json[1][$i])) {
                 $resultTitle = $json[1][$i];
                 $resultUrl   = $json[3][$i];
+                
+                CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'wikipedia on: '.$GLOBALS['CONFIG_CNANNEL'].
+                ', by: '.$GLOBALS['nick'].', search: '.$query, '1');
 
                 BOT_RESPONSE($resultTitle.' - '.$resultUrl);
             }
         }
     }
-  
-     CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'wikipedia on: '.$GLOBALS['CONFIG_CNANNEL'].
-         ', by: '.$GLOBALS['nick'].', search: '.$query, '1');
 }

@@ -9,11 +9,11 @@ if (PHP_SAPI !== 'cli') {
 function plugin_op()
 {
 
-    if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'op <nick>');
+    if (OnEmptyArg('op <nick>')) {
     } else {
-              fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' +o '.$GLOBALS['args']."\n");
               CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'op on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '
               .$GLOBALS['nick'].', for: '.$GLOBALS['args'], '1');
+
+              fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' +o '.$GLOBALS['args']."\n");
     }
 }

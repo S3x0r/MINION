@@ -9,6 +9,9 @@ if (PHP_SAPI !== 'cli') {
 function plugin_list_owners()
 {
 
+    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'list_owners on: '.$GLOBALS['CONFIG_CNANNEL'].
+        ', by: '.$GLOBALS['nick'], '1');
+
     LoadData($GLOBALS['config_file'], 'ADMIN', 'bot_owners');
 
     $pieces = explode(", ", $GLOBALS['LOADED']);
@@ -16,12 +19,9 @@ function plugin_list_owners()
 
     $table = $owners;
  
-    BOT_RESPONSE('My Owners Hosts:');
+    NICK_MSG('My Owners Hosts:');
 
     for ($i=0; $i<count($table); $i++) {
-         BOT_RESPONSE($table[$i]);
+         NICK_MSG($table[$i]);
     }
- 
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'list_owners on: '.$GLOBALS['CONFIG_CNANNEL'].
-        ', by: '.$GLOBALS['nick'], '1');
 }
