@@ -149,6 +149,9 @@ function v_extract()
         $GLOBALS['CONFIG_CTCP_RESPONSE']  = $cfg->get("CTCP", "ctcp_response");
         //$GLOBALS['CONFIG_CTCP_VERSION']   = $cfg->get("CTCP", "ctcp_version");
         $GLOBALS['CONFIG_CTCP_FINGER']    = $cfg->get("CTCP", "ctcp_finger");
+        $GLOBALS['CONFIG_CHANNEL_DELAY']  = $cfg->get("DELAYS", "channel_delay");
+        $GLOBALS['CONFIG_PRIVATE_DELAY']  = $cfg->get("DELAYS", "private_delay");
+        $GLOBALS['CONFIG_NOTICE_DELAY']   = $cfg->get("DELAYS", "notice_delay");
         $GLOBALS['CONFIG_LOGGING']        = $cfg->get("LOGS", "logging");
         $GLOBALS['CONFIG_LANGUAGE']       = $cfg->get("LANG", "language");
         $GLOBALS['CONFIG_TIMEZONE']       = $cfg->get("TIME", "time_zone");
@@ -179,6 +182,9 @@ function v_extract()
         SaveData($new_cf, 'CTCP', 'ctcp_response', $GLOBALS['CONFIG_CTCP_RESPONSE']);
         //SaveData($new_cf, 'CTCP', 'ctcp_version', $GLOBALS['CONFIG_CTCP_VERSION']);
         SaveData($new_cf, 'CTCP', 'ctcp_finger', $GLOBALS['CONFIG_CTCP_FINGER']);
+        SaveData($new_cf, 'DELAYS', 'channel_delay', $GLOBALS['CONFIG_CHANNEL_DELAY']);
+        SaveData($new_cf, 'DELAYS', 'private_delay', $GLOBALS['CONFIG_PRIVATE_DELAY']);
+        SaveData($new_cf, 'DELAYS', 'notice_delay', $GLOBALS['CONFIG_NOTICE_DELAY']);
         SaveData($new_cf, 'LOGS', 'logging', $GLOBALS['CONFIG_LOGGING']);
         SaveData($new_cf, 'LANG', 'language', $GLOBALS['CONFIG_LANGUAGE']);
         SaveData($new_cf, 'TIME', 'time_zone', $GLOBALS['CONFIG_TIMEZONE']);

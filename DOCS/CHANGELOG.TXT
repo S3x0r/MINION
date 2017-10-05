@@ -1,4 +1,10 @@
    
+   v0.5.4 changes (05.10.2017):
+   - added 1.5 seconds delay after bot response new line in channel, and 1 second on priv & notice
+   - added channel_delay, private_delay, notice_delay to config file, you can control messages delay now
+   - config.ini info.txt - updated
+   - added comments to CONFIG.INI
+
    v0.5.3 changes (03.10.2017):
    - new plugin: !rem_owner <nick!ident@host> - removes owner from config owners list
    - plugins !help, !add_owner - updated

@@ -1,54 +1,117 @@
 
   CONFIG.INI Explanation
 
-
 [BOT]
-nickname = 'davybot' <-- Bot nickname
-name = 'http://github.com/S3x0r/davybot' <-- Bot name
-ident = 'http://github.com/S3x0r/davybot' <-- Bot ident
+
+; bot nickname
+nickname         = 'davybot'
+
+; bot name
+name             = 'http://github.com/S3x0r/davybot'
+
+; bot ident
+ident            = 'http://github.com/S3x0r/davybot'
 
 [SERVER]
-server = 'minionki.com.pl' <-- Server where to connect
-port = '6667' <-- Server port
-try_connect = '10' <-- Try connect 'n' times to server, if cannot then quit
-connect_delay = '3' <-- Delay before new connection to server
+
+; server where to connect
+server           = 'minionki.com.pl'
+
+; server port
+port             = '6667'
+
+; try connect 'n' (in seconds) times to server, if cannot then quit
+try_connect      = '10'
+
+; delay (in seconds) after new connection to server
+connect_delay    = '3'
 
 [ADMIN]
-auto_op_list = 'nick!ident@first.host, nick!ident@second.host' <-- Bot gives op if hosts join channel 
-bot_owners = 'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host' <-- Bot owners hosts
-owner_password = 'change_me!' <-- /msg botnickname register owner_password, if ok bot add's you to bot_owners hosts
+
+; bot will give op's if this hosts join channel 
+auto_op_list     = 'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host'
+
+; BOT OWNER HOSTS
+bot_owners       = 'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host'
+
+; owner password (SHA256)
+owner_password   = '47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed'
 
 [RESPONSE]
-bot_response = 'channel' <-- Where bot may response, you can choose 'channel', 'notice', 'priv'
+
+; where bot should response, you can choose from: channel, notice, priv
+bot_response     = 'channel'
 
 [AUTOMATIC]
-auto_op = 'yes' <-- give auto ops from auto_op_list? 'yes' / 'no'
-auto_rejoin = 'yes' <-- auto rejoin channel when kicked
-keep_nick = 'yes' <-- This setting makes the bot try to get his original nickname back if its primary nickname is already in use.
+
+; bot will give op when join to channel from auto_op_list: 'yes', 'no'
+auto_op          = 'yes'
+
+; bot will auto rejoin channel when kicked: 'yes', 'no'
+auto_rejoin      = 'yes'
+
+; this setting makes the bot try to get his original nickname back if its primary nickname is already in use
+keep_nick        = 'yes'
 
 [CHANNEL]
-channel = '#davybot' <-- channel where to join when connected
-auto_join = 'yes' <-- auto join to channel when connected
+
+; channel where to join when connected
+channel          = '#davybot'
+
+; auto join channel when connected: 'yes', 'no'
+auto_join        = 'yes'
+
+; channel key if exists
+channel_key      = ''
 
 [COMMAND]
-command_prefix = '!' <-- Bot commands prefix eg. !info, you can change to what you want :)
+
+; bot commands prefix eg. !info, you can change to what you want
+command_prefix   = '!'
 
 [CTCP]
-ctcp_response = 'yes' <-- Response to ctcp? 'yes' / 'no'
-ctcp_version = 'davybot' <-- Ctcp version response
-ctcp_finger = 'davybot' <-- Ctcp finger response
+
+; response to ctcp requests? 'yes', 'no'
+ctcp_response    = 'yes'
+
+; ctcp version response (please do not change it:)
+ctcp_version     = 'davybot (0.5.4) powered by minions!'
+
+; ctcf finger response
+ctcp_finger      = 'davybot'
+
+[DELAYS]
+
+; bot response delay on channel (in seconds)
+channel_delay   = '1.5'
+
+; bot response delay on private messages (in seconds)
+private_delay   = '1'
+
+; bot response delay on notice messages (in seconds)
+notice_delay    = '1'
 
 [LOGS]
-logging = 'yes' <-- Log Cli messages to LOGS folder? 'yes' / 'no'
+
+; log CLI messages to LOGS folder? 'yes', 'no'
+logging          = 'yes'
 
 [LANG]
-language = 'EN' <-- Set BOT language / 'EN' / 'PL'
+
+; set BOT language: 'EN', 'PL'
+language         = 'EN'
 
 [TIME]
-time_zone = 'Europe/Warsaw' <-- Time Zone
+
+; bot time zone
+time_zone        = 'Europe/Warsaw'
 
 [FETCH]
-fetch_server = 'https://raw.githubusercontent.com/S3x0r/davybot_repository_plugins/master' <-- Bot plugin repository
+
+; bot plugin repository address
+fetch_server     = 'https://raw.githubusercontent.com/S3x0r/davybot_repository_plugins/master'
 
 [DEBUG]
-show_raw = 'no' <-- Show debug messages? 'yes' / 'no'
+
+; show raw output on CLI window
+show_raw         = 'no'

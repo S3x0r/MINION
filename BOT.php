@@ -8,7 +8,7 @@ Start();
 function Start()
 {
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '0.5.3');
+    define('VER', '0.5.4');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());
@@ -194,6 +194,10 @@ function LoadConfig($filename)
         $GLOBALS['CONFIG_CTCP_RESPONSE']  = $cfg->get("CTCP", "ctcp_response");
         $GLOBALS['CONFIG_CTCP_VERSION']   = $cfg->get("CTCP", "ctcp_version");
         $GLOBALS['CONFIG_CTCP_FINGER']    = $cfg->get("CTCP", "ctcp_finger");
+        /* DELAYS */
+        $GLOBALS['CONFIG_CHANNEL_DELAY']  = $cfg->get("DELAYS", "channel_delay");
+        $GLOBALS['CONFIG_PRIVATE_DELAY']  = $cfg->get("DELAYS", "private_delay");
+        $GLOBALS['CONFIG_NOTICE_DELAY']   = $cfg->get("DELAYS", "notice_delay");
         /* LOGGING */
         $GLOBALS['CONFIG_LOGGING']        = $cfg->get("LOGS", "logging");
         /* LANGUAGE */
@@ -320,6 +324,15 @@ function SetDefaultData()
     if (empty($GLOBALS['CONFIG_CTCP_RESPONSE'])) {
         $GLOBALS['CONFIG_CTCP_RESPONSE'] = 'yes';
     }
+    if (empty($GLOBALS['CONFIG_CHANNEL_DELAY'])) {
+        $GLOBALS['CONFIG_CHANNEL_DELAY'] = '1.5';
+    }
+    if (empty($GLOBALS['CONFIG_PRIVATE_DELAY'])) {
+        $GLOBALS['CONFIG_PRIVATE_DELAY'] = '1';
+    }
+    if (empty($GLOBALS['CONFIG_NOTICE_DELAY'])) {
+        $GLOBALS['CONFIG_NOTICE_DELAY'] = '1';
+    }
     if (empty($GLOBALS['CONFIG_LOGGING'])) {
         $GLOBALS['CONFIG_LOGGING'] = 'yes';
     }
@@ -346,56 +359,121 @@ function SetDefaultData()
 function CreateDefaultConfig($filename)
 {
     /* default config */
-    $default_config = '[BOT]
+    $default_config = ';<?php die(); ?>
+
+[BOT]
+
+; bot nickname
 nickname         = \'davybot\'
+
+; bot name
 name             = \'http://github.com/S3x0r/davybot\'
+
+; bot ident
 ident            = \'http://github.com/S3x0r/davybot\'
 
 [SERVER]
+
+; server where to connect
 server           = \'minionki.com.pl\'
+
+; server port
 port             = \'6667\'
+
+; try connect \'n\' (in seconds) times to server, if cannot then quit
 try_connect      = \'10\'
+
+; delay (in seconds) after new connection to server
 connect_delay    = \'3\'
 
 [ADMIN]
+
+; bot will give op\'s if this hosts join channel 
 auto_op_list     = \'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host\'
+
+; BOT OWNER HOSTS
 bot_owners       = \'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host\'
+
+; owner password (SHA256)
 owner_password   = \'47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed\'
 
 [RESPONSE]
+
+; where bot should response, you can choose from: channel, notice, priv
 bot_response     = \'channel\'
 
 [AUTOMATIC]
+
+; bot will give op when join to channel from auto_op_list: \'yes\', \'no\'
 auto_op          = \'yes\'
+
+; bot will auto rejoin channel when kicked: \'yes\', \'no\'
 auto_rejoin      = \'yes\'
+
+; this setting makes the bot try to get his original nickname back if its primary nickname is already in use
 keep_nick        = \'yes\'
 
 [CHANNEL]
+
+; channel where to join when connected
 channel          = \'#davybot\'
+
+; auto join channel when connected: \'yes\', \'no\'
 auto_join        = \'yes\'
+
+; channel key if exists
 channel_key      = \'\'
 
 [COMMAND]
+
+; bot commands prefix eg. !info, you can change to what you want
 command_prefix   = \'!\'
 
 [CTCP]
+
+; response to ctcp requests? \'yes\', \'no\'
 ctcp_response    = \'yes\'
+
+; ctcp version response (please do not change it:)
 ctcp_version     = \'davybot ('.VER.') powered by minions!\'
+
+; ctcf finger response
 ctcp_finger      = \'davybot\'
 
+[DELAYS]
+
+; bot response delay on channel (in seconds)
+channel_delay   = \'1.5\'
+
+; bot response delay on private messages (in seconds)
+private_delay   = \'1\'
+
+; bot response delay on notice messages (in seconds)
+notice_delay    = \'1\'
+
 [LOGS]
+
+; log CLI messages to LOGS folder? \'yes\', \'no\'
 logging          = \'yes\'
 
 [LANG]
+
+; set BOT language: \'EN\', \'PL\'
 language         = \'EN\'
 
 [TIME]
+
+; bot time zone
 time_zone        = \'Europe/Warsaw\'
 
 [FETCH]
+
+; bot plugin repository address
 fetch_server     = \'https://raw.githubusercontent.com/S3x0r/davybot_repository_plugins/master\'
 
 [DEBUG]
+
+; show raw output on CLI window
 show_raw         = \'no\'';
 
     /* Save default config to file if no config */
@@ -500,7 +578,7 @@ function Connect()
 
         if ($GLOBALS['socket']==false) {
             CLI_MSG(TR_28, '1');
-            sleep($GLOBALS['CONFIG_CONNECT_DELAY']);
+            usleep($GLOBALS['CONFIG_CONNECT_DELAY'] * 1000000);
             if ($i==$GLOBALS['CONFIG_TRY_CONNECT']) {
                 CLI_MSG(TR_29, '1');
                 die(); /* TODO: send email that terminated program? */
@@ -865,7 +943,7 @@ function Engine()
             }
 //---------------------------------------------------------------------------------------------------------
             /* keep nick - check every 60 sec */
-            if ($GLOBALS['CONFIG_KEEP_NICK']=='yes' && $GLOBALS['I_USE_RND_NICKNAME']=='1') {
+            if ($GLOBALS['CONFIG_KEEP_NICK']=='yes' && isset($GLOBALS['I_USE_RND_NICKNAME'])) {
                 if (time()-$GLOBALS['first_time'] > 60) {
                     fputs($GLOBALS['socket'], "ISON :".$GLOBALS['NICKNAME_FROM_CONFIG']."\n");
                     $GLOBALS['first_time'] = time();
@@ -873,7 +951,7 @@ function Engine()
                 if ($ex[1] == '303' && $ex[3] == ':') {
                     fputs($GLOBALS['socket'], "NICK ".$GLOBALS['NICKNAME_FROM_CONFIG']."\n");
                     $GLOBALS['CONFIG_NICKNAME'] = $GLOBALS['NICKNAME_FROM_CONFIG'];
-                    $GLOBALS['I_USE_RND_NICKNAME'] = '0';
+                    unset($GLOBALS['I_USE_RND_NICKNAME']);
                     CLI_MSG('[BOT]: '.TR_37, '1');
                     /* wcli extension */
                     wcliExt();
@@ -1151,14 +1229,17 @@ function BOT_RESPONSE($msg)
     switch ($GLOBALS['CONFIG_BOT_RESPONSE']) {
         case 'channel':
             fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['CONFIG_CNANNEL']." :$msg\n");
+            usleep($GLOBALS['CONFIG_CHANNEL_DELAY'] * 1000000);
             break;
 
         case 'notice':
             fputs($GLOBALS['socket'], 'NOTICE '.$GLOBALS['nick']." :$msg\n");
+            usleep($GLOBALS['CONFIG_NOTICE_DELAY'] * 1000000);
             break;
 
         case 'priv':
             fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['nick']." :$msg\n");
+            usleep($GLOBALS['CONFIG_PRIVATE_DELAY'] * 1000000);
             break;
     }
 }
@@ -1166,6 +1247,7 @@ function BOT_RESPONSE($msg)
 function NICK_MSG($msg)
 {
     fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['nick']." :$msg\n");
+    usleep($GLOBALS['CONFIG_PRIVATE_DELAY'] * 1000000);
 }
 //---------------------------------------------------------------------------------------------------------
 function JOIN_CHANNEL($channel)
