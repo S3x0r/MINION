@@ -10,8 +10,10 @@ function plugin_quit()
 {
 
     /* give op before restart */
-    fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' +o '.$GLOBALS['nick']."\n");
-  
+    if (BotOpped() == true) {
+        fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' +o '.$GLOBALS['nick']."\n");
+    }
+
     fputs($GLOBALS['socket'], "QUIT :http://github.com/S3x0r/davybot\n");
     CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'quit received by: '.$GLOBALS['nick'], '1');
     CLI_MSG('Terminating BOT.', '1');

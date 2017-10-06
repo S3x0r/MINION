@@ -5,6 +5,7 @@
 
 */
 
+//---------------------------------------------------------------------------------------------------------
 /* update users (OWNER,USER) array */
 function UpdatePrefix($user, $new_prefix)
 {
@@ -20,5 +21,21 @@ function OnEmptyArg($info)
     } else {
               return false;
     }
+}
+//---------------------------------------------------------------------------------------------------------
+/* sends info if bot is opped, true, false */
+function BotOpped()
+{
+    if (isset($GLOBALS['BOT_OPPED'])) {
+        return true;
+    } else {
+              return false;
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+/* sends bot channels array */
+function GetBotChannels()
+{
+    return $GLOBALS['BOT_CHANNELS'];
 }
 //---------------------------------------------------------------------------------------------------------

@@ -10,8 +10,10 @@ function plugin_restart()
 {
 
     /* give op before restart */
-    fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' +o '.$GLOBALS['nick']."\n");
-  
+    if (BotOpped() == true) {
+        fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' +o '.$GLOBALS['nick']."\n");
+    }
+
     /* quit from irc server */
     fputs($GLOBALS['socket'], "QUIT :Restarting...\n");
 
