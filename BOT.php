@@ -8,7 +8,7 @@ Start();
 function Start()
 {
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '0.5.7');
+    define('VER', '0.5.8');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());
@@ -373,7 +373,7 @@ nickname         = \'davybot\'
 name             = \'http://github.com/S3x0r/davybot\'
 
 ; bot ident
-ident            = \'http://github.com/S3x0r/davybot\'
+ident            = \'minion\'
 
 [SERVER]
 
@@ -598,11 +598,11 @@ function Connect()
 //---------------------------------------------------------------------------------------------------------
 function Identify()
 {
-    /* sending user/nick to server */
-    fputs($GLOBALS['socket'], 'USER '.$GLOBALS['CONFIG_NICKNAME'].' FORCE '
-    .$GLOBALS['CONFIG_IDENT'].' :'.$GLOBALS['CONFIG_NAME']."\n");
+    /* sending NICK / USER to server */
     fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['CONFIG_NICKNAME']."\n");
-  
+
+    fputs($GLOBALS['socket'], 'USER '.$GLOBALS['CONFIG_IDENT'].' 8 * :'.$GLOBALS['CONFIG_NAME']."\n");
+
     /* time for socket loop */
     Engine();
 }
@@ -624,6 +624,7 @@ function Engine()
     /* set initial */
     $ident = null;
     $host  = null;
+    $GLOBALS['BOT_NICKNAME'] = $GLOBALS['CONFIG_NICKNAME'];
     $GLOBALS['I_USE_RND_NICKNAME'] = null;
     $GLOBALS['BOT_CHANNELS'] = array();
 
@@ -683,7 +684,7 @@ function Engine()
                     }
                 }
                 /* if bot join */
-                if ($nick == $GLOBALS['CONFIG_NICKNAME']) {
+                if ($nick == $GLOBALS['BOT_NICKNAME']) {
                     array_push($GLOBALS['BOT_CHANNELS'], $GLOBALS['channel']);
                 } else {
                           /* if some else join */
@@ -694,7 +695,7 @@ function Engine()
  /* ON PART */
             if (isset($ex[1]) && $ex[1] == 'PART') {
                 /* if bot part */
-                if ($nick == $GLOBALS['CONFIG_NICKNAME']) {
+                if ($nick == $GLOBALS['BOT_NICKNAME']) {
                     $key = array_search($GLOBALS['channel'], $GLOBALS['BOT_CHANNELS']);
                     if ($key!== false) {
                         unset($GLOBALS['BOT_CHANNELS'][$key]);
@@ -705,7 +706,7 @@ function Engine()
 //---------------------------------------------------------------------------------------------------------
 /* ON KICK */
             if (isset($ex[1]) && $ex[1] == 'KICK') {
-                if (isset($ex[3]) && $ex[3] == $GLOBALS['CONFIG_NICKNAME']) {
+                if (isset($ex[3]) && $ex[3] == $GLOBALS['BOT_NICKNAME']) {
                     if ($GLOBALS['CONFIG_AUTO_REJOIN'] == 'yes') {
                         CLI_MSG(TR_30, '1');
                         fputs($GLOBALS['socket'], "JOIN :".$ex[2]."\n");
@@ -730,14 +731,14 @@ function Engine()
                 if (empty($nick_host)) {
                 } else {
                     /* if bot opped */
-                    if (isset($ex[4]) && $ex[4] == $GLOBALS['CONFIG_NICKNAME']) {
+                    if (isset($ex[4]) && $ex[4] == $GLOBALS['BOT_NICKNAME']) {
                         if (isset($ex[3]) && $ex[3] == '+o') {
                             CLI_MSG('[BOT] Ok i have op now on channel: '.$GLOBALS['channel'], '1');
                             $GLOBALS['BOT_OPPED'] = 'yes';
                         }
                     }
                     /* if bot deoped */
-                    if (isset($ex[4]) && $ex[4] == $GLOBALS['CONFIG_NICKNAME']) {
+                    if (isset($ex[4]) && $ex[4] == $GLOBALS['BOT_NICKNAME']) {
                         if (isset($ex[3]) && $ex[3] == '-o') {
                             CLI_MSG('[BOT] I dont have op now, channel: '.$GLOBALS['channel'], '1');
                             unset($GLOBALS['BOT_OPPED']);
@@ -749,6 +750,22 @@ function Engine()
                               $rest = '';
                     } //need to fix not showing all
                     CLI_MSG('* '.$nick.' ('.$nick_host.') sets mode: '.$ex[3].' '.$rest, '1');
+                }
+            }
+//---------------------------------------------------------------------------------------------------------
+/* ON NICK */
+            if (isset($ex[1]) && $ex[1] == 'NICK') {
+                if ($nick == $GLOBALS['CONFIG_NICKNAME'] && empty($GLOBALS['I_USE_RND_NICKNAME'])) {
+                    $GLOBALS['BOT_NICKNAME'] = str_replace(':', '', $ex[2]);
+                    wcliExt();
+                    CLI_MSG('[BOT] My new nickname is: '.$GLOBALS['BOT_NICKNAME'], '1');
+                } elseif (isset($GLOBALS['BOT_NICKNAME']) && $nick == $GLOBALS['BOT_NICKNAME']) {
+                           $GLOBALS['BOT_NICKNAME'] = str_replace(':', '', $ex[2]);
+                           wcliExt();
+                           CLI_MSG('[BOT] My new nickname is: '.$GLOBALS['BOT_NICKNAME'], '1');
+                } else {
+                          $new = str_replace(':', '', $ex[2]);
+                          CLI_MSG(' * '.$nick. ' changed nick to '.$new, '1');
                 }
             }
 //---------------------------------------------------------------------------------------------------------
@@ -843,9 +860,9 @@ function Engine()
                         }
    
                         /* set random nick */
-                        $GLOBALS['CONFIG_NICKNAME'] = $GLOBALS['CONFIG_NICKNAME'].'|'.rand(0, 99);
-                        CLI_MSG(TR_33.' '.$GLOBALS['CONFIG_NICKNAME'], '1');
-                        fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['CONFIG_NICKNAME']."\n");
+                        $GLOBALS['BOT_NICKNAME'] = $GLOBALS['BOT_NICKNAME'].'|'.rand(0, 99);
+                        CLI_MSG(TR_33.' '.$GLOBALS['BOT_NICKNAME'], '1');
+                        fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['BOT_NICKNAME']."\n");
                         continue;
 //---------------------------------------------------------------------------------------------------------
                     case '422': /* join if no motd */
@@ -853,12 +870,12 @@ function Engine()
                         if (empty($GLOBALS['silent_mode'])) {
                             echo "\n";
                         }
-                        CLI_MSG(TR_58.' '.$GLOBALS['CONFIG_NICKNAME'], '1');
+                        CLI_MSG(TR_58.' '.$GLOBALS['BOT_NICKNAME'], '1');
 
                         /* register to bot info */
                         if (isset($GLOBALS['if_first_time_pwd_change'])) {
                             CLI_MSG('****************************************************', '0');
-                            CLI_MSG(TR_34.' /msg '.$GLOBALS['CONFIG_NICKNAME'].' register '.$GLOBALS['pwd'], '0');
+                            CLI_MSG(TR_34.' /msg '.$GLOBALS['BOT_NICKNAME'].' register '.$GLOBALS['pwd'], '0');
                             CLI_MSG('****************************************************', '0');
                             unset($GLOBALS['pwd']);
                             unset($GLOBALS['if_first_time_pwd_change']);
@@ -875,8 +892,8 @@ function Engine()
                         continue;
  //---------------------------------------------------------------------------------------------------------
                     case '353': /* on channel join inf */
-                        if (isset($ex[2]) && $ex[2] == $GLOBALS['CONFIG_NICKNAME']) {
-                            if (isset($ex[5]) && $ex[5] == ':@'.$GLOBALS['CONFIG_NICKNAME']) {
+                        if (isset($ex[2]) && $ex[2] == $GLOBALS['BOT_NICKNAME']) {
+                            if (isset($ex[5]) && $ex[5] == ':@'.$GLOBALS['BOT_NICKNAME']) {
                                 $GLOBALS['BOT_OPPED'] = 'yes';
                             }
                         }
@@ -1008,7 +1025,7 @@ function Engine()
                 }
                 if ($ex[1] == '303' && $ex[3] == ':') {
                     fputs($GLOBALS['socket'], "NICK ".$GLOBALS['NICKNAME_FROM_CONFIG']."\n");
-                    $GLOBALS['CONFIG_NICKNAME'] = $GLOBALS['NICKNAME_FROM_CONFIG'];
+                    $GLOBALS['BOT_NICKNAME'] = $GLOBALS['NICKNAME_FROM_CONFIG'];
                     unset($GLOBALS['I_USE_RND_NICKNAME']);
                     CLI_MSG('[BOT]: '.TR_37, '1');
                     /* wcli extension */
@@ -1190,7 +1207,7 @@ function wcliExt()
     if (extension_loaded('wcli')) {
         if (empty($GLOBALS['silent_mode'])) {
             wcli_set_console_title('davybot '.VER.' ('.TR_51.' '.$GLOBALS['CONFIG_SERVER'].':'
-            .$GLOBALS['CONFIG_PORT'].' | '.TR_52.' '.$GLOBALS['CONFIG_NICKNAME'].' | '.TR_53.' '
+            .$GLOBALS['CONFIG_PORT'].' | '.TR_52.' '.$GLOBALS['BOT_NICKNAME'].' | '.TR_53.' '
             .$GLOBALS['CONFIG_CNANNEL'].')');
         }
     }

@@ -12,7 +12,7 @@ function plugin_auto_op()
     $nick_ex = explode('!', trim($GLOBALS['args']));
 
     if (OnEmptyArg('auto_op <nick!ident@hostname>')) {
-    } elseif ($nick_ex[0] != $GLOBALS['CONFIG_NICKNAME']) {
+    } elseif ($nick_ex[0] != $GLOBALS['BOT_NICKNAME']) {
           LoadData($GLOBALS['config_file'], 'ADMIN', 'auto_op_list');
 
           $auto_list   = $GLOBALS['LOADED'];
