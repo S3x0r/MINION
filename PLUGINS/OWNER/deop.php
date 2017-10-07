@@ -11,9 +11,11 @@ function plugin_deop()
 
     if (OnEmptyArg('deop <nick>')) {
     } else {
-              CLI_MSG('!deop on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', deoped: '
-              .$GLOBALS['args'], '1');
+              if (BotOpped() == true) {
+                  CLI_MSG('!deop on: '.$GLOBALS['channel'].', by: '.$GLOBALS['nick'].', deoped: '
+                  .$GLOBALS['args'], '1');
 
-              fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' -o '. $GLOBALS['args'] ."\n");
+                  fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' -o '. $GLOBALS['args'] ."\n");
+              }
     }
 }

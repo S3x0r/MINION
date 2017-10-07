@@ -14,7 +14,7 @@ function plugin_md5()
               $data = str_replace(" ", "", $GLOBALS['args']);
               $md5  = md5($data);
 
-              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'md5 on: '.$GLOBALS['CONFIG_CNANNEL'].
+              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'md5 on: '.$GLOBALS['channel'].
                   ', by: '.$GLOBALS['nick'].', data: '.$data, '1');
 
               BOT_RESPONSE('(MD5) \''.$data.'\' -> '.$md5);

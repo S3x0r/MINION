@@ -11,14 +11,14 @@ function plugin_restart()
 
     /* give op before restart */
     if (BotOpped() == true) {
-        fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' +o '.$GLOBALS['nick']."\n");
+        fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['nick']."\n");
     }
 
     /* quit from irc server */
     fputs($GLOBALS['socket'], "QUIT :Restarting...\n");
 
     /* send cli messages */
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'restart on: '.$GLOBALS['CONFIG_CNANNEL'].' by: '.$GLOBALS['nick'], '1');
+    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'restart on: '.$GLOBALS['channel'].' by: '.$GLOBALS['nick'], '1');
     CLI_MSG('Restarting BOT...', '1');
   
     /* execute batch script */

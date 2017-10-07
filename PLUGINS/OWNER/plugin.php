@@ -35,17 +35,17 @@ function plugin_plugin()
                     if (file_exists('PLUGINS/USER/'.$GLOBALS['piece2'].'.php')) {
                         unlink('PLUGINS/USER/'.$GLOBALS['piece2'].'.php');
                         BOT_RESPONSE('Plugin: '.$GLOBALS['piece2'].' removed from: USER dir.');
-                        CLI_MSG('[BOT] !plugin delete on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '
+                        CLI_MSG('[BOT] !plugin delete on: '.$GLOBALS['channel'].', by: '
                         .$GLOBALS['nick'].', deleted: '.$GLOBALS['piece2'], '1');
                     } elseif (file_exists('PLUGINS/OWNER/'.$GLOBALS['piece2'].'.php')) {
                                unlink('PLUGINS/OWNER/'.$GLOBALS['piece2'].'.php');
                                BOT_RESPONSE('Plugin: '.$GLOBALS['piece2'].' removed from OWNER dir.');
-                               CLI_MSG('[BOT] !plugin delete on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '
+                               CLI_MSG('[BOT] !plugin delete on: '.$GLOBALS['channel'].', by: '
                                .$GLOBALS['nick'].', deleted: '.$GLOBALS['piece2'], '1');
                     }
                 } else {
                       BOT_RESPONSE('No such plugin, wrong name?');
-                      CLI_MSG('[BOT] !plugin delete on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '
+                      CLI_MSG('[BOT] !plugin delete on: '.$GLOBALS['channel'].', by: '
                       .$GLOBALS['nick'].', NO SUCH PLUGIN: '.$GLOBALS['piece2'], '1');
                 }
                 break;
@@ -54,11 +54,11 @@ function plugin_plugin()
                 if (file_exists('PLUGINS/OWNER/'.$GLOBALS['piece2'].'.php')) {
                     rename('PLUGINS/OWNER/'.$GLOBALS['piece2'].'.php', 'PLUGINS/USER/'.$GLOBALS['piece2'].'.php');
                     BOT_RESPONSE('Plugin: '.$GLOBALS['piece2'].' moved to USER dir.');
-                    CLI_MSG('!plugin move on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].
+                    CLI_MSG('!plugin move on: '.$GLOBALS['channel'].', by: '.$GLOBALS['nick'].
                     ', moved plugin to USER: '.$GLOBALS['piece2'], '1');
                 } elseif (!file_exists('PLUGINS/OWNER/'.$GLOBALS['piece2'].'.php')) {
                            BOT_RESPONSE('No such plugin in OWNER dir, wrong name?');
-                           CLI_MSG('[BOT] !plugin move on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '
+                           CLI_MSG('[BOT] !plugin move on: '.$GLOBALS['channel'].', by: '
                            .$GLOBALS['nick'].', NO SUCH PLUGIN: '.$GLOBALS['piece2'], '1');
                 }
                 break;

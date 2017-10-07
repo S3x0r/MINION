@@ -11,7 +11,7 @@ function plugin_quit()
 
     /* give op before restart */
     if (BotOpped() == true) {
-        fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' +o '.$GLOBALS['nick']."\n");
+        fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['nick']."\n");
     }
 
     fputs($GLOBALS['socket'], "QUIT :http://github.com/S3x0r/davybot\n");

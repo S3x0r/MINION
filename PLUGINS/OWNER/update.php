@@ -10,7 +10,7 @@ if (PHP_SAPI !== 'cli') {
 function plugin_update()
 {
 
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'update on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'update on: '.$GLOBALS['channel'].', by: '.$GLOBALS['nick'], '1');
 
     v_connect();
 }
@@ -193,6 +193,11 @@ function v_extract()
 
         //copy CONFIG from old ver
         copy($GLOBALS['config_file'], $GLOBALS['newdir'].'/OLD_CONFIG.INI');
+
+        /* give op */
+        if (BotOpped() == true) {
+            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['nick']."\n");
+        }
 
         // reconnect to run new version
         fputs($GLOBALS['socket'], "QUIT :Installing update...\n");

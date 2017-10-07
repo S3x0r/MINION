@@ -37,12 +37,12 @@ function plugin_fetch()
                         fclose($a);
                         $delete = 'PLUGINS/'.$GLOBALS['piece2'].'.php';
                         unlink($delete);
-                        CLI_MSG('!fetch: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', plugin: '
+                        CLI_MSG('!fetch: '.$GLOBALS['channel'].', by: '.$GLOBALS['nick'].', plugin: '
                         .$GLOBALS['piece2'], '1');
                     } else {
                         fclose($a);
                         BOT_RESPONSE('Plugin added.');
-                        CLI_MSG('!fetch: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', plugin: '
+                        CLI_MSG('!fetch: '.$GLOBALS['channel'].', by: '.$GLOBALS['nick'].', plugin: '
                         .$GLOBALS['piece2'], '1');
                     }
                 }

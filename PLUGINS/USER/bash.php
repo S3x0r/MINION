@@ -25,7 +25,7 @@ function plugin_bash()
            } else {
            }
 
-           CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'bash on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+           CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'bash on: '.$GLOBALS['channel'].', by: '.$GLOBALS['nick'], '1');
            BOT_RESPONSE(str_replace('<br />', '', html_entity_decode($quotes[1][$i], ENT_QUOTES)));
     }
 } catch (Exception $e) {

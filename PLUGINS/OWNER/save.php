@@ -72,7 +72,7 @@ function plugin_save()
  
                  NICK_MSG('Auto_join Saved.');
                  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save auto_join on: '
-                 .$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', New auto_join: '.$GLOBALS['piece2'], '1');
+                 .$GLOBALS['channel'].', by: '.$GLOBALS['nick'].', New auto_join: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'auto_op':
@@ -84,7 +84,7 @@ function plugin_save()
  
                  NICK_MSG('Auto_op Saved.');
                  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save auto_op on: '
-                 .$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', New auto_op: '.$GLOBALS['piece2'], '1');
+                 .$GLOBALS['channel'].', by: '.$GLOBALS['nick'].', New auto_op: '.$GLOBALS['piece2'], '1');
                 break;
  
             case 'auto_op_list':
@@ -96,7 +96,7 @@ function plugin_save()
  
                  NICK_MSG('Auto_op_list Saved.');
                  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save auto_op_list on: '
-                 .$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', New auto_op_list: '.$GLOBALS['piece2'], '1');
+                 .$GLOBALS['channel'].', by: '.$GLOBALS['nick'].', New auto_op_list: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'auto_rejoin':
@@ -108,7 +108,7 @@ function plugin_save()
  
                  NICK_MSG('Auto_rejoin Saved.');
                  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save auto_rejoin on: '
-                 .$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', New auto_rejoin: '.$GLOBALS['piece2'], '1');
+                 .$GLOBALS['channel'].', by: '.$GLOBALS['nick'].', New auto_rejoin: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'bot_owners':
@@ -120,7 +120,7 @@ function plugin_save()
  
                  NICK_MSG('Bot_owners Saved.');
                  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save bot_owners on: '
-                 .$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', New bot_owners: '.$GLOBALS['piece2'], '1');
+                 .$GLOBALS['channel'].', by: '.$GLOBALS['nick'].', New bot_owners: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'bot_response':
@@ -132,7 +132,7 @@ function plugin_save()
  
                  NICK_MSG('bot_response Saved.');
                  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save bot_response on: '
-                 .$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', New bot_response: '.$GLOBALS['piece2'], '1');
+                 .$GLOBALS['channel'].', by: '.$GLOBALS['nick'].', New bot_response: '.$GLOBALS['piece2'], '1');
                 break;
   
             case 'channel':
@@ -144,7 +144,7 @@ function plugin_save()
  
                  NICK_MSG('Channel Saved.');
                  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save channel on: '
-                 .$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'].', New channel: '.$GLOBALS['piece2'], '1');
+                 .$GLOBALS['channel'].', by: '.$GLOBALS['nick'].', New channel: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'command_prefix':
@@ -159,7 +159,7 @@ function plugin_save()
                  $GLOBALS['CONFIG_CMD_PREFIX'] = $cfg->get("COMMAND", "command_prefix");
 
                  NICK_MSG('Command_prefix Saved.');
-                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save command_prefix on: '.$GLOBALS['CONFIG_CNANNEL'].
+                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save command_prefix on: '.$GLOBALS['channel'].
                      ', by: '.$GLOBALS['nick'].', New command_prefix: '.$GLOBALS['piece2'], '1');
                 break;
 
@@ -171,7 +171,7 @@ function plugin_save()
                  $GLOBALS['CONFIG_CONNECT_DELAY'] = $cfg->get("SERVER", "connect_delay");
  
                  NICK_MSG('Connect_delay Saved.');
-                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save connect_delay on: '.$GLOBALS['CONFIG_CNANNEL'].
+                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save connect_delay on: '.$GLOBALS['channel'].
                      ', by: '.$GLOBALS['nick'].', New connect_delay: '.$GLOBALS['piece2'], '1');
                 break;
 
@@ -183,7 +183,7 @@ function plugin_save()
                  $GLOBALS['CONFIG_CTCP_FINGER'] = $cfg->get("CTCP", "ctcp_finger");
  
                  NICK_MSG('Ctcp_finger Saved.');
-                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save ctcp_finger on: '.$GLOBALS['CONFIG_CNANNEL'].
+                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save ctcp_finger on: '.$GLOBALS['channel'].
                      ', by: '.$GLOBALS['nick'].', New ctcp_finger: '.$GLOBALS['piece2'], '1');
                 break;
 
@@ -195,7 +195,7 @@ function plugin_save()
                  $GLOBALS['CONFIG_CTCP_RESPONSE'] = $cfg->get("CTCP", "ctcp_response");
  
                  NICK_MSG('Ctcp_response Saved.');
-                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save ctcp_response on: '.$GLOBALS['CONFIG_CNANNEL'].
+                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save ctcp_response on: '.$GLOBALS['channel'].
                      ', by: '.$GLOBALS['nick'].', New ctcp_response: '.$GLOBALS['piece2'], '1');
                 break;
 
@@ -207,7 +207,7 @@ function plugin_save()
                  $GLOBALS['CONFIG_CTCP_VERSION'] = $cfg->get("CTCP", "ctcp_version");
  
                  NICK_MSG('Ctcp_version Saved.');
-                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save ctcp_version on: '.$GLOBALS['CONFIG_CNANNEL'].
+                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save ctcp_version on: '.$GLOBALS['channel'].
                      ', by: '.$GLOBALS['nick'].', New ctcp_version: '.$GLOBALS['piece2'], '1');
                 break;
 
@@ -219,7 +219,7 @@ function plugin_save()
                  $GLOBALS['CONFIG_FETCH_SERVER'] = $cfg->get("FETCH", "fetch_server");
  
                  NICK_MSG('Server Saved.');
-                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save fetch_server on: '.$GLOBALS['CONFIG_CNANNEL'].
+                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save fetch_server on: '.$GLOBALS['channel'].
                      ', by: '.$GLOBALS['nick'].', New server: '.$GLOBALS['piece2'], '1');
                 break;
 
@@ -231,7 +231,7 @@ function plugin_save()
                  $GLOBALS['CONFIG_IDENT'] = $cfg->get("BOT", "ident");
  
                  NICK_MSG('Ident Saved.');
-                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save ident on: '.$GLOBALS['CONFIG_CNANNEL'].
+                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save ident on: '.$GLOBALS['channel'].
                      ', by: '.$GLOBALS['nick'].', New ident: '.$GLOBALS['piece2'], '1');
                 break;
 
@@ -243,7 +243,7 @@ function plugin_save()
                  $GLOBALS['CONFIG_LOGGING'] = $cfg->get("LOGS", "logging");
  
                  NICK_MSG('Logging Saved.');
-                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save logging on: '.$GLOBALS['CONFIG_CNANNEL'].
+                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save logging on: '.$GLOBALS['channel'].
                      ', by: '.$GLOBALS['nick'].', New logging: '.$GLOBALS['piece2'], '1');
                 break;
 
@@ -255,7 +255,7 @@ function plugin_save()
                  $GLOBALS['CONFIG_NAME'] = $cfg->get("BOT", "name");
  
                  NICK_MSG('Name Saved.');
-                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save name on: '.$GLOBALS['CONFIG_CNANNEL'].
+                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save name on: '.$GLOBALS['channel'].
                      ', by: '.$GLOBALS['nick'].', New name: '.$GLOBALS['piece2'], '1');
                 break;
 
@@ -267,7 +267,7 @@ function plugin_save()
                  $GLOBALS['CONFIG_NICKNAME'] = $cfg->get("BOT", "nickname");
  
                  NICK_MSG('Nick Saved.');
-                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save nick on: '.$GLOBALS['CONFIG_CNANNEL'].
+                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save nick on: '.$GLOBALS['channel'].
                      ', by: '.$GLOBALS['nick'].', New nick: '.$GLOBALS['piece2'], '1');
                 break;
 
@@ -279,7 +279,7 @@ function plugin_save()
                  $GLOBALS['CONFIG_OWNER_PASSWD'] = $cfg->get("ADMIN", "owner_password");
  
                  NICK_MSG('Owner_password Saved.');
-                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save owner_password on: '.$GLOBALS['CONFIG_CNANNEL'].
+                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save owner_password on: '.$GLOBALS['channel'].
                      ', by: '.$GLOBALS['nick'].', New owner_password: '.$GLOBALS['piece2'], '1');
                 break;
 
@@ -291,7 +291,7 @@ function plugin_save()
                  $GLOBALS['CONFIG_PORT'] = $cfg->get("SERVER", "port");
  
                  NICK_MSG('Port Saved.');
-                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save port on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.
+                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save port on: '.$GLOBALS['channel'].', by: '.
                      $GLOBALS['nick'].', New port: '.$GLOBALS['piece2'], '1');
                 break;
 
@@ -303,7 +303,7 @@ function plugin_save()
                  $GLOBALS['CONFIG_SHOW_RAW'] = $cfg->get("DEBUG", "show_raw");
  
                  NICK_MSG('Show_raw Saved.');
-                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save show_raw on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.
+                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save show_raw on: '.$GLOBALS['channel'].', by: '.
                      $GLOBALS['nick'].', New show_raw: '.$GLOBALS['piece2'], '1');
                 break;
 
@@ -315,7 +315,7 @@ function plugin_save()
                  $GLOBALS['CONFIG_SERVER'] = $cfg->get("SERVER", "server");
  
                  NICK_MSG('Server Saved.');
-                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save server on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.
+                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save server on: '.$GLOBALS['channel'].', by: '.
                      $GLOBALS['nick'].', New server: '.$GLOBALS['piece2'], '1');
                 break;
 
@@ -327,7 +327,7 @@ function plugin_save()
                  $GLOBALS['CONFIG_TIMEZONE'] = $cfg->get("TIME", "time_zone");
  
                  NICK_MSG('Time_zone Saved.');
-                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save time_zone on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.
+                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save time_zone on: '.$GLOBALS['channel'].', by: '.
                      $GLOBALS['nick'].', New time_zone: '.$GLOBALS['piece2'], '1');
                 break;
 
@@ -339,7 +339,7 @@ function plugin_save()
                  $GLOBALS['CONFIG_TRY_CONNECT'] = $cfg->get("SERVER", "try_connect");
  
                  NICK_MSG('Try_connect Saved.');
-                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save try_connect on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.
+                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save try_connect on: '.$GLOBALS['channel'].', by: '.
                      $GLOBALS['nick'].', New try_connect: '.$GLOBALS['piece2'], '1');
                 break;
         }

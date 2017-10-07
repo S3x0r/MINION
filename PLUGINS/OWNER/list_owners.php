@@ -9,7 +9,7 @@ if (PHP_SAPI !== 'cli') {
 function plugin_list_owners()
 {
 
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'list_owners on: '.$GLOBALS['CONFIG_CNANNEL'].
+    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'list_owners on: '.$GLOBALS['channel'].
         ', by: '.$GLOBALS['nick'], '1');
 
     LoadData($GLOBALS['config_file'], 'ADMIN', 'bot_owners');

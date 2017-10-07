@@ -11,9 +11,11 @@ function plugin_topic()
 
     if (OnEmptyArg('topic <new_topic>')) {
     } else {
-              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'topic on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '
-              .$GLOBALS['nick'].', New topic: \''.msg_without_command().'\'', '1');
-              
-              fputs($GLOBALS['socket'], 'TOPIC '.$GLOBALS['CONFIG_CNANNEL'].' '.msg_without_command()."\n");
+              if (BotOpped() == true) {
+                  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'topic on: '.$GLOBALS['channel'].', by: '
+                  .$GLOBALS['nick'].', New topic: \''.msg_without_command().'\'', '1');
+
+                  fputs($GLOBALS['socket'], 'TOPIC '.$GLOBALS['channel'].' '.msg_without_command()."\n");
+              }
     }
 }

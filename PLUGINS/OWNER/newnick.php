@@ -11,15 +11,12 @@ function plugin_newnick()
 
     if (OnEmptyArg('newnick <new_nick>')) {
     } else {
-             CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'newnick on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '
+             CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'newnick on: '.$GLOBALS['channel'].', by: '
              .$GLOBALS['nick'].', new nick: '.$GLOBALS['args'], '1');
             
              fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['args']."\n");
 
-        /* wcli extension */
-        if (extension_loaded('wcli')) {
-            wcli_set_console_title('davybot '.VER.' (server: '.$GLOBALS['CONFIG_SERVER'].':'
-            .$GLOBALS['CONFIG_PORT'].' | nickname: '.$GLOBALS['args'].' | channel: '.$GLOBALS['CONFIG_CNANNEL'].')');
-        }
+             /* wcli extension */
+             wcliExt();
     }
 }

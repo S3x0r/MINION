@@ -8,7 +8,7 @@ Start();
 function Start()
 {
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '0.5.6');
+    define('VER', '0.5.7');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());
@@ -641,8 +641,12 @@ function Engine()
 //---------------------------------------------------------------------------------------------------------
             flush();
             $ex = explode(' ', trim($data));
+
+            if (isset($ex[2])) {
+                $GLOBALS['channel'] = str_replace(':#', '#', $ex[2]);
+            }
 //---------------------------------------------------------------------------------------------------------
-/* ping response */
+/* PING PONG */
             if (isset($ex[0]) && $ex[0] == 'PING') {
                 fputs($GLOBALS['socket'], "PONG ".$ex[1]."\n");
                 continue;
@@ -657,7 +661,7 @@ function Engine()
                       $server = str_replace(':', '', $ex[0]);
             }
 //---------------------------------------------------------------------------------------------------------
-/* if someone JOIN */
+/* ON JOIN */
             if (isset($ex[1]) && $ex[1] == 'JOIN') {
                 /* auto op */
                 if ($GLOBALS['CONFIG_AUTO_OP'] == 'yes') {
@@ -671,37 +675,35 @@ function Engine()
 
                     if (in_array($mask2, $pieces)) {
                         if (BotOpped() == true) {
-                            CLI_MSG('* '.$nick.' ('.$nick_host.') has joined '.$GLOBALS['CONFIG_CNANNEL'], '1');
+                            CLI_MSG('* '.$nick.' ('.$nick_host.') has joined '.$GLOBALS['channel'], '1');
                             CLI_MSG(TR_31.' '.$nick.' '.TR_32, '1');
-                            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' +o '.$nick."\n");
+                            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$nick."\n");
                             continue;
                         }
                     }
                 }
                 /* if bot join */
                 if ($nick == $GLOBALS['CONFIG_NICKNAME']) {
-                    $chan = str_replace(':#', '#', $ex[2]);
-                    array_push($GLOBALS['BOT_CHANNELS'], $chan);
+                    array_push($GLOBALS['BOT_CHANNELS'], $GLOBALS['channel']);
                 } else {
                           /* if some else join */
-                          CLI_MSG('* '.$nick.' ('.$nick_host.') has joined '.$GLOBALS['CONFIG_CNANNEL'], '1');
+                          CLI_MSG('* '.$nick.' ('.$nick_host.') has joined '.$GLOBALS['channel'], '1');
                 }
             }
 //---------------------------------------------------------------------------------------------------------
- /* if someone PART */
+ /* ON PART */
             if (isset($ex[1]) && $ex[1] == 'PART') {
                 /* if bot part */
                 if ($nick == $GLOBALS['CONFIG_NICKNAME']) {
-                    $chan = str_replace(':#', '#', $ex[2]);
-                    $key = array_search($chan, $GLOBALS['BOT_CHANNELS']);
+                    $key = array_search($GLOBALS['channel'], $GLOBALS['BOT_CHANNELS']);
                     if ($key!== false) {
                         unset($GLOBALS['BOT_CHANNELS'][$key]);
                     }
                 }
-                CLI_MSG('* '.$nick.' ('.$nick_host.') has leaved '.$GLOBALS['CONFIG_CNANNEL'], '1');
+                CLI_MSG('* '.$nick.' ('.$nick_host.') has leaved '.$GLOBALS['channel'], '1');
             }
 //---------------------------------------------------------------------------------------------------------
-/* if someone KICKED */
+/* ON KICK */
             if (isset($ex[1]) && $ex[1] == 'KICK') {
                 if (isset($ex[3]) && $ex[3] == $GLOBALS['CONFIG_NICKNAME']) {
                     if ($GLOBALS['CONFIG_AUTO_REJOIN'] == 'yes') {
@@ -710,34 +712,34 @@ function Engine()
                         continue;
                     }
                 }
-                CLI_MSG('* '.$nick.' ('.$nick_host.') kicked '.$ex[3].' from '.$GLOBALS['CONFIG_CNANNEL'], '1');
+                CLI_MSG('* '.$nick.' ('.$nick_host.') kicked '.$ex[3].' from '.$GLOBALS['channel'], '1');
             }
 //---------------------------------------------------------------------------------------------------------
-/* if TOPIC */
+/* ON TOPIC */
             if (isset($ex[1]) && $ex[1] == 'TOPIC') {
-                CLI_MSG('* '.$nick.' ('.$nick_host.') ('.$GLOBALS['CONFIG_CNANNEL'].') sets topic: '.parse_ex3(), '1');
+                CLI_MSG('* '.$nick.' ('.$nick_host.') ('.$GLOBALS['channel'].') sets topic: '.parse_ex3(), '1');
             }
 //---------------------------------------------------------------------------------------------------------
-/* if PRIVMSG */
+/* ON PRIVMSG */
             if (isset($ex[1]) && $ex[1] == 'PRIVMSG') {
-                CLI_MSG('<'.$nick.'> '.parse_ex3(), '1');
+                CLI_MSG('['.$GLOBALS['channel'].'] <'.$nick.'> '.parse_ex3(), '1');
             }
 //---------------------------------------------------------------------------------------------------------
-/* if MODE */
+/* ON MODE */
             if (isset($ex[1]) && $ex[1] == 'MODE') {
                 if (empty($nick_host)) {
                 } else {
                     /* if bot opped */
                     if (isset($ex[4]) && $ex[4] == $GLOBALS['CONFIG_NICKNAME']) {
                         if (isset($ex[3]) && $ex[3] == '+o') {
-                            CLI_MSG('[BOT] Ok i have op now on channel: '.$ex[2], '1');
+                            CLI_MSG('[BOT] Ok i have op now on channel: '.$GLOBALS['channel'], '1');
                             $GLOBALS['BOT_OPPED'] = 'yes';
                         }
                     }
                     /* if bot deoped */
                     if (isset($ex[4]) && $ex[4] == $GLOBALS['CONFIG_NICKNAME']) {
                         if (isset($ex[3]) && $ex[3] == '-o') {
-                            CLI_MSG('[BOT] I dont have op now, channel: '.$ex[2], '1');
+                            CLI_MSG('[BOT] I dont have op now, channel: '.$GLOBALS['channel'], '1');
                             unset($GLOBALS['BOT_OPPED']);
                         }
                     }
@@ -745,18 +747,18 @@ function Engine()
                          $rest = $ex[4];
                     } else {
                               $rest = '';
-                    }
+                    } //need to fix not showing all
                     CLI_MSG('* '.$nick.' ('.$nick_host.') sets mode: '.$ex[3].' '.$rest, '1');
                 }
             }
 //---------------------------------------------------------------------------------------------------------
-/* if someone QUIT */
+/* ON QUIT */
             if (isset($ex[1]) && $ex[1] == 'QUIT') {
                 if (isset($ex[2])) {
                     $quit = $ex[3];
                 } else {
                           $quit = '';
-                }
+                } //need fix not showing all
                 CLI_MSG('* '.$nick.' ('.$nick_host.') Quit ('.$quit.')', '1');
             }
 //---------------------------------------------------------------------------------------------------------
@@ -1149,12 +1151,12 @@ function RegisterToBot()
                 NICK_MSG(TR_60.' '.$user_commands);
 
                 /* cli msg */
-                CLI_MSG(TR_43.', '.$GLOBALS['CONFIG_CNANNEL'].', '.TR_47.' '.$GLOBALS['mask'], '1');
-                CLI_MSG(TR_44.', '.$GLOBALS['CONFIG_CNANNEL'].', '.TR_47.' '.$GLOBALS['mask'], '1');
+                CLI_MSG(TR_43.', '.$GLOBALS['channel'].', '.TR_47.' '.$GLOBALS['mask'], '1');
+                CLI_MSG(TR_44.', '.$GLOBALS['channel'].', '.TR_47.' '.$GLOBALS['mask'], '1');
 
                 /* give op */
                 if (BotOpped() == true) {
-                    fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' +o '.$GLOBALS['nick']."\n");
+                    fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['nick']."\n");
                 }
 
                 /* update variable with new owners */
@@ -1301,7 +1303,7 @@ function BOT_RESPONSE($msg)
 {
     switch ($GLOBALS['CONFIG_BOT_RESPONSE']) {
         case 'channel':
-            fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['CONFIG_CNANNEL']." :$msg\n");
+            fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :$msg\n");
             usleep($GLOBALS['CONFIG_CHANNEL_DELAY'] * 1000000);
             break;
 

@@ -18,7 +18,7 @@ if (PHP_SAPI !== 'cli') {
 function plugin_winamp()
 {
 
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'winamp on: '.$GLOBALS['CONFIG_CNANNEL'].
+    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'winamp on: '.$GLOBALS['channel'].
         ', by: '.$GLOBALS['nick'], '1');
 
     if (OnEmptyArg('winamp <help> to list commands')) {

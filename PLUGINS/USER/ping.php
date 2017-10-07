@@ -25,7 +25,7 @@ function plugin_ping()
                     }
                 }
             }
-              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'ping on: '.$GLOBALS['CONFIG_CNANNEL'].
+              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'ping on: '.$GLOBALS['channel'].
                   ', by: '.$GLOBALS['nick'].', address: '.$GLOBALS['args'], '1');
         }
     } catch (Exception $e) {

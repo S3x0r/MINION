@@ -38,12 +38,12 @@ function plugin_add_owner()
            fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :Owner Commands: $owner_commands\n");
            fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :User Commands: $user_commands\n");
  
-           CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'add_owner on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '
+           CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'add_owner on: '.$GLOBALS['channel'].', by: '
            .$GLOBALS['nick'].', OWNER ADDED: '.$GLOBALS['args'], '1');
 
            BOT_RESPONSE('Host: \''.$GLOBALS['args'].'\' added to owners.');
     } else {
-              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'add_owner on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '
+              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'add_owner on: '.$GLOBALS['channel'].', by: '
                .$GLOBALS['nick'].', CANNOT ADD MYSELF: '.$GLOBALS['args'], '1');
 
               BOT_RESPONSE('I cannot add myself to owners, im already master :)');

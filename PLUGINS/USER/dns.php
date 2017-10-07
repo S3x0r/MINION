@@ -14,7 +14,7 @@ function plugin_dns()
                     $host = gethostbyaddr(trim($GLOBALS['args']));
                     BOT_RESPONSE('host: '.$host);
 
-                    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'dns on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.
+                    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'dns on: '.$GLOBALS['channel'].', by: '.
                     $GLOBALS['nick'].', dns: '.$GLOBALS['args'].'/ '.$host, '1');
            }
     } catch (Exception $e) {

@@ -9,7 +9,7 @@ if (PHP_SAPI !== 'cli') {
 function plugin_showconfig()
 {
 
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'showconfig on: '.$GLOBALS['CONFIG_CNANNEL'].
+    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'showconfig on: '.$GLOBALS['channel'].
         ', by: '.$GLOBALS['nick'], '1');
 
     NICK_MSG('My Config:');

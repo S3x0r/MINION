@@ -17,7 +17,7 @@ function plugin_htmltitle()
                     $matches[1].='...';
                 }
 
-                CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'htmltitle on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+                CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'htmltitle on: '.$GLOBALS['channel'].', by: '.$GLOBALS['nick'], '1');
 
                 BOT_RESPONSE('Title: '.
                     str_replace("\n", '', str_replace("\r", '', html_entity_decode($matches[1], ENT_QUOTES, 'utf-8'))));

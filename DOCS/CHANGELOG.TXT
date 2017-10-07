@@ -1,4 +1,9 @@
    
+   v0.5.7 changes (07.10.2017):
+   - bot can handle now more than 1 channel, response on channel where commands was put
+   - cli messages bugs fixed
+   - plugins updated
+
    v0.5.6 changes (06.10.2017):
    - bot now detects if it have op or no
    - bot have now channels list where he is 

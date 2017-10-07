@@ -37,7 +37,7 @@ function plugin_rem_owner()
             BOT_RESPONSE('Host: \''.$GLOBALS['args'].'\' removed from owners.');
                       
             /* & to CLI */
-            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'rem_owner on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '
+            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'rem_owner on: '.$GLOBALS['channel'].', by: '
             .$GLOBALS['nick'].', OWNER REMOVED: '.$GLOBALS['args'], '1');
         }
     }

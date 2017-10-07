@@ -12,7 +12,7 @@ function plugin_ripe()
 
     if (OnEmptyArg('ripe <ip or host>')) {
     } else {
-              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'ripe on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '
+              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'ripe on: '.$GLOBALS['channel'].', by: '
               .$GLOBALS['nick'].', address: '.$GLOBALS['args'], '1');
 
               BOT_RESPONSE(ripe_check_ip($GLOBALS['args']));

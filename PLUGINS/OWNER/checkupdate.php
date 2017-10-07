@@ -11,7 +11,7 @@ function plugin_checkupdate()
     global $CheckVersion;
     $addr = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
 
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'checkupdate on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '.$GLOBALS['nick'], '1');
+    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'checkupdate on: '.$GLOBALS['channel'].', by: '.$GLOBALS['nick'], '1');
 
     $CheckVersion = file_get_contents($addr);
 

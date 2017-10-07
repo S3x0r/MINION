@@ -12,7 +12,7 @@ function plugin_uptime()
 
     $time = uptime_parse(microtime(true) - START_TIME);
 
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'Uptime on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '
+    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'Uptime on: '.$GLOBALS['channel'].', by: '
     .$GLOBALS['nick'], '1');
 
     BOT_RESPONSE("I've been running since (".date('d.m.Y, H:i:s', START_TIME).

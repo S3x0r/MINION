@@ -12,10 +12,10 @@ function plugin_op()
     if (OnEmptyArg('op <nick>')) {
     } else {
               if (BotOpped() == true) {
-                  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'op on: '.$GLOBALS['CONFIG_CNANNEL'].', by: '
+                  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'op on: '.$GLOBALS['channel'].', by: '
                   .$GLOBALS['nick'].', for: '.$GLOBALS['args'], '1');
 
-                  fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['CONFIG_CNANNEL'].' +o '.$GLOBALS['args']."\n");
+                  fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['args']."\n");
               }
     }
 }
