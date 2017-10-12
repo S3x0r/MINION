@@ -17,7 +17,7 @@ function plugin_math()
         if ($sum == "null") {
         } else {
                   CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'math on: '.$GLOBALS['channel'].
-                  ', by: '.$GLOBALS['nick'], '1');
+                  ', by: '.$GLOBALS['USER'], '1');
                   
                   BOT_RESPONSE('Value is: '.$sum);
         }

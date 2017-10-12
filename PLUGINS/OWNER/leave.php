@@ -12,7 +12,7 @@ function plugin_leave()
     if (OnEmptyArg('leave <#channel>')) {
     } else {
              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'leave on: '.$GLOBALS['channel'].', by: '
-             .$GLOBALS['nick'].', leaving: '.$GLOBALS['args'], '1');
+             .$GLOBALS['USER'].', leaving: '.$GLOBALS['args'], '1');
 
              fputs($GLOBALS['socket'], 'PART '.$GLOBALS['args']."\n");
     }

@@ -14,6 +14,6 @@ function plugin_raw()
              $msg = $GLOBALS['piece1'].' '.$GLOBALS['piece2'].' '.$GLOBALS['piece3'].' '.$GLOBALS['piece4']."\n";
              fputs($GLOBALS['socket'], $msg);
              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'raw on: '.$GLOBALS['channel'].
-               ', by: '.$GLOBALS['nick'].', cmd: '.$msg, '1');
+               ', by: '.$GLOBALS['USER'].', cmd: '.$msg, '1');
     }
 }

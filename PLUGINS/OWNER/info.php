@@ -10,7 +10,7 @@ function plugin_info()
 {
 
     CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'info on: '.$GLOBALS['channel'].', by: '
-    .$GLOBALS['nick'], '1');
+    .$GLOBALS['USER'], '1');
 
     NICK_MSG('    __                      __           __');
     NICK_MSG('.--|  |.---.-.--.--.--.--. |  |--.-----.|  |_');
@@ -20,6 +20,11 @@ function plugin_info()
     NICK_MSG('----------------------------------------------');
     NICK_MSG('   Author: S3x0r, contact: olisek@gmail.com');
     NICK_MSG('----------------------------------------------');
+
+    if (!empty($GLOBALS['CONFIG_BOT_ADMIN'])) {
+        NICK_MSG('Bot Admin: '.$GLOBALS['CONFIG_BOT_ADMIN']);
+    }
+
 // NICK_MSG('PHP version: '.PHP_VER);
 
 }

@@ -12,7 +12,7 @@ function plugin_newnick()
     if (OnEmptyArg('newnick <new_nick>')) {
     } else {
              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'newnick on: '.$GLOBALS['channel'].', by: '
-             .$GLOBALS['nick'].', new nick: '.$GLOBALS['args'], '1');
+             .$GLOBALS['USER'].', new nick: '.$GLOBALS['args'], '1');
             
              fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['args']."\n");
 

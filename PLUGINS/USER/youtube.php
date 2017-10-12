@@ -24,7 +24,7 @@ function plugin_youtube()
               $pieceb = explode('">', $piecesb[1]);
 
               CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'youtube on: '.$GLOBALS['channel'].
-                  ', by: '.$GLOBALS['nick'], '1');
+                  ', by: '.$GLOBALS['USER'], '1');
 
               BOT_RESPONSE('Youtube Title: '.htmlspecialchars_decode($piece[0]));
     }

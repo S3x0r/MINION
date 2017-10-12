@@ -15,7 +15,7 @@ function plugin_md5()
               $md5  = md5($data);
 
               CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'md5 on: '.$GLOBALS['channel'].
-                  ', by: '.$GLOBALS['nick'].', data: '.$data, '1');
+                  ', by: '.$GLOBALS['USER'].', data: '.$data, '1');
 
               BOT_RESPONSE('(MD5) \''.$data.'\' -> '.$md5);
     }

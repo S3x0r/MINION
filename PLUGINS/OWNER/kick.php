@@ -13,7 +13,7 @@ function plugin_kick()
     } else {
               if (BotOpped() == true) {
                   CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'kick on: '.$GLOBALS['channel'].', by: '
-                  .$GLOBALS['nick'].', kicked: '.$GLOBALS['piece2'], '1');
+                  .$GLOBALS['USER'].', kicked: '.$GLOBALS['piece2'], '1');
 
                   fputs($GLOBALS['socket'], 'KICK '.$GLOBALS['piece1'].' :'.$GLOBALS['piece2']."\n");
               }

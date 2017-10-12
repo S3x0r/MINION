@@ -24,7 +24,7 @@ function plugin_cluster()
         if ($GLOBALS['piece1'] == 'shutdown' && $GLOBALS['piece2'] == $GLOBALS['BOT_NICKNAME']) {
             BOT_RESPONSE('Shutting down machine...');
             CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'cluster shutdown: on '.$GLOBALS['channel'].', by: '
-            .$GLOBALS['nick'], '1');
+            .$GLOBALS['USER'], '1');
             CLI_MSG('SHUTTING DOWN COMPUTER!', '1');
             exec('shutdown -s -t 0');
         }
@@ -32,7 +32,7 @@ function plugin_cluster()
         if ($GLOBALS['piece1'] == 'shutdown' && $GLOBALS['piece2'] == '*') {
             BOT_RESPONSE('Shutting down machine...');
             CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'cluster shutdown: on '.$GLOBALS['channel'].', by: '
-            .$GLOBALS['nick'], '1');
+            .$GLOBALS['USER'], '1');
             CLI_MSG('SHUTTING DOWN COMPUTER!', '1');
             exec('shutdown -s -t 0');
         }

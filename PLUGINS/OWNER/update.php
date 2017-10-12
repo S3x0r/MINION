@@ -10,7 +10,7 @@ if (PHP_SAPI !== 'cli') {
 function plugin_update()
 {
 
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'update on: '.$GLOBALS['channel'].', by: '.$GLOBALS['nick'], '1');
+    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'update on: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'], '1');
 
     v_connect();
 }
@@ -135,6 +135,7 @@ function v_extract()
         $GLOBALS['CONFIG_PORT']           = $cfg->get("SERVER", "port");
         $GLOBALS['CONFIG_TRY_CONNECT']    = $cfg->get("SERVER", "try_connect");
         $GLOBALS['CONFIG_CONNECT_DELAY']  = $cfg->get("SERVER", "connect_delay");
+        $GLOBALS['CONFIG_BOT_ADMIN']      = $cfg->get("ADMIN", "bot_admin");
         $GLOBALS['CONFIG_AUTO_OP_LIST']   = $cfg->get("ADMIN", "auto_op_list");
         $GLOBALS['CONFIG_OWNERS']         = $cfg->get("ADMIN", "bot_owners");
         $GLOBALS['CONFIG_OWNER_PASSWD']   = $cfg->get("ADMIN", "owner_password");
@@ -144,6 +145,7 @@ function v_extract()
         $GLOBALS['CONFIG_KEEP_NICK']      = $cfg->get("AUTOMATIC", "keep_nick");
         $GLOBALS['CONFIG_CNANNEL']        = $cfg->get("CHANNEL", "channel");
         $GLOBALS['CONFIG_AUTO_JOIN']      = $cfg->get("CHANNEL", "auto_join");
+        $GLOBALS['CONFIG_CHANNEL_MODES']  = $cfg->get("CHANNEL", "channel_modes");
         $GLOBALS['CONFIG_CHANNEL_KEY']    = $cfg->get("CHANNEL", "channel_key");
         $GLOBALS['CONFIG_CMD_PREFIX']     = $cfg->get("COMMAND", "command_prefix");
         $GLOBALS['CONFIG_CTCP_RESPONSE']  = $cfg->get("CTCP", "ctcp_response");
@@ -168,6 +170,7 @@ function v_extract()
         SaveData($new_cf, 'SERVER', 'port', $GLOBALS['CONFIG_PORT']);
         SaveData($new_cf, 'SERVER', 'try_connect', $GLOBALS['CONFIG_TRY_CONNECT']);
         SaveData($new_cf, 'SERVER', 'connect_delay', $GLOBALS['CONFIG_CONNECT_DELAY']);
+        SaveData($new_cf, 'ADMIN', 'bot_admin', $GLOBALS['CONFIG_BOT_ADMIN']);
         SaveData($new_cf, 'ADMIN', 'auto_op_list', $GLOBALS['CONFIG_AUTO_OP_LIST']);
         SaveData($new_cf, 'ADMIN', 'bot_owners', $GLOBALS['CONFIG_OWNERS']);
         SaveData($new_cf, 'ADMIN', 'owner_password', $GLOBALS['CONFIG_OWNER_PASSWD']);
@@ -177,6 +180,7 @@ function v_extract()
         SaveData($new_cf, 'AUTOMATIC', 'keep_nick', $GLOBALS['CONFIG_KEEP_NICK']);
         SaveData($new_cf, 'CHANNEL', 'channel', $GLOBALS['CONFIG_CNANNEL']);
         SaveData($new_cf, 'CHANNEL', 'auto_join', $GLOBALS['CONFIG_AUTO_JOIN']);
+        SaveData($new_cf, 'CHANNEL', 'channel_modes', $GLOBALS['CONFIG_CHANNEL_MODES']);
         SaveData($new_cf, 'CHANNEL', 'channel_key', $GLOBALS['CONFIG_CHANNEL_KEY']);
         SaveData($new_cf, 'COMMAND', 'command_prefix', $GLOBALS['CONFIG_CMD_PREFIX']);
         SaveData($new_cf, 'CTCP', 'ctcp_response', $GLOBALS['CONFIG_CTCP_RESPONSE']);
@@ -196,7 +200,7 @@ function v_extract()
 
         /* give op */
         if (BotOpped() == true) {
-            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['nick']."\n");
+            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['USER']."\n");
         }
 
         // reconnect to run new version

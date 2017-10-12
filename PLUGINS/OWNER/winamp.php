@@ -19,7 +19,7 @@ function plugin_winamp()
 {
 
     CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'winamp on: '.$GLOBALS['channel'].
-        ', by: '.$GLOBALS['nick'], '1');
+        ', by: '.$GLOBALS['USER'], '1');
 
     if (OnEmptyArg('winamp <help> to list commands')) {
     } else {

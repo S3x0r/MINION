@@ -19,14 +19,14 @@ function plugin_ping()
             } else {
                       $ping = ping($ip);
                 if ($ping) {
-                              $ping[0] = $GLOBALS['nick'].': '.$ping[0];
+                              $ping[0] = $GLOBALS['USER'].': '.$ping[0];
                     foreach ($ping as $thisline) {
                              BOT_RESPONSE($thisline);
                     }
                 }
             }
               CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'ping on: '.$GLOBALS['channel'].
-                  ', by: '.$GLOBALS['nick'].', address: '.$GLOBALS['args'], '1');
+                  ', by: '.$GLOBALS['USER'].', address: '.$GLOBALS['args'], '1');
         }
     } catch (Exception $e) {
              BOT_RESPONSE('[ERROR] Exception: plugin_ping() '.$e);

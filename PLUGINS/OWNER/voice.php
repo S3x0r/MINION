@@ -13,7 +13,7 @@ function plugin_voice()
     } else {
               if (BotOpped() == true) {
                   CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'voice on: '.$GLOBALS['channel'].', by: '
-                  .$GLOBALS['nick'].', for: '.$GLOBALS['args'], '1');
+                  .$GLOBALS['USER'].', for: '.$GLOBALS['args'], '1');
 
                   fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +v '.$GLOBALS['args']."\n");
               }

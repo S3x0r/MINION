@@ -13,7 +13,7 @@ function plugin_devoice()
     } else {
               if (BotOpped() == true) {
               
-                  CLI_MSG('!devoice on: '.$GLOBALS['channel'].', by: '.$GLOBALS['nick'].
+                  CLI_MSG('!devoice on: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'].
                   ', devoiced: '.$GLOBALS['args'], '1');
 
                   fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' -v '.$GLOBALS['args']."\n");

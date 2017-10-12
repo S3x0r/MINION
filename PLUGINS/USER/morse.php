@@ -32,7 +32,7 @@ function plugin_morse()
                 $final .= $morse_code[$care]." ";
             }
         }
-        CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'morse on: '.$GLOBALS['channel'].', by: '.$GLOBALS['nick'], '1');
+        CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'morse on: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'], '1');
         BOT_RESPONSE($string.' converted to morse: '.rtrim($final));
     }
 }

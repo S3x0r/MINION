@@ -10,7 +10,7 @@ function plugin_showconfig()
 {
 
     CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'showconfig on: '.$GLOBALS['channel'].
-        ', by: '.$GLOBALS['nick'], '1');
+        ', by: '.$GLOBALS['USER'], '1');
 
     NICK_MSG('My Config:');
 

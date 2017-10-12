@@ -15,7 +15,7 @@ function plugin_dns()
                     BOT_RESPONSE('host: '.$host);
 
                     CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'dns on: '.$GLOBALS['channel'].', by: '.
-                    $GLOBALS['nick'].', dns: '.$GLOBALS['args'].'/ '.$host, '1');
+                    $GLOBALS['USER'].', dns: '.$GLOBALS['args'].'/ '.$host, '1');
            }
     } catch (Exception $e) {
                           BOT_RESPONSE(TR_49.' plugin_dns() '.TR_50);

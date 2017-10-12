@@ -10,7 +10,7 @@ function plugin_list_owners()
 {
 
     CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'list_owners on: '.$GLOBALS['channel'].
-        ', by: '.$GLOBALS['nick'], '1');
+        ', by: '.$GLOBALS['USER'], '1');
 
     LoadData($GLOBALS['config_file'], 'ADMIN', 'bot_owners');
 

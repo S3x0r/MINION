@@ -38,7 +38,7 @@ function plugin_rem_owner()
                       
             /* & to CLI */
             CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'rem_owner on: '.$GLOBALS['channel'].', by: '
-            .$GLOBALS['nick'].', OWNER REMOVED: '.$GLOBALS['args'], '1');
+            .$GLOBALS['USER'].', OWNER REMOVED: '.$GLOBALS['args'], '1');
         }
     }
 }

@@ -29,7 +29,7 @@ function plugin_cham()
               $who = trim($GLOBALS['args']);
               
               CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'cham on: '.$GLOBALS['channel'].', by: '.
-              $GLOBALS['nick'].', who: '.$who, '1');
+              $GLOBALS['USER'].', who: '.$who, '1');
 
               BOT_RESPONSE($who.': '.$text);
 

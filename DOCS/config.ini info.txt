@@ -28,6 +28,9 @@ connect_delay    = '3'
 
 [ADMIN]
 
+; you can set info about bot administrator here
+bot_admin        = 'S3x0r <olisek@gmail.com>'
+
 ; bot will give op's if this hosts join channel 
 auto_op_list     = 'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host'
 
@@ -60,6 +63,9 @@ channel          = '#davybot'
 
 ; auto join channel when connected: 'yes', 'no'
 auto_join        = 'yes'
+
+; set channel modes on bot join, eg: 'nts'
+channel_modes    = 'nt'
 
 ; channel key if exists
 channel_key      = ''

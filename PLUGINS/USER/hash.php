@@ -17,7 +17,7 @@ function plugin_hash()
     } else {
               if (hash($GLOBALS['piece1'], $GLOBALS['piece2'])) {
                   CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'hash on: '.$GLOBALS['channel'].', by: '.
-                  $GLOBALS['nick'].', string: '.$GLOBALS['piece2'], '1');
+                  $GLOBALS['USER'].', string: '.$GLOBALS['piece2'], '1');
                   BOT_RESPONSE($GLOBALS['piece1'].': ' . hash($GLOBALS['piece1'], $GLOBALS['piece2']));
               }
     }

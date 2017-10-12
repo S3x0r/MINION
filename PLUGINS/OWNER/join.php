@@ -12,7 +12,7 @@ function plugin_join()
     if (OnEmptyArg('join <#channel>')) {
     } else {
         CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'join on: '.$GLOBALS['channel'].', by: '
-        .$GLOBALS['nick'].', joining: '.$GLOBALS['args'], '1');
+        .$GLOBALS['USER'].', joining: '.$GLOBALS['args'], '1');
         
         JOIN_CHANNEL($GLOBALS['args']);
     }

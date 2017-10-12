@@ -34,12 +34,12 @@ function plugin_auto_op()
           fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :From now you are on my auto op list, enjoy.\n");
 
           CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'auto_op on: '.$GLOBALS['channel'].', by: '
-          .$GLOBALS['nick'].', added: '.$GLOBALS['args'], '1');
+          .$GLOBALS['USER'].', added: '.$GLOBALS['args'], '1');
 
           BOT_RESPONSE('Host: \''.$GLOBALS['args'].'\' added to auto op list.');
     } else {
               CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'auto_op on: '.$GLOBALS['channel'].', by: '
-              .$GLOBALS['nick'].', CANNOT ADD MYSELF: '.$GLOBALS['args'], '1');
+              .$GLOBALS['USER'].', CANNOT ADD MYSELF: '.$GLOBALS['args'], '1');
 
               BOT_RESPONSE('I cannot add myself to auto op list, im already OP MASTER :)');
     }

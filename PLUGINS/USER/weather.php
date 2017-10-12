@@ -58,7 +58,7 @@ function plugin_weather()
         }
     }
 
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'weather on: '.$GLOBALS['channel'].', by: '.$GLOBALS['nick'], '1');
+    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'weather on: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'], '1');
 }
 
 function get_contents($url, $post = null)

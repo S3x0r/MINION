@@ -22,7 +22,7 @@ function plugin_wikipedia()
                 $resultUrl   = $json[3][$i];
                 
                 CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'wikipedia on: '.$GLOBALS['channel'].
-                ', by: '.$GLOBALS['nick'].', search: '.$query, '1');
+                ', by: '.$GLOBALS['USER'].', search: '.$query, '1');
 
                 BOT_RESPONSE($resultTitle.' - '.$resultUrl);
             }
