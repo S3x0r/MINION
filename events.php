@@ -1,6 +1,19 @@
 <?php
+/* Copyright (c) 2013-2017, S3x0r <olisek@gmail.com>
+ *
+ * Permission to use, copy, modify, and distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ */
 
-//---------------------------------------------------------------------------------------------------------
 function on_server_ping()
 {
     fputs($GLOBALS['socket'], "PONG ".$GLOBALS['ex'][1]."\n");
@@ -245,11 +258,8 @@ function on_474() /* if bot +banned on channel */
 //---------------------------------------------------------------------------------------------------------
 function on_475() /* if +key on channel */
 {
-    if (isset($GLOBALS['try_channel_key'])) {
-        if (isset($GLOBALS['CONFIG_CHANNEL_KEY'])) {
-            JOIN_CHANNEL($GLOBALS['CONFIG_CNANNEL'].' '.$GLOBALS['CONFIG_CHANNEL_KEY']);
-            unset($GLOBALS['try_channel_key']);
-        }
+    if (!empty($GLOBALS['CONFIG_CHANNEL_KEY'])) {
+        JOIN_CHANNEL($GLOBALS['CONFIG_CNANNEL'].' '.$GLOBALS['CONFIG_CHANNEL_KEY']);
     } else {
               CLI_MSG('[BOT] I cannot join, bad channel key in config or key not set', '1');
     }

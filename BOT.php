@@ -1,4 +1,19 @@
 <?php
+/* Copyright (c) 2013-2017, S3x0r <olisek@gmail.com>
+ *
+ * Permission to use, copy, modify, and distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ */
+
 if (PHP_SAPI !== 'cli') {
     die('<h2>This script can\'t be run from a web browser. Use CLI to run it -> php BOT.php</h2>');
 }
@@ -8,7 +23,7 @@ Start();
 function Start()
 {
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '0.5.9');
+    define('VER', '0.6.0');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());
@@ -25,11 +40,21 @@ function Start()
              $GLOBALS['OS_TYPE'] = 'other';
     }
 
+    /* load some needed variables */
+    if (is_file('CONFIG.INI')) {
+        $config_file = 'CONFIG.INI';
+        $cfg = new IniParser($config_file);
+        $GLOBALS['CONFIG_SHOW_LOGO'] = $cfg->get('PROGRAM', 'show_logo');
+        $GLOBALS['silent_mode'] = $cfg->get('PROGRAM', 'silent_mode');
+        $GLOBALS['CONFIG_CHECK_UPDATE'] = $cfg->get('PROGRAM', 'check_update');
+    } else {
+             $GLOBALS['CONFIG_SHOW_LOGO'] = 'yes';
+             $GLOBALS['silent_mode'] = 'no';
+             $GLOBALS['CONFIG_CHECK_UPDATE'] = 'no';
+    }
+
     /* Load translation file */
     SetLanguage();
-
-    /* include API file */
-    require('events.php');
 
     /* CLI arguments */
     if (isset($_SERVER['argv'][1])) {
@@ -58,6 +83,7 @@ function Start()
                 die();
 
             case '-s':
+                $GLOBALS['silent_cli'] = 'yes';
                 $GLOBALS['silent_mode'] = 'yes';
                 break;
 
@@ -67,20 +93,30 @@ function Start()
                 break;
         }
     }
-
+    
     /* wcli extension */
     if (extension_loaded('wcli')) {
-        if (empty($GLOBALS['silent_mode'])) {
-            wcli_clear();
+        if ($GLOBALS['silent_mode'] == 'no' or empty($GLOBALS['silent_mode'])) {
             wcli_maximize();
-            wcli_set_console_title('davybot ('.VER.')');
+            wcli_set_console_title('davybot '.VER);
             wcli_hide_cursor();
         }
     }
 
+    /* include EVENTS file */
+    if (is_file('events.php')) {
+        require('events.php');
+    } else {
+              echo "\n  ERROR: I need 'EVENTS.PHP' file to run!",
+                   " Terminating program after 5 seconds.\n";
+              sleep(5);
+              die();
+    }
+
     /* Logo & info :) */
-    if (empty($GLOBALS['silent_mode'])) {
-        echo "
+    if ($GLOBALS['silent_mode'] == 'no' or empty($GLOBALS['silent_mode'])) {
+        if ($GLOBALS['CONFIG_SHOW_LOGO'] == 'yes' or empty($GLOBALS['CONFIG_SHOW_LOGO'])) {
+            echo "
     B@B@B@B@@@B@B@B@B@B@B@B@@@B@B@B@B@B@@@@@@@B@B@B@B@B@@@B@B
     @B@BGB@B@B@B@B@@@B@@@B@B@B@@@B@B@B@B@B@@@B@B@B@@@B@@@@@B@
     B@B@  :@Bi:@B@B@B@@@B@BGS522s22SXMB@B@B@B@B@B@B@B@@@B@B@B
@@ -111,10 +147,32 @@ function Start()
     @B@B@B@B@@@B@B@@@B@B@2           :GB@BBG9XXSSS9X9999G9GGM
     B@B@@@B@B@B@B@@@B@B@@s           Srri;i;rrrssssssss22S5HS
     @B@B@B@B@B@BBMMGG9G:              :,::::iir;rs22SXGGMMMMB
+    ";
+        }
+    }
 
+    if ($GLOBALS['silent_mode'] == 'no' or empty($GLOBALS['silent_mode'])) {
+        echo "
     davybot - ver: ".VER.", ".TR_10." S3x0r, ".TR_11." olisek@gmail.com
                    ".TR_12." ".TotalLines()." :)
     \n";
+    }
+    
+    /* check if new version on server */
+    if ($GLOBALS['CONFIG_CHECK_UPDATE'] == 'yes') {
+        $url = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
+        $CheckVersion = @file_get_contents($url);
+        
+        if ($CheckVersion !='') {
+            $version = explode("\n", $CheckVersion);
+            if ($version[0] > VER) {
+                echo "             >>>> New version available! ($version[0]) <<<<\n\n\n";
+            } else {
+                     echo "       >>>> No new update, you have the latest version <<<<\n\n\n";
+            }
+        } else {
+                 echo "            >>>> Cannot connect to update server <<<<\n\n\n";
+        }
     }
 
     /* try to load config */
@@ -123,24 +181,50 @@ function Start()
 //---------------------------------------------------------------------------------------------------------
 function SetLanguage()
 {
-    $config_file = 'CONFIG.INI';
-    $cfg = new IniParser($config_file);
-    $GLOBALS['CONFIG_LANGUAGE'] = $cfg->get("LANG", "language");
+    /* is IS config file */
+    if (is_file('CONFIG.INI')) {
+        $config_file = 'CONFIG.INI';
+        $cfg = new IniParser($config_file);
+        $GLOBALS['CONFIG_LANGUAGE'] = $cfg->get("LANG", "language");
 
-    if (file_exists($config_file)) {
         if (!empty($GLOBALS['CONFIG_LANGUAGE'])) {
-            require('LANG/'.$GLOBALS['CONFIG_LANGUAGE'].'.php');
+            if (is_file('LANG/'.$GLOBALS['CONFIG_LANGUAGE'].'.php')) {
+                require('LANG/'.$GLOBALS['CONFIG_LANGUAGE'].'.php');
+            } else {
+                if (is_file('LANG/EN.php')) {
+                    CLI_MSG('ERROR: No such language: \''.$GLOBALS['CONFIG_LANGUAGE'].'\' in LANG dir', '0');
+                    CLI_MSG('[BOT] Changing to default language: EN', '0');
+                    require('LANG/EN.php');
+                } else {
+                         no_lang_file();
+                }
+            }
         } elseif (empty($GLOBALS['CONFIG_LANGUAGE'])) {
                   $GLOBALS['CONFIG_LANGUAGE'] = 'EN';
-                  require('LANG/'.$GLOBALS['CONFIG_LANGUAGE'].'.php');
-        }
-    } elseif (!file_exists($config_file)) {
+            if (is_file('LANG/EN.php')) {
+                require('LANG/EN.php');
+            } else {
+                     no_lang_file();
+            }
+        }    /* if NO config file */
+    } elseif (!is_file('CONFIG.INI')) {
               $GLOBALS['CONFIG_LANGUAGE'] = 'EN';
-              require('LANG/'.$GLOBALS['CONFIG_LANGUAGE'].'.php');
+        if (is_file('LANG/EN.php')) {
+            require('LANG/EN.php');
+        } else {
+                 no_lang_file();
+        }
     }
- 
+
     unset($config_file);
     unset($cfg);
+}
+//---------------------------------------------------------------------------------------------------------
+function no_lang_file()
+{
+    echo "\n\n  ERROR: I need at least one translation in LANG directory to work! Exiting.\n\n";
+    sleep(6);
+    die();
 }
 //---------------------------------------------------------------------------------------------------------
 function LoadConfig($filename)
@@ -156,7 +240,7 @@ function LoadConfig($filename)
                    echo " [ERROR] Config file does not exist, wrong path?\n";
                    die();
         } elseif (isset($_SERVER['argv'][1]) && empty($_SERVER['argv'][2])) {
-                   echo " [ERROR] Need to specify config file!\n";
+                   echo " [ERROR] You need to specify config file! I need some data :)\n";
                    die();
         }
     } else {
@@ -205,12 +289,16 @@ function LoadConfig($filename)
         $GLOBALS['CONFIG_NOTICE_DELAY']   = $cfg->get("DELAYS", "notice_delay");
         /* LOGGING */
         $GLOBALS['CONFIG_LOGGING']        = $cfg->get("LOGS", "logging");
-        /* LANGUAGE */
-        //$GLOBALS['CONFIG_LANGUAGE']     = $cfg->get("LANG", "language");
         /* TIMEZONE */
         $GLOBALS['CONFIG_TIMEZONE']       = $cfg->get("TIME", "time_zone");
         /* FETCH */
         $GLOBALS['CONFIG_FETCH_SERVER']   = $cfg->get("FETCH", "fetch_server");
+        /* PROGRAM */
+        $GLOBALS['CONFIG_SHOW_LOGO']      = $cfg->get("PROGRAM", "show_logo");
+        if (empty($GLOBALS['silent_cli'])) {
+            $GLOBALS['silent_mode']       = $cfg->get("PROGRAM", "silent_mode");
+        }
+        $GLOBALS['CONFIG_CHECK_UPDATE']   = $cfg->get("PROGRAM", "check_update");
         /* DEBUG */
         $GLOBALS['CONFIG_SHOW_RAW']       = $cfg->get("DEBUG", "show_raw");
 
@@ -269,7 +357,7 @@ function LoadConfig($filename)
         }
 //---------------------------------------------------------------------------------------------------------  
         /* from what file config loaded */
-        if (empty($GLOBALS['silent_mode'])) {
+        if ($GLOBALS['silent_mode'] == 'no' or empty($GLOBALS['silent_mode'])) {
             CLI_MSG(TR_17.' '.$config_file, '0');
             echo "------------------------------------------------------------------------------\n";
         }
@@ -277,7 +365,7 @@ function LoadConfig($filename)
         if ($GLOBALS['CONFIG_LOGGING'] == 'yes') {
             Logs();
         }
-
+        
         /* now time for plugins */
         LoadPlugins();
     } else {
@@ -350,15 +438,15 @@ function SetDefaultData()
     if (empty($GLOBALS['CONFIG_FETCH_SERVER'])) {
         $GLOBALS['CONFIG_FETCH_SERVER'] = 'https://raw.githubusercontent.com/S3x0r/davybot_repository_plugins/master';
     }
+    if (empty($GLOBALS['CONFIG_SHOW_LOGO'])) {
+        $GLOBALS['CONFIG_SHOW_LOGO'] = 'yes';
+    }
     if (empty($GLOBALS['CONFIG_SHOW_RAW'])) {
         $GLOBALS['CONFIG_SHOW_RAW'] = 'no';
     }
 
     /* set timezone */
     date_default_timezone_set($GLOBALS['CONFIG_TIMEZONE']);
-
-    /* set some vars */
-    $GLOBALS['try_channel_key'] = '1';
 }
 //---------------------------------------------------------------------------------------------------------
 function CreateDefaultConfig($filename)
@@ -482,6 +570,17 @@ time_zone        = \'Europe/Warsaw\'
 ; bot plugin repository address
 fetch_server     = \'https://raw.githubusercontent.com/S3x0r/davybot_repository_plugins/master\'
 
+[PROGRAM]
+
+; show BOT startup logo: \'yes\', \'no\'
+show_logo        = \'yes\'
+
+; no output to CLI window: \'yes\', \'no\'
+silent_mode      = \'no\'
+
+; check on program startup if new version is on server: \'yes\', \'no\'
+check_update     = \'no\'
+
 [DEBUG]
 
 ; show raw output on CLI window
@@ -524,7 +623,7 @@ function LoadPlugins()
     $count1 = count(glob("PLUGINS/OWNER/*.php", GLOB_BRACE));
     $GLOBALS['OWNER_PLUGINS'] = null;
 
-    if (empty($GLOBALS['silent_mode'])) {
+    if ($GLOBALS['silent_mode'] == 'no' or empty($GLOBALS['silent_mode'])) {
         CLI_MSG(TR_23." ($count1):", '0');
         echo "------------------------------------------------------------------------------\n";
     }
@@ -532,11 +631,11 @@ function LoadPlugins()
         include_once($plugin_name);
         $GLOBALS['OWNER_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ';
         $plugin_name = basename($plugin_name, '.php');
-        if (empty($GLOBALS['silent_mode'])) {
+        if ($GLOBALS['silent_mode'] == 'no' or empty($GLOBALS['silent_mode'])) {
             echo "$plugin_name -- $plugin_description\n";
         }
     }
-    if (empty($GLOBALS['silent_mode'])) {
+    if ($GLOBALS['silent_mode'] == 'no' or empty($GLOBALS['silent_mode'])) {
         echo "------------------------------------------------------------------------------\n";
     }
 //---------------------------------------------------------------------------------------------------------
@@ -544,7 +643,7 @@ function LoadPlugins()
 
     $GLOBALS['USER_PLUGINS'] = null;
 
-    if (empty($GLOBALS['silent_mode'])) {
+    if ($GLOBALS['silent_mode'] == 'no' or empty($GLOBALS['silent_mode'])) {
         CLI_MSG(TR_24." ($count2):", '0');
         echo "------------------------------------------------------------------------------\n";
     }
@@ -552,13 +651,13 @@ function LoadPlugins()
         include_once($plugin_name);
         $GLOBALS['USER_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ';
         $plugin_name = basename($plugin_name, '.php');
-        if (empty($GLOBALS['silent_mode'])) {
+        if ($GLOBALS['silent_mode'] == 'no' or empty($GLOBALS['silent_mode'])) {
             echo "$plugin_name -- $plugin_description\n";
         }
     }
     $tot = $count1+$count2;
     
-    if (empty($GLOBALS['silent_mode'])) {
+    if ($GLOBALS['silent_mode'] == 'no' or empty($GLOBALS['silent_mode'])) {
         echo "----------------------------------------------------------".TR_25." ($tot)---------\n";
     }
 
@@ -586,16 +685,15 @@ function Connect()
 
     $i=0;
 
-    /* loop if something goes wrong */
     while ($i++ < $GLOBALS['CONFIG_TRY_CONNECT']) {
-        $GLOBALS['socket'] = fsockopen($GLOBALS['CONFIG_SERVER'], $GLOBALS['CONFIG_PORT']);
+           $GLOBALS['socket'] = fsockopen($GLOBALS['CONFIG_SERVER'], $GLOBALS['CONFIG_PORT']);
 
         if ($GLOBALS['socket']==false) {
             CLI_MSG(TR_28, '1');
             usleep($GLOBALS['CONFIG_CONNECT_DELAY'] * 1000000);
             if ($i==$GLOBALS['CONFIG_TRY_CONNECT']) {
                 CLI_MSG(TR_29, '1');
-                die(); /* TODO: send email that terminated program? */
+                die();
             }
         } else {
                 Identify();
@@ -646,7 +744,6 @@ function Engine()
     $I_USE_RND_NICKNAME = null;
     $BOT_CHANNELS = array();
 //---------------------------------------------------------------------------------------------------------
-
     /* main socket loop */
     while (1) {
         while (!feof($GLOBALS['socket'])) {
@@ -656,7 +753,7 @@ function Engine()
             $data = fgets($GLOBALS['socket'], 512);
 //---------------------------------------------------------------------------------------------------------
             if ($GLOBALS['CONFIG_SHOW_RAW'] == 'yes') {
-                if (empty($GLOBALS['silent_mode'])) {
+                if ($GLOBALS['silent_mode'] == 'no' or empty($GLOBALS['silent_mode'])) {
                     echo $data;
                 }
             }
@@ -1053,7 +1150,7 @@ function set_channel_modes()
 function wcliExt()
 {
     if (extension_loaded('wcli')) {
-        if (empty($GLOBALS['silent_mode'])) {
+        if ($GLOBALS['silent_mode'] == 'no' or empty($GLOBALS['silent_mode'])) {
             wcli_set_console_title('davybot '.VER.' ('.TR_51.' '.$GLOBALS['CONFIG_SERVER'].':'
             .$GLOBALS['CONFIG_PORT'].' | '.TR_52.' '.$GLOBALS['BOT_NICKNAME'].' | '.TR_53.' '
             .$GLOBALS['CONFIG_CNANNEL'].')');
@@ -1152,10 +1249,10 @@ function LoadData($config_file, $section, $config)
 //---------------------------------------------------------------------------------------------------------
 function CLI_MSG($msg, $log)
 {
-    if (empty($GLOBALS['silent_mode'])) {
+    if ($GLOBALS['silent_mode'] == 'no' or empty($GLOBALS['silent_mode'])) {
         $line='['.@date('H:i:s').'] '.$msg."\r\n";
 
-        if ($GLOBALS['CONFIG_LOGGING'] == 'yes') {
+        if (isset($GLOBALS['CONFIG_LOGGING']) && $GLOBALS['CONFIG_LOGGING'] == 'yes') {
             if ($log=='1') {
                 SaveToFile($GLOBALS['log_file'], $line, 'a');
             }
@@ -1220,7 +1317,7 @@ function ErrorHandler($errno, $errstr, $errfile, $errline)
             break;
 
         default:
-            CLI_MSG("[UNKOWN]: ".TR_57." [$errno] $errstr", '1');
+            CLI_MSG("[UNKOWN]: error type [$errno] $errstr", '1');
             break;
     }
 

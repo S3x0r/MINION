@@ -117,6 +117,17 @@ time_zone        = 'Europe/Warsaw'
 ; bot plugin repository address
 fetch_server     = 'https://raw.githubusercontent.com/S3x0r/davybot_repository_plugins/master'
 
+[PROGRAM]
+
+; show BOT startup logo? 'yes', 'no'
+show_logo        = \'yes\'
+
+; silent mode - no output to CLI window 'yes', 'no'
+silent_mode      = \'no\'
+
+; check on program startup if new version is on server 'yes', 'no'
+check_update     = \'no\'
+
 [DEBUG]
 
 ; show raw output on CLI window

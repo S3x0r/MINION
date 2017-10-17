@@ -1,3 +1,12 @@
+   
+   v0.6.0 changes (17.10.2017):
+   - added copyright info
+   - updated readme.md
+   - setlanguage() little change
+   - new section PROGRAM in config.ini
+     & new option show_logo - you can turn off logo on start :P
+     & new option silent_mode - if 'yes' there will be no output to CLI window
+     & new option check_update - if 'yes' bot will check if new version is available on startup
 
    v0.5.9 changes (12.10.2017):
    - api.php changed to events.php

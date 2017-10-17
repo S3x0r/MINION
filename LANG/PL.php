@@ -12,7 +12,7 @@ define('TR_11', 'kontakt:');
 define('TR_12', 'ù•czna iloòÜ lini kodu:');
 define('TR_13', 'Wykryto domyòlne hasào wàaòciciela!');
 define('TR_14', 'Prosz© zmieniÜ hasào ze wzgl©d¢w bezpiecze‰stwa');
-define('TR_15', 'Nowe Hasào:');
+define('TR_15', 'Nowe Hasàlo:');
 define('TR_16', 'Hasào zbyt kr¢tkie, musi skàadaÜ si© z co najmniej 6 znak¢w');
 define('TR_17', 'Konfiguracja zaàadowana z:');
 define('TR_18', 'Brak pliku konfiguracji!');

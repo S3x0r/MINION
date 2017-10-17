@@ -1,4 +1,19 @@
 <?php
+/* Copyright (c) 2013-2017, S3x0r <olisek@gmail.com>
+ *
+ * Permission to use, copy, modify, and distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ */
+
 if (PHP_SAPI !== 'cli') {
     die('This script can\'t be run from a web browser. Use CLI to run it.');
 }
@@ -149,7 +164,6 @@ function v_extract()
         $GLOBALS['CONFIG_CHANNEL_KEY']    = $cfg->get("CHANNEL", "channel_key");
         $GLOBALS['CONFIG_CMD_PREFIX']     = $cfg->get("COMMAND", "command_prefix");
         $GLOBALS['CONFIG_CTCP_RESPONSE']  = $cfg->get("CTCP", "ctcp_response");
-        //$GLOBALS['CONFIG_CTCP_VERSION']   = $cfg->get("CTCP", "ctcp_version");
         $GLOBALS['CONFIG_CTCP_FINGER']    = $cfg->get("CTCP", "ctcp_finger");
         $GLOBALS['CONFIG_CHANNEL_DELAY']  = $cfg->get("DELAYS", "channel_delay");
         $GLOBALS['CONFIG_PRIVATE_DELAY']  = $cfg->get("DELAYS", "private_delay");
@@ -158,6 +172,9 @@ function v_extract()
         $GLOBALS['CONFIG_LANGUAGE']       = $cfg->get("LANG", "language");
         $GLOBALS['CONFIG_TIMEZONE']       = $cfg->get("TIME", "time_zone");
         $GLOBALS['CONFIG_FETCH_SERVER']   = $cfg->get("FETCH", "fetch_server");
+        $GLOBALS['CONFIG_SHOW_LOGO']      = $cfg->get("PROGRAM", "show_logo");
+        $GLOBALS['silent_mode']           = $cfg->get("PROGRAM", "silent_mode");
+        $GLOBALS['CONFIG_CHECK_UPDATE']   = $cfg->get("PROGRAM", "check_update");
         $GLOBALS['CONFIG_SHOW_RAW']       = $cfg->get("DEBUG", "show_raw");
 
         // save to new config
@@ -184,7 +201,6 @@ function v_extract()
         SaveData($new_cf, 'CHANNEL', 'channel_key', $GLOBALS['CONFIG_CHANNEL_KEY']);
         SaveData($new_cf, 'COMMAND', 'command_prefix', $GLOBALS['CONFIG_CMD_PREFIX']);
         SaveData($new_cf, 'CTCP', 'ctcp_response', $GLOBALS['CONFIG_CTCP_RESPONSE']);
-        //SaveData($new_cf, 'CTCP', 'ctcp_version', $GLOBALS['CONFIG_CTCP_VERSION']);
         SaveData($new_cf, 'CTCP', 'ctcp_finger', $GLOBALS['CONFIG_CTCP_FINGER']);
         SaveData($new_cf, 'DELAYS', 'channel_delay', $GLOBALS['CONFIG_CHANNEL_DELAY']);
         SaveData($new_cf, 'DELAYS', 'private_delay', $GLOBALS['CONFIG_PRIVATE_DELAY']);
@@ -193,6 +209,9 @@ function v_extract()
         SaveData($new_cf, 'LANG', 'language', $GLOBALS['CONFIG_LANGUAGE']);
         SaveData($new_cf, 'TIME', 'time_zone', $GLOBALS['CONFIG_TIMEZONE']);
         SaveData($new_cf, 'FETCH', 'fetch_server', $GLOBALS['CONFIG_FETCH_SERVER']);
+        SaveData($new_cf, 'PROGRAM', 'show_logo', $GLOBALS['CONFIG_SHOW_LOGO']);
+        SaveData($new_cf, 'PROGRAM', 'silent_mode', $GLOBALS['silent_mode']);
+        SaveData($new_cf, 'PROGRAM', 'check_update', $GLOBALS['CONFIG_CHECK_UPDATE']);
         SaveData($new_cf, 'DEBUG', 'show_raw', $GLOBALS['CONFIG_SHOW_RAW']);
 
         //copy CONFIG from old ver
