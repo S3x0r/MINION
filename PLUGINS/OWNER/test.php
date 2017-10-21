@@ -31,5 +31,8 @@ $a = implode(' ', GetBotChannels());
 BOT_RESPONSE($a);
 
 BOT_RESPONSE('bot nickname var: '.$GLOBALS['BOT_NICKNAME']);
- 
+
+
+
+
 }

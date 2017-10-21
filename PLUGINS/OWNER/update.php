@@ -148,6 +148,7 @@ function v_extract()
         $GLOBALS['CONFIG_IDENT']          = $cfg->get("BOT", "ident");
         $GLOBALS['CONFIG_SERVER']         = $cfg->get("SERVER", "server");
         $GLOBALS['CONFIG_PORT']           = $cfg->get("SERVER", "port");
+        $GLOBALS['CONFIG_SERVER_PASSWD']  = $cfg->get("SERVER", "server_password");
         $GLOBALS['CONFIG_TRY_CONNECT']    = $cfg->get("SERVER", "try_connect");
         $GLOBALS['CONFIG_CONNECT_DELAY']  = $cfg->get("SERVER", "connect_delay");
         $GLOBALS['CONFIG_BOT_ADMIN']      = $cfg->get("ADMIN", "bot_admin");
@@ -185,6 +186,7 @@ function v_extract()
         SaveData($new_cf, 'BOT', 'ident', $GLOBALS['CONFIG_IDENT']);
         SaveData($new_cf, 'SERVER', 'server', $GLOBALS['CONFIG_SERVER']);
         SaveData($new_cf, 'SERVER', 'port', $GLOBALS['CONFIG_PORT']);
+        SaveData($new_cf, 'SERVER', 'server_password', $GLOBALS['CONFIG_SERVER_PASSWD']);
         SaveData($new_cf, 'SERVER', 'try_connect', $GLOBALS['CONFIG_TRY_CONNECT']);
         SaveData($new_cf, 'SERVER', 'connect_delay', $GLOBALS['CONFIG_CONNECT_DELAY']);
         SaveData($new_cf, 'ADMIN', 'bot_admin', $GLOBALS['CONFIG_BOT_ADMIN']);

@@ -23,7 +23,7 @@ Start();
 function Start()
 {
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '0.6.0');
+    define('VER', '0.6.1');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());
@@ -112,6 +112,17 @@ function Start()
               sleep(5);
               die();
     }
+
+    /* include TIMERS file */
+    if (is_file('timers.php')) {
+        require('timers.php');
+    } else {
+              echo "\n  ERROR: I need 'TIMERS.PHP' file to run!",
+                   " Terminating program after 5 seconds.\n";
+              sleep(5);
+              die();
+    }
+
 
     /* Logo & info :) */
     if ($GLOBALS['silent_mode'] == 'no' or empty($GLOBALS['silent_mode'])) {
@@ -259,6 +270,7 @@ function LoadConfig($filename)
         /* SERVER */
         $GLOBALS['CONFIG_SERVER']         = $cfg->get("SERVER", "server");
         $GLOBALS['CONFIG_PORT']           = $cfg->get("SERVER", "port");
+        $GLOBALS['CONFIG_SERVER_PASSWD']  = $cfg->get("SERVER", "server_password");
         $GLOBALS['CONFIG_TRY_CONNECT']    = $cfg->get("SERVER", "try_connect");
         $GLOBALS['CONFIG_CONNECT_DELAY']  = $cfg->get("SERVER", "connect_delay");
         /* ADMIN */
@@ -472,6 +484,9 @@ server           = \'minionki.com.pl\'
 
 ; server port
 port             = \'6667\'
+
+; if irc server have password
+server_password  = \'\'
 
 ; try connect \'n\' (in seconds) times to server, if cannot then quit
 try_connect      = \'10\'
@@ -687,7 +702,7 @@ function Connect()
 
     while ($i++ < $GLOBALS['CONFIG_TRY_CONNECT']) {
            $GLOBALS['socket'] = fsockopen($GLOBALS['CONFIG_SERVER'], $GLOBALS['CONFIG_PORT']);
-
+           //socket_set_blocking($GLOBALS['socket'], false);
         if ($GLOBALS['socket']==false) {
             CLI_MSG(TR_28, '1');
             usleep($GLOBALS['CONFIG_CONNECT_DELAY'] * 1000000);
@@ -696,15 +711,20 @@ function Connect()
                 die();
             }
         } else {
-                Identify();
-                unset($i);
+                 Identify();
+                 unset($i);
         }
     }
 }
 //---------------------------------------------------------------------------------------------------------
 function Identify()
 {
-    /* sending NICK / USER to server */
+    /* send PASSWORD / NICK / USER to server */
+
+    if (!empty($GLOBALS['CONFIG_SERVER_PASSWD'])) {
+        fputs($GLOBALS['socket'], 'PASS '.$GLOBALS['CONFIG_SERVER_PASSWD']."\n");
+    }
+
     fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['CONFIG_NICKNAME']."\n");
 
     fputs($GLOBALS['socket'], 'USER '.$GLOBALS['CONFIG_IDENT'].' 8 * :'.$GLOBALS['CONFIG_NAME']."\n");
@@ -743,6 +763,21 @@ function Engine()
     $channel = $GLOBALS['CONFIG_CNANNEL'];
     $I_USE_RND_NICKNAME = null;
     $BOT_CHANNELS = array();
+
+    /* set timers */
+    $GLOBALS['TIMER1'] = time();
+    $GLOBALS['TIMER2'] = time();
+    $GLOBALS['TIMER3'] = time();
+    $GLOBALS['TIMER4'] = time();
+    $GLOBALS['TIMER5'] = time();
+    $GLOBALS['TIMER6'] = time();
+    $GLOBALS['TIMER7'] = time();
+    $GLOBALS['TIMER8'] = time();
+    $GLOBALS['TIMER9'] = time();
+    $GLOBALS['TIMER10'] = time();
+    $GLOBALS['TIMER11'] = time();
+    $GLOBALS['TIMER12'] = time();
+    $GLOBALS['TIMER13'] = time();
 //---------------------------------------------------------------------------------------------------------
     /* main socket loop */
     while (1) {
@@ -750,19 +785,17 @@ function Engine()
             $mask = null;
 
             /* get data */
-            $data = fgets($GLOBALS['socket'], 512);
+            $data = fgets($GLOBALS['socket'], 1024);
 //---------------------------------------------------------------------------------------------------------
             if ($GLOBALS['CONFIG_SHOW_RAW'] == 'yes') {
                 if ($GLOBALS['silent_mode'] == 'no' or empty($GLOBALS['silent_mode'])) {
                     echo $data;
                 }
             }
-//---------------------------------------------------------------------------------------------------------
-            flush();
-
+//---------------------------------------------------------------------------------------------------------            
             /* put data to array */
             $ex = explode(' ', trim($data));
-            
+    
             /* get channel from ex[2] */
             if (isset($ex[2])) {
                 $channel = str_replace(':#', '#', $ex[2]);
@@ -780,8 +813,8 @@ function Engine()
                 $host        = $source[3];
                 $USER_HOST   = $USER_IDENT.'@'.$host;
             } else {
-                      /* put server to var and remove ':' */
-                      $server = str_replace(':', '', $ex[0]);
+                    /* put server to var and remove ':' */
+                    $server = str_replace(':', '', $ex[0]);
             }
 //---------------------------------------------------------------------------------------------------------
             /* ON JOIN */
@@ -824,7 +857,6 @@ function Engine()
                 on_quit();
             }
 //---------------------------------------------------------------------------------------------------------
-            
             if (count($ex) < 4) {
                 continue;
             }
@@ -855,22 +887,22 @@ function Engine()
             if (isset($pieces[0])) {
                 $piece1 = $pieces[0];
             } else {
-                $piece1 = '';
+                     $piece1 = '';
             }
             if (isset($pieces[1])) {
                 $piece2 = $pieces[1];
             } else {
-                $piece2 = '';
+                     $piece2 = '';
             }
             if (isset($pieces[2])) {
                 $piece3 = $pieces[2];
             } else {
-                $piece3 = '';
+                     $piece3 = '';
             }
             if (isset($pieces[3])) {
                 $piece4 = $pieces[3];
             } else {
-                $piece4 = '';
+                     $piece4 = '';
             }
 //---------------------------------------------------------------------------------------------------------
             if (isset($ex[1])) {
@@ -934,6 +966,74 @@ function Engine()
 //---------------------------------------------------------------------------------------------------------
                 }
             }
+//---------------------------------------------------------------------------------------------------------
+            /* TIMERS - 1 minute */
+            if (time()-$GLOBALS['TIMER1'] > 60) {
+                every_1_minute();
+                $GLOBALS['TIMER1'] = time();
+            }
+            /* TIMERS - 5 minutes */
+            if (time()-$GLOBALS['TIMER2'] > 300) {
+                every_5_minutes();
+                $GLOBALS['TIMER2'] = time();
+            }
+            /* TIMERS - 10 minutes */
+            if (time()-$GLOBALS['TIMER3'] > 600) {
+                every_10_minutes();
+                $GLOBALS['TIMER3'] = time();
+            }
+            /* TIMERS - 15 minutes */
+            if (time()-$GLOBALS['TIMER4'] > 900) {
+                every_15_minutes();
+                $GLOBALS['TIMER4'] = time();
+            }
+            /* TIMERS - 20 minutes */
+            if (time()-$GLOBALS['TIMER5'] > 1200) {
+                every_20_minutes();
+                $GLOBALS['TIMER5'] = time();
+            }
+            /* TIMERS - 25 minutes */
+            if (time()-$GLOBALS['TIMER6'] > 1500) {
+                every_25_minutes();
+                $GLOBALS['TIMER6'] = time();
+            }
+            /* TIMERS - 30 minutes */
+            if (time()-$GLOBALS['TIMER7'] > 1800) {
+                every_30_minutes();
+                $GLOBALS['TIMER7'] = time();
+            }
+            /* TIMERS - 35 minutes */
+            if (time()-$GLOBALS['TIMER8'] > 2100) {
+                every_35_minutes();
+                $GLOBALS['TIMER8'] = time();
+            }
+            /* TIMERS - 40 minutes */
+            if (time()-$GLOBALS['TIMER9'] > 2400) {
+                every_40_minutes();
+                $GLOBALS['TIMER9'] = time();
+            }
+            /* TIMERS - 45 minutes */
+            if (time()-$GLOBALS['TIMER10'] > 2700) {
+                every_45_minutes();
+                $GLOBALS['TIMER10'] = time();
+            }
+            /* TIMERS - 50 minutes */
+            if (time()-$GLOBALS['TIMER11'] > 3000) {
+                every_50_minutes();
+                $GLOBALS['TIMER11'] = time();
+            }
+            /* TIMERS - 55 minutes */
+            if (time()-$GLOBALS['TIMER12'] > 3300) {
+                every_55_minutes();
+                $GLOBALS['TIMER12'] = time();
+            }
+            /* TIMERS - 60 minutes */
+            if (time()-$GLOBALS['TIMER13'] > 3600) {
+                every_60_minutes();
+                $GLOBALS['TIMER13'] = time();
+            }
+//---------------------------------------------------------------------------------------------------------
+
             /* CTCP */
             if ($GLOBALS['CONFIG_CTCP_RESPONSE'] == 'yes' && isset($rawcmd[1])) {
                 switch ($rawcmd[1]) {

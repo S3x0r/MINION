@@ -1,4 +1,10 @@
    
+   v0.6.1 changes (21.10.2017):
+   - php engine changed from 5.4.45 to latest 5.6.31
+   - new option in config.ini 'server_password' - if server have password write it there
+   - new file: timers.php
+   - added timers events, every: 1,5,10,15,20,25,30,35,40,45,50,55,60 minutes
+
    v0.6.0 changes (17.10.2017):
    - added copyright info
    - updated readme.md
