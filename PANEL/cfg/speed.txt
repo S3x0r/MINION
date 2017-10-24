@@ -1,0 +1,32 @@
+# AFTER CHANGING THIS FILE
+# YOU HAVE TO EXIT AND RESTART WWEBSERVER
+
+# Maximal parallel requests.
+threads=15
+
+# Time in Milliseconds a HTTP client should send data.
+receive_timeout=10000
+
+# Content encoding will only be used for text Mimetypes.
+# none = no encoding
+# deflate = ZLIB encoding (only if browser support it)
+content_encoding=deflate
+
+# Maximal FCGI processes, should be not lower than threads.
+fcgi_processes=15
+
+# Time in Milliseconds a FCGI process should be available.
+# Otherwise HTTP Status 504 Gateway timeout will be sent to client. 
+fcgi_gateway_timeout=10000
+
+# Cronjob performance
+# Time in Milliseconds a cronjob should be finished.
+cronjob_timeout=3600000
+
+# Time in Milliseconds a cronjob HTTP request should get data.
+cronjob_http_timeout=3600000
+
+# Convert CGI filenames to character format 
+# Following formats are allowed: utf8, latin2
+# If your CGI interpreter understand utf8 filenames you should change to utf8
+convert_cgi_filenames=latin2

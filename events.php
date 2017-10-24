@@ -14,6 +14,10 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+if (PHP_SAPI !== 'cli') {
+    die('<h2>This script can\'t be run from a web browser. Use CLI to run it -> php BOT.php</h2>');
+}
+
 function on_server_ping()
 {
     fputs($GLOBALS['socket'], "PONG ".$GLOBALS['ex'][1]."\n");
@@ -43,6 +47,10 @@ function on_join()
     /* if bot join */
     if ($GLOBALS['USER'] == $GLOBALS['BOT_NICKNAME']) {
         array_push($GLOBALS['BOT_CHANNELS'], $GLOBALS['channel']);
+        
+        /* save data for web panel */
+        $data = implode(' ', $GLOBALS['BOT_CHANNELS']);
+        WebSave('WEB_BOT_CHANNELS', $data);
     } else {
               /* if some else join */
               CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') has joined '.$GLOBALS['channel'], '1');
@@ -56,6 +64,10 @@ function on_part()
         $key = array_search($GLOBALS['channel'], $GLOBALS['BOT_CHANNELS']);
         if ($key!== false) {
             unset($GLOBALS['BOT_CHANNELS'][$key]);
+
+            /* save data for web panel */
+            $data = implode(' ', $GLOBALS['BOT_CHANNELS']);
+            WebSave('WEB_BOT_CHANNELS', $data);
         }
     }
     CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') has leaved '.$GLOBALS['channel'], '1');
@@ -313,7 +325,7 @@ function on_register_to_bot()
                 /* send information to user about commands */
                 NICK_MSG(TR_36);
                 NICK_MSG('Core Commands: '.$GLOBALS['CONFIG_CMD_PREFIX'].'load '.
-                    $GLOBALS['CONFIG_CMD_PREFIX'].'unload');
+                    $GLOBALS['CONFIG_CMD_PREFIX'].'unload '.$GLOBALS['CONFIG_CMD_PREFIX'].'panel');
                 NICK_MSG(TR_59.' '.$owner_commands);
                 NICK_MSG(TR_60.' '.$user_commands);
 

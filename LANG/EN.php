@@ -1,5 +1,10 @@
 <?php
 
+if (PHP_SAPI !== 'cli') {
+    die('<h2>This script can\'t be run from a web browser. Use CLI to run it -> php BOT.php</h2>');
+}
+
+
 /* English Language File */
 
 define('TR_10', 'author:');

@@ -1,4 +1,13 @@
    
+   v0.6.2 changes (24.10.2017):
+   - new core plugin: !panel, !panel start <port>, !panel stop
+     !panel start <port> - starts web server with bot admin panel
+     !panel stop - kills the web server
+   - new section added to config.ini [PANEL]
+     & new option web_login - for web panel login
+     $ new option web_password - for web panel password
+   - logs filename format changed
+
    v0.6.1 changes (21.10.2017):
    - php engine changed from 5.4.45 to latest 5.6.31
    - new option in config.ini 'server_password' - if server have password write it there

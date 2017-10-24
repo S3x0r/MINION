@@ -23,7 +23,7 @@ Start();
 function Start()
 {
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '0.6.1');
+    define('VER', '0.6.2');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());
@@ -31,7 +31,7 @@ function Start()
     set_error_handler('ErrorHandler');
     error_reporting(-1);
 //---------------------------------------------------------------------------------------------------------
-    
+
     /* check os type and set path */
     if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
         chdir('../');
@@ -122,7 +122,6 @@ function Start()
               sleep(5);
               die();
     }
-
 
     /* Logo & info :) */
     if ($GLOBALS['silent_mode'] == 'no' or empty($GLOBALS['silent_mode'])) {
@@ -301,6 +300,9 @@ function LoadConfig($filename)
         $GLOBALS['CONFIG_NOTICE_DELAY']   = $cfg->get("DELAYS", "notice_delay");
         /* LOGGING */
         $GLOBALS['CONFIG_LOGGING']        = $cfg->get("LOGS", "logging");
+        /* PANEL */
+        $GLOBALS['CONFIG_WEB_LOGIN']      = $cfg->get("PANEL", "web_login");
+        $GLOBALS['CONFIG_WEB_PASSWORD']   = $cfg->get("PANEL", "web_password");
         /* TIMEZONE */
         $GLOBALS['CONFIG_TIMEZONE']       = $cfg->get("TIME", "time_zone");
         /* FETCH */
@@ -444,6 +446,12 @@ function SetDefaultData()
     if (empty($GLOBALS['CONFIG_LANGUAGE'])) {
         $GLOBALS['CONFIG_LANGUAGE'] = 'EN';
     }
+    if (empty($GLOBALS['CONFIG_WEB_LOGIN'])) {
+        $GLOBALS['CONFIG_WEB_LOGIN'] = 'changeme';
+    }
+    if (empty($GLOBALS['CONFIG_WEB_PASSWORD'])) {
+        $GLOBALS['CONFIG_WEB_PASSWORD'] = 'changeme';
+    }
     if (empty($GLOBALS['CONFIG_TIMEZONE'])) {
         $GLOBALS['CONFIG_TIMEZONE'] = 'Europe/Warsaw';
     }
@@ -570,6 +578,14 @@ notice_delay    = \'1\'
 ; log CLI messages to LOGS folder? \'yes\', \'no\'
 logging          = \'yes\'
 
+[PANEL]
+
+; web panel login
+web_login        = \'changeme\'
+
+; web panel password
+web_password     = \'changeme\'
+
 [LANG]
 
 ; set BOT language: \'EN\', \'PL\'
@@ -624,7 +640,10 @@ function Logs()
         mkdir('LOGS');
     }
 
-    $log_file = 'LOGS/LOG-'.date('d.m.Y').'.TXT';
+    /* random data to prevent fetch file from panel server */
+    $a = random_str('5');
+
+    $log_file = 'LOGS/log_'.date('dmY_H-i-s').'('.$a.').TXT';
 
     $data = "-------------------------".TR_22." ".date('d.m.Y | H:i:s')."-------------------------\r\n";
 
@@ -639,6 +658,15 @@ function LoadPlugins()
     $GLOBALS['OWNER_PLUGINS'] = null;
 
     if ($GLOBALS['silent_mode'] == 'no' or empty($GLOBALS['silent_mode'])) {
+        /* CORE COMMANDS */
+        CLI_MSG('Core Commands (3):', '0');
+        echo "------------------------------------------------------------------------------\n";
+        echo "load -- Loads specified plugins to BOT: !load <plugin>\n";
+        echo "panel -- Starts web admin panel for BOT: !panel help\n";
+        echo "unload -- Unloads specified plugin from BOT: !unload <plugin>\n";
+        echo "------------------------------------------------------------------------------\n";
+        
+        /* OWNERS PLUGINS */
         CLI_MSG(TR_23." ($count1):", '0');
         echo "------------------------------------------------------------------------------\n";
     }
@@ -670,7 +698,7 @@ function LoadPlugins()
             echo "$plugin_name -- $plugin_description\n";
         }
     }
-    $tot = $count1+$count2;
+    $tot = $count1+$count2+3;
     
     if ($GLOBALS['silent_mode'] == 'no' or empty($GLOBALS['silent_mode'])) {
         echo "----------------------------------------------------------".TR_25." ($tot)---------\n";
@@ -729,8 +757,53 @@ function Identify()
 
     fputs($GLOBALS['socket'], 'USER '.$GLOBALS['CONFIG_IDENT'].' 8 * :'.$GLOBALS['CONFIG_NAME']."\n");
 
+    /* save data for web panel */
+    WebEntry();
+   
     /* time for socket loop */
     Engine();
+}
+//---------------------------------------------------------------------------------------------------------
+function WebEntry()
+{
+    $data = "[MAIN]
+WEB_VERSION         = ".VER."
+WEB_START_TIME      = ".START_TIME."
+WEB_PHP_VERSION     = ".PHP_VER."
+WEB_BOT_CONFIG_FILE = ".$GLOBALS['config_file'];
+    
+    /* save some variables to web.ini */
+    SaveToFile('PANEL\web.ini', $data, 'w');
+
+    $config_file = 'CONFIG.INI';
+    $cfg = new IniParser($config_file);
+    $GLOBALS['CONFIG_WEB_LOGIN'] = $cfg->get('PANEL', 'web_login');
+    $GLOBALS['CONFIG_WEB_PASSWORD'] = $cfg->get('PANEL', 'web_password');
+    
+    /* generate random string for cookie salt */
+    $string = random_str('16');
+
+    /* save data to panel config */
+    SaveData('PANEL\web.ini', 'PANEL', 'web_login', $GLOBALS['CONFIG_WEB_LOGIN']);
+    SaveData('PANEL\web.ini', 'PANEL', 'web_password', $GLOBALS['CONFIG_WEB_PASSWORD']);
+    SaveData('PANEL\web.ini', 'PANEL', 'web_salt', $string);
+}
+//---------------------------------------------------------------------------------------------------------
+function random_str($length)
+{
+    $seed = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $str = '';
+    for ($i=0; $i < $length; $i++) {
+         $str .= substr($seed, mt_rand(0, strlen($seed) -1), 1);
+    }
+    return $str;
+}
+//---------------------------------------------------------------------------------------------------------
+function WebSave($v1, $v2)
+{
+    $cfg = new IniParser('PANEL\web.ini');
+    $cfg->setValue("MAIN", "$v1", "$v2");
+    $cfg->save();
 }
 //---------------------------------------------------------------------------------------------------------
 function Engine()
@@ -1033,7 +1106,6 @@ function Engine()
                 $GLOBALS['TIMER13'] = time();
             }
 //---------------------------------------------------------------------------------------------------------
-
             /* CTCP */
             if ($GLOBALS['CONFIG_CTCP_RESPONSE'] == 'yes' && isset($rawcmd[1])) {
                 switch ($rawcmd[1]) {
@@ -1073,6 +1145,46 @@ function Engine()
                         fputs($GLOBALS['socket'], "NOTICE $USER :TIME ".$a."\n");
                         CLI_MSG('CTCP TIME '.TR_48.' '.$USER, '1');
                         break;
+                }
+            }
+//---------------------------------------------------------------------------------------------------------
+            /* Panel Core command */
+            if (isset($rawcmd[1]) && HasOwner($mask) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'panel') {
+                if (OnEmptyArg('panel <help> to list commands')) {
+                } else {
+                    switch ($GLOBALS['args']) {
+                        case 'help':
+                              NICK_MSG('Panel commands:');
+                              NICK_MSG('start <port> - Start panel with specified port: '
+                             .$GLOBALS['CONFIG_CMD_PREFIX'].'panel start <eg. 3131>');
+                              NICK_MSG('stop         - Stop panel: '.$GLOBALS['CONFIG_CMD_PREFIX'].'panel stop');
+                            break;
+                    }
+                    switch ($GLOBALS['piece1']) {
+                        case 'start':
+                            if (!isset($GLOBALS['OS_TYPE'])) {
+                                $port = $GLOBALS['piece2'];
+                                if (!empty($port)) {
+                                    chdir('PANEL/');
+                                    $commandString = 'start /b serv.exe --http-host=0.0.0.0 --http-port='.
+                                        $port.' --no-https';
+                                    pclose(popen($commandString, 'r'));
+                                    chdir('../');
+                                    BOT_RESPONSE('Runned.');
+                                    CLI_MSG('[BOT] Panel Runned at port: '.$port, '1');
+                                } else {
+                                         BOT_RESPONSE('I need port to run server!');
+                                }
+                            } else {
+                                     BOT_RESPONSE('This plugin works on windows only at this time.');
+                            }
+                            break;
+                        case 'stop':
+                              exec('taskkill /IM serv.exe /F');
+                              BOT_RESPONSE('Panel Closed');
+                              CLI_MSG('[BOT] Panel Closed', '1');
+                            break;
+                    }
                 }
             }
 //---------------------------------------------------------------------------------------------------------

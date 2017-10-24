@@ -28,7 +28,7 @@ example: S3x0r!~S3x0r@12-13-38-219.dsl.dynamic.simnet.is
 </pre>
 </dl>
 
-Bot was writted to run from Windows systems (tested on Windows 7, XP)
+Bot was writted to run from Windows systems (tested on Windows 7)
 but you can also run it from Linux/Unix by typing: 'php -f BOT.php'
 To have all plugins working (on Linux/Unix) you need to enable
 two extension modules in your php.ini config, modules: php_openssl, php_curl
@@ -41,6 +41,9 @@ To run bot with diffrent config file: php.exe "../BOT.php" -c some_other_config.
 Plugins from 'USER' directory are for all users, everybody can use it
 Owners can use plugins 'OWNER' & 'USER'
 If you want to block some plugin from users just move it from 'USER' to 'OWNER'
+
+BOT has also web panel, to start it use !panel start <port> 
+and go to http://yourhost:portnumber, to shutdown panel: !panel stop
 
 You can now check for bot update, command: !checkupdate
 And command: !update for downloading and installing new version.
@@ -79,6 +82,10 @@ You can change prefix in config file.
 |    morse         | Converts given string to morse code      | !morse <string>               |   USER       |
 |    newnick       | Changes BOT nickname                     | !newnick <newnick>            |   OWNER      |
 |    op            | BOT gives op to given nick               | !op <nick>                    |   OWNER      |
+|    panel         | Starts web admin panel for BOT           | !panel                        |   CORE/OWNER |
+|                  | Lists panel commands                     | !panel help                   |   CORE/OWNER |
+|                  | Starts web panem at specified port       | !panel start <port>           |   CORE/OWNER |
+|                  | Stops web panel                          | !panel stop                   |   CORE/OWNER |
 |    plugin        | Plugins manipulation                     | !plugin                       |   OWNER      |
 |                  | Deletes plugin from directory            | !plugin delete <plugin>       |   OWNER      |
 |                  | Lists plugin commands                    | !plugin help                  |   OWNER      |

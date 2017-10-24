@@ -170,6 +170,8 @@ function v_extract()
         $GLOBALS['CONFIG_PRIVATE_DELAY']  = $cfg->get("DELAYS", "private_delay");
         $GLOBALS['CONFIG_NOTICE_DELAY']   = $cfg->get("DELAYS", "notice_delay");
         $GLOBALS['CONFIG_LOGGING']        = $cfg->get("LOGS", "logging");
+        $GLOBALS['CONFIG_WEB_LOGIN']      = $cfg->get("PANEL", "web_login");
+        $GLOBALS['CONFIG_WEB_PASSWORD']   = $cfg->get("PANEL", "web_password");
         $GLOBALS['CONFIG_LANGUAGE']       = $cfg->get("LANG", "language");
         $GLOBALS['CONFIG_TIMEZONE']       = $cfg->get("TIME", "time_zone");
         $GLOBALS['CONFIG_FETCH_SERVER']   = $cfg->get("FETCH", "fetch_server");
@@ -208,6 +210,8 @@ function v_extract()
         SaveData($new_cf, 'DELAYS', 'private_delay', $GLOBALS['CONFIG_PRIVATE_DELAY']);
         SaveData($new_cf, 'DELAYS', 'notice_delay', $GLOBALS['CONFIG_NOTICE_DELAY']);
         SaveData($new_cf, 'LOGS', 'logging', $GLOBALS['CONFIG_LOGGING']);
+        SaveData($new_cf, 'PANEL', 'web_login', $GLOBALS['CONFIG_WEB_LOGIN']);
+        SaveData($new_cf, 'PANEL', 'web_password', $GLOBALS['CONFIG_WEB_PASSWORD']);
         SaveData($new_cf, 'LANG', 'language', $GLOBALS['CONFIG_LANGUAGE']);
         SaveData($new_cf, 'TIME', 'time_zone', $GLOBALS['CONFIG_TIMEZONE']);
         SaveData($new_cf, 'FETCH', 'fetch_server', $GLOBALS['CONFIG_FETCH_SERVER']);

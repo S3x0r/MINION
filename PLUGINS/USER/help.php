@@ -30,7 +30,8 @@ function plugin_help()
         
         CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'help on: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'], '1');
 
-        BOT_RESPONSE('Core Commands: '.$GLOBALS['CONFIG_CMD_PREFIX'].'load '.$GLOBALS['CONFIG_CMD_PREFIX'].'unload');
+        BOT_RESPONSE('Core Commands: '.$GLOBALS['CONFIG_CMD_PREFIX'].'load '.$GLOBALS['CONFIG_CMD_PREFIX'].'unload '.
+        $GLOBALS['CONFIG_CMD_PREFIX'].'panel');
         BOT_RESPONSE('Owner Commands: '.$owner_cmd);
         BOT_RESPONSE('User Commands: '.$user_cmd);
     } elseif (!HasOwner($GLOBALS['mask'])) {
