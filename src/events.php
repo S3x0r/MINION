@@ -23,6 +23,16 @@ function on_server_ping()
     fputs($GLOBALS['socket'], "PONG ".$GLOBALS['ex'][1]."\n");
 }
 //---------------------------------------------------------------------------------------------------------
+function on_first_start()
+{
+    /* event after end motd */
+}
+//---------------------------------------------------------------------------------------------------------
+function on_bot_join_channel()
+{
+    BOT_RESPONSE('bello! :)');
+}
+//---------------------------------------------------------------------------------------------------------
 function on_join()
 {
     /* auto op */
@@ -46,6 +56,7 @@ function on_join()
 //---------------------------------------------------------------------------------------------------------
     /* if bot join */
     if ($GLOBALS['USER'] == $GLOBALS['BOT_NICKNAME']) {
+        on_bot_join_channel();
         array_push($GLOBALS['BOT_CHANNELS'], $GLOBALS['channel']);
         
         /* save data for web panel */
@@ -224,6 +235,11 @@ function on_376() /* join after motd */
     if ($GLOBALS['CONFIG_AUTO_JOIN'] == 'yes') {
         CLI_MSG(TR_35.' '.$GLOBALS['CONFIG_CNANNEL'], '1');
         JOIN_CHANNEL($GLOBALS['CONFIG_CNANNEL']);
+        
+        /* on first start event */
+        on_first_start();
+    } else {
+             on_first_start();
     }
 }
 //---------------------------------------------------------------------------------------------------------

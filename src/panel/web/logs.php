@@ -47,7 +47,7 @@ if (isset($_COOKIE['xs']) && $_COOKIE['xs'] == hash('sha512', $password.$salt)) 
 
 <?php
 
- $path = "../../LOGS/";
+ $path = "../../../LOGS/";
  $files = glob($path . "*.TXT");
 
 foreach ($files as $file) {

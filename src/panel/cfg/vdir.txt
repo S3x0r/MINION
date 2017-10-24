@@ -3,4 +3,4 @@
 #
 # Note: There must be an '/' on end of <Path>
 
-logs/;..\LOGS
+logs/;..\..\LOGS

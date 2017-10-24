@@ -84,7 +84,7 @@ You can change prefix in config file.
 |    op            | BOT gives op to given nick               | !op <nick>                    |   OWNER      |
 |    panel         | Starts web admin panel for BOT           | !panel                        |   CORE/OWNER |
 |                  | Lists panel commands                     | !panel help                   |   CORE/OWNER |
-|                  | Starts web panem at specified port       | !panel start <port>           |   CORE/OWNER |
+|                  | Starts web panel at specified port       | !panel start <port>           |   CORE/OWNER |
 |                  | Stops web panel                          | !panel stop                   |   CORE/OWNER |
 |    plugin        | Plugins manipulation                     | !plugin                       |   OWNER      |
 |                  | Deletes plugin from directory            | !plugin delete <plugin>       |   OWNER      |

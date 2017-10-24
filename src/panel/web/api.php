@@ -5,7 +5,7 @@ function GetDataFromBotConfig()
     $cfg = new IniParser('../web.ini');
     $GLOBALS['WEB_BOT_CONFIG_FILE'] = $cfg->get("MAIN", "WEB_BOT_CONFIG_FILE");
 
-    $cfg = new IniParser('../../'.$GLOBALS['WEB_BOT_CONFIG_FILE']);
+    $cfg = new IniParser('../../../'.$GLOBALS['WEB_BOT_CONFIG_FILE']);
         /* BOT */
         $GLOBALS['CONFIG_NICKNAME']       = $cfg->get("BOT", "nickname");
         $GLOBALS['CONFIG_NAME']           = $cfg->get("BOT", "name");
@@ -198,8 +198,8 @@ class IniParser
 function ListPlugins()
 {
         /* count plugins */
-        $count1 = count(glob("../../PLUGINS/OWNER/*.php", GLOB_BRACE));
-        $count2 = count(glob("../../PLUGINS/USER/*.php", GLOB_BRACE));
+        $count1 = count(glob("../../../PLUGINS/OWNER/*.php", GLOB_BRACE));
+        $count2 = count(glob("../../../PLUGINS/USER/*.php", GLOB_BRACE));
         $tot = $count1+$count2+3;
         
         echo "<h4>All Plugins: $tot</h4><br>";
@@ -214,7 +214,7 @@ function ListPlugins()
         /* OWNERS PLUGINS */
         echo "Owner Plugins ($count1):<br>";
 
-    foreach (glob('../../PLUGINS/OWNER/*.php') as $plugin_name) {
+    foreach (glob('../../../PLUGINS/OWNER/*.php') as $plugin_name) {
         $plugin_name = basename($plugin_name, '.php');
         echo "- $plugin_name<br>";
     }
@@ -223,7 +223,7 @@ function ListPlugins()
         /* USER PLUGINS */
         echo "User Plugins ($count2):<br>";
 
-    foreach (glob('../../PLUGINS/USER/*.php') as $plugin_name) {
+    foreach (glob('../../../PLUGINS/USER/*.php') as $plugin_name) {
         $plugin_name = basename($plugin_name, '.php');
         echo "- $plugin_name<br>";
     }

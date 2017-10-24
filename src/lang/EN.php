@@ -18,7 +18,7 @@ define('TR_17', 'Configuration Loaded from:');
 define('TR_18', 'Configuration file missing!');
 define('TR_19', 'Creating default config in:');
 define('TR_20', 'Cannot make default config! Exiting');
-define('TR_21', '(need to be configured)');
+define('TR_21', 'need to be configured');
 define('TR_22', 'LOG CREATED:');
 define('TR_23', 'Owner Plugins');
 define('TR_24', 'User Plugins');

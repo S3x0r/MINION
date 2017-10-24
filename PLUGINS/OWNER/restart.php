@@ -38,7 +38,7 @@ function plugin_restart()
   
     /* execute batch script */
     if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-        system('START_BOT.BAT');
+        system('cd .. & START_BOT.BAT');
     } else {
               system('php -f BOT.php');
     }

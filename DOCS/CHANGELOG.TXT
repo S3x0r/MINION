@@ -1,4 +1,9 @@
    
+   v0.6.3 changes (25.10.2017):
+   - bot directory structure changed
+   - added: START_SILENT -- to start bot in silent mode
+   - added: generate_hash -- to generate hash from password needed in config.ini
+
    v0.6.2 changes (24.10.2017):
    - new core plugin: !panel, !panel start <port>, !panel stop
      !panel start <port> - starts web server with bot admin panel
