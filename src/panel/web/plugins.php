@@ -23,7 +23,7 @@ if (isset($_COOKIE['xs']) && $_COOKIE['xs'] == hash('sha512', $password.$salt)) 
     <div id="header">
       <div id="logo">
         <div id="logo_text">
-          <h1><a href="main.php">davybot - Admin Panel</a></h1>
+          <h1><a href="main.php">MINION - Admin Panel</a></h1>
         </div>
       </div>
       <div id="menubar">

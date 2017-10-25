@@ -23,7 +23,7 @@ if (PHP_SAPI !== 'cli') {
 
 /*
  
- Plugin from 'suphpbot' adapted to davybot :)
+ Plugin from 'suphpbot' adapted to minion :)
 
  */
 

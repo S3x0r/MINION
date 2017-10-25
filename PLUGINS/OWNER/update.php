@@ -35,8 +35,8 @@ function v_connect()
 
     $GLOBALS['v_addr']   = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
     $GLOBALS['CheckVersion'] = file_get_contents($GLOBALS['v_addr']);
-    $GLOBALS['newdir']   = '../davybot'.$GLOBALS['CheckVersion'];
-    $GLOBALS['v_source'] = 'http://github.com/S3x0r/davybot/archive/master.zip';
+    $GLOBALS['newdir']   = '../minion'.$GLOBALS['CheckVersion'];
+    $GLOBALS['v_source'] = 'http://github.com/S3x0r/MINION/archive/master.zip';
 
     if ($GLOBALS['CheckVersion'] !='') {
         v_checkVersion();
@@ -129,17 +129,17 @@ function v_extract()
         BOT_RESPONSE('Extracted.');
         CLI_MSG('[BOT] Extracted.', '1');
 
-        unlink('davybot-master/.gitattributes');
+        unlink('MINION-master/.gitattributes');
 
         /* copy from extracted dir to -> new dir */
-        recurse_copy("davybot-master/", $GLOBALS['newdir']);
+        recurse_copy("MINION-master/", $GLOBALS['newdir']);
 
         /* delete downloaded zip */
         unlink('update.zip');
         unlink($GLOBALS['newdir'].'/.gitattributes');
 
         /* delete extracted dir */
-        delete_files('davybot-master');
+        delete_files('MINION-master');
 
         //read config and put to new version conf
         $cfg = new IniParser($GLOBALS['config_file']);

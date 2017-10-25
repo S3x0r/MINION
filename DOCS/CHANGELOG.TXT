@@ -1,4 +1,7 @@
-   
+
+   v0.6.4 changes (25.10.2017):
+   - rebranding program name changed to 'MINION' :)
+
    v0.6.3 changes (25.10.2017):
    - bot directory structure changed
    - added: START_SILENT -- to start bot in silent mode
@@ -277,7 +280,7 @@
    - fixed little bug with data.ini
    - fixed update plugin - working now :)
      it checks if new version on server, if yes downloads it and extract
-     to one directory up ../davybot(version) and copy CONFIG.INI from
+     to one directory up ../MINION(version) and copy CONFIG.INI from
      previous version, then executing new version.
 
    v0.2.2 changes:

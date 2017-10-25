@@ -28,7 +28,7 @@ function plugin_fetch()
     if (OnEmptyArg('fetch list / fetch get <plugin>')) {
     } else {
         if ($GLOBALS['args'] == 'list') {
-            $addr_list = 'https://raw.githubusercontent.com/S3x0r/davybot_repository_plugins/master/plugin_list.db';
+            $addr_list = 'https://raw.githubusercontent.com/S3x0r/minion_repository_plugins/master/plugin_list.db';
             $list = file_get_contents($addr_list);
             BOT_RESPONSE('Repository list:');
             BOT_RESPONSE($list);

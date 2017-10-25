@@ -72,4 +72,4 @@ define('TR_67', 'ta pomoc');
 define('TR_68', 'Zahaszuje twoje has³o do SHA256');
 define('TR_69', 'Has³o:');
 define('TR_70', 'Zahaszowane:');
-define('TR_71', 'davybot wersja:');
+define('TR_71', 'MINION wersja:');

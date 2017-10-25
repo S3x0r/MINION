@@ -15,7 +15,6 @@
  */
 /* This is first file called by BOT.PHP -> Start();
  *
- * ^___^_____________----
  *
  */
 
@@ -26,7 +25,7 @@ if (PHP_SAPI !== 'cli') {
 function Start()
 {
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '0.6.3');
+    define('VER', '0.6.4');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());
@@ -102,7 +101,7 @@ function Start()
     if (extension_loaded('wcli')) {
         if ($GLOBALS['silent_mode'] == 'no' or empty($GLOBALS['silent_mode'])) {
             wcli_maximize();
-            wcli_set_console_title('davybot '.VER);
+            wcli_set_console_title('MINION '.VER);
             wcli_hide_cursor();
         }
     }
@@ -167,7 +166,7 @@ function Start()
 
     if ($GLOBALS['silent_mode'] == 'no' or empty($GLOBALS['silent_mode'])) {
         echo "
-    davybot - ver: ".VER.", ".TR_10." S3x0r, ".TR_11." olisek@gmail.com
+    MINION - ver: ".VER.", ".TR_10." S3x0r, ".TR_11." olisek@gmail.com
                    ".TR_12." ".TotalLines()." :)
     ".PHP_EOL.PHP_EOL;
     }
@@ -460,7 +459,7 @@ function SetDefaultData()
         $GLOBALS['CONFIG_TIMEZONE'] = 'Europe/Warsaw';
     }
     if (empty($GLOBALS['CONFIG_FETCH_SERVER'])) {
-        $GLOBALS['CONFIG_FETCH_SERVER'] = 'https://raw.githubusercontent.com/S3x0r/davybot_repository_plugins/master';
+        $GLOBALS['CONFIG_FETCH_SERVER'] = 'https://raw.githubusercontent.com/S3x0r/minion_repository_plugins/master';
     }
     if (empty($GLOBALS['CONFIG_SHOW_LOGO'])) {
         $GLOBALS['CONFIG_SHOW_LOGO'] = 'yes';
@@ -481,10 +480,10 @@ function CreateDefaultConfig($filename)
 [BOT]
 
 ; bot nickname
-nickname         = \'davybot\'
+nickname         = \'minion\'
 
 ; bot name
-name             = \'http://github.com/S3x0r/davybot\'
+name             = \'http://github.com/S3x0r/MINION\'
 
 ; bot ident
 ident            = \'minion\'
@@ -539,7 +538,7 @@ keep_nick        = \'yes\'
 [CHANNEL]
 
 ; channel where to join when connected
-channel          = \'#davybot\'
+channel          = \'#minion\'
 
 ; auto join channel when connected: \'yes\', \'no\'
 auto_join        = \'yes\'
@@ -561,10 +560,10 @@ command_prefix   = \'!\'
 ctcp_response    = \'yes\'
 
 ; ctcp version response (please do not change it:)
-ctcp_version     = \'davybot ('.VER.') powered by minions!\'
+ctcp_version     = \'MINION ('.VER.') powered by minions!\'
 
 ; ctcf finger response
-ctcp_finger      = \'davybot\'
+ctcp_finger      = \'MINION\'
 
 [DELAYS]
 
@@ -603,7 +602,7 @@ time_zone        = \'Europe/Warsaw\'
 [FETCH]
 
 ; bot plugin repository address
-fetch_server     = \'https://raw.githubusercontent.com/S3x0r/davybot_repository_plugins/master\'
+fetch_server     = \'https://raw.githubusercontent.com/S3x0r/minion_repository_plugins/master\'
 
 [PROGRAM]
 
@@ -1124,7 +1123,7 @@ function Engine()
                         break;
 
                     case 'source':
-                        fputs($GLOBALS['socket'], "NOTICE $USER :SOURCE https://github.com/S3x0r/davybot\n");
+                        fputs($GLOBALS['socket'], "NOTICE $USER :SOURCE http://github.com/S3x0r/MINION\n");
                         CLI_MSG('CTCP SOURCE '.TR_48.' '.$USER, '1');
                         break;
 
@@ -1292,8 +1291,8 @@ function UnloadPlugin($plugin)
                   BOT_RESPONSE(TR_42);
         }
     } catch (Exception $e) {
-                              BOT_RESPONSE(TR_49.' UnloadPlugin() '.TR_50);
-                              CLI_MSG('[ERROR]: '.TR_49.' UnloadPlugin() '.TR_50, '1');
+                              BOT_RESPONSE(TR_49.' '.__FUNCTION__.' '.TR_50);
+                              CLI_MSG('[ERROR]: '.TR_49.' '.__FUNCTION__.' '.TR_50, '1');
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -1336,8 +1335,8 @@ function LoadPlugin($plugin)
             }
         }
     } catch (Exception $e) {
-                             BOT_RESPONSE(TR_49.' LoadPlugin() '.TR_50);
-                             CLI_MSG('[ERROR]: '.TR_49.' LoadPlugin() '.TR_50, '1');
+                             BOT_RESPONSE(TR_49.' '.__FUNCTION__.' '.TR_50);
+                             CLI_MSG('[ERROR]: '.TR_49.' '.__FUNCTION__.' '.TR_50, '1');
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -1367,7 +1366,7 @@ function wcliExt()
 {
     if (extension_loaded('wcli')) {
         if ($GLOBALS['silent_mode'] == 'no' or empty($GLOBALS['silent_mode'])) {
-            wcli_set_console_title('davybot '.VER.' ('.TR_51.' '.$GLOBALS['CONFIG_SERVER'].':'
+            wcli_set_console_title('MINION '.VER.' ('.TR_51.' '.$GLOBALS['CONFIG_SERVER'].':'
             .$GLOBALS['CONFIG_PORT'].' | '.TR_52.' '.$GLOBALS['BOT_NICKNAME'].' | '.TR_53.' '
             .$GLOBALS['CONFIG_CNANNEL'].')');
         }

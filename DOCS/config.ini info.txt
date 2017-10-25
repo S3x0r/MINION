@@ -4,13 +4,13 @@
 [BOT]
 
 ; bot nickname
-nickname         = 'davybot'
+nickname         = 'minion'
 
 ; bot name
-name             = 'http://github.com/S3x0r/davybot'
+name             = 'http://github.com/S3x0r/MINION'
 
 ; bot ident
-ident            = 'http://github.com/S3x0r/davybot'
+ident            = 'http://github.com/S3x0r/MINION'
 
 [SERVER]
 
@@ -59,7 +59,7 @@ keep_nick        = 'yes'
 [CHANNEL]
 
 ; channel where to join when connected
-channel          = '#davybot'
+channel          = '#minion'
 
 ; auto join channel when connected: 'yes', 'no'
 auto_join        = 'yes'
@@ -81,10 +81,10 @@ command_prefix   = '!'
 ctcp_response    = 'yes'
 
 ; ctcp version response (please do not change it:)
-ctcp_version     = 'davybot (0.5.4) powered by minions!'
+ctcp_version     = 'MINION (0.5.4) powered by minions!'
 
 ; ctcf finger response
-ctcp_finger      = 'davybot'
+ctcp_finger      = 'MINION'
 
 [DELAYS]
 
@@ -115,7 +115,7 @@ time_zone        = 'Europe/Warsaw'
 [FETCH]
 
 ; bot plugin repository address
-fetch_server     = 'https://raw.githubusercontent.com/S3x0r/davybot_repository_plugins/master'
+fetch_server     = 'https://raw.githubusercontent.com/S3x0r/minion_repository_plugins/master'
 
 [PROGRAM]
 

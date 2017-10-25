@@ -68,4 +68,4 @@ define('TR_67', 'this help');
 define('TR_68', 'I will hash your password to SHA256');
 define('TR_69', 'Password:');
 define('TR_70', 'Hashed:');
-define('TR_71', 'davybot version:');
+define('TR_71', 'MINION version:');
