@@ -13,28 +13,25 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-
+//---------------------------------------------------------------------------------------------------------
 if (PHP_SAPI !== 'cli') {
-    die('This script can\'t be run from a web browser. Use CLI to run it.');
+    die('<h2>This script can\'t be run from a web browser. Use CLI to run it -> php BOT.php</h2>');
 }
-
-    $plugin_description = 'Shows info: '.$GLOBALS['CONFIG_CMD_PREFIX'].'info';
-    $plugin_command = 'info';
-
-function plugin_info()
+//---------------------------------------------------------------------------------------------------------
+function Logs()
 {
+    global $log_file;
 
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'info on: '.$GLOBALS['channel'].', by: '
-    .$GLOBALS['USER'], '1');
-
-    NICK_MSG('MINION version '.VER);
-    NICK_MSG('----------------------------------------------');
-    NICK_MSG('   Author: S3x0r, contact: olisek@gmail.com');
-
-    if (!empty($GLOBALS['CONFIG_BOT_ADMIN'])) {
-        NICK_MSG('Bot Admin: '.$GLOBALS['CONFIG_BOT_ADMIN']);
+    if (!is_dir('../LOGS')) {
+        mkdir('../LOGS');
     }
 
-// NICK_MSG('PHP version: '.PHP_VER);
+    /* random data to prevent fetch file from panel server */
+    $a = random_str('5');
 
+    $log_file = '../LOGS/log_'.date('dmY_H-i-s').'('.$a.').TXT';
+
+    $data = "-------------------------".TR_22." ".date('d.m.Y | H:i:s')."-------------------------\r\n";
+
+    SaveToFile($log_file, $data, 'a');
 }

@@ -1,3 +1,7 @@
+   
+   v0.6.5 changes (27.10.2017):
+   - bot core structure changes:
+     some code separated to different files
 
    v0.6.4 changes (25.10.2017):
    - rebranding program name changed to 'MINION' :)
