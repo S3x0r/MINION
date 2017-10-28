@@ -76,7 +76,7 @@ function LoadPlugins()
     /* USER Plugins array */
     $GLOBALS['USER_PLUGINS'] = explode(" ", $GLOBALS['USER_PLUGINS']);
 
-    /* Now its time to connect */
+    /* time for socket */
     Connect();
 }
 //---------------------------------------------------------------------------------------------------------

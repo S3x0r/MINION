@@ -28,10 +28,10 @@ $files = array('cli.php',
                'debug.php',
                'define.php',
                'events.php',
-               'language.php',      
+               'language.php',
                'logo.php',
                'logs.php',
-               'misc.php',           
+               'misc.php',
                'plugins.php',
                'socket.php',
                'timers.php',
@@ -40,7 +40,7 @@ $files = array('cli.php',
 
 foreach ($files as $file) {
     if (is_file($file)) {
-        require($file);
+        require_once($file);
     } else {
              echo PHP_EOL.'  ERROR: I need \''.$file.'\' file to run!',
              ' Terminating program after 5 seconds.'.PHP_EOL;
@@ -52,25 +52,25 @@ foreach ($files as $file) {
 
 /* let's go! */
 
-    /* check os type and set path */
-    if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-    } else {
-             chdir('.');
-             $GLOBALS['OS_TYPE'] = 'other';
-    }
+/* check os type and set path */
+if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+} else {
+         chdir('.');
+         $GLOBALS['OS_TYPE'] = 'other';
+}
 
-    /* load some needed variables */
-    if (is_file('../CONFIG.INI')) {
-        $config_file = '../CONFIG.INI';
-        $cfg = new IniParser($config_file);
-        $GLOBALS['CONFIG_SHOW_LOGO'] = $cfg->get('PROGRAM', 'show_logo');
-        $GLOBALS['silent_mode'] = $cfg->get('PROGRAM', 'silent_mode');
-        $GLOBALS['CONFIG_CHECK_UPDATE'] = $cfg->get('PROGRAM', 'check_update');
-    } else {
-             $GLOBALS['CONFIG_SHOW_LOGO'] = 'yes';
-             $GLOBALS['silent_mode'] = 'no';
-             $GLOBALS['CONFIG_CHECK_UPDATE'] = 'no';
-    }
+/* load some needed variables */
+if (is_file('../CONFIG.INI')) {
+    $config_file = '../CONFIG.INI';
+    $cfg = new IniParser($config_file);
+    $GLOBALS['CONFIG_SHOW_LOGO'] = $cfg->get('PROGRAM', 'show_logo');
+    $GLOBALS['silent_mode'] = $cfg->get('PROGRAM', 'silent_mode');
+    $GLOBALS['CONFIG_CHECK_UPDATE'] = $cfg->get('PROGRAM', 'check_update');
+} else {
+         $GLOBALS['CONFIG_SHOW_LOGO'] = 'yes';
+         $GLOBALS['silent_mode'] = 'no';
+         $GLOBALS['CONFIG_CHECK_UPDATE'] = 'no';
+}
 
     /* Load translation file */
     SetLanguage();
@@ -79,31 +79,14 @@ foreach ($files as $file) {
     CheckCLIArgs();
     
     /* wcli extension */
-    if (extension_loaded('wcli')) {
-        if (!IsSilent()) {
-            wcli_maximize();
-            wcli_set_console_title('MINION '.VER);
-            wcli_hide_cursor();
-        }
-    }
+    wcliStart();
 
     /* Logo & info :) */
+    logo();
+ 
+/* check if new version on server */
+if ($GLOBALS['CONFIG_CHECK_UPDATE'] == 'yes') {
     if (!IsSilent()) {
-        if ($GLOBALS['CONFIG_SHOW_LOGO'] == 'yes' or empty($GLOBALS['CONFIG_SHOW_LOGO'])) {
-            /* show logo */
-            logo();
-        }
-    }
-
-    if (!IsSilent()) {
-        echo "
-    MINION - ver: ".VER.", ".TR_10." S3x0r, ".TR_11." olisek@gmail.com
-                   ".TR_12." ".TotalLines()." :)
-    ".PHP_EOL.PHP_EOL;
-    }
-    
-    /* check if new version on server */
-    if ($GLOBALS['CONFIG_CHECK_UPDATE'] == 'yes') {
         $url = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
         $CheckVersion = @file_get_contents($url);
         
@@ -115,9 +98,11 @@ foreach ($files as $file) {
                      echo "       >>>> No new update, you have the latest version <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
             }
         } else {
-                 echo "            >>>> Cannot connect to update server <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
+             echo "            >>>> Cannot connect to update server <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
         }
     }
+}
 
-    /* try to load config */
+    /* Load config */
     LoadConfig('../CONFIG.INI');
+    /*  ^__^____-- */

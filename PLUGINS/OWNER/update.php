@@ -178,6 +178,7 @@ function v_extract()
         $GLOBALS['CONFIG_SHOW_LOGO']      = $cfg->get("PROGRAM", "show_logo");
         $GLOBALS['silent_mode']           = $cfg->get("PROGRAM", "silent_mode");
         $GLOBALS['CONFIG_CHECK_UPDATE']   = $cfg->get("PROGRAM", "check_update");
+        $GLOBALS['CONFIG_PLAY_SOUNDS']    = $cfg->get("PROGRAM", "play_sounds");
         $GLOBALS['CONFIG_SHOW_RAW']       = $cfg->get("DEBUG", "show_raw");
 
         // save to new config
@@ -218,6 +219,7 @@ function v_extract()
         SaveData($new_cf, 'PROGRAM', 'show_logo', $GLOBALS['CONFIG_SHOW_LOGO']);
         SaveData($new_cf, 'PROGRAM', 'silent_mode', $GLOBALS['silent_mode']);
         SaveData($new_cf, 'PROGRAM', 'check_update', $GLOBALS['CONFIG_CHECK_UPDATE']);
+        SaveData($new_cf, 'PROGRAM', 'play_sounds', $GLOBALS['CONFIG_PLAY_SOUNDS']);
         SaveData($new_cf, 'DEBUG', 'show_raw', $GLOBALS['CONFIG_SHOW_RAW']);
 
         //copy CONFIG from old ver

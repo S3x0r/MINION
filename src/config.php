@@ -94,6 +94,7 @@ function LoadConfig($filename)
             $GLOBALS['silent_mode']       = $cfg->get("PROGRAM", "silent_mode");
         }
         $GLOBALS['CONFIG_CHECK_UPDATE']   = $cfg->get("PROGRAM", "check_update");
+        $GLOBALS['CONFIG_PLAY_SOUNDS']    = $cfg->get("PROGRAM", "play_sounds");
         /* DEBUG */
         $GLOBALS['CONFIG_SHOW_RAW']       = $cfg->get("DEBUG", "show_raw");
 
@@ -111,8 +112,10 @@ function LoadConfig($filename)
 
         /* Set default data */
         SetDefaultData();
-  /* if default master password, prompt for change it! */
+       
+        /* if default master password, prompt for change it! */
         if ($GLOBALS['CONFIG_OWNER_PASSWD'] == '47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed') {
+            PlaySound('prompt.wav');
             CLI_MSG(TR_13, '0');
             CLI_MSG(TR_14, '0');
 
@@ -158,7 +161,7 @@ function LoadConfig($filename)
             Logs();
         }
         
-        /* now time for plugins */
+        /* if all ok load plugins */
         LoadPlugins();
     } else {
              /* set default logging */
@@ -167,7 +170,7 @@ function LoadConfig($filename)
              CLI_MSG(TR_18, '0');
              CLI_MSG(TR_19.' CONFIG.INI '.PHP_EOL, '0');
 
-             /* Create default config */
+             /* create default config if missing */
              CreateDefaultConfig('../CONFIG.INI');
     }
 }
@@ -314,6 +317,9 @@ silent_mode      = \'no\'
 
 ; check on program startup if new version is on server: \'yes\', \'no\'
 check_update     = \'no\'
+
+; if we want to play sounds?
+play_sounds      = \'yes\'
 
 [DEBUG]
 

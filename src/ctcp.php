@@ -24,6 +24,7 @@ function CTCP()
         case 'version':
             fputs($GLOBALS['socket'], "NOTICE ".$GLOBALS['USER']." :VERSION ".$GLOBALS['CONFIG_CTCP_VERSION']."\n");
             CLI_MSG('CTCP VERSION '.TR_48.' '.$GLOBALS['USER'], '1');
+            PlaySound('prompt.wav');
             break;
 
         case 'clientinfo':

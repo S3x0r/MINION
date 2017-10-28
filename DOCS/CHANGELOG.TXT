@@ -1,4 +1,10 @@
-   
+
+   v0.6.6 changes (28.10.2017):
+   - code reorganize
+   - bot has now sound system :D
+     & new option in CONFIG.INI file: 'play_sounds'
+     if 'yes' sounds will be played, no = no sounds.
+
    v0.6.5 changes (27.10.2017):
    - bot core structure changes:
      some code separated to different files

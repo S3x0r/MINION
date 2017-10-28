@@ -59,9 +59,9 @@ function CoreCmd_Load()
     if (empty($GLOBALS['args'])) {
         BOT_RESPONSE(TR_46.' '.$GLOBALS['CONFIG_CMD_PREFIX'].'load <'.TR_45.'>');
     } else {
-             if (!empty($GLOBALS['piece1'])) {
-                 LoadPlugin($GLOBALS['piece1']);
-             }
+        if (!empty($GLOBALS['piece1'])) {
+            LoadPlugin($GLOBALS['piece1']);
+        }
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -70,9 +70,9 @@ function CoreCmd_Unload()
     if (empty($GLOBALS['args'])) {
         BOT_RESPONSE(TR_46.' '.$GLOBALS['CONFIG_CMD_PREFIX'].'unload <'.TR_45.'>');
     } else {
-             if (!empty($GLOBALS['piece1'])) {
-                 UnloadPlugin($GLOBALS['piece1']);
-             }
+        if (!empty($GLOBALS['piece1'])) {
+            UnloadPlugin($GLOBALS['piece1']);
+        }
     }
 }
 //---------------------------------------------------------------------------------------------------------

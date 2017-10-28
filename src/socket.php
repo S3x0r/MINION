@@ -29,14 +29,15 @@ function Connect()
            //socket_set_blocking($GLOBALS['socket'], false);
         if ($GLOBALS['socket']==false) {
             CLI_MSG(TR_28, '1');
+            PlaySound('tryagain.mp3');
             usleep($GLOBALS['CONFIG_CONNECT_DELAY'] * 1000000);
             if ($i==$GLOBALS['CONFIG_TRY_CONNECT']) {
                 CLI_MSG(TR_29, '1');
+                PlaySound('error_conn.mp3');
                 die();
             }
         } else {
                  Identify();
-                 unset($i);
         }
     }
 }
@@ -53,11 +54,10 @@ function Identify()
 
     fputs($GLOBALS['socket'], 'USER '.$GLOBALS['CONFIG_IDENT'].' 8 * :'.$GLOBALS['CONFIG_NAME']."\n");
 
-    /* time for socket loop */
-    Engine();
+    SocketLoop();
 }
 //---------------------------------------------------------------------------------------------------------
-function Engine()
+function SocketLoop()
 {
     global $args;
     global $args1;

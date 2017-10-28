@@ -60,6 +60,17 @@ function CheckCLIArgs()
     }
 }
 //---------------------------------------------------------------------------------------------------------
+function wcliStart()
+{
+    if (extension_loaded('wcli')) {
+        if (!IsSilent()) {
+            wcli_maximize();
+            wcli_set_console_title('MINION '.VER);
+            wcli_hide_cursor();
+        }
+    }
+}
+//---------------------------------------------------------------------------------------------------------
 function wcliExt()
 {
     if (extension_loaded('wcli')) {
