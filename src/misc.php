@@ -225,7 +225,7 @@ function IsSilent()
 //---------------------------------------------------------------------------------------------------------
 function PlaySound($sound)
 {
-    if ($GLOBALS['CONFIG_PLAY_SOUNDS'] == 'yes') {  
+    if (!IsSilent() && $GLOBALS['CONFIG_PLAY_SOUNDS'] == 'yes') {
         if (is_file('php/play.exe') && is_file('sounds/'.$sound)) {
             $command = 'start /b php/play.exe sounds/'.$sound;
             pclose(popen($command, 'r'));
