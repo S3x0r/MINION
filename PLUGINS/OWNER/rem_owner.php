@@ -17,7 +17,7 @@
 if (PHP_SAPI !== 'cli') {
     die('This script can\'t be run from a web browser. Use CLI to run it.');
 }
-
+    $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = 'Removes owner from config file: '
     .$GLOBALS['CONFIG_CMD_PREFIX'].'rem_owner <nick!ident@hostname>';
     $plugin_command = 'rem_owner';

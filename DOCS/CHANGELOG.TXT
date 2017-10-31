@@ -1,4 +1,8 @@
-   
+
+   v0.6.8 changes(31.10.2017):
+   - fixed CoreCmd_Panel(), panel now checks more input from user
+   - added simple plugin verifying, if verify include, if not not include plugin :)
+
    v0.6.7 changes (30.10.2017):
    - smaller custom play.exe file :)
    - a lot smaller custom web server for panel functionality

@@ -17,7 +17,7 @@
 if (PHP_SAPI !== 'cli') {
     die('This script can\'t be run from a web browser. Use CLI to run it.');
 }
-
+    $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = 'Pings a host: '.$GLOBALS['CONFIG_CMD_PREFIX'].'ping <host>';
     $plugin_command = 'ping';
 
@@ -45,7 +45,7 @@ function plugin_ping()
         }
     } catch (Exception $e) {
              BOT_RESPONSE('[ERROR] Exception: plugin_ping() '.$e);
-             CLI_MSG('[ERROR] Exception: plugin_ping() '.$e);
+             CLI_MSG('[ERROR] Exception: plugin_ping() '.$e. '1');
     }
 }
 
@@ -60,6 +60,6 @@ function ping($hostname)
         }
     } catch (Exception $e) {
              BOT_RESPONSE('[ERROR] Exception: ping() '.$e);
-             CLI_MSG('[ERROR] Exception: ping() '.$e);
+             CLI_MSG('[ERROR] Exception: ping() '.$e, '1');
     }
 }

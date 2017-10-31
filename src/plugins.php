@@ -37,12 +37,18 @@ function LoadPlugins()
         echo '------------------------------------------------------------------------------'.PHP_EOL;
     }
     foreach (glob('../PLUGINS/OWNER/*.php') as $plugin_name) {
-        include_once($plugin_name);
-        $GLOBALS['OWNER_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ';
-        $plugin_name = basename($plugin_name, '.php');
-        if (!IsSilent()) {
-            echo "$plugin_name -- $plugin_description".PHP_EOL;
-        }
+         /* simple verify plugin */
+         $file = file_get_contents($plugin_name);
+         if (strpos($file, PLUGIN_HASH)) {
+             include_once($plugin_name);
+             $GLOBALS['OWNER_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ';
+             $plugin_name = basename($plugin_name, '.php');
+             if (!IsSilent()) {
+                 echo "$plugin_name -- $plugin_description".PHP_EOL;
+             }
+         } else {
+                  echo PHP_EOL."[ERROR] Not compatible plugin: $plugin_name".PHP_EOL.PHP_EOL;
+         }
     }
     if (!IsSilent()) {
         echo '------------------------------------------------------------------------------'.PHP_EOL;
@@ -57,12 +63,18 @@ function LoadPlugins()
         echo '------------------------------------------------------------------------------'.PHP_EOL;
     }
     foreach (glob('../PLUGINS/USER/*.php') as $plugin_name) {
-        include_once($plugin_name);
-        $GLOBALS['USER_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ';
-        $plugin_name = basename($plugin_name, '.php');
-        if (!IsSilent()) {
-            echo "$plugin_name -- $plugin_description".PHP_EOL;
-        }
+         /* simple verify plugin */
+         $file = file_get_contents($plugin_name);
+         if (strpos($file, PLUGIN_HASH)) {
+             include_once($plugin_name);
+             $GLOBALS['USER_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ';
+             $plugin_name = basename($plugin_name, '.php');
+             if (!IsSilent()) {
+                 echo "$plugin_name -- $plugin_description".PHP_EOL;
+             }
+         } else {
+                  echo PHP_EOL."[ERROR] Not compatible plugin: $plugin_name".PHP_EOL.PHP_EOL;
+         }
     }
     $tot = $count1+$count2+3;
     

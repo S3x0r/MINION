@@ -28,16 +28,22 @@ function CoreCmd_Panel()
         }
         switch ($GLOBALS['piece1']) {
             case 'start':
+                /* if windows system */
                 if (!isset($GLOBALS['OS_TYPE'])) {
                     $port = $GLOBALS['piece2'];
                     if (!empty($port)) {
-                        chdir('panel/');
-                        $commandString = 'start /b serv.exe --http-host=0.0.0.0 --http-port='.
-                        $port.' --no-https';
-                        pclose(popen($commandString, 'r'));
-                        chdir('../');
-                        BOT_RESPONSE('Runned.');
-                        CLI_MSG('[BOT] Panel Runned at port: '.$port, '1');
+                        if (!isRunned('serv')) {
+                            if (is_file('panel/serv.exe')) {
+                                $command = 'cd panel & serv.exe --http-host=0.0.0.0 --http-port='.
+                                $port.' --no-https --hide-window';
+                                popen($command, 'r');
+                                BOT_RESPONSE('Runned.');
+                                CLI_MSG('[BOT] Panel Runned at port: '.$port, '1');
+                            } else {
+                                     BOT_RESPONSE('Cannot find web server, missing?');
+                            }
+                       } else { BOT_RESPONSE('Panel already runned! ...');
+                       }
                     } else {
                              BOT_RESPONSE('I need port to run server!');
                     }
@@ -46,9 +52,14 @@ function CoreCmd_Panel()
                 }
                 break;
             case 'stop':
-                exec('taskkill /IM serv.exe /F');
-                BOT_RESPONSE('Panel Closed');
-                CLI_MSG('[BOT] Panel Closed', '1');
+                if (!isset($GLOBALS['OS_TYPE'])) {
+                    if (kill('serv')) {
+                        BOT_RESPONSE('Panel Closed');
+                        CLI_MSG('[BOT] Panel Closed', '1');
+                    } else {
+                         BOT_RESPONSE('Panel Not runned stupid!');
+                    }
+                }
                 break;
         }
     }

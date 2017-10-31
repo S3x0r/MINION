@@ -234,3 +234,32 @@ function PlaySound($sound)
         }
     }
 }
+//---------------------------------------------------------------------------------------------------------
+function kill($program)
+{
+    $pattern = '~('.$program.')\.exe~i';
+    $tasks = array();
+    exec("tasklist 2>NUL", $tasks);
+
+    foreach ($tasks AS $task_line)
+    {
+      if (preg_match($pattern, $task_line, $out)) {
+          exec("taskkill /F /IM ".$out[1].".exe 2>NUL");
+          return true;
+      }
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function isRunned($program)
+{
+    $pattern = '~('.$program.')\.exe~i';
+    $tasks = array();
+    exec("tasklist 2>NUL", $tasks);
+
+    foreach ($tasks AS $task_line)
+    {
+      if (preg_match($pattern, $task_line, $out)) {
+          return true;
+      }
+    }
+}
