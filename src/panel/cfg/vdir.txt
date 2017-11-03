@@ -1,6 +1,1 @@
-# Definitions of virtual directories
-# <Path>;<Directory>
-#
-# Note: There must be an '/' on end of <Path>
-
 logs/;..\..\LOGS

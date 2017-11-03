@@ -1,4 +1,10 @@
 
+   v0.6.9 changes(03.11.2017):
+   - more sounds on CTCP
+   - prompt.wav compressed to mp3
+   - sounds changed
+   - smaller web server & php files
+
    v0.6.8 changes(31.10.2017):
    - fixed CoreCmd_Panel(), panel now checks more input from user
    - added simple plugin verifying, if verify include, if not not include plugin :)

@@ -28,12 +28,12 @@ function Connect()
            $GLOBALS['socket'] = fsockopen($GLOBALS['CONFIG_SERVER'], $GLOBALS['CONFIG_PORT']);
            //socket_set_blocking($GLOBALS['socket'], false);
         if ($GLOBALS['socket']==false) {
+            PlaySound('error_conn.mp3');
             CLI_MSG(TR_28, '1');
-            PlaySound('tryagain.mp3');
             usleep($GLOBALS['CONFIG_CONNECT_DELAY'] * 1000000);
             if ($i==$GLOBALS['CONFIG_TRY_CONNECT']) {
-                CLI_MSG(TR_29, '1');
                 PlaySound('error_conn.mp3');
+                CLI_MSG(TR_29, '1');
                 die();
             }
         } else {

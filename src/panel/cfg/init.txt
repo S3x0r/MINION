@@ -1,20 +1,7 @@
-# Edit this file in UTF8 format
-
-# HTTP configuration
 httpHost=localhost
 httpPort=80
-
-# HTTPS configuration
 httpsPort=443
-
-# Turn to true if you dont want to use HTTPS
 noHTTPS=true
-
-# Document path, empty = Path of WWebserver
 docPath=web
-
-# Open URL after start
 openURL=
-
-# Index files
 indexFiles=index.php,index.html,index.htm

@@ -24,39 +24,45 @@ function CTCP()
         case 'version':
             fputs($GLOBALS['socket'], "NOTICE ".$GLOBALS['USER']." :VERSION ".$GLOBALS['CONFIG_CTCP_VERSION']."\n");
             CLI_MSG('CTCP VERSION '.TR_48.' '.$GLOBALS['USER'], '1');
-            PlaySound('prompt.wav');
+            PlaySound('ctcp.mp3');
             break;
 
         case 'clientinfo':
             fputs($GLOBALS['socket'], "NOTICE ".$GLOBALS['USER']." :CLIENTINFO ".$GLOBALS['CONFIG_CTCP_VERSION']."\n");
             CLI_MSG('CTCP CLIENTINFO '.TR_48.' '.$GLOBALS['USER'], '1');
+            PlaySound('ctcp.mp3');
             break;
 
         case 'source':
             fputs($GLOBALS['socket'], "NOTICE ".$GLOBALS['USER']." :SOURCE http://github.com/S3x0r/MINION\n");
             CLI_MSG('CTCP SOURCE '.TR_48.' '.$GLOBALS['USER'], '1');
+            PlaySound('ctcp.mp3');
             break;
 
         case 'userinfo':
             fputs($GLOBALS['socket'], "NOTICE ".$GLOBALS['USER']." :USERINFO Powered by Minions!\n");
             CLI_MSG('CTCP USERINFO '.TR_48.' '.$GLOBALS['USER'], '1');
+            PlaySound('ctcp.mp3');
             break;
 
         case 'finger':
             fputs($GLOBALS['socket'], "NOTICE ".$GLOBALS['USER']." :FINGER ".$GLOBALS['CONFIG_CTCP_FINGER']."\n");
             CLI_MSG('CTCP FINGER '.TR_48.' '.$GLOBALS['USER'], '1');
+            PlaySound('ctcp.mp3');
             break;
 
         case 'ping':
             $a = str_replace(" ", "", $GLOBALS['args']);
             fputs($GLOBALS['socket'], "NOTICE ".$GLOBALS['USER']." :PING ".$a."\n");
             CLI_MSG('CTCP PING '.TR_48.' '.$GLOBALS['USER'], '1');
+            PlaySound('ctcp.mp3');
             break;
 
         case 'time':
             $a = date("F j, Y, g:i a");
             fputs($GLOBALS['socket'], "NOTICE ".$GLOBALS['USER']." :TIME ".$a."\n");
             CLI_MSG('CTCP TIME '.TR_48.' '.$GLOBALS['USER'], '1');
+            PlaySound('ctcp.mp3');
             break;
     }
 }

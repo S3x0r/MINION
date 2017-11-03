@@ -50,7 +50,7 @@ function on_join()
                 CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') has joined '.$GLOBALS['channel'], '1');
                 CLI_MSG(TR_31.' '.$GLOBALS['USER'].' '.TR_32, '1');
                 fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['USER']."\n");
-                PlaySound('prompt.wav');
+                PlaySound('prompt.mp3');
             }
         }
     }
@@ -93,7 +93,7 @@ function on_kick()
             CLI_MSG(TR_30, '1');
             sleep(2);
             fputs($GLOBALS['socket'], "JOIN :".$GLOBALS['ex'][2]."\n");
-            PlaySound('prompt.wav');
+            PlaySound('prompt.mp3');
         }
     }
     CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') kicked '.
@@ -125,7 +125,7 @@ function on_mode()
             if (isset($GLOBALS['ex'][3]) && $GLOBALS['ex'][3] == '+o') {
                 CLI_MSG('[BOT] Ok i have op now on channel: '.$GLOBALS['channel'], '1');
                 $GLOBALS['BOT_OPPED'] = 'yes';
-                PlaySound('prompt.wav');
+                PlaySound('prompt.mp3');
 
                 /* change channel modes */
                 fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel']."\n");
@@ -137,7 +137,7 @@ function on_mode()
             if (isset($GLOBALS['ex'][3]) && $GLOBALS['ex'][3] == '-o') {
                 CLI_MSG('[BOT] I dont have op now, channel: '.$GLOBALS['channel'], '1');
                 unset($GLOBALS['BOT_OPPED']);
-                PlaySound('prompt.wav');
+                PlaySound('prompt.mp3');
             }
         }
         if (isset($GLOBALS['ex'][4])) {
@@ -237,17 +237,17 @@ function on_376() /* join after motd */
 
     /* if autojoin */
     if ($GLOBALS['CONFIG_AUTO_JOIN'] == 'yes') {
+        /* play sound :) */
+        PlaySound('connected.mp3');
+
         CLI_MSG(TR_35.' '.$GLOBALS['CONFIG_CNANNEL'], '1');
         JOIN_CHANNEL($GLOBALS['CONFIG_CNANNEL']);
-        
-        /* play sound :) */
-        PlaySound('prompt.wav');
         
         /* on first start event */
         on_first_start();
     } else {
              /* play sound :) */
-             PlaySound('prompt.wav');
+             PlaySound('connected.mp3');
              
              /* on first start event */           
              on_first_start();
@@ -301,6 +301,6 @@ function on_475() /* if +key on channel */
         JOIN_CHANNEL($GLOBALS['CONFIG_CNANNEL'].' '.$GLOBALS['CONFIG_CHANNEL_KEY']);
     } else {
               CLI_MSG('[BOT] I cannot join, bad channel key in config or key not set', '1');
-              PlaySound('prompt.wav');
+              PlaySound('prompt.mp3');
     }
 }

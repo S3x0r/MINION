@@ -115,7 +115,7 @@ function LoadConfig($filename)
        
         /* if default master password, prompt for change it! */
         if ($GLOBALS['CONFIG_OWNER_PASSWD'] == '47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed') {
-            PlaySound('prompt.wav');
+            PlaySound('error_conn.mp3');
 
             CLI_MSG(TR_13, '0');
             CLI_MSG(TR_14, '0');
