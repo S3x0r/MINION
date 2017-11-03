@@ -18,7 +18,7 @@ if (PHP_SAPI !== 'cli') {
     die('<h2>This script can\'t be run from a web browser. Use CLI to run it -> php BOT.php</h2>');
 }
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '0.6.9');
+    define('VER', '0.7.0');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());
@@ -45,22 +45,22 @@ function SetDefaultData()
     if (empty($GLOBALS['CONFIG_BOT_RESPONSE'])) {
         $GLOBALS['CONFIG_BOT_RESPONSE'] = 'channel';
     }
-    if (empty($GLOBALS['CONFIG_AUTO_OP'])) {
+    if ($GLOBALS['CONFIG_AUTO_OP'] != 'no' && $GLOBALS['CONFIG_AUTO_OP'] != 'yes') {
         $GLOBALS['CONFIG_AUTO_OP'] = 'yes';
     }
-    if (empty($GLOBALS['CONFIG_AUTO_REJOIN'])) {
+    if ($GLOBALS['CONFIG_AUTO_REJOIN'] != 'no' && $GLOBALS['CONFIG_AUTO_REJOIN'] != 'yes') {
         $GLOBALS['CONFIG_AUTO_REJOIN'] = 'yes';
     }
-    if (empty($GLOBALS['CONFIG_KEEP_NICK'])) {
+    if ($GLOBALS['CONFIG_KEEP_NICK'] != 'no' && $GLOBALS['CONFIG_KEEP_NICK'] != 'yes') {
         $GLOBALS['CONFIG_KEEP_NICK'] = 'yes';
     }
-    if (empty($GLOBALS['CONFIG_AUTO_JOIN'])) {
+    if ($GLOBALS['CONFIG_AUTO_JOIN'] != 'no' && $GLOBALS['CONFIG_AUTO_JOIN'] != 'yes') {
         $GLOBALS['CONFIG_AUTO_JOIN'] = 'yes';
     }
     if (empty($GLOBALS['CONFIG_CMD_PREFIX'])) {
         $GLOBALS['CONFIG_CMD_PREFIX'] = '!';
     }
-    if (empty($GLOBALS['CONFIG_CTCP_RESPONSE'])) {
+    if ($GLOBALS['CONFIG_CTCP_RESPONSE'] != 'no' && $GLOBALS['CONFIG_CTCP_RESPONSE'] != 'yes') {
         $GLOBALS['CONFIG_CTCP_RESPONSE'] = 'yes';
     }
     if (empty($GLOBALS['CONFIG_CHANNEL_DELAY'])) {
@@ -72,10 +72,10 @@ function SetDefaultData()
     if (empty($GLOBALS['CONFIG_NOTICE_DELAY'])) {
         $GLOBALS['CONFIG_NOTICE_DELAY'] = '1';
     }
-    if (empty($GLOBALS['CONFIG_LOGGING'])) {
+    if ($GLOBALS['CONFIG_LOGGING'] != 'no' && $GLOBALS['CONFIG_LOGGING'] != 'yes') {
         $GLOBALS['CONFIG_LOGGING'] = 'yes';
     }
-    if (empty($GLOBALS['CONFIG_LANGUAGE'])) {
+    if ($GLOBALS['CONFIG_LANGUAGE'] != 'EN' && $GLOBALS['CONFIG_LANGUAGE'] != 'PL')  {
         $GLOBALS['CONFIG_LANGUAGE'] = 'EN';
     }
     if (empty($GLOBALS['CONFIG_WEB_LOGIN'])) {
@@ -90,10 +90,19 @@ function SetDefaultData()
     if (empty($GLOBALS['CONFIG_FETCH_SERVER'])) {
         $GLOBALS['CONFIG_FETCH_SERVER'] = 'https://raw.githubusercontent.com/S3x0r/minion_repository_plugins/master';
     }
-    if (empty($GLOBALS['CONFIG_SHOW_LOGO'])) {
+    if ($GLOBALS['silent_mode'] != 'no' && $GLOBALS['silent_mode'] != 'yes') {
+        $GLOBALS['silent_mode'] = 'no';
+    }
+    if ($GLOBALS['CONFIG_CHECK_UPDATE'] != 'no' && $GLOBALS['CONFIG_CHECK_UPDATE'] != 'yes') {
+        $GLOBALS['CONFIG_CHECK_UPDATE'] = 'no';
+    }
+    if ($GLOBALS['CONFIG_PLAY_SOUNDS'] != 'no' && $GLOBALS['CONFIG_PLAY_SOUNDS'] != 'yes') {
+        $GLOBALS['CONFIG_PLAY_SOUNDS'] = 'yes';
+    }
+    if ($GLOBALS['CONFIG_SHOW_LOGO'] != 'no' && $GLOBALS['CONFIG_SHOW_LOGO'] != 'yes') {
         $GLOBALS['CONFIG_SHOW_LOGO'] = 'yes';
     }
-    if (empty($GLOBALS['CONFIG_SHOW_RAW'])) {
+    if ($GLOBALS['CONFIG_SHOW_RAW'] != 'no' && $GLOBALS['CONFIG_SHOW_RAW'] != 'yes') {
         $GLOBALS['CONFIG_SHOW_RAW'] = 'no';
     }
 

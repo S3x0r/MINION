@@ -66,6 +66,15 @@ if (is_file('../CONFIG.INI')) {
     $GLOBALS['CONFIG_SHOW_LOGO'] = $cfg->get('PROGRAM', 'show_logo');
     $GLOBALS['silent_mode'] = $cfg->get('PROGRAM', 'silent_mode');
     $GLOBALS['CONFIG_CHECK_UPDATE'] = $cfg->get('PROGRAM', 'check_update');
+    if ($GLOBALS['CONFIG_SHOW_LOGO'] != 'no' && $GLOBALS['CONFIG_SHOW_LOGO'] != 'yes') {
+        $GLOBALS['CONFIG_SHOW_LOGO'] = 'yes';
+    }
+    if ($GLOBALS['silent_mode'] != 'no' && $GLOBALS['silent_mode'] != 'yes') {
+        $GLOBALS['silent_mode'] = 'no';
+    }
+    if ($GLOBALS['CONFIG_CHECK_UPDATE'] != 'no' && $GLOBALS['CONFIG_CHECK_UPDATE'] != 'yes') {
+        $GLOBALS['CONFIG_CHECK_UPDATE'] = 'no';
+    }
 } else {
          $GLOBALS['CONFIG_SHOW_LOGO'] = 'yes';
          $GLOBALS['silent_mode'] = 'no';

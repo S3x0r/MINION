@@ -25,22 +25,23 @@ example: S3x0r!~S3x0r@12-13-38-219.dsl.dynamic.simnet.is
 
 Bot was writted to run from Windows systems (tested on Windows 7)
 but you can also run it from Linux/Unix by typing: 'php -f BOT.php'
-To have all plugins working (on Linux/Unix) you need to enable
+To have almost all plugins working on Linux/Unix you need to enable
 two extension modules in your php.ini config, modules: php_openssl, php_curl
 and set allow_url_fopen=1 in php.ini
 
-From windows you dont need to download PHP, just run bot from START_BOT.BAT file
+From Windows you don't need to download PHP, just run bot from START_BOT.BAT file
 
 To run bot with diffrent config file: php.exe "../BOT.php" -c some_other_config.ini
 
 Plugins from 'USER' directory are for all users, everybody can use it
 Owners can use plugins 'OWNER' & 'USER'
-If you want to block some plugin from users just move it from 'USER' to 'OWNER'
+If you want to block some plugin(s) from users just move it from 'USER' to 'OWNER' dir.
 
 BOT has also web panel, to start it use !panel start <port> 
-and go to http://yourhost:portnumber, to shutdown panel: !panel stop
+and go to http://yourhost:portnumber
+To shutdown panel: !panel stop
 
-You can now check for bot update, command: !checkupdate
+You can also check for bot update, command: !checkupdate
 And command: !update for downloading and installing new version.
 
 To communicate with bot msg to it on channel using prefix: !<command>

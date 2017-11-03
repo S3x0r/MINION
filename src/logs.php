@@ -20,18 +20,20 @@ if (PHP_SAPI !== 'cli') {
 //---------------------------------------------------------------------------------------------------------
 function Logs()
 {
-    global $log_file;
+    if (!isSilent()) {
+        global $log_file;
 
-    if (!is_dir('../LOGS')) {
-        mkdir('../LOGS');
+        if (!is_dir('../LOGS')) {
+            mkdir('../LOGS');
+        }
+
+        /* random data to prevent fetch file from panel server */
+        $a = random_str('5');
+
+        $log_file = '../LOGS/log_'.date('dmY_H-i-s').'('.$a.').TXT';
+
+        $data = "-------------------------".TR_22." ".date('d.m.Y | H:i:s')."-------------------------\r\n";
+
+        SaveToFile($log_file, $data, 'a');
     }
-
-    /* random data to prevent fetch file from panel server */
-    $a = random_str('5');
-
-    $log_file = '../LOGS/log_'.date('dmY_H-i-s').'('.$a.').TXT';
-
-    $data = "-------------------------".TR_22." ".date('d.m.Y | H:i:s')."-------------------------\r\n";
-
-    SaveToFile($log_file, $data, 'a');
 }
