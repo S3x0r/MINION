@@ -26,11 +26,11 @@ function plugin_voice()
 
     if (OnEmptyArg('voice <nick>')) {
     } else {
-              if (BotOpped() == true) {
-                  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'voice on: '.$GLOBALS['channel'].', by: '
-                  .$GLOBALS['USER'].', for: '.$GLOBALS['args'], '1');
+        if (BotOpped() == true) {
+            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'voice on: '.$GLOBALS['channel'].', by: '
+            .$GLOBALS['USER'].', for: '.$GLOBALS['args'], '1');
 
-                  fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +v '.$GLOBALS['args']."\n");
-              }
+            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +v '.$GLOBALS['args']."\n");
+        }
     }
 }

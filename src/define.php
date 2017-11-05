@@ -18,7 +18,7 @@ if (PHP_SAPI !== 'cli') {
     die('<h2>This script can\'t be run from a web browser. Use CLI to run it -> php BOT.php</h2>');
 }
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '0.7.0');
+    define('VER', '0.7.1');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());
@@ -75,7 +75,7 @@ function SetDefaultData()
     if ($GLOBALS['CONFIG_LOGGING'] != 'no' && $GLOBALS['CONFIG_LOGGING'] != 'yes') {
         $GLOBALS['CONFIG_LOGGING'] = 'yes';
     }
-    if ($GLOBALS['CONFIG_LANGUAGE'] != 'EN' && $GLOBALS['CONFIG_LANGUAGE'] != 'PL')  {
+    if ($GLOBALS['CONFIG_LANGUAGE'] != 'EN' && $GLOBALS['CONFIG_LANGUAGE'] != 'PL') {
         $GLOBALS['CONFIG_LANGUAGE'] = 'EN';
     }
     if (empty($GLOBALS['CONFIG_WEB_LOGIN'])) {

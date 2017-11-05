@@ -25,15 +25,15 @@ if (PHP_SAPI !== 'cli') {
 function plugin_hash()
 {
 
-    if (OnEmptyArg('hash <algorithm> <string>')) {
+    if (OnEmptyArg('hash help to get algorithms list')) {
     } elseif ($GLOBALS['args'] == 'help') {
               BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'hash <algorithm> <string>');
               BOT_RESPONSE('Valid algos: ' . implode(' ', hash_algos()));
     } else {
-              if (hash($GLOBALS['piece1'], $GLOBALS['piece2'])) {
-                  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'hash on: '.$GLOBALS['channel'].', by: '.
-                  $GLOBALS['USER'].', string: '.$GLOBALS['piece2'], '1');
-                  BOT_RESPONSE($GLOBALS['piece1'].': ' . hash($GLOBALS['piece1'], $GLOBALS['piece2']));
-              }
+        if (hash($GLOBALS['piece1'], $GLOBALS['piece2'])) {
+            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'hash on: '.$GLOBALS['channel'].', by: '.
+            $GLOBALS['USER'].', string: '.$GLOBALS['piece2'], '1');
+            BOT_RESPONSE($GLOBALS['piece1'].': ' . hash($GLOBALS['piece1'], $GLOBALS['piece2']));
+        }
     }
 }

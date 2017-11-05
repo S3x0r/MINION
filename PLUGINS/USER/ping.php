@@ -24,9 +24,9 @@ if (PHP_SAPI !== 'cli') {
 function plugin_ping()
 {
     try {
-    if (OnEmptyArg('ping <host>')) {
+        if (OnEmptyArg('ping <host>')) {
         } else {
-                  $ip = gethostbyname($GLOBALS['args']);
+                 $ip = gethostbyname($GLOBALS['args']);
                  
             if ((!preg_match('/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/', $ip)) and
                (($ip == $GLOBALS['args']) or ($ip === false))) {

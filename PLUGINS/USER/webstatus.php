@@ -18,15 +18,15 @@ if (PHP_SAPI !== 'cli') {
     die('This script can\'t be run from a web browser. Use CLI to run it.');
 }
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Shows http status: '.$GLOBALS['CONFIG_CMD_PREFIX'].'http_status <number>';
-    $plugin_command = 'http_status';
+    $plugin_description = 'Shows http status: '.$GLOBALS['CONFIG_CMD_PREFIX'].'webstatus <number>';
+    $plugin_command = 'webstatus';
 
-function plugin_http_status()
+function plugin_webstatus()
 {
 
-    if (OnEmptyArg('http_status <number>')) {
+    if (OnEmptyArg('webstatus <number>')) {
     } else {
-              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'http_status on: '.$GLOBALS['channel'].
+              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'webstatus on: '.$GLOBALS['channel'].
                   ', by: '.$GLOBALS['USER'].', code: '.$GLOBALS['args'], '1');
 
               BOT_RESPONSE(httpstatus($GLOBALS['args']));

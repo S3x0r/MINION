@@ -28,28 +28,31 @@ if (PHP_SAPI !== 'cli') {
 
 function plugin_cham()
 {
+    try {
+        if (OnEmptyArg('cham <nick>')) {
+        } else {
+                 $file = ''; //  <----- here
 
-    if (OnEmptyArg('cham <nick>')) {
-    } else {
-              $file = ''; //  <----- here
+            if (!empty($file)) {
+                $texts = file_get_contents($file);
+                $texts = explode("\n", $texts);
+                $count = 0;
 
-              if(!empty($file)) {
-              $texts = file_get_contents($file);
-              $texts = explode("\n", $texts);
-              $count = 0;
+                shuffle($texts);
+                $text = $texts[$count++];
 
-              shuffle($texts);
-              $text = $texts[$count++];
+                $who = trim($GLOBALS['args']);
 
-              $who = trim($GLOBALS['args']);
-              
-              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'cham on: '.$GLOBALS['channel'].', by: '.
-              $GLOBALS['USER'].', who: '.$who, '1');
+                CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'cham on: '.$GLOBALS['channel'].', by: '.
+                $GLOBALS['USER'].', who: '.$who, '1');
 
-              BOT_RESPONSE($who.': '.$text);
-
-              } else {
-                        BOT_RESPONSE('no file specified to use plugin');
-              }
+                BOT_RESPONSE($who.': '.$text);
+            } else {
+                     BOT_RESPONSE('no file specified to use plugin');
+            }
+        }
+    } catch (Exception $e) {
+                             BOT_RESPONSE(TR_49.' plugin_cham() '.TR_50);
+                             CLI_MSG('[ERROR]: '.TR_49.' plugin_cham() '.TR_50, '1');
     }
 }

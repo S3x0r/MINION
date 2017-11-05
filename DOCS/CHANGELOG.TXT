@@ -1,4 +1,19 @@
-   
+
+   v0.7.1 changes(05.11.2017):
+   - PLUGIN: 'bash' more failproof & gives now 3 output lines
+   - PLUGIN: 'cham' more failproof
+   - PLUGIN: 'dns' is now 'gethost' and more failproof
+   - PLUGIN: 'htmltitle' is now 'webtitle' & now checks if input has http(s)://
+   - PLUGIN: 'http_status' is now 'webstatus' 
+   - PLUGIN: 'hash' typo in text changed
+   - PLUGINS: 'morse', 'youtube', 'wikipedia' little fix
+   - PLUGIN: 'add_owner' is now 'addowner' & we have now check if input is correct
+   - PLUGIN: 'auto_op' is now 'autoop' & we have now check if input is correct
+   - PLUGIN: 'list_owners' is now 'listowners'
+   - PLUGIN: 'newnick' checks first if already has that nick
+   - PLUGINS: 'join', 'leave' checking now if already on that channel
+   - PLUGIN: 'rem_owner' is now 'remowner'
+
    v0.7.0 changes(04.11.2017):
    - bug fixed in silent mode, there was log created
    - more config.ini checks, if 'no' or 'yes' sets defaults

@@ -26,12 +26,16 @@ function plugin_newnick()
 
     if (OnEmptyArg('newnick <new_nick>')) {
     } else {
-             CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'newnick on: '.$GLOBALS['channel'].', by: '
-             .$GLOBALS['USER'].', new nick: '.$GLOBALS['args'], '1');
+        if ($GLOBALS['args'] != $GLOBALS['BOT_NICKNAME']) {
+            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'newnick on: '.$GLOBALS['channel'].', by: '
+            .$GLOBALS['USER'].', new nick: '.$GLOBALS['args'], '1');
             
              fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['args']."\n");
 
              /* wcli extension */
              wcliExt();
+        } else {
+                 BOT_RESPONSE('...');
+        }
     }
 }

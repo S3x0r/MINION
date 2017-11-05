@@ -18,13 +18,13 @@ if (PHP_SAPI !== 'cli') {
     die('This script can\'t be run from a web browser. Use CLI to run it.');
 }
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Shows BOT owners: '.$GLOBALS['CONFIG_CMD_PREFIX'].'list_owners';
-    $plugin_command = 'list_owners';
+    $plugin_description = 'Shows BOT owners: '.$GLOBALS['CONFIG_CMD_PREFIX'].'listowners';
+    $plugin_command = 'listowners';
 
-function plugin_list_owners()
+function plugin_listowners()
 {
 
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'list_owners on: '.$GLOBALS['channel'].
+    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'listowners on: '.$GLOBALS['channel'].
         ', by: '.$GLOBALS['USER'], '1');
 
     LoadData($GLOBALS['config_file'], 'ADMIN', 'bot_owners');

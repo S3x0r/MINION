@@ -248,8 +248,8 @@ function on_376() /* join after motd */
     } else {
              /* play sound :) */
              PlaySound('connected.mp3');
-             
-             /* on first start event */           
+
+             /* on first start event */
              on_first_start();
     }
 }

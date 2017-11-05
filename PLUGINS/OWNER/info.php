@@ -34,7 +34,5 @@ function plugin_info()
     if (!empty($GLOBALS['CONFIG_BOT_ADMIN'])) {
         NICK_MSG('Bot Admin: '.$GLOBALS['CONFIG_BOT_ADMIN']);
     }
-
 // NICK_MSG('PHP version: '.PHP_VER);
-
 }

@@ -26,9 +26,12 @@ function plugin_join()
 
     if (OnEmptyArg('join <#channel>')) {
     } else {
-        CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'join on: '.$GLOBALS['channel'].', by: '
-        .$GLOBALS['USER'].', joining: '.$GLOBALS['args'], '1');
-        
-        JOIN_CHANNEL($GLOBALS['args']);
+        if (!in_array($GLOBALS['args'], $GLOBALS['BOT_CHANNELS'])) {
+            JOIN_CHANNEL($GLOBALS['args']);
+            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'join on: '.$GLOBALS['channel'].', by: '
+            .$GLOBALS['USER'].', joining: '.$GLOBALS['args'], '1');
+        } else {
+                 BOT_RESPONSE('...');
+        }
     }
 }

@@ -19,13 +19,13 @@ if (PHP_SAPI !== 'cli') {
 }
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = 'Removes owner from config file: '
-    .$GLOBALS['CONFIG_CMD_PREFIX'].'rem_owner <nick!ident@hostname>';
-    $plugin_command = 'rem_owner';
+    .$GLOBALS['CONFIG_CMD_PREFIX'].'remowner <nick!ident@hostname>';
+    $plugin_command = 'remowner';
 
-function plugin_rem_owner()
+function plugin_remowner()
 {
 
-    if (OnEmptyArg('rem_owner <nick!ident@hostname>')) {
+    if (OnEmptyArg('remowner <nick!ident@hostname>')) {
     } else {
               /* read owners from config */
               LoadData($GLOBALS['config_file'], 'ADMIN', 'bot_owners');
@@ -52,7 +52,7 @@ function plugin_rem_owner()
             BOT_RESPONSE('Host: \''.$GLOBALS['args'].'\' removed from owners.');
                       
             /* & to CLI */
-            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'rem_owner on: '.$GLOBALS['channel'].', by: '
+            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'remowner on: '.$GLOBALS['channel'].', by: '
             .$GLOBALS['USER'].', OWNER REMOVED: '.$GLOBALS['args'], '1');
         }
     }

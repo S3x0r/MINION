@@ -26,11 +26,11 @@ function plugin_kick()
 
     if (OnEmptyArg('kick <#channel> <who>')) {
     } else {
-              if (BotOpped() == true) {
-                  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'kick on: '.$GLOBALS['channel'].', by: '
-                  .$GLOBALS['USER'].', kicked: '.$GLOBALS['piece2'], '1');
+        if (BotOpped() == true) {
+            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'kick on: '.$GLOBALS['channel'].', by: '
+            .$GLOBALS['USER'].', kicked: '.$GLOBALS['piece2'], '1');
 
-                  fputs($GLOBALS['socket'], 'KICK '.$GLOBALS['piece1'].' :'.$GLOBALS['piece2']."\n");
-              }
+            fputs($GLOBALS['socket'], 'KICK '.$GLOBALS['piece1'].' :'.$GLOBALS['piece2']."\n");
+        }
     }
 }

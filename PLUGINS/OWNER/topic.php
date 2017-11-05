@@ -26,11 +26,11 @@ function plugin_topic()
 
     if (OnEmptyArg('topic <new_topic>')) {
     } else {
-              if (BotOpped() == true) {
-                  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'topic on: '.$GLOBALS['channel'].', by: '
-                  .$GLOBALS['USER'].', New topic: \''.msg_without_command().'\'', '1');
+        if (BotOpped() == true) {
+            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'topic on: '.$GLOBALS['channel'].', by: '
+            .$GLOBALS['USER'].', New topic: \''.msg_without_command().'\'', '1');
 
-                  fputs($GLOBALS['socket'], 'TOPIC '.$GLOBALS['channel'].' '.msg_without_command()."\n");
-              }
+            fputs($GLOBALS['socket'], 'TOPIC '.$GLOBALS['channel'].' '.msg_without_command()."\n");
+        }
     }
 }

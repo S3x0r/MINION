@@ -18,25 +18,23 @@ if (PHP_SAPI !== 'cli') {
     die('This script can\'t be run from a web browser. Use CLI to run it.');
 }
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Shows webpage titile: '.$GLOBALS['CONFIG_CMD_PREFIX'].'htmltitle <address>';
-    $plugin_command = 'htmltitle';
+    $plugin_description = 'Ip address to hostname change: '.$GLOBALS['CONFIG_CMD_PREFIX'].'gethost <ip>';
+    $plugin_command = 'gethost';
 
-function plugin_htmltitle()
+function plugin_gethost()
 {
-
-    if (OnEmptyArg('htmltitle <address>')) {
-    } else {
-        if ($file = file_get_contents('http://'.$GLOBALS['args'])) {
-            if (preg_match('@<title>([^<]{1,256}).*?</title>@mi', $file, $matches)) {
-                if (strlen($matches[1]) == 256) {
-                    $matches[1].='...';
-                }
-
-                CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'htmltitle on: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'], '1');
-
-                BOT_RESPONSE('Title: '.
-                    str_replace("\n", '', str_replace("\r", '', html_entity_decode($matches[1], ENT_QUOTES, 'utf-8'))));
+    try {
+        if (OnEmptyArg('gethost <ip>')) {
+        } else {
+                 $host = gethostbyaddr(trim($GLOBALS['args']));
+            if ($host != '') {
+                BOT_RESPONSE('hostname: '.$host);
+                CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'gethost on: '.$GLOBALS['channel'].', by: '.
+                $GLOBALS['USER'].', hostname: '.$GLOBALS['args'].'/'.$host, '1');
             }
         }
+    } catch (Exception $e) {
+                          BOT_RESPONSE(TR_49.' plugin_gethost() '.TR_50);
+                          CLI_MSG('[ERROR]: '.TR_49.' plugin_gethost() '.TR_50, '1');
     }
 }

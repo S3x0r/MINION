@@ -26,12 +26,11 @@ function plugin_devoice()
 
     if (OnEmptyArg('devoice <nick>')) {
     } else {
-              if (BotOpped() == true) {
-              
-                  CLI_MSG('!devoice on: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'].
-                  ', devoiced: '.$GLOBALS['args'], '1');
+        if (BotOpped() == true) {
+            CLI_MSG('!devoice on: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'].
+            ', devoiced: '.$GLOBALS['args'], '1');
 
-                  fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' -v '.$GLOBALS['args']."\n");
-              }
+            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' -v '.$GLOBALS['args']."\n");
+        }
     }
 }

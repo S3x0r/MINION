@@ -241,12 +241,11 @@ function kill($program)
     $tasks = array();
     exec("tasklist 2>NUL", $tasks);
 
-    foreach ($tasks AS $task_line)
-    {
-      if (preg_match($pattern, $task_line, $out)) {
-          exec("taskkill /F /IM ".$out[1].".exe 2>NUL");
-          return true;
-      }
+    foreach ($tasks as $task_line) {
+        if (preg_match($pattern, $task_line, $out)) {
+            exec("taskkill /F /IM ".$out[1].".exe 2>NUL");
+            return true;
+        }
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -256,10 +255,9 @@ function isRunned($program)
     $tasks = array();
     exec("tasklist 2>NUL", $tasks);
 
-    foreach ($tasks AS $task_line)
-    {
-      if (preg_match($pattern, $task_line, $out)) {
-          return true;
-      }
+    foreach ($tasks as $task_line) {
+        if (preg_match($pattern, $task_line, $out)) {
+            return true;
+        }
     }
 }

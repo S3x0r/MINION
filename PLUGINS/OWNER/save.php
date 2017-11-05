@@ -163,7 +163,7 @@ function plugin_save()
                 break;
 
             case 'command_prefix':
-                 /* update plugins array */      
+                 /* update plugins array */
                  UpdatePrefix('OWNER', $GLOBALS['piece2']);
                  UpdatePrefix('USER', $GLOBALS['piece2']);
             

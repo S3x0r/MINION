@@ -51,26 +51,24 @@ You can change prefix in config file.
 
 |      Plugin      | Description                              | Command                       | Permission   |
 |------------------|------------------------------------------|-------------------------------|--------------|
-|    add_owner     | Adds Owner host to config file           | !add_owner <nick!ident@host>  |   OWNER      |
-|    auto_op       | Adds host to auto op list in config file | !auto_op <nick!ident@host>    |   OWNER      |
+|    addowner      | Adds Owner host to config file           | !addowner <nick!ident@host>   |   OWNER      |
+|    autoop        | Adds host to auto op list in config file | !autoop <nick!ident@host>     |   OWNER      |
 |    bash          | Shows quotes from bash.org               | !bash                         |   USER       |
 |    cham          | Shows random text from file              | !cham <nick>                  |   USER       |
 |    checkupdate   | Checking for updates                     | !checkupdate                  |   OWNER      |
 |    deop          | Deops someone                            | !deop <nick>                  |   OWNER      |
 |    devoice       | Devoice someone                          | !devoice <nick>               |   OWNER      |
-|    dns           | Dns host                                 | !dns <address>                |   USER       |
+|    gethost       | Ip address to hostname                   | !gethost <ip>                 |   USER       |
 |    fetch         | Plugins repository list                  | !fetch list                   |   OWNER      |
 |                  | Downloads plugins from repository        | !fetch get <plugin>           |   OWNER      |
 |    hash          | Changing string to choosed algorithm     | !hash <algo> <string>         |   USER       |
 |                  | Lists available algorithms               | !hash help                    |   USER       |
 |    help          | Shows BOT commands                       | !help                         |   USER       |
-|    htmltitle     | Shows webpage titile                     | !htmltitle <address>          |   USER       |
-|    http_status   | Shows http status info from given number | !http_status <number>         |   USER       |
 |    info          | Shows BOT information                    | !info                         |   OWNER      |
 |    join          | BOT joins given channel                  | !join <#channel>              |   OWNER      |
 |    kick          | BOT kicks given user from channel        | !kick <#channel> <nick>       |   OWNER      |
 |    leave         | BOT parts given channel                  | !leave <#channel>             |   OWNER      |
-|    list_owners   | Shows BOT owners hosts                   | !list_owners                  |   OWNER      |
+|    listowners    | Shows BOT owners hosts                   | !listowners                   |   OWNER      |
 |    load          | Loads plugin to BOT                      | !load <plugin>                |   CORE/OWNER |
 |    math          | Solves mathematical tasks                | !math <2+2>                   |   USER       |
 |    md5           | Changing string to MD5 hash              | !md5 <string>                 |   USER       |
@@ -91,7 +89,7 @@ You can change prefix in config file.
 |    ping          | Ping given host                          | !ping <address>               |   USER       |
 |    quit          | Shutdown BOT                             | !quit                         |   OWNER      |
 |    raw           | Sends raw string to server               | !raw <string> <2> <3> <4>     |   OWNER      |
-|    rem_owner     | Removes owner host from config file      | !rem_owner <nick!ident@host>  |   OWNER      |
+|    remowner      | Removes owner host from config file      | !remowner <nick!ident@host>   |   OWNER      |
 |    restart       | Restarts BOT                             | !restart                      |   OWNER      |
 |    ripe          | Checks ip/host address and show results  | !ripe <address>               |   USER       |
 |    save          | Saving to config file                    | !save                         |   OWNER      |
@@ -125,6 +123,8 @@ You can change prefix in config file.
 |    uptime        | Shows BOT uptime                         | !uptime                       |   USER       |
 |    voice         | BOT gives voice                          | !voice <nick>                 |   OWNER      |
 |    weather       | Shows actual weather                     | !weather <city/place>         |   USER       |
+|    webstatus     | Shows http status info from given number | !webstatus <number>           |   USER       |
+|    webtitle      | Shows webpage titile                     | !webtitle <web address>       |   USER       |
 |    wikipedia     | Search wikipedia                         | !wikipedia <lang> <string>    |   USER       |
 |    winamp        | Controls winamp                          | !winamp                       |   OWNER      |
 |                  | Next song                                | !winamp next                  |   OWNER      |

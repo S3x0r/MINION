@@ -27,20 +27,21 @@ function plugin_youtube()
     if (OnEmptyArg('youtube <link>')) {
     } else {
               $site = $GLOBALS['args'];
-              $content = file_get_contents($site);
-
-              $search = '<meta name="twitter:title" content="';
-              $searchb = '<meta name="twitter:description" content="';
+        if (@file_get_contents($site)) {
+            $content = @file_get_contents($site);
+            $search = '<meta name="twitter:title" content="';
+            $searchb = '<meta name="twitter:description" content="';
  
-              $pieces = explode($search, $content);
-              $piece = explode('">', $pieces[1]);
+            $pieces = explode($search, $content);
+            $piece = explode('">', $pieces[1]);
 
-              $piecesb = explode($searchb, $content);
-              $pieceb = explode('">', $piecesb[1]);
+            $piecesb = explode($searchb, $content);
+            $pieceb = explode('">', $piecesb[1]);
 
-              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'youtube on: '.$GLOBALS['channel'].
-                  ', by: '.$GLOBALS['USER'], '1');
+            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'youtube on: '.$GLOBALS['channel'].
+            ', by: '.$GLOBALS['USER'], '1');
 
-              BOT_RESPONSE('Youtube Title: '.htmlspecialchars_decode($piece[0]));
+            BOT_RESPONSE('Youtube Title: '.htmlspecialchars_decode($piece[0]));
+        }
     }
 }

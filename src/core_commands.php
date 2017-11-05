@@ -42,8 +42,9 @@ function CoreCmd_Panel()
                             } else {
                                      BOT_RESPONSE('Cannot find web server, missing?');
                             }
-                       } else { BOT_RESPONSE('Panel already runned! ...');
-                       }
+                        } else {
+                                 BOT_RESPONSE('Panel already runned! ...');
+                        }
                     } else {
                              BOT_RESPONSE('I need port to run server!');
                     }

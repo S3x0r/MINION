@@ -23,7 +23,6 @@ if (PHP_SAPI !== 'cli') {
 
 function plugin_help()
 {
-
     if (HasOwner($GLOBALS['mask'])) {
         $owner_cmd = implode(' ', $GLOBALS['OWNER_PLUGINS']);
         $user_cmd  = implode(' ', $GLOBALS['USER_PLUGINS']);
@@ -41,8 +40,8 @@ function plugin_help()
 
               BOT_RESPONSE('User Commands: '.$user_cmd);
               
-              if (!empty($GLOBALS['CONFIG_BOT_ADMIN'])) {
-                  BOT_RESPONSE('Bot Admin: '.$GLOBALS['CONFIG_BOT_ADMIN']);
-              }
+        if (!empty($GLOBALS['CONFIG_BOT_ADMIN'])) {
+            BOT_RESPONSE('Bot Admin: '.$GLOBALS['CONFIG_BOT_ADMIN']);
+        }
     }
 }

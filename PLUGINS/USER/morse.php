@@ -38,7 +38,7 @@ function plugin_morse()
                                   '!'  =>  '-.-.--', '/'  =>  '-..-.', '-'  =>  '-....-', '"'  =>  '.-..-.',
                                   '('  =>  '-.--.-', ')'  =>  '-.--.-', ' '  =>  '/',);
 
-        $string = strtolower(msg_without_command());
+        $string = strtolower(parse_msg());
         $len = strlen($string);
         $final = null;
         for ($pos = 0; $pos < $len; $pos++) {
@@ -50,4 +50,18 @@ function plugin_morse()
         CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'morse on: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'], '1');
         BOT_RESPONSE($string.' converted to morse: '.rtrim($final));
     }
+}
+
+function parse_msg()
+{
+    $a = $GLOBALS['ex'];
+    $current = '';
+    $index = 4;
+    
+    while (isset($a[$index])) {
+           $current .= $a[$index].' ';
+           $index++;
+    }
+    $b = preg_replace('/^:/', '', $current, 1);
+    return $b;
 }

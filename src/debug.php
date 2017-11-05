@@ -41,7 +41,8 @@ function ErrorHandler($errno, $errstr, $errfile, $errline)
             break;
 
         default:
-            CLI_MSG("[UNKOWN]: error type [$errno] $errstr", '1');
+            BOT_RESPONSE("Error: $errstr");
+            CLI_MSG("Error: $errstr", '1');
             break;
     }
 

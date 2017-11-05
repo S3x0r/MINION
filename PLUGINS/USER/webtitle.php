@@ -18,22 +18,26 @@ if (PHP_SAPI !== 'cli') {
     die('This script can\'t be run from a web browser. Use CLI to run it.');
 }
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Dns: '.$GLOBALS['CONFIG_CMD_PREFIX'].'dns <address>';
-    $plugin_command = 'dns';
+    $plugin_description = 'Shows webpage titile: '.$GLOBALS['CONFIG_CMD_PREFIX'].'webtitle <web address>';
+    $plugin_command = 'webtitle';
 
-function plugin_dns()
+function plugin_webtitle()
 {
-    try {
-           if (OnEmptyArg('dns <address>')) {
-           } else {
-                    $host = gethostbyaddr(trim($GLOBALS['args']));
-                    BOT_RESPONSE('host: '.$host);
+    if (OnEmptyArg('webtitle <web address>')) {
+    } else {
+             $data = str_replace('http://', '', str_replace('https://', '', $GLOBALS['args']));
+        if ($file = @file_get_contents('http://'.$data)) {
+            if (preg_match('@<title>([^<]{1,256}).*?</title>@mi', $file, $matches)) {
+                if (strlen($matches[1]) == 256) {
+                    $matches[1].='...';
+                }
 
-                    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'dns on: '.$GLOBALS['channel'].', by: '.
-                    $GLOBALS['USER'].', dns: '.$GLOBALS['args'].'/ '.$host, '1');
-           }
-    } catch (Exception $e) {
-                          BOT_RESPONSE(TR_49.' plugin_dns() '.TR_50);
-                          CLI_MSG('[ERROR]: '.TR_49.' plugin_dns() '.TR_50, '1');
+                CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'webtitle on: '.$GLOBALS['channel'].
+                    ', by: '.$GLOBALS['USER'], '1');
+
+                BOT_RESPONSE('Title: '.
+                    str_replace("\n", '', str_replace("\r", '', html_entity_decode($matches[1], ENT_QUOTES, 'utf-8'))));
+            }
+        }
     }
 }
