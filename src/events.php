@@ -35,6 +35,9 @@ function on_bot_join_channel()
 //---------------------------------------------------------------------------------------------------------
 function on_join()
 {
+    /* if someone join */
+    CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') has joined '.$GLOBALS['channel'], '1');
+    
     /* auto op */
     if ($GLOBALS['CONFIG_AUTO_OP'] == 'yes') {
         $cfg = new IniParser($GLOBALS['config_file']);
@@ -47,7 +50,6 @@ function on_join()
 
         if (in_array($mask2, $pieces)) {
             if (BotOpped() == true) {
-                CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') has joined '.$GLOBALS['channel'], '1');
                 CLI_MSG(TR_31.' '.$GLOBALS['USER'].' '.TR_32, '1');
                 fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['USER']."\n");
                 PlaySound('prompt.mp3');
@@ -63,9 +65,6 @@ function on_join()
         /* save data for web panel */
         $data = implode(' ', $GLOBALS['BOT_CHANNELS']);
         WebSave('WEB_BOT_CHANNELS', $data);
-    } else {
-              /* if some else join */
-              CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') has joined '.$GLOBALS['channel'], '1');
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -73,6 +72,7 @@ function on_part()
 {
     /* if bot part */
     if ($GLOBALS['USER'] == $GLOBALS['BOT_NICKNAME']) {
+        /* delete channel from array */
         $key = array_search($GLOBALS['channel'], $GLOBALS['BOT_CHANNELS']);
         if ($key!== false) {
             unset($GLOBALS['BOT_CHANNELS'][$key]);
@@ -81,14 +81,26 @@ function on_part()
             $data = implode(' ', $GLOBALS['BOT_CHANNELS']);
             WebSave('WEB_BOT_CHANNELS', $data);
         }
+        /* set to not opped */
+        unset($GLOBALS['BOT_OPPED']);
     }
     CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') has leaved '.$GLOBALS['channel'], '1');
 }
 //---------------------------------------------------------------------------------------------------------
 function on_kick()
 {
-    /* auto rejoin when bot kicked if in config 'yes' */
+    /* if BOT kicked */
     if (isset($GLOBALS['ex'][3]) && $GLOBALS['ex'][3] == $GLOBALS['BOT_NICKNAME']) {
+        /* set to not opped */
+        unset($GLOBALS['BOT_OPPED']);
+
+        /* delete channel from array */
+        $key = array_search($GLOBALS['channel'], $GLOBALS['BOT_CHANNELS']);
+        if ($key!== false) {
+            unset($GLOBALS['BOT_CHANNELS'][$key]); 
+        }
+
+        /* rejoin if kicked? */
         if ($GLOBALS['CONFIG_AUTO_REJOIN'] == 'yes') {
             CLI_MSG(TR_30, '1');
             sleep(2);
@@ -96,6 +108,7 @@ function on_kick()
             PlaySound('prompt.mp3');
         }
     }
+    /* else */
     CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') kicked '.
         $GLOBALS['ex'][3].' from '.$GLOBALS['channel'], '1');
 }
@@ -145,7 +158,8 @@ function on_mode()
         } else {
                   $rest = '';
         }
-        CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') sets mode: '.$GLOBALS['ex'][3].' '.$rest, '1');
+    /* show message about modes */
+    CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') sets mode: '.$GLOBALS['ex'][3].' '.$rest, '1');
     }
 }
 //---------------------------------------------------------------------------------------------------------

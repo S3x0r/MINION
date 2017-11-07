@@ -1,4 +1,11 @@
 
+   v0.7.2 changes(07.11.2017):
+   - log file format little change
+   - fixed bug: with web panel and diffrent config file (-c)
+   - fixed bug: if bot kicked op var was not updated
+   - fixed bug: if bot kicked channel var was not updated
+   - fixed bug: double message on join & wrong order
+
    v0.7.1 changes(05.11.2017):
    - PLUGIN: 'bash' more failproof & gives now 3 output lines
    - PLUGIN: 'cham' more failproof

@@ -31,7 +31,7 @@ and set allow_url_fopen=1 in php.ini
 
 From Windows you don't need to download PHP, just run bot from START_BOT.BAT file
 
-To run bot with diffrent config file: php.exe "../BOT.php" -c some_other_config.ini
+To run bot with diffrent config file: php.exe "../../BOT.php" -c some_other_config.ini
 
 Plugins from 'USER' directory are for all users, everybody can use it
 Owners can use plugins 'OWNER' & 'USER'

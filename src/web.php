@@ -29,8 +29,8 @@ WEB_BOT_CONFIG_FILE = ".$GLOBALS['config_file'];
     /* save some variables to web.ini */
     SaveToFile('PANEL\web.ini', $data, 'w');
 
-    $config_file = '../CONFIG.INI';
-    $cfg = new IniParser($config_file);
+    $file = $GLOBALS['config_file'];
+    $cfg = new IniParser($file);
     $GLOBALS['CONFIG_WEB_LOGIN'] = $cfg->get('PANEL', 'web_login');
     $GLOBALS['CONFIG_WEB_PASSWORD'] = $cfg->get('PANEL', 'web_password');
     

@@ -24,7 +24,7 @@ function UpdatePrefix($user, $new_prefix)
     $GLOBALS[$user.'_PLUGINS'] = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], $new_prefix, $GLOBALS[$user.'_PLUGINS']);
 }
 //---------------------------------------------------------------------------------------------------------
-/* if first arg after !plugin is empty */
+/* if first arg after !plugin <arg> is empty */
 function OnEmptyArg($info)
 {
     if (empty($GLOBALS['args'])) {
@@ -77,7 +77,7 @@ function TotalLines()
 //---------------------------------------------------------------------------------------------------------
 function random_str($length)
 {
-    $seed = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $seed = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $str = '';
     for ($i=0; $i < $length; $i++) {
          $str .= substr($seed, mt_rand(0, strlen($seed) -1), 1);
