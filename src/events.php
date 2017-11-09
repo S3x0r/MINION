@@ -38,8 +38,21 @@ function on_join()
     /* if someone join */
     CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') has joined '.$GLOBALS['channel'], '1');
     
+    /* if bot join */
+    if ($GLOBALS['USER'] == $GLOBALS['BOT_NICKNAME']) {
+        /* add channel to array */
+        array_push($GLOBALS['BOT_CHANNELS'], $GLOBALS['channel']);
+        
+        /* save data for web panel */
+        $data = implode(' ', $GLOBALS['BOT_CHANNELS']);
+        WebSave('WEB_BOT_CHANNELS', $data);
+
+        /* on bot join event */
+        on_bot_join_channel();
+    }
+    
     /* auto op */
-    if ($GLOBALS['CONFIG_AUTO_OP'] == 'yes') {
+    if ($GLOBALS['CONFIG_AUTO_OP'] == 'yes' && BotOpped() == true) {
         $cfg = new IniParser($GLOBALS['config_file']);
         $GLOBALS['CONFIG_AUTO_OP_LIST'] = $cfg->get("ADMIN", "auto_op_list");
 
@@ -49,22 +62,10 @@ function on_join()
         $mask2 = $GLOBALS['USER'].'!'.$GLOBALS['USER_IDENT'].'@'.$GLOBALS['host'];
 
         if (in_array($mask2, $pieces)) {
-            if (BotOpped() == true) {
-                CLI_MSG(TR_31.' '.$GLOBALS['USER'].' '.TR_32, '1');
-                fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['USER']."\n");
-                PlaySound('prompt.mp3');
-            }
+            CLI_MSG(TR_31.' '.$GLOBALS['USER'].' '.TR_32, '1');
+            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['USER']."\n");
+            PlaySound('prompt.mp3');
         }
-    }
-//---------------------------------------------------------------------------------------------------------
-    /* if bot join */
-    if ($GLOBALS['USER'] == $GLOBALS['BOT_NICKNAME']) {
-        on_bot_join_channel();
-        array_push($GLOBALS['BOT_CHANNELS'], $GLOBALS['channel']);
-        
-        /* save data for web panel */
-        $data = implode(' ', $GLOBALS['BOT_CHANNELS']);
-        WebSave('WEB_BOT_CHANNELS', $data);
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -83,6 +84,9 @@ function on_part()
         }
         /* set to not opped */
         unset($GLOBALS['BOT_OPPED']);
+        
+        /* delete channel modes */
+        unset($GLOBALS['CHANNEL_MODES']);
     }
     CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') has leaved '.$GLOBALS['channel'], '1');
 }
@@ -97,8 +101,11 @@ function on_kick()
         /* delete channel from array */
         $key = array_search($GLOBALS['channel'], $GLOBALS['BOT_CHANNELS']);
         if ($key!== false) {
-            unset($GLOBALS['BOT_CHANNELS'][$key]); 
+            unset($GLOBALS['BOT_CHANNELS'][$key]);
         }
+
+        /* delete channel modes */
+        unset($GLOBALS['CHANNEL_MODES']);
 
         /* rejoin if kicked? */
         if ($GLOBALS['CONFIG_AUTO_REJOIN'] == 'yes') {
@@ -127,29 +134,52 @@ function on_privmsg()
 //---------------------------------------------------------------------------------------------------------
 function on_mode()
 {
-    /* check if someone changes channel modes and set default if changed */
+    /* check if someone changed modes and set default if changed */
     if ($GLOBALS['ex'][2] == $GLOBALS['channel'] && $GLOBALS['USER'] != $GLOBALS['BOT_NICKNAME']) {
         set_channel_modes();
     }
-    if (empty($GLOBALS['USER_HOST'])) {
+
+    /* if server mode */
+    if (empty($GLOBALS['USER_HOST'])) { /* TODO: save bot mode */
     } else {
         /* if bot opped */
         if (isset($GLOBALS['ex'][4]) && $GLOBALS['ex'][4] == $GLOBALS['BOT_NICKNAME']) {
             if (isset($GLOBALS['ex'][3]) && $GLOBALS['ex'][3] == '+o') {
-                CLI_MSG('[BOT] Ok i have op now on channel: '.$GLOBALS['channel'], '1');
+                /* info */
+                CLI_MSG('[BOT] I have OP now on: '.$GLOBALS['channel']. ', from: '.$GLOBALS['USER'].
+                    ' ('.$GLOBALS['USER_HOST'].')', '1');
+                
+                /* set to opped var */
                 $GLOBALS['BOT_OPPED'] = 'yes';
+
+                /* sound */
                 PlaySound('prompt.mp3');
 
-                /* change channel modes */
+                /* and set it */
                 fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel']."\n");
                 set_channel_modes();
+
+                /* set ban list */
+                if (!empty($GLOBALS['CONFIG_BAN_LIST'])) {
+                    $ban_list = explode(', ', $GLOBALS['CONFIG_BAN_LIST']);
+                    foreach ($ban_list as $s) {
+                        sleep(3);
+                        fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +b '.$s."\n");
+                    }
+                }
             }
         }
         /* if bot deoped */
         if (isset($GLOBALS['ex'][4]) && $GLOBALS['ex'][4] == $GLOBALS['BOT_NICKNAME']) {
             if (isset($GLOBALS['ex'][3]) && $GLOBALS['ex'][3] == '-o') {
-                CLI_MSG('[BOT] I dont have op now, channel: '.$GLOBALS['channel'], '1');
+                /* info */
+                CLI_MSG('[BOT] User: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') DEOPED ME on channel: '.
+                    $GLOBALS['channel'], '1');
+                
+                /* bot not opped anymore */
                 unset($GLOBALS['BOT_OPPED']);
+
+                /* sound */
                 PlaySound('prompt.mp3');
             }
         }
@@ -158,8 +188,8 @@ function on_mode()
         } else {
                   $rest = '';
         }
-    /* show message about modes */
-    CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') sets mode: '.$GLOBALS['ex'][3].' '.$rest, '1');
+        /* show message about modes */
+        CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') sets mode: '.$GLOBALS['ex'][3].' '.$rest, '1');
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -208,6 +238,7 @@ function on_003() /* server creation time */
 function on_324() /* channel modes */
 {
     if (isset($GLOBALS['ex'][4])) {
+        unset($GLOBALS['CHANNEL_MODES']);
         $GLOBALS['CHANNEL_MODES'] = str_replace('+', '', $GLOBALS['ex'][4]);
     }
 }
@@ -224,7 +255,10 @@ function on_353() /* on channel join inf */
         $GLOBALS['channel'] = $GLOBALS['ex'][4];
 
         if (isset($GLOBALS['ex'][5]) && $GLOBALS['ex'][5] == ':@'.$GLOBALS['BOT_NICKNAME']) {
+            /* i have op: first on channel */
             $GLOBALS['BOT_OPPED'] = 'yes';
+
+            /* set modes: first on channel */
             set_channel_modes();
         }
     }

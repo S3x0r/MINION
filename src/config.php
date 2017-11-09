@@ -69,6 +69,8 @@ function LoadConfig($filename)
         $GLOBALS['CONFIG_AUTO_JOIN']      = $cfg->get("CHANNEL", "auto_join");
         $GLOBALS['CONFIG_CHANNEL_MODES']  = $cfg->get("CHANNEL", "channel_modes");
         $GLOBALS['CONFIG_CHANNEL_KEY']    = $cfg->get("CHANNEL", "channel_key");
+        /* BANS */
+        $GLOBALS['CONFIG_BAN_LIST']       = $cfg->get("BANS", "ban_list");
         /* COMMAND PREFIX */
         $GLOBALS['CONFIG_CMD_PREFIX']     = $cfg->get("COMMAND", "command_prefix");
         /* CTCP */
@@ -204,10 +206,10 @@ port             = \'6667\'
 server_password  = \'\'
 
 ; try connect \'n\' (in seconds) times to server, if cannot then quit
-try_connect      = \'10\'
+try_connect      = \'99\'
 
 ; delay (in seconds) after new connection to server
-connect_delay    = \'3\'
+connect_delay    = \'6\'
 
 [ADMIN]
 
@@ -215,10 +217,10 @@ connect_delay    = \'3\'
 bot_admin        = \'S3x0r <olisek@gmail.com>\'
 
 ; bot will give op\'s if this hosts join channel 
-auto_op_list     = \'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host\'
+auto_op_list     = \'nick!ident@some.hostname\'
 
 ; BOT OWNER HOSTS
-bot_owners       = \'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host\'
+bot_owners       = \'nick!ident@some.hostname\'
 
 ; owner password (SHA256)
 owner_password   = \'47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed\'
@@ -252,6 +254,11 @@ channel_modes   = \'nt\'
 
 ; channel key if exists
 channel_key      = \'\'
+
+[BANS]
+
+; ban users from this list
+ban_list         = \'nick!ident@hostname, *!ident@hostname, *!*@onlyhost\'
 
 [COMMAND]
 

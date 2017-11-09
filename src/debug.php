@@ -41,8 +41,10 @@ function ErrorHandler($errno, $errstr, $errfile, $errline)
             break;
 
         default:
-            BOT_RESPONSE("Error: $errstr");
-            CLI_MSG("Error: $errstr", '1');
+             CLI_MSG("Error: $errstr", '1');
+            if (isset($GLOBALS['socket']) && isset($GLOBALS['channel'])) {
+                BOT_RESPONSE("Error: $errstr");
+            }
             break;
     }
 
@@ -53,7 +55,7 @@ function ErrorHandler($errno, $errstr, $errfile, $errline)
 function DEBUG($where)
 {
     if (isset($where)) {
-        echo PHP_EOL.PHP_EOL.'[DEBUG] WHERE: $where'.PHP_EOL;
+        echo PHP_EOL.PHP_EOL."[DEBUG] WHERE: $where".PHP_EOL;
     } else {
               echo PHP_EOL.PHP_EOL.'[DEBUG] ---'.PHP_EOL;
     }
@@ -106,6 +108,16 @@ function DEBUG($where)
         echo '[DEBUG] BOT_OPPED: '.$GLOBALS['BOT_OPPED'].PHP_EOL;
     } else {
               echo '[DEBUG] BOT_OPPED: ---'.PHP_EOL;
+    }
+    if (isset($GLOBALS['USER'])) {
+        echo '[DEBUG] USER: '.$GLOBALS['USER'].PHP_EOL;
+    } else {
+              echo '[DEBUG] USER: ---'.PHP_EOL;
+    }
+    if (isset($GLOBALS['USER_HOST'])) {
+        echo '[DEBUG] USER_HOST: '.$GLOBALS['USER_HOST'].PHP_EOL;
+    } else {
+              echo '[DEBUG] USER_HOST: ---'.PHP_EOL;
     }
     if (isset($GLOBALS['CHANNEL_MODES'])) {
         echo '[DEBUG] CHANNEL_MODES: '.$GLOBALS['CHANNEL_MODES'].PHP_EOL.PHP_EOL;

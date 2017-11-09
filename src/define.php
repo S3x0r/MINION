@@ -18,7 +18,7 @@ if (PHP_SAPI !== 'cli') {
     die('<h2>This script can\'t be run from a web browser. Use CLI to run it -> php BOT.php</h2>');
 }
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '0.7.2');
+    define('VER', '0.7.3');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());
@@ -34,10 +34,10 @@ function SetDefaultData()
         $GLOBALS['CONFIG_PORT'] = '6667';
     }
     if (empty($GLOBALS['CONFIG_TRY_CONNECT'])) {
-        $GLOBALS['CONFIG_TRY_CONNECT'] = '10';
+        $GLOBALS['CONFIG_TRY_CONNECT'] = '99';
     }
     if (empty($GLOBALS['CONFIG_CONNECT_DELAY'])) {
-        $GLOBALS['CONFIG_CONNECT_DELAY'] = '3';
+        $GLOBALS['CONFIG_CONNECT_DELAY'] = '6';
     }
     if (empty($GLOBALS['CONFIG_OWNERS_PASSWD'])) {
         $GLOBALS['CONFIG_OWNERS_PASSWD'] = '47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed';

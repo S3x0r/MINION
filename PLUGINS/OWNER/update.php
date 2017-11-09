@@ -163,6 +163,7 @@ function v_extract()
         $GLOBALS['CONFIG_AUTO_JOIN']      = $cfg->get("CHANNEL", "auto_join");
         $GLOBALS['CONFIG_CHANNEL_MODES']  = $cfg->get("CHANNEL", "channel_modes");
         $GLOBALS['CONFIG_CHANNEL_KEY']    = $cfg->get("CHANNEL", "channel_key");
+        $GLOBALS['CONFIG_BAN_LIST']       = $cfg->get("BANS", "ban_list");
         $GLOBALS['CONFIG_CMD_PREFIX']     = $cfg->get("COMMAND", "command_prefix");
         $GLOBALS['CONFIG_CTCP_RESPONSE']  = $cfg->get("CTCP", "ctcp_response");
         $GLOBALS['CONFIG_CTCP_FINGER']    = $cfg->get("CTCP", "ctcp_finger");
@@ -204,6 +205,7 @@ function v_extract()
         SaveData($new_cf, 'CHANNEL', 'auto_join', $GLOBALS['CONFIG_AUTO_JOIN']);
         SaveData($new_cf, 'CHANNEL', 'channel_modes', $GLOBALS['CONFIG_CHANNEL_MODES']);
         SaveData($new_cf, 'CHANNEL', 'channel_key', $GLOBALS['CONFIG_CHANNEL_KEY']);
+        SaveData($new_cf, 'BANS', 'ban_list', $GLOBALS['CONFIG_BAN_LIST']);
         SaveData($new_cf, 'COMMAND', 'command_prefix', $GLOBALS['CONFIG_CMD_PREFIX']);
         SaveData($new_cf, 'CTCP', 'ctcp_response', $GLOBALS['CONFIG_CTCP_RESPONSE']);
         SaveData($new_cf, 'CTCP', 'ctcp_finger', $GLOBALS['CONFIG_CTCP_FINGER']);

@@ -1,4 +1,13 @@
 
+   v0.7.3 changes(09.11.2017):
+   - smaller sounds
+   - changed default value how many times to connect if cannot - from '10' to '99'
+   - changed default value delay to connect to server changed from '3' to '6'
+   - fixed bugs: in DEBUG() & small others
+   - new section in config '[BANS]' and option 'ban_list' you can set ban host's
+     if bot join and opped add bans to channel from 'ban_list'
+   - NEW PLUGIN: 'ban' - ban specified hostname <nick!ident@host>
+
    v0.7.2 changes(07.11.2017):
    - log file format little change
    - fixed bug: with web panel and diffrent config file (-c)

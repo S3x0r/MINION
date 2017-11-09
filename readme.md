@@ -53,6 +53,7 @@ You can change prefix in config file.
 |------------------|------------------------------------------|-------------------------------|--------------|
 |    addowner      | Adds Owner host to config file           | !addowner <nick!ident@host>   |   OWNER      |
 |    autoop        | Adds host to auto op list in config file | !autoop <nick!ident@host>     |   OWNER      |
+|    ban           | Ban specified hostname                   | !ban <nick!ident@host>        |   OWNER      |
 |    bash          | Shows quotes from bash.org               | !bash                         |   USER       |
 |    cham          | Shows random text from file              | !cham <nick>                  |   USER       |
 |    checkupdate   | Checking for updates                     | !checkupdate                  |   OWNER      |
