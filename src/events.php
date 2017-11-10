@@ -160,13 +160,7 @@ function on_mode()
                 set_channel_modes();
 
                 /* set ban list */
-                if (!empty($GLOBALS['CONFIG_BAN_LIST'])) {
-                    $ban_list = explode(', ', $GLOBALS['CONFIG_BAN_LIST']);
-                    foreach ($ban_list as $s) {
-                        sleep(3);
-                        fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +b '.$s."\n");
-                    }
-                }
+                set_bans();
             }
         }
         /* if bot deoped */
@@ -260,6 +254,9 @@ function on_353() /* on channel join inf */
 
             /* set modes: first on channel */
             set_channel_modes();
+
+            /* set ban list */
+            set_bans();
         }
     }
 }

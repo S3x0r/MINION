@@ -107,6 +107,16 @@ function set_channel_modes()
     }
 }
 //---------------------------------------------------------------------------------------------------------
+function set_bans() /* set ban from config list */
+{
+    if (!empty($GLOBALS['CONFIG_BAN_LIST'])) {
+        $ban_list = explode(', ', $GLOBALS['CONFIG_BAN_LIST']);
+        foreach ($ban_list as $s) {
+            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +b '.$s."\n");
+        }
+    }
+}
+//---------------------------------------------------------------------------------------------------------
 function parse_ex3()
 {
     $a = $GLOBALS['ex'];

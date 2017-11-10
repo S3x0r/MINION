@@ -94,21 +94,19 @@ if (is_file('../CONFIG.INI')) {
     logo();
  
 /* check if new version on server */
-if ($GLOBALS['CONFIG_CHECK_UPDATE'] == 'yes') {
-    if (!IsSilent()) {
-        $url = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
-        $CheckVersion = @file_get_contents($url);
+if ($GLOBALS['CONFIG_CHECK_UPDATE'] == 'yes' && !IsSilent()) {
+    $url = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
+    $CheckVersion = @file_get_contents($url);
         
-        if ($CheckVersion !='') {
-            $version = explode("\n", $CheckVersion);
-            if ($version[0] > VER) {
-                echo "             >>>> New version available! ($version[0]) <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
-            } else {
-                     echo "       >>>> No new update, you have the latest version <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
-            }
+    if ($CheckVersion !='') {
+        $version = explode("\n", $CheckVersion);
+        if ($version[0] > VER) {
+            echo "             >>>> New version available! ($version[0]) <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
         } else {
-             echo "            >>>> Cannot connect to update server <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
+                 echo "       >>>> No new update, you have the latest version <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
         }
+    } else {
+             echo "            >>>> Cannot connect to update server <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
     }
 }
 

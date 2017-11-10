@@ -306,21 +306,21 @@ function SocketLoop()
                 }
             }
 //---------------------------------------------------------------------------------------------------------
-            /* keep nick - check every 60 sec */
-            if ($GLOBALS['CONFIG_KEEP_NICK']=='yes' && isset($I_USE_RND_NICKNAME)) {
-                if (time()-$GLOBALS['first_time'] > 60) {
-                    fputs($GLOBALS['socket'], "ISON :".$GLOBALS['NICKNAME_FROM_CONFIG']."\n");
-                    $GLOBALS['first_time'] = time();
-                }
-                if ($ex[1] == '303' && $ex[3] == ':') {
-                    fputs($GLOBALS['socket'], "NICK ".$GLOBALS['NICKNAME_FROM_CONFIG']."\n");
-                    $BOT_NICKNAME = $GLOBALS['NICKNAME_FROM_CONFIG'];
-                    unset($I_USE_RND_NICKNAME);
-                    CLI_MSG('[BOT]: '.TR_37, '1');
-                    /* wcli extension */
-                    wcliExt();
-                }
-            }
+    /* keep nick - check every 60 sec */
+    if ($GLOBALS['CONFIG_KEEP_NICK']=='yes' && isset($GLOBALS['I_USE_RND_NICKNAME'])) {
+        if (time()-$GLOBALS['first_time'] > 60) {
+            fputs($GLOBALS['socket'], "ISON :".$GLOBALS['NICKNAME_FROM_CONFIG']."\n");
+            $GLOBALS['first_time'] = time();
+        }
+        if ($GLOBALS['ex'][1] == '303' && $GLOBALS['ex'][3] == ':') {
+            fputs($GLOBALS['socket'], "NICK ".$GLOBALS['NICKNAME_FROM_CONFIG']."\n");
+            $GLOBALS['BOT_NICKNAME'] = $GLOBALS['NICKNAME_FROM_CONFIG'];
+            unset($GLOBALS['I_USE_RND_NICKNAME']);
+            CLI_MSG('[BOT]: '.TR_37, '1');
+            /* wcli extension */
+            wcliExt();
+        }
+    }
 //---------------------------------------------------------------------------------------------------------
         }
         exit;
