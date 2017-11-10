@@ -26,15 +26,15 @@ function LoadPlugins()
     if (!IsSilent()) {
         /* CORE COMMANDS */
         CLI_MSG('Core Commands (3):', '0');
-        echo '------------------------------------------------------------------------------'.PHP_EOL;
+        Line(COLOR);
         echo 'load -- Loads specified plugins to BOT: !load <plugin>'.PHP_EOL;
         echo 'panel -- Starts web admin panel for BOT: !panel help'.PHP_EOL;
         echo 'unload -- Unloads specified plugin from BOT: !unload <plugin>'.PHP_EOL;
-        echo '------------------------------------------------------------------------------'.PHP_EOL;
+        Line(COLOR);
         
         /* OWNERS PLUGINS */
         CLI_MSG(TR_23." ($count1):", '0');
-        echo '------------------------------------------------------------------------------'.PHP_EOL;
+        Line(COLOR);
     }
     foreach (glob('../PLUGINS/OWNER/*.php') as $plugin_name) {
          /* simple verify plugin */
@@ -51,7 +51,7 @@ function LoadPlugins()
         }
     }
     if (!IsSilent()) {
-        echo '------------------------------------------------------------------------------'.PHP_EOL;
+        Line(COLOR);
     }
 //---------------------------------------------------------------------------------------------------------
     $count2 = count(glob("../PLUGINS/USER/*.php", GLOB_BRACE));
@@ -60,7 +60,7 @@ function LoadPlugins()
 
     if (!IsSilent()) {
         CLI_MSG(TR_24." ($count2):", '0');
-        echo '------------------------------------------------------------------------------'.PHP_EOL;
+        Line(COLOR);
     }
     foreach (glob('../PLUGINS/USER/*.php') as $plugin_name) {
          /* simple verify plugin */

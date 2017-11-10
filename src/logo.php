@@ -52,13 +52,10 @@ function logo()
     B@B@B@B@B@@@B@B@Br:                  rM@B@B@B@B@B@B@B@B@@
     @B@B@B@B@@@B@B@@@B@B@2           :GB@BBG9XXSSS9X9999G9GGM
     B@B@@@B@B@B@B@@@B@B@@s           Srri;i;rrrssssssss22S5HS
-    @B@B@B@B@B@BBMMGG9G:              :,::::iir;rs22SXGGMMMMB
-    ";
- 
-            echo "
-    MINION - ver: ".VER.", ".TR_10." S3x0r, ".TR_11." olisek@gmail.com
-                   ".TR_12." ".TotalLines()." :)
-    ".PHP_EOL.PHP_EOL;
+    @B@B@B@B@B@BBMMGG9G:              :,::::iir;rs22SXGGMMMMB".PHP_EOL;
+
+             echo PHP_EOL.'    MINION - ver: '.VER.', '.TR_10.' S3x0r, '.TR_11.' olisek@gmail.com'.PHP_EOL;
+             echo '                   '.TR_12.' '.TotalLines().' :)'.PHP_EOL.PHP_EOL.PHP_EOL;
         }
     }
 }

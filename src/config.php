@@ -117,15 +117,19 @@ function LoadConfig($filename)
        
         /* if default master password, prompt for change it! */
         if ($GLOBALS['CONFIG_OWNER_PASSWD'] == '47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed') {
+            /* play sound */
             PlaySound('error_conn.mp3');
 
+            /* show info about it */
             CLI_MSG(TR_13, '0');
             CLI_MSG(TR_14, '0');
 
+            /* 'New Password:' */
             echo '['.@date('H:i:s').'] '.TR_15.' ';
 
+            /* handle to input */ 
             $STDIN = fopen('php://stdin', 'r');
-            $new_pwd = fread($STDIN, 30);
+            $new_pwd = str_replace(' ', '', fread($STDIN, 30));
 
             while (strlen($new_pwd) < 8) {
                 echo '['.@date('H:i:s').'] '.TR_16.PHP_EOL;
@@ -157,7 +161,7 @@ function LoadConfig($filename)
         /* from what file config loaded */
         if (!IsSilent()) {
             CLI_MSG(TR_17.' '.$config_file, '0');
-            echo '------------------------------------------------------------------------------'.PHP_EOL;
+            Line(COLOR);
         }
         /* logging init */
         if ($GLOBALS['CONFIG_LOGGING'] == 'yes') {

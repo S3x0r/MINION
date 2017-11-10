@@ -1,3 +1,9 @@
+   
+   v0.7.4 changes(10.11.2017):
+   - now on silent mode window is automatic minimized
+   - we have colors now :)
+   - on 'register <password>' we are checking now if there was
+     space in password, if yes = remove space
 
    v0.7.3 changes(09.11.2017):
    - smaller sounds

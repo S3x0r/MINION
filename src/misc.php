@@ -261,3 +261,32 @@ function isRunned($program)
         }
     }
 }
+//---------------------------------------------------------------------------------------------------------
+function Line($color)
+{
+    /* set color to line */
+    if (extension_loaded('wcli')) {
+        $old = wcli_get_foreground_color();
+        wcli_set_foreground_color($color);
+    }
+
+    echo '------------------------------------------------------------------------------'.PHP_EOL;
+
+    if (extension_loaded('wcli')) {
+        wcli_set_foreground_color($old);
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function Color($data, $color)
+{
+    if (extension_loaded('wcli')) {
+        $old = wcli_get_foreground_color();
+        wcli_set_foreground_color($color);
+    }
+    
+    echo $data;
+    
+    if (extension_loaded('wcli')) {
+        wcli_set_foreground_color($old);
+    }
+}

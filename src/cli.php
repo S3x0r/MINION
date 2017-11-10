@@ -36,7 +36,7 @@ function CheckCLIArgs()
                 echo PHP_EOL.' '.TR_68.PHP_EOL;
                 echo PHP_EOL.' '.TR_69.' ';
                 $STDIN = fopen('php://stdin', 'r');
-                $pwd = fread($STDIN, 30);
+                $pwd = str_replace(' ', '', fread($STDIN, 30));
                 while (strlen($pwd) < 8) {
                        echo ' '.TR_16.PHP_EOL;
                        echo ' '.TR_69.' ';
@@ -50,6 +50,9 @@ function CheckCLIArgs()
             case '-s':
                 $GLOBALS['silent_cli'] = 'yes';
                 $GLOBALS['silent_mode'] = 'yes';
+                if (extension_loaded('wcli')) {
+                    wcli_minimize();
+                }
                 break;
 
             case '-v':
