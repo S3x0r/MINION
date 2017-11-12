@@ -18,9 +18,14 @@ if (PHP_SAPI !== 'cli') {
     die('<h2>This script can\'t be run from a web browser. Use CLI to run it -> php BOT.php</h2>');
 }
 //---------------------------------------------------------------------------------------------------------
-    /* change directory from php to src */
+/* check os type and set path */
+if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
     chdir('../');
-
+} else {
+         chdir('src/');
+         $GLOBALS['OS_TYPE'] = 'other';
+}
+    
 $files = array('cli.php',
                'config.php',
                'core_commands.php',
@@ -51,13 +56,6 @@ foreach ($files as $file) {
 //---------------------------------------------------------------------------------------------------------
 
 /* let's go! */
-
-/* check os type and set path */
-if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-} else {
-         chdir('.');
-         $GLOBALS['OS_TYPE'] = 'other';
-}
 
 /* load some needed variables */
 if (is_file('../CONFIG.INI')) {

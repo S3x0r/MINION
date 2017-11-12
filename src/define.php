@@ -18,7 +18,7 @@ if (PHP_SAPI !== 'cli') {
     die('<h2>This script can\'t be run from a web browser. Use CLI to run it -> php BOT.php</h2>');
 }
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '0.7.5');
+    define('VER', '0.7.6');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());

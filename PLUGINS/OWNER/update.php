@@ -35,7 +35,7 @@ function v_connect()
 
     $GLOBALS['v_addr']   = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
     $GLOBALS['CheckVersion'] = file_get_contents($GLOBALS['v_addr']);
-    $GLOBALS['newdir']   = '../minion'.$GLOBALS['CheckVersion'];
+    $GLOBALS['newdir']   = '../../minion'.$GLOBALS['CheckVersion'];
     $GLOBALS['v_source'] = 'http://github.com/S3x0r/MINION/archive/master.zip';
 
     if ($GLOBALS['CheckVersion'] !='') {
@@ -136,10 +136,9 @@ function v_extract()
 
         /* delete downloaded zip */
         unlink('update.zip');
-        unlink($GLOBALS['newdir'].'/.gitattributes');
 
         /* delete extracted dir */
-        delete_files('MINION-master');
+        delete_files('MINION-master/');
 
         //read config and put to new version conf
         $cfg = new IniParser($GLOBALS['config_file']);

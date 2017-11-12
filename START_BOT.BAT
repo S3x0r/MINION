@@ -2,4 +2,4 @@
 title MINION
 cd src
 cd PHP
-php -c "php.ini" -f "../../BOT.php"
+php.exe -c "php.ini" -f "../../BOT.php"

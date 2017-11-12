@@ -1,4 +1,8 @@
 
+   v0.7.6 changes(12.11.2017):
+   - fixed on linux: proper run & bug in PlaySound()
+   - plugin: update fix
+
    v0.7.5 changes(10.11.2017):
    - fixed bug: bot not proper set's ban list to channel when first on channel
      & removed delay

@@ -235,7 +235,7 @@ function IsSilent()
 //---------------------------------------------------------------------------------------------------------
 function PlaySound($sound)
 {
-    if (!IsSilent() && $GLOBALS['CONFIG_PLAY_SOUNDS'] == 'yes') {
+    if (!IsSilent() && $GLOBALS['CONFIG_PLAY_SOUNDS'] == 'yes' && !isset($GLOBALS['OS_TYPE'])) {
         if (is_file('php/play.exe') && is_file('sounds/'.$sound)) {
             $command = 'start /b php/play.exe sounds/'.$sound;
             pclose(popen($command, 'r'));
@@ -276,27 +276,17 @@ function Line($color)
 {
     /* set color to line */
     if (extension_loaded('wcli')) {
-        $old = wcli_get_foreground_color();
-        wcli_set_foreground_color($color);
-    }
-
-    echo '------------------------------------------------------------------------------'.PHP_EOL;
-
-    if (extension_loaded('wcli')) {
-        wcli_set_foreground_color($old);
+        wcli_echo('------------------------------------------------------------------------------'.PHP_EOL, $color);
+    } else {
+             echo '------------------------------------------------------------------------------'.PHP_EOL;
     }
 }
 //---------------------------------------------------------------------------------------------------------
 function Color($data, $color)
 {
     if (extension_loaded('wcli')) {
-        $old = wcli_get_foreground_color();
-        wcli_set_foreground_color($color);
-    }
-    
-    echo $data;
-    
-    if (extension_loaded('wcli')) {
-        wcli_set_foreground_color($old);
+        wcli_echo($data, $color);
+    } else {
+             echo $data;
     }
 }
