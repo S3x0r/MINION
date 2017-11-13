@@ -26,22 +26,26 @@ function plugin_ping()
     try {
         if (OnEmptyArg('ping <host>')) {
         } else {
-                 $ip = gethostbyname($GLOBALS['args']);
+                 if (!isset($GLOBALS['OS_TYPE'])) {
+                     $ip = gethostbyname($GLOBALS['args']);
                  
-            if ((!preg_match('/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/', $ip)) and
-               (($ip == $GLOBALS['args']) or ($ip === false))) {
-                BOT_RESPONSE('Unknown host: \''.$GLOBALS['args'].'\'');
-            } else {
-                      $ping = ping($ip);
-                if ($ping) {
+                 if ((!preg_match('/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/', $ip)) and
+                      (($ip == $GLOBALS['args']) or ($ip === false))) {
+                        BOT_RESPONSE('Unknown host: \''.$GLOBALS['args'].'\'');
+                 } else {
+                          $ping = ping($ip);
+                          if ($ping) {
                               $ping[0] = $GLOBALS['USER'].': '.$ping[0];
-                    foreach ($ping as $thisline) {
-                             BOT_RESPONSE($thisline);
-                    }
+                          foreach ($ping as $thisline) {
+                                  BOT_RESPONSE($thisline);
+                          }
                 }
-            }
+                }
               CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'ping on: '.$GLOBALS['channel'].
                   ', by: '.$GLOBALS['USER'].', address: '.$GLOBALS['args'], '1');
+                } else {
+                         BOT_RESPONSE('This plugin works on windows only at this time.');
+                }
         }
     } catch (Exception $e) {
              BOT_RESPONSE('[ERROR] Exception: plugin_ping() '.$e);

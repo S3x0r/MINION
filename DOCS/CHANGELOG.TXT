@@ -1,4 +1,8 @@
 
+   v0.7.7 changes(13.11.2017):
+   - plugin 'ping' for now only for windows (hangs on linux)
+   - plugin 'math' removed
+
    v0.7.6 changes(12.11.2017):
    - fixed on linux: proper run & bug in PlaySound()
    - plugin: update fix

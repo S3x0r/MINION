@@ -51,9 +51,9 @@ You can change prefix in config file.
 
 ## BOT Commands:
 
-|      Plugin      | Description                              | Command                       | Permission   |
-|------------------|------------------------------------------|-------------------------------|--------------|
-|    addowner      | Adds Owner host to config file           | !addowner <nick!ident@host>   |   OWNER      |
+|      Plugin      | Description                              | Command                       | Permission   | Platform    |
+|------------------|------------------------------------------|-------------------------------|--------------|-------------|
+|    addowner      | Adds Owner host to config file           | !addowner <nick!ident@host>   |   OWNER      | Independent
 |    autoop        | Adds host to auto op list in config file | !autoop <nick!ident@host>     |   OWNER      |
 |    ban           | Ban specified hostname                   | !ban <nick!ident@host>        |   OWNER      |
 |    bash          | Shows quotes from bash.org               | !bash                         |   USER       |
@@ -73,13 +73,12 @@ You can change prefix in config file.
 |    leave         | BOT parts given channel                  | !leave <#channel>             |   OWNER      |
 |    listowners    | Shows BOT owners hosts                   | !listowners                   |   OWNER      |
 |    load          | Loads plugin to BOT                      | !load <plugin>                |   CORE/OWNER |
-|    math          | Solves mathematical tasks                | !math <2+2>                   |   USER       |
 |    md5           | Changing string to MD5 hash              | !md5 <string>                 |   USER       |
 |    memusage      | Shows how much ram is being used by BOT  | !memusage                     |   OWNER      |
 |    morse         | Converts given string to morse code      | !morse <string>               |   USER       |
 |    newnick       | Changes BOT nickname                     | !newnick <newnick>            |   OWNER      |
 |    op            | BOT gives op to given nick               | !op <nick>                    |   OWNER      |
-|    panel         | Starts web admin panel for BOT           | !panel                        |   CORE/OWNER |
+|    panel         | Starts web admin panel for BOT           | !panel                        |   CORE/OWNER | WIN
 |                  | Lists panel commands                     | !panel help                   |   CORE/OWNER |
 |                  | Starts web panel at specified port       | !panel start <port>           |   CORE/OWNER |
 |                  | Stops web panel                          | !panel stop                   |   CORE/OWNER |
@@ -89,7 +88,7 @@ You can change prefix in config file.
 |                  | Loads given plugin to BOT                | !plugin load <plugin>         |   OWNER      |
 |                  | Move plugin from OWNER dir to USER dir   | !plugin move <plugin>         |   OWNER      |
 |                  | Unloads plugin from BOT                  | !plugin unload <plugin>       |   OWNER      |
-|    ping          | Ping given host                          | !ping <address>               |   USER       |
+|    ping          | Ping given host                          | !ping <address>               |   USER       | WIN
 |    quit          | Shutdown BOT                             | !quit                         |   OWNER      |
 |    raw           | Sends raw string to server               | !raw <string> <2> <3> <4>     |   OWNER      |
 |    remowner      | Removes owner host from config file      | !remowner <nick!ident@host>   |   OWNER      |
