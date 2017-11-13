@@ -19,52 +19,49 @@ if (PHP_SAPI !== 'cli') {
 }
     
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Adds Owner host to config file: '
-    .$GLOBALS['CONFIG_CMD_PREFIX'].'addowner <nick!ident@hostname>';
-    $plugin_command = 'addowner';
+    $plugin_description = 'Adds host to admin list in config file: '
+    .$GLOBALS['CONFIG_CMD_PREFIX'].'addadmin <nick!ident@host>';
+    $plugin_command = 'addadmin';
 
-function plugin_addowner()
+function plugin_addadmin()
 {
     $nick_ex = explode('!', trim($GLOBALS['args']));
 
-    if (OnEmptyArg('addowner <nick!ident@hostname>')) {
+    if (OnEmptyArg('addadmin <nick!ident@hostname>')) {
     } elseif ($nick_ex[0] != $GLOBALS['BOT_NICKNAME']) {
         if (preg_match('/^(.+?)!(.+?)@(.+?)$/', $GLOBALS['args'], $host)) {
-            LoadData($GLOBALS['config_file'], 'OWNER', 'bot_owners');
+            LoadData($GLOBALS['config_file'], 'ADMIN', 'admin_list');
  
-            $owners_list = $GLOBALS['LOADED'];
+            $admin_list = $GLOBALS['LOADED'];
             $new         = $host[0];
-            if ($owners_list == '') {
+            if ($admin_list == '') {
                 $new_list = $new.'';
             }
-            if ($owners_list != '') {
-                $new_list = $owners_list.', '.$new;
+            if ($admin_list != '') {
+                $new_list = $admin_list.', '.$new;
             }
-            SaveData($GLOBALS['config_file'], 'OWNER', 'bot_owners', $new_list);
+            SaveData($GLOBALS['config_file'], 'ADMIN', 'admin_list', $new_list);
 
             /* update variable with new owners */
             $cfg = new IniParser($GLOBALS['config_file']);
-            $GLOBALS['CONFIG_OWNERS'] = $cfg->get("OWNER", "bot_owners");
+            $GLOBALS['CONFIG_ADMIN_LIST'] = $cfg->get("ADMIN", "admin_list");
 
             /* inform nick about it */
-            $owner_commands = implode(' ', $GLOBALS['OWNER_PLUGINS']);
+            $admin_commands = implode(' ', $GLOBALS['ADMIN_PLUGINS']);
             $user_commands  = implode(' ', $GLOBALS['USER_PLUGINS']);
 
-            fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :From now you are on my owners list, enjoy.\n");
-            fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :Core Commands: ".
-                $GLOBALS['CONFIG_CMD_PREFIX']."load ".$GLOBALS['CONFIG_CMD_PREFIX']."unload ".
-                $GLOBALS['CONFIG_CMD_PREFIX']."panel\n");
-            fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :Owner Commands: $owner_commands\n");
+            fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :From now you are on my ADMINS list, enjoy.\n");
+            fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :Admin Commands: $admin_commands\n");
             fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :User Commands: $user_commands\n");
  
-            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'addowner on: '.$GLOBALS['channel'].', by: '
-            .$GLOBALS['USER'].', OWNER ADDED: '.$host[0], '1');
+            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'addadmin on: '.$GLOBALS['channel'].', by: '
+            .$GLOBALS['USER'].', ADMIN ADDED: '.$host[0], '1');
 
-            BOT_RESPONSE('Host: \''.$host[0].'\' added to owner list.');
+            BOT_RESPONSE('Host: \''.$host[0].'\' added to admin list.');
         } else {
                  BOT_RESPONSE('Bad input, try: nick!ident@hostname');
         }
     } else {
-             BOT_RESPONSE('I cannot add myself to owners, im already master :)');
+             BOT_RESPONSE('I cannot add myself to admins, im already master :)');
     }
 }

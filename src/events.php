@@ -54,7 +54,7 @@ function on_join()
     /* auto op */
     if ($GLOBALS['CONFIG_AUTO_OP'] == 'yes' && BotOpped() == true) {
         $cfg = new IniParser($GLOBALS['config_file']);
-        $GLOBALS['CONFIG_AUTO_OP_LIST'] = $cfg->get("ADMIN", "auto_op_list");
+        $GLOBALS['CONFIG_AUTO_OP_LIST'] = $cfg->get("OWNER", "auto_op_list");
 
         $auto_op_list_c = $GLOBALS['CONFIG_AUTO_OP_LIST'];
         $pieces = explode(", ", $auto_op_list_c);

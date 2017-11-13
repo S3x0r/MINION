@@ -144,9 +144,13 @@ function msg_without_command()
     return $data;
 }
 //---------------------------------------------------------------------------------------------------------
-function HasAccess($mask)
+function HasAdmin($mask)
 {
     global $admins;
+
+    $admins_c = $GLOBALS['CONFIG_ADMIN_LIST'];
+    $pieces = explode(", ", $admins_c);
+    $admins = $pieces;
 
     if ($mask == null) {
     }

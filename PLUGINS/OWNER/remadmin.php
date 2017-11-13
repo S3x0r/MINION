@@ -18,21 +18,21 @@ if (PHP_SAPI !== 'cli') {
     die('This script can\'t be run from a web browser. Use CLI to run it.');
 }
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Removes owner from config file: '
-    .$GLOBALS['CONFIG_CMD_PREFIX'].'remowner <nick!ident@hostname>';
-    $plugin_command = 'remowner';
+    $plugin_description = 'Removes admin from config file: '
+    .$GLOBALS['CONFIG_CMD_PREFIX'].'remadmin <nick!ident@hostname>';
+    $plugin_command = 'remadmin';
 
-function plugin_remowner()
+function plugin_remadmin()
 {
 
-    if (OnEmptyArg('remowner <nick!ident@hostname>')) {
+    if (OnEmptyArg('remadmin <nick!ident@hostname>')) {
     } else {
               /* read owners from config */
-              LoadData($GLOBALS['config_file'], 'OWNER', 'bot_owners');
-              $owners_list = $GLOBALS['LOADED'];
-              $array = explode(" ", str_replace(',', '', $owners_list));
+              LoadData($GLOBALS['config_file'], 'ADMIN', 'admin_list');
+              $admin_list = $GLOBALS['LOADED'];
+              $array = explode(" ", str_replace(',', '', $admin_list));
 
-            $key = array_search($GLOBALS['args'], $array);
+              $key = array_search($GLOBALS['args'], $array);
         if ($key !== false) {
             /* remove from host from array */
             unset($array[$key]);
@@ -42,18 +42,18 @@ function plugin_remowner()
             $string2 = str_replace(' ', ', ', $string);
 
             /* save new list to config */
-            SaveData($GLOBALS['config_file'], 'OWNER', 'bot_owners', $string2);
+            SaveData($GLOBALS['config_file'], 'ADMIN', 'admin_list', $string2);
 
             /* update variable with new owners */
             $cfg = new IniParser($GLOBALS['config_file']);
-            $GLOBALS['CONFIG_OWNERS'] = $cfg->get("OWNER", "bot_owners");
+            $GLOBALS['CONFIG_ADMIN_LIST'] = $cfg->get("ADMIN", "admin_list");
 
             /* send info to user */
-            BOT_RESPONSE('Host: \''.$GLOBALS['args'].'\' removed from owners.');
+            BOT_RESPONSE('Host: \''.$GLOBALS['args'].'\' removed from admin list.');
                       
             /* & to CLI */
-            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'remowner on: '.$GLOBALS['channel'].', by: '
-            .$GLOBALS['USER'].', OWNER REMOVED: '.$GLOBALS['args'], '1');
+            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'remadmin on: '.$GLOBALS['channel'].', by: '
+            .$GLOBALS['USER'].', ADMIN REMOVED: '.$GLOBALS['args'], '1');
         }
     }
 }

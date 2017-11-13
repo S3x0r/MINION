@@ -21,8 +21,14 @@ if (PHP_SAPI !== 'cli') {
 function LoadPlugins()
 {
     $count1 = count(glob("../PLUGINS/OWNER/*.php", GLOB_BRACE));
-    $GLOBALS['OWNER_PLUGINS'] = null;
+    $count2 = count(glob("../PLUGINS/USER/*.php", GLOB_BRACE));
+    $count3 = count(glob("../PLUGINS/ADMIN/*.php", GLOB_BRACE));
 
+    $GLOBALS['OWNER_PLUGINS'] = null;
+    $GLOBALS['ADMIN_PLUGINS'] = null;
+    $GLOBALS['USER_PLUGINS'] = null;
+
+//---------------------------------------------------------------------------------------------------------
     if (!IsSilent()) {
         /* CORE COMMANDS */
         CLI_MSG('Core Commands (3):', '0');
@@ -31,7 +37,7 @@ function LoadPlugins()
         echo 'panel -- Starts web admin panel for BOT: !panel help'.PHP_EOL;
         echo 'unload -- Unloads specified plugin from BOT: !unload <plugin>'.PHP_EOL;
         Line(COLOR);
-        
+//---------------------------------------------------------------------------------------------------------
         /* OWNERS PLUGINS */
         CLI_MSG(TR_23." ($count1):", '0');
         Line(COLOR);
@@ -54,10 +60,30 @@ function LoadPlugins()
         Line(COLOR);
     }
 //---------------------------------------------------------------------------------------------------------
-    $count2 = count(glob("../PLUGINS/USER/*.php", GLOB_BRACE));
+        /* ADMIN PLUGINS */
+        CLI_MSG("Admin Plugins ($count3):", '0');
+        Line(COLOR);
 
-    $GLOBALS['USER_PLUGINS'] = null;
+    foreach (glob('../PLUGINS/ADMIN/*.php') as $plugin_name) {
+         /* simple verify plugin */
+         $file = file_get_contents($plugin_name);
+        if (strpos($file, PLUGIN_HASH)) {
+            include_once($plugin_name);
+            $GLOBALS['ADMIN_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ';
+            $plugin_name = basename($plugin_name, '.php');
+            if (!IsSilent()) {
+                echo "$plugin_name -- $plugin_description".PHP_EOL;
+            }
+        } else {
+                 echo PHP_EOL."[ERROR] Not compatible plugin: $plugin_name".PHP_EOL.PHP_EOL;
+        }
+    }
+    if (!IsSilent()) {
+        Line(COLOR);
+    }
 
+//---------------------------------------------------------------------------------------------------------
+    /* USER PLUGINS */
     if (!IsSilent()) {
         CLI_MSG(TR_24." ($count2):", '0');
         Line(COLOR);
@@ -76,15 +102,18 @@ function LoadPlugins()
                  echo PHP_EOL."[ERROR] Not compatible plugin: $plugin_name".PHP_EOL.PHP_EOL;
         }
     }
-    $tot = $count1+$count2+3;
+    $tot = $count1+$count2+$count3+3;
     
     if (!IsSilent()) {
         echo "----------------------------------------------------------".TR_25." ($tot)---------".PHP_EOL;
     }
-
+//---------------------------------------------------------------------------------------------------------
     /* OWNER Plugins array */
     $GLOBALS['OWNER_PLUGINS'] = explode(" ", $GLOBALS['OWNER_PLUGINS']);
     
+    /* ADMIN Plugins array */
+    $GLOBALS['ADMIN_PLUGINS'] = explode(" ", $GLOBALS['ADMIN_PLUGINS']);
+
     /* USER Plugins array */
     $GLOBALS['USER_PLUGINS'] = explode(" ", $GLOBALS['USER_PLUGINS']);
 
@@ -98,7 +127,8 @@ function UnloadPlugin($plugin)
            $with_prefix = $GLOBALS['CONFIG_CMD_PREFIX'].$plugin;
            $without_prefix = $plugin;
 
-        if (in_array($with_prefix, $GLOBALS['OWNER_PLUGINS']) || in_array($with_prefix, $GLOBALS['USER_PLUGINS'])) {
+        if (in_array($with_prefix, $GLOBALS['OWNER_PLUGINS']) || in_array($with_prefix, $GLOBALS['ADMIN_PLUGINS']) || 
+            in_array($with_prefix, $GLOBALS['USER_PLUGINS'])) {
             if (($key = array_search($with_prefix, $GLOBALS['OWNER_PLUGINS'])) !== false) {
                 unset($GLOBALS['OWNER_PLUGINS'][$key]);
                 //todo rename function
@@ -107,6 +137,16 @@ function UnloadPlugin($plugin)
                     BOT_RESPONSE(TR_40.' \''.$without_prefix.'\' '.TR_39);
                 }
             }
+//---------------------------------------------------------------------------------------------------------
+            if (($key = array_search($with_prefix, $GLOBALS['ADMIN_PLUGINS'])) !== false) {
+                unset($GLOBALS['ADMIN_PLUGINS'][$key]);
+                //todo rename function
+                if (!in_array($with_prefix, $GLOBALS['ADMIN_PLUGINS'])) {
+                    CLI_MSG('[Plugin]: \''.$without_prefix.'\' '.TR_39, '1');
+                    BOT_RESPONSE(TR_40.' \''.$without_prefix.'\' '.TR_39);
+                }
+            }
+//---------------------------------------------------------------------------------------------------------
             if (($key = array_search($with_prefix, $GLOBALS['USER_PLUGINS'])) !== false) {
                 unset($GLOBALS['USER_PLUGINS'][$key]);
                 //todo rename function
@@ -131,36 +171,47 @@ function LoadPlugin($plugin)
            $with_prefix    = $GLOBALS['CONFIG_CMD_PREFIX'].$plugin;
            $without_prefix = $plugin;
 
-        if (in_array($with_prefix, $GLOBALS['OWNER_PLUGINS']) || in_array($with_prefix, $GLOBALS['USER_PLUGINS'])) {
+        if (in_array($with_prefix, $GLOBALS['OWNER_PLUGINS']) || in_array($with_prefix, $GLOBALS['ADMIN_PLUGINS']) || 
+            in_array($with_prefix, $GLOBALS['USER_PLUGINS'])) {
             BOT_RESPONSE(TR_41);
 
           /* if there is no plugin name in plugins array */
         } elseif (!in_array($with_prefix, $GLOBALS['OWNER_PLUGINS']) ||
-            !in_array($with_prefix, $GLOBALS['USER_PLUGINS'])) {
+            !in_array($with_prefix, $GLOBALS['ADMIN_PLUGINS']) || !in_array($with_prefix, $GLOBALS['USER_PLUGINS'])) {
+            
             /* if no plugin in array & file exists in dir */
-            if (file_exists('PLUGINS/OWNER/'.$without_prefix.'.php')) {
+            if (file_exists('../PLUGINS/OWNER/'.$without_prefix.'.php')) {
                 /* include that file */
-                include_once('PLUGINS/OWNER/'.$without_prefix.'.php');
+                include_once('../PLUGINS/OWNER/'.$without_prefix.'.php');
 
                 /* add prefix & plugin name to plugins array */
                 array_push($GLOBALS['OWNER_PLUGINS'], $with_prefix);
  
                 /* bot responses */
-                BOT_RESPONSE(TR_40.' \''.$without_prefix.'\''.TR_38);
+                BOT_RESPONSE(TR_40.' \''.$without_prefix.'\' '.TR_38);
                 CLI_MSG('[PLUGIN]: '.TR_61.' '.$without_prefix.', '.TR_48.' '.$GLOBALS['USER'], '1');
-            }
-
-            /* if no plugin in array & file exists in dir */
-            if (file_exists('PLUGINS/USER/'.$without_prefix.'.php')) {
+            } elseif (file_exists('../PLUGINS/ADMIN/'.$without_prefix.'.php')) {
                 /* include that file */
-                include_once('PLUGINS/USER/'.$without_prefix.'.php');
+                include_once('../PLUGINS/ADMIN/'.$without_prefix.'.php');
+
+                /* add prefix & plugin name to plugins array */
+                array_push($GLOBALS['ADMIN_PLUGINS'], $with_prefix);
+
+                /* bot responses */
+                BOT_RESPONSE(TR_40.' \''.$without_prefix.'\' '.TR_38);
+                CLI_MSG('[PLUGIN]: '.TR_61.' '.$without_prefix.', '.TR_48.' '.$GLOBALS['USER'], '1');
+            } elseif (file_exists('../PLUGINS/USER/'.$without_prefix.'.php')) {
+                /* include that file */
+                include_once('../PLUGINS/USER/'.$without_prefix.'.php');
 
                 /* add prefix & plugin name to plugins array */
                 array_push($GLOBALS['USER_PLUGINS'], $with_prefix);
 
                 /* bot responses */
-                BOT_RESPONSE(TR_40.' \''.$without_prefix.'\''.TR_38);
+                BOT_RESPONSE(TR_40.' \''.$without_prefix.'\' '.TR_38);
                 CLI_MSG('[PLUGIN]: '.TR_61.' '.$without_prefix.', '.TR_48.' '.$GLOBALS['USER'], '1');
+            } else {
+                     BOT_RESPONSE('No such plugin to load.');
             }
         }
     } catch (Exception $e) {

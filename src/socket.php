@@ -290,11 +290,26 @@ function SocketLoop()
                     call_user_func('plugin_'.$pn);
                 }
 
+                if (in_array($rawcmd[1], $GLOBALS['ADMIN_PLUGINS'])) {
+                    call_user_func('plugin_'.$pn);
+                }
+
                 if (in_array($rawcmd[1], $GLOBALS['USER_PLUGINS'])) {
                     call_user_func('plugin_'.$pn);
                 }
-            } elseif (!HasOwner($mask) && isset($rawcmd[1])) {
+            } elseif (!HasOwner($mask) && HasAdmin($mask) && isset($rawcmd[1])) {
                 $pn = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
+                
+                if (in_array($rawcmd[1], $GLOBALS['ADMIN_PLUGINS'])) {
+                    call_user_func('plugin_'.$pn);
+                }
+              
+                if (in_array($rawcmd[1], $GLOBALS['USER_PLUGINS'])) {
+                    call_user_func('plugin_'.$pn);
+                }
+            } elseif (!HasOwner($mask) && !HasAdmin($mask) && isset($rawcmd[1])) {
+                $pn = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
+                
                 if (in_array($rawcmd[1], $GLOBALS['USER_PLUGINS'])) {
                     call_user_func('plugin_'.$pn);
                 }

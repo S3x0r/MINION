@@ -26,7 +26,7 @@ try_connect      = '10'
 ; delay (in seconds) after new connection to server
 connect_delay    = '3'
 
-[ADMIN]
+[OWNER]
 
 ; you can set info about bot administrator here
 bot_admin        = 'S3x0r <olisek@gmail.com>'
@@ -39,6 +39,11 @@ bot_owners       = 'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host'
 
 ; owner password (SHA256)
 owner_password   = '47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed'
+
+[ADMIN]
+
+; admin host list
+admin_list       = 'nick!ident@hostname, other, ...'
 
 [RESPONSE]
 

@@ -27,7 +27,7 @@ function plugin_listowners()
     CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'listowners on: '.$GLOBALS['channel'].
         ', by: '.$GLOBALS['USER'], '1');
 
-    LoadData($GLOBALS['config_file'], 'ADMIN', 'bot_owners');
+    LoadData($GLOBALS['config_file'], 'OWNER', 'bot_owners');
 
     $pieces = explode(", ", $GLOBALS['LOADED']);
     $owners = $pieces;

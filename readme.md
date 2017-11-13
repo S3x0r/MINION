@@ -26,21 +26,33 @@ example: S3x0r!~S3x0r@12-13-38-219.dsl.dynamic.simnet.is
 </dl>
 
 Bot was writted to run from Windows systems (tested on Windows 7)
-but you can also run it from Linux/Unix by typing: 'php -f BOT.php'
+but you can also run it from Linux/Unix by typing: 'php BOT.php'
 To have almost all plugins working on Linux/Unix you need to enable
-two extension modules in your php.ini config, modules: php_openssl, php_curl
-and set allow_url_fopen=1 in php.ini
+two extension modules in your 'php.ini' config:
 
-From Windows you don't need to download PHP, just run bot from START_BOT.BAT file
+modules:
+- php_openssl
+- php_curl
+
+and set: allow_url_fopen=1 in php.ini
+
+From Windows systems you don't need to download PHP, just run bot from START_BOT.BAT
+There is also silent mode without output to console & no logs, run: START_SILENT.BAT
+
+You can also run bot with arguments:
+On Windows: php.exe "../../BOT.php" -h (to list options)
+On Linux: php BOT.php -h
 
 To run bot with diffrent config file: php.exe "../../BOT.php" -c some_other_config.ini
 
-Plugins from 'USER' directory are for all users, everybody can use it
-Owners can use plugins 'OWNER' & 'USER'
-If you want to block some plugin(s) from users just move it from 'USER' to 'OWNER' dir.
+Access Hierarchy:
+Owner has access to: CORE commands, ADMIN plugins & USER plugins
+Admin has access to: ADMIN plugins & USER plugins
+User has access to: User plugins
+If you want to block some plugin(s) from user's or admin's just move it from folder
+to folder, etc...
 
-BOT has also web panel, to start it use !panel start <port> 
-and go to http://yourhost:portnumber
+BOT has also web panel, to start it use !panel start <port> and go to http://yourhost:portnumber
 To shutdown panel: !panel stop
 
 You can also check for bot update, command: !checkupdate
@@ -53,7 +65,8 @@ You can change prefix in config file.
 
 |      Plugin      | Description                              | Command                       | Permission   | Platform    |
 |------------------|------------------------------------------|-------------------------------|--------------|-------------|
-|    addowner      | Adds Owner host to config file           | !addowner <nick!ident@host>   |   OWNER      | Independent
+|    addadmin      | Adds user host to ADMIN list in config   | !addadmin <nick!ident@host>   |   OWNER      |
+|    addowner      | Adds owner host to config file           | !addowner <nick!ident@host>   |   OWNER      | Independent
 |    autoop        | Adds host to auto op list in config file | !autoop <nick!ident@host>     |   OWNER      |
 |    ban           | Ban specified hostname                   | !ban <nick!ident@host>        |   OWNER      |
 |    bash          | Shows quotes from bash.org               | !bash                         |   USER       |
@@ -91,6 +104,7 @@ You can change prefix in config file.
 |    ping          | Ping given host                          | !ping <address>               |   USER       | WIN
 |    quit          | Shutdown BOT                             | !quit                         |   OWNER      |
 |    raw           | Sends raw string to server               | !raw <string> <2> <3> <4>     |   OWNER      |
+|    remadmin      | Removes admin from config file           | !remadmin <nick!ident@host>   |   OWNER      |
 |    remowner      | Removes owner host from config file      | !remowner <nick!ident@host>   |   OWNER      |
 |    restart       | Restarts BOT                             | !restart                      |   OWNER      |
 |    ripe          | Checks ip/host address and show results  | !ripe <address>               |   USER       |

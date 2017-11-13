@@ -53,11 +53,13 @@ function LoadConfig($filename)
         $GLOBALS['CONFIG_SERVER_PASSWD']  = $cfg->get("SERVER", "server_password");
         $GLOBALS['CONFIG_TRY_CONNECT']    = $cfg->get("SERVER", "try_connect");
         $GLOBALS['CONFIG_CONNECT_DELAY']  = $cfg->get("SERVER", "connect_delay");
+        /* OWNER */
+        $GLOBALS['CONFIG_BOT_ADMIN']      = $cfg->get("OWNER", "bot_admin");
+        $GLOBALS['CONFIG_AUTO_OP_LIST']   = $cfg->get("OWNER", "auto_op_list");
+        $GLOBALS['CONFIG_OWNERS']         = $cfg->get("OWNER", "bot_owners");
+        $GLOBALS['CONFIG_OWNER_PASSWD']   = $cfg->get("OWNER", "owner_password");
         /* ADMIN */
-        $GLOBALS['CONFIG_BOT_ADMIN']      = $cfg->get("ADMIN", "bot_admin");
-        $GLOBALS['CONFIG_AUTO_OP_LIST']   = $cfg->get("ADMIN", "auto_op_list");
-        $GLOBALS['CONFIG_OWNERS']         = $cfg->get("ADMIN", "bot_owners");
-        $GLOBALS['CONFIG_OWNER_PASSWD']   = $cfg->get("ADMIN", "owner_password");
+        $GLOBALS['CONFIG_ADMIN_LIST']     = $cfg->get("ADMIN", "admin_list");
         /* BOT RESPONSE */
         $GLOBALS['CONFIG_BOT_RESPONSE']   = $cfg->get("RESPONSE", "bot_response");
         /* AUTOMATIC */
@@ -145,7 +147,7 @@ function LoadConfig($filename)
             $hashed = hash('sha256', $GLOBALS['pwd']);
 
             /* save pwd to file */
-            SaveData($config_file, 'ADMIN', 'owner_password', $hashed);
+            SaveData($config_file, 'OWNER', 'owner_password', $hashed);
 
             /* remove pwd checking vars */
             unset($new_pwd);
@@ -215,19 +217,24 @@ try_connect      = \'99\'
 ; delay (in seconds) after new connection to server
 connect_delay    = \'6\'
 
-[ADMIN]
+[OWNER]
 
 ; bot administrator information
 bot_admin        = \'S3x0r <olisek@gmail.com>\'
 
-; bot will give op\'s if this hosts join channel 
-auto_op_list     = \'nick!ident@some.hostname\'
+; bot will give op\'s if this hosts join channel <nick!ident@hostname>
+auto_op_list     = \'\'
 
-; BOT OWNER HOSTS
-bot_owners       = \'nick!ident@some.hostname\'
+; BOT OWNER HOSTS <nick!ident@hostname>
+bot_owners       = \'\'
 
 ; owner password (SHA256)
 owner_password   = \'47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed\'
+
+[ADMIN]
+
+; bot admin list <nick!ident@hostname>
+admin_list       = \'\'
 
 [RESPONSE]
 

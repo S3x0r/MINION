@@ -103,11 +103,11 @@ function plugin_save()
                 break;
  
             case 'auto_op_list':
-                 SaveData($GLOBALS['config_file'], 'ADMIN', 'auto_op_list', $GLOBALS['piece2']);
+                 SaveData($GLOBALS['config_file'], 'OWNER', 'auto_op_list', $GLOBALS['piece2']);
      
                  /* update variable with new owners */
                  $cfg = new IniParser($GLOBALS['config_file']);
-                 $GLOBALS['CONFIG_AUTO_OP_LIST'] = $cfg->get("ADMIN", "auto_op_list");
+                 $GLOBALS['CONFIG_AUTO_OP_LIST'] = $cfg->get("OWNER", "auto_op_list");
  
                  NICK_MSG('Auto_op_list Saved.');
                  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save auto_op_list on: '
@@ -127,11 +127,11 @@ function plugin_save()
                 break;
 
             case 'bot_owners':
-                 SaveData($GLOBALS['config_file'], 'ADMIN', 'bot_owners', $GLOBALS['piece2']);
+                 SaveData($GLOBALS['config_file'], 'OWNER', 'bot_owners', $GLOBALS['piece2']);
  
                  /* update variable with new owners */
                  $cfg = new IniParser($GLOBALS['config_file']);
-                 $GLOBALS['CONFIG_OWNERS'] = $cfg->get("ADMIN", "bot_owners");
+                 $GLOBALS['CONFIG_OWNERS'] = $cfg->get("OWNER", "bot_owners");
  
                  NICK_MSG('Bot_owners Saved.');
                  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save bot_owners on: '
@@ -287,11 +287,11 @@ function plugin_save()
                 break;
 
             case 'owner_password':
-                 SaveData($GLOBALS['config_file'], 'ADMIN', 'owner_password', $GLOBALS['piece2']);
+                 SaveData($GLOBALS['config_file'], 'OWNER', 'owner_password', $GLOBALS['piece2']);
      
                  /* update variable with new owners */
                  $cfg = new IniParser($GLOBALS['config_file']);
-                 $GLOBALS['CONFIG_OWNER_PASSWD'] = $cfg->get("ADMIN", "owner_password");
+                 $GLOBALS['CONFIG_OWNER_PASSWD'] = $cfg->get("OWNER", "owner_password");
  
                  NICK_MSG('Owner_password Saved.');
                  CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'save owner_password on: '.$GLOBALS['channel'].

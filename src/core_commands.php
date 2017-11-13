@@ -98,7 +98,7 @@ function CoreCmd_RegisterToBot()
         
             /* if user password match password in config do the rest */
             if ($hashed == $GLOBALS['CONFIG_OWNER_PASSWD']) {
-                LoadData($GLOBALS['config_file'], 'ADMIN', 'bot_owners');
+                LoadData($GLOBALS['config_file'], 'OWNER', 'bot_owners');
             
                 /* load owner list from config */
                 $owners_list = $GLOBALS['LOADED'];
@@ -112,10 +112,10 @@ function CoreCmd_RegisterToBot()
                     $new_list = $owners_list.', '.$new;
                 }
 
-                SaveData($GLOBALS['config_file'], 'ADMIN', 'bot_owners', $new_list);
+                SaveData($GLOBALS['config_file'], 'OWNER', 'bot_owners', $new_list);
 
                 /* Add host to auto op list */
-                LoadData($GLOBALS['config_file'], 'ADMIN', 'auto_op_list');
+                LoadData($GLOBALS['config_file'], 'OWNER', 'auto_op_list');
 
                 $auto_list   = $GLOBALS['LOADED'];
                 $new         = trim($GLOBALS['mask']);
@@ -128,15 +128,17 @@ function CoreCmd_RegisterToBot()
                     $new_list = $auto_list.', '.$new;
                 }
 
-                SaveData($GLOBALS['config_file'], 'ADMIN', 'auto_op_list', $new_list);
+                SaveData($GLOBALS['config_file'], 'OWNER', 'auto_op_list', $new_list);
 
                 $owner_commands = implode(' ', $GLOBALS['OWNER_PLUGINS']);
+                $admin_commands = implode(' ', $GLOBALS['ADMIN_PLUGINS']);
                 $user_commands  = implode(' ', $GLOBALS['USER_PLUGINS']);
 
                 /* send information to user about commands */
                 NICK_MSG(TR_36);
                 NICK_MSG('Core Commands: '.$GLOBALS['CONFIG_CMD_PREFIX'].'load '.
                     $GLOBALS['CONFIG_CMD_PREFIX'].'unload '.$GLOBALS['CONFIG_CMD_PREFIX'].'panel');
+                NICK_MSG('Admin Commands: '.$admin_commands);
                 NICK_MSG(TR_59.' '.$owner_commands);
                 NICK_MSG(TR_60.' '.$user_commands);
 
@@ -156,7 +158,7 @@ function CoreCmd_RegisterToBot()
 
                 /* update variable with new owners */
                 $cfg = new IniParser($GLOBALS['config_file']);
-                $GLOBALS['CONFIG_OWNERS'] = $cfg->get("ADMIN", "bot_owners");
+                $GLOBALS['CONFIG_OWNERS'] = $cfg->get("OWNER", "bot_owners");
             }
         } else {
                   $hashed = hash('sha256', $GLOBALS['args']);

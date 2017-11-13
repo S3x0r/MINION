@@ -1,3 +1,17 @@
+   
+   v0.7.8 changes(13.11.2017):
+   - section 'ADMIN' changed to 'OWNER' in config.ini
+     & in section 'ADMIN' now are admin hosts
+     to manage PLUGINS from ADMIN folder
+   - removed default hosts in owner list & auto_op list
+   - New plugins hierarchy:
+     Owner has access to: core commands, owner plugins, admin plugins & user plugins
+     Admin has access to: admin plugins & user plugins
+     User has access to: user plugins
+   - readme.md updated
+   - new plugin: 'addadmin' -- adds user host to ADMIN list in config file
+   - new plugin: 'remadmin' -- removes admin from config file
+   - plugins: 'load', 'plugin' fixed.
 
    v0.7.7 changes(13.11.2017):
    - plugin 'ping' for now only for windows (hangs on linux)

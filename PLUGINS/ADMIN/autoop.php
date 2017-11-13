@@ -29,7 +29,7 @@ function plugin_autoop()
     if (OnEmptyArg('autoop <nick!ident@hostname>')) {
     } elseif ($nick_ex[0] != $GLOBALS['BOT_NICKNAME']) {
         if (preg_match('/^(.+?)!(.+?)@(.+?)$/', $GLOBALS['args'], $host)) {
-            LoadData($GLOBALS['config_file'], 'ADMIN', 'auto_op_list');
+            LoadData($GLOBALS['config_file'], 'OWNER', 'auto_op_list');
 
             $auto_list   = $GLOBALS['LOADED'];
             $new         = $host[0];
@@ -40,11 +40,11 @@ function plugin_autoop()
                 $new_list = $auto_list.', '.$new;
             }
  
-            SaveData($GLOBALS['config_file'], 'ADMIN', 'auto_op_list', $new_list);
+            SaveData($GLOBALS['config_file'], 'OWNER', 'auto_op_list', $new_list);
 
             /* update variable with new owners */
             $cfg = new IniParser($GLOBALS['config_file']);
-            $GLOBALS['CONFIG_AUTO_OP_LIST'] = $cfg->get("ADMIN", "auto_op_list");
+            $GLOBALS['CONFIG_AUTO_OP_LIST'] = $cfg->get("OWNER", "auto_op_list");
 
             /* Inform nick about it */
             fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :From now you are on my auto op list, enjoy.\n");
