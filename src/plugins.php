@@ -62,7 +62,9 @@ function LoadPlugins()
 //---------------------------------------------------------------------------------------------------------
         /* ADMIN PLUGINS */
         CLI_MSG("Admin Plugins ($count3):", '0');
+    if (!IsSilent()) {
         Line(COLOR);
+    }
 
     foreach (glob('../PLUGINS/ADMIN/*.php') as $plugin_name) {
          /* simple verify plugin */
@@ -127,7 +129,7 @@ function UnloadPlugin($plugin)
            $with_prefix = $GLOBALS['CONFIG_CMD_PREFIX'].$plugin;
            $without_prefix = $plugin;
 
-        if (in_array($with_prefix, $GLOBALS['OWNER_PLUGINS']) || in_array($with_prefix, $GLOBALS['ADMIN_PLUGINS']) || 
+        if (in_array($with_prefix, $GLOBALS['OWNER_PLUGINS']) || in_array($with_prefix, $GLOBALS['ADMIN_PLUGINS']) ||
             in_array($with_prefix, $GLOBALS['USER_PLUGINS'])) {
             if (($key = array_search($with_prefix, $GLOBALS['OWNER_PLUGINS'])) !== false) {
                 unset($GLOBALS['OWNER_PLUGINS'][$key]);
@@ -171,14 +173,13 @@ function LoadPlugin($plugin)
            $with_prefix    = $GLOBALS['CONFIG_CMD_PREFIX'].$plugin;
            $without_prefix = $plugin;
 
-        if (in_array($with_prefix, $GLOBALS['OWNER_PLUGINS']) || in_array($with_prefix, $GLOBALS['ADMIN_PLUGINS']) || 
+        if (in_array($with_prefix, $GLOBALS['OWNER_PLUGINS']) || in_array($with_prefix, $GLOBALS['ADMIN_PLUGINS']) ||
             in_array($with_prefix, $GLOBALS['USER_PLUGINS'])) {
             BOT_RESPONSE(TR_41);
 
           /* if there is no plugin name in plugins array */
         } elseif (!in_array($with_prefix, $GLOBALS['OWNER_PLUGINS']) ||
             !in_array($with_prefix, $GLOBALS['ADMIN_PLUGINS']) || !in_array($with_prefix, $GLOBALS['USER_PLUGINS'])) {
-            
             /* if no plugin in array & file exists in dir */
             if (file_exists('../PLUGINS/OWNER/'.$without_prefix.'.php')) {
                 /* include that file */

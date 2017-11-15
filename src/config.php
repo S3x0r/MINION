@@ -129,7 +129,7 @@ function LoadConfig($filename)
             /* 'New Password:' */
             echo '['.@date('H:i:s').'] '.TR_15.' ';
 
-            /* handle to input */ 
+            /* handle to input */
             $STDIN = fopen('php://stdin', 'r');
             $new_pwd = str_replace(' ', '', fread($STDIN, 30));
 

@@ -8,7 +8,7 @@ if (PHP_SAPI !== 'cli') {
 /* English Language File */
 
 define('TR_10', 'author:');
-define('TR_11', 'contact:');
+define('TR_11', 'email:');
 define('TR_12', 'Total Lines of code:');
 define('TR_13', 'Default owner bot password detected!');
 define('TR_14', 'For security please change it');

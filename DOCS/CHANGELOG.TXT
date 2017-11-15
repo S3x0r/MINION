@@ -1,5 +1,9 @@
+   
+   v0.7.9 changes (15.11.2017):
+   - if bot disconnected, it will try to connect to server again
+   - removed line in silent mode
 
-   v0.7.8 changes(13.11.2017):
+   v0.7.8 changes (13.11.2017):
    - section 'ADMIN' changed to 'OWNER' in config.ini
      & in section 'ADMIN' now are admin hosts
      to manage PLUGINS from ADMIN folder
@@ -13,25 +17,25 @@
    - new plugin: 'remadmin' -- removes admin from config file
    - plugins: 'load', 'plugin' fixed.
 
-   v0.7.7 changes(13.11.2017):
+   v0.7.7 changes (13.11.2017):
    - plugin 'ping' for now only for windows (hangs on linux)
    - plugin 'math' removed
 
-   v0.7.6 changes(12.11.2017):
+   v0.7.6 changes (12.11.2017):
    - fixed on linux: proper run & bug in PlaySound()
    - plugin: update fix
 
-   v0.7.5 changes(10.11.2017):
+   v0.7.5 changes (10.11.2017):
    - fixed bug: bot not proper set's ban list to channel when first on channel
      & removed delay
 
-   v0.7.4 changes(10.11.2017):
+   v0.7.4 changes (10.11.2017):
    - now on silent mode window is automatic minimized
    - we have colors now :)
    - on 'register <password>' we are checking now if there was
      space in password, if yes = remove space
 
-   v0.7.3 changes(09.11.2017):
+   v0.7.3 changes (09.11.2017):
    - smaller sounds
    - changed default value how many times to connect if cannot - from '10' to '99'
    - changed default value delay to connect to server changed from '3' to '6'
@@ -40,14 +44,14 @@
      if bot join and opped add bans to channel from 'ban_list'
    - NEW PLUGIN: 'ban' - ban specified hostname <nick!ident@host>
 
-   v0.7.2 changes(07.11.2017):
+   v0.7.2 changes (07.11.2017):
    - log file format little change
    - fixed bug: with web panel and diffrent config file (-c)
    - fixed bug: if bot kicked op var was not updated
    - fixed bug: if bot kicked channel var was not updated
    - fixed bug: double message on join & wrong order
 
-   v0.7.1 changes(05.11.2017):
+   v0.7.1 changes (05.11.2017):
    - PLUGIN: 'bash' more failproof & gives now 3 output lines
    - PLUGIN: 'cham' more failproof
    - PLUGIN: 'dns' is now 'gethost' and more failproof
@@ -62,18 +66,18 @@
    - PLUGINS: 'join', 'leave' checking now if already on that channel
    - PLUGIN: 'rem_owner' is now 'remowner'
 
-   v0.7.0 changes(04.11.2017):
+   v0.7.0 changes (04.11.2017):
    - bug fixed in silent mode, there was log created
    - more config.ini checks, if 'no' or 'yes' sets defaults
    - readme.md updated
 
-   v0.6.9 changes(03.11.2017):
+   v0.6.9 changes (03.11.2017):
    - more sounds on CTCP
    - prompt.wav compressed to mp3
    - sounds changed
    - smaller web server & php files
 
-   v0.6.8 changes(31.10.2017):
+   v0.6.8 changes (31.10.2017):
    - fixed CoreCmd_Panel(), panel now checks more input from user
    - added simple plugin verifying, if verify include, if not not include plugin :)
 

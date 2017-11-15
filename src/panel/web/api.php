@@ -16,7 +16,7 @@ function GetDataFromBotConfig()
         $GLOBALS['CONFIG_SERVER_PASSWD']  = $cfg->get("SERVER", "server_password");
         $GLOBALS['CONFIG_TRY_CONNECT']    = $cfg->get("SERVER", "try_connect");
         $GLOBALS['CONFIG_CONNECT_DELAY']  = $cfg->get("SERVER", "connect_delay");
-        /* ADMIN */
+        /* OWNER */
         $GLOBALS['CONFIG_BOT_ADMIN']      = $cfg->get("OWNER", "bot_admin");
         $GLOBALS['CONFIG_AUTO_OP_LIST']   = $cfg->get("OWNER", "auto_op_list");
         $GLOBALS['CONFIG_OWNERS']         = $cfg->get("OWNER", "bot_owners");
@@ -199,8 +199,10 @@ function ListPlugins()
 {
         /* count plugins */
         $count1 = count(glob("../../../PLUGINS/OWNER/*.php", GLOB_BRACE));
-        $count2 = count(glob("../../../PLUGINS/USER/*.php", GLOB_BRACE));
-        $tot = $count1+$count2+3;
+        $count2 = count(glob("../../../PLUGINS/ADMIN/*.php", GLOB_BRACE));
+        $count3 = count(glob("../../../PLUGINS/USER/*.php", GLOB_BRACE));
+
+        $tot = $count1+$count2+$count3+3;
         
         echo "<h4>All Plugins: $tot</h4><br>";
     
@@ -220,8 +222,17 @@ function ListPlugins()
     }
         echo '<br>';
 
+        /* ADMIN PLUGINS */
+        echo "Admin Plugins ($count2):<br>";
+
+    foreach (glob('../../../PLUGINS/ADMIN/*.php') as $plugin_name) {
+        $plugin_name = basename($plugin_name, '.php');
+        echo "- $plugin_name<br>";
+    }
+        echo '<br>';
+
         /* USER PLUGINS */
-        echo "User Plugins ($count2):<br>";
+        echo "User Plugins ($count3):<br>";
 
     foreach (glob('../../../PLUGINS/USER/*.php') as $plugin_name) {
         $plugin_name = basename($plugin_name, '.php');
