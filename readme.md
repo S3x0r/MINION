@@ -63,90 +63,91 @@ You can change prefix in config file.
 
 ## BOT Commands:
 
-|      Plugin      | Description                              | Command                       | Permission   | Platform    |
-|------------------|------------------------------------------|-------------------------------|--------------|-------------|
-|    addadmin      | Adds user host to ADMIN list in config   | !addadmin <nick!ident@host>   |   OWNER      |
-|    addowner      | Adds owner host to config file           | !addowner <nick!ident@host>   |   OWNER      | Independent
-|    autoop        | Adds host to auto op list in config file | !autoop <nick!ident@host>     |   OWNER      |
-|    ban           | Ban specified hostname                   | !ban <nick!ident@host>        |   OWNER      |
-|    bash          | Shows quotes from bash.org               | !bash                         |   USER       |
-|    cham          | Shows random text from file              | !cham <nick>                  |   USER       |
-|    checkupdate   | Checking for updates                     | !checkupdate                  |   OWNER      |
-|    deop          | Deops someone                            | !deop <nick>                  |   OWNER      |
-|    devoice       | Devoice someone                          | !devoice <nick>               |   OWNER      |
-|    gethost       | Ip address to hostname                   | !gethost <ip>                 |   USER       |
-|    fetch         | Plugins repository list                  | !fetch list                   |   OWNER      |
-|                  | Downloads plugins from repository        | !fetch get <plugin>           |   OWNER      |
-|    hash          | Changing string to choosed algorithm     | !hash <algo> <string>         |   USER       |
-|                  | Lists available algorithms               | !hash help                    |   USER       |
-|    help          | Shows BOT commands                       | !help                         |   USER       |
-|    info          | Shows BOT information                    | !info                         |   OWNER      |
-|    join          | BOT joins given channel                  | !join <#channel>              |   OWNER      |
-|    kick          | BOT kicks given user from channel        | !kick <#channel> <nick>       |   OWNER      |
-|    leave         | BOT parts given channel                  | !leave <#channel>             |   OWNER      |
-|    listowners    | Shows BOT owners hosts                   | !listowners                   |   OWNER      |
-|    load          | Loads plugin to BOT                      | !load <plugin>                |   CORE/OWNER |
-|    md5           | Changing string to MD5 hash              | !md5 <string>                 |   USER       |
-|    memusage      | Shows how much ram is being used by BOT  | !memusage                     |   OWNER      |
-|    morse         | Converts given string to morse code      | !morse <string>               |   USER       |
-|    newnick       | Changes BOT nickname                     | !newnick <newnick>            |   OWNER      |
-|    op            | BOT gives op to given nick               | !op <nick>                    |   OWNER      |
-|    panel         | Starts web admin panel for BOT           | !panel                        |   CORE/OWNER | WIN
-|                  | Lists panel commands                     | !panel help                   |   CORE/OWNER |
-|                  | Starts web panel at specified port       | !panel start <port>           |   CORE/OWNER |
-|                  | Stops web panel                          | !panel stop                   |   CORE/OWNER |
-|    plugin        | Plugins manipulation                     | !plugin                       |   OWNER      |
-|                  | Deletes plugin from directory            | !plugin delete <plugin>       |   OWNER      |
-|                  | Lists plugin commands                    | !plugin help                  |   OWNER      |
-|                  | Loads given plugin to BOT                | !plugin load <plugin>         |   OWNER      |
-|                  | Move plugin from OWNER dir to USER dir   | !plugin move <plugin>         |   OWNER      |
-|                  | Unloads plugin from BOT                  | !plugin unload <plugin>       |   OWNER      |
-|    ping          | Ping given host                          | !ping <address>               |   USER       | WIN
-|    quit          | Shutdown BOT                             | !quit                         |   OWNER      |
-|    raw           | Sends raw string to server               | !raw <string> <2> <3> <4>     |   OWNER      |
-|    remadmin      | Removes admin from config file           | !remadmin <nick!ident@host>   |   OWNER      |
-|    remowner      | Removes owner host from config file      | !remowner <nick!ident@host>   |   OWNER      |
-|    restart       | Restarts BOT                             | !restart                      |   OWNER      |
-|    ripe          | Checks ip/host address and show results  | !ripe <address>               |   USER       |
-|    save          | Saving to config file                    | !save                         |   OWNER      |
-|                  | Saving auto join value in config         | !save auto_join <string>      |   OWNER      |
-|                  | Saving auto op value in config           | !save auto_op <string>        |   OWNER      |
-|                  | Saving auto op list value in config      | !save auto_op_list <string>   |   OWNER      |
-|                  | Saving auto rejoin value in config       | !save auto_rejoin <string>    |   OWNER      |
-|                  | Saving bot owners value in config        | !save bot_owners <string>     |   OWNER      |
-|                  | Saving bot response value in config      | !save bot_response <string>   |   OWNER      |
-|                  | Saving command prefix value in config    | !save command_prefix <string> |   OWNER      |
-|                  | Saving connect delay value in config     | !save connect_delay <string>  |   OWNER      |
-|                  | Saving ctcp finger value in config       | !save ctcp_finger <string>    |   OWNER      |
-|                  | Saving ctcp response value in config     | !save ctcp_response <string>  |   OWNER      |
-|                  | Saving ctcp version value in config      | !save ctcp_version <string>   |   OWNER      |
-|                  | Saving channel value in config           | !save channel <string>        |   OWNER      |
-|                  | Saving fetch server value in config      | !save fetch_server <string>   |   OWNER      |
-|                  | Saving ident value in config             | !save ident <string>          |   OWNER      |
-|                  | Saving logging value in config           | !save logging <string>        |   OWNER      |
-|                  | Saving name value in config              | !save name <string>           |   OWNER      |
-|                  | Saving nick value in config              | !save nick <string>           |   OWNER      |
-|                  | Saving owner password value in config    | !save owner_password <string> |   OWNER      |
-|                  | Saving port value in config              | !save port <string>           |   OWNER      |
-|                  | Saving server value in config            | !save server <string>         |   OWNER      |
-|                  | Saving show raw value in config          | !save show_raw <string>       |   OWNER      |
-|                  | Saving time zone value in config         | !save time_zone <string>      |   OWNER      |
-|                  | Saving try connect value in config       | !save try_connect <string>    |   OWNER      |
-|    showconfig    | Shows BOT configuration                  | !showconfig                   |   OWNER      |
-|    topic         | Changes topic on channel                 | !topic <string>               |   OWNER      |
-|    unload        | Unloads plugin from BOT                  | !unload <plugin>              |   CORE/OWNER |
-|    update        | Updates BOT if new version is available  | !update                       |   OWNER      |
-|    uptime        | Shows BOT uptime                         | !uptime                       |   USER       |
-|    voice         | BOT gives voice                          | !voice <nick>                 |   OWNER      |
-|    weather       | Shows actual weather                     | !weather <city/place>         |   USER       |
-|    webstatus     | Shows http status info from given number | !webstatus <number>           |   USER       |
-|    webtitle      | Shows webpage titile                     | !webtitle <web address>       |   USER       |
-|    wikipedia     | Search wikipedia                         | !wikipedia <lang> <string>    |   USER       |
-|    winamp        | Controls winamp                          | !winamp                       |   OWNER      |
-|                  | Next song                                | !winamp next                  |   OWNER      |
-|                  | Pause song                               | !winamp pause                 |   OWNER      |
-|                  | Play song                                | !winamp play                  |   OWNER      |
-|                  | Previous song                            | !winamp prev                  |   OWNER      |
-|                  | Stop song                                | !winamp stop                  |   OWNER      |
-|                  | Shows song title                         | !winamp title                 |   OWNER      |
-|    youtube       | Shows youtube video title from link      | !youtube <link>               |   USER       |
+|      Plugin      | Description                              | Command                       | Permission   | Platform  |
+|------------------|------------------------------------------|-------------------------------|--------------|-----------|
+|    addadmin      | Adds user host to ADMIN list in config   | !addadmin <nick!ident@host>   |  OWNER       |  All      |
+|    addowner      | Adds owner host to config file           | !addowner <nick!ident@host>   |  OWNER       |  All      |
+|    autoop        | Adds host to auto op list in config file | !autoop <nick!ident@host>     |  OWNER/ADMIN |  All      |
+|    ban           | Ban specified hostname                   | !ban <nick!ident@host>        |  OWNER/ADMIN |  All      |
+|    bash          | Shows quotes from bash.org               | !bash                         |  USER        |  All      |
+|    cham          | Shows random text from file              | !cham <nick>                  |  USER        |  All      |
+|    checkupdate   | Checking for updates                     | !checkupdate                  |  OWNER       |  All      |
+|    deop          | Deops someone                            | !deop <nick>                  |  OWNER/ADMIN |  All      |
+|    devoice       | Devoice someone                          | !devoice <nick>               |  OWNER/ADMIN |  All      |
+|    gethost       | Ip address to hostname                   | !gethost <ip>                 |  USER        |  All      |
+|    fetch         | Plugins repository list                  | !fetch list                   |  OWNER       |  All      |
+|                  | Downloads plugins from repository        | !fetch get <plugin>           |  OWNER       |  All      |
+|    hash          | Changing string to choosed algorithm     | !hash <algo> <string>         |  USER        |  All      |
+|                  | Lists available algorithms               | !hash help                    |  USER        |  All      |
+|    help          | Shows BOT commands                       | !help                         |  USER        |  All      |
+|    info          | Shows BOT information                    | !info                         |  OWNER       |  All      |
+|    join          | BOT joins given channel                  | !join <#channel>              |  OWNER       |  All      |
+|    kick          | BOT kicks given user from channel        | !kick <#channel> <nick>       |  OWNER/ADMIN |  All      |
+|    leave         | BOT parts given channel                  | !leave <#channel>             |  OWNER       |  All      |
+|    listowners    | Shows BOT owners hosts                   | !listowners                   |  OWNER       |  All      |
+|    load          | Loads plugin to BOT                      | !load <plugin>                |  CORE/OWNER  |  All      |
+|    md5           | Changing string to MD5 hash              | !md5 <string>                 |  USER        |  All      |
+|    memusage      | Shows how much ram is being used by BOT  | !memusage                     |  OWNER       |  All      |
+|    morse         | Converts given string to morse code      | !morse <string>               |  USER        |  All      |
+|    newnick       | Changes BOT nickname                     | !newnick <newnick>            |  OWNER       |  All      |
+|    op            | BOT gives op to given nick               | !op <nick>                    |  OWNER/ADMIN |  All      |
+|    panel         | Starts web admin panel for BOT           | !panel                        |  CORE/OWNER  |  WIN      |
+|                  | Lists panel commands                     | !panel help                   |  CORE/OWNER  |  WIN      |
+|                  | Starts web panel at specified port       | !panel start <port>           |  CORE/OWNER  |  WIN      |
+|                  | Stops web panel                          | !panel stop                   |  CORE/OWNER  |  WIN      |
+|    plugin        | Plugins manipulation                     | !plugin                       |  OWNER       |  All      |
+|                  | Deletes plugin from directory            | !plugin delete <plugin>       |  OWNER       |  All      |
+|                  | Lists plugin commands                    | !plugin help                  |  OWNER       |  All      |
+|                  | Loads given plugin to BOT                | !plugin load <plugin>         |  OWNER       |  All      |
+|                  | Move plugin from OWNER dir to USER dir   | !plugin move <plugin>         |  OWNER       |  All      |
+|                  | Unloads plugin from BOT                  | !plugin unload <plugin>       |  OWNER       |  All      |
+|    ping          | Ping given host                          | !ping <address>               |  USER        |  WIN      |
+|    quit          | Shutdown BOT                             | !quit                         |  OWNER       |  All      |
+|    raw           | Sends raw string to server               | !raw <string> <2> <3> <4>     |  OWNER       |  All      |
+|    remadmin      | Removes admin from config file           | !remadmin <nick!ident@host>   |  OWNER       |  All      |
+|    remowner      | Removes owner host from config file      | !remowner <nick!ident@host>   |  OWNER       |  All      |
+|    restart       | Restarts BOT                             | !restart                      |  OWNER       |  All      |
+|    ripe          | Checks ip/host address and show results  | !ripe <address>               |  USER        |  All      |
+|    save          | Saving to config file                    | !save                         |  OWNER       |  All      |
+|                  | Saving auto join value in config         | !save auto_join <string>      |  OWNER       |  All      |
+|                  | Saving auto op value in config           | !save auto_op <string>        |  OWNER       |  All      |
+|                  | Saving auto op list value in config      | !save auto_op_list <string>   |  OWNER       |  All      |
+|                  | Saving auto rejoin value in config       | !save auto_rejoin <string>    |  OWNER       |  All      |
+|                  | Saving bot owners value in config        | !save bot_owners <string>     |  OWNER       |  All      |
+|                  | Saving bot response value in config      | !save bot_response <string>   |  OWNER       |  All      |
+|                  | Saving command prefix value in config    | !save command_prefix <string> |  OWNER       |  All      |
+|                  | Saving connect delay value in config     | !save connect_delay <string>  |  OWNER       |  All      |
+|                  | Saving ctcp finger value in config       | !save ctcp_finger <string>    |  OWNER       |  All      |
+|                  | Saving ctcp response value in config     | !save ctcp_response <string>  |  OWNER       |  All      |
+|                  | Saving ctcp version value in config      | !save ctcp_version <string>   |  OWNER       |  All      |
+|                  | Saving channel value in config           | !save channel <string>        |  OWNER       |  All      |
+|                  | Saving fetch server value in config      | !save fetch_server <string>   |  OWNER       |  All      |
+|                  | Saving ident value in config             | !save ident <string>          |  OWNER       |  All      |
+|                  | Saving logging value in config           | !save logging <string>        |  OWNER       |  All      |
+|                  | Saving name value in config              | !save name <string>           |  OWNER       |  All      |
+|                  | Saving nick value in config              | !save nick <string>           |  OWNER       |  All      |
+|                  | Saving owner password value in config    | !save owner_password <string> |  OWNER       |  All      |
+|                  | Saving port value in config              | !save port <string>           |  OWNER       |  All      |
+|                  | Saving server value in config            | !save server <string>         |  OWNER       |  All      |
+|                  | Saving show raw value in config          | !save show_raw <string>       |  OWNER       |  All      |
+|                  | Saving time zone value in config         | !save time_zone <string>      |  OWNER       |  All      |
+|                  | Saving try connect value in config       | !save try_connect <string>    |  OWNER       |  All      |
+|    showconfig    | Shows BOT configuration                  | !showconfig                   |  OWNER       |  All      |
+|    topic         | Changes topic on channel                 | !topic <string>               |  OWNER/ADMIN |  All      |
+|    unload        | Unloads plugin from BOT                  | !unload <plugin>              |  CORE/OWNER  |  All      |
+|    update        | Updates BOT if new version is available  | !update                       |  OWNER       |  All      |
+|    uptime        | Shows BOT uptime                         | !uptime                       |  USER        |  All      |
+|    unban         | Unban specified user/hostmask            | !unban <nick!ident@host>      |  OWNER/ADMIN |  All      |
+|    voice         | BOT gives voice                          | !voice <nick>                 |  OWNER/ADMIN |  All      |
+|    weather       | Shows actual weather                     | !weather <city/place>         |  USER        |  All      |
+|    webstatus     | Shows http status info from given number | !webstatus <number>           |  USER        |  All      |
+|    webtitle      | Shows webpage titile                     | !webtitle <web address>       |  USER        |  All      |
+|    wikipedia     | Search wikipedia                         | !wikipedia <lang> <string>    |  USER        |  All      |
+|    winamp        | Controls winamp                          | !winamp                       |  OWNER       |  WIN      |
+|                  | Next song                                | !winamp next                  |  OWNER       |  WIN      |
+|                  | Pause song                               | !winamp pause                 |  OWNER       |  WIN      |
+|                  | Play song                                | !winamp play                  |  OWNER       |  WIN      |
+|                  | Previous song                            | !winamp prev                  |  OWNER       |  WIN      |
+|                  | Stop song                                | !winamp stop                  |  OWNER       |  WIN      |
+|                  | Shows song title                         | !winamp title                 |  OWNER       |  WIN      |
+|    youtube       | Shows youtube video title from link      | !youtube <link>               |  USER        |  All      |

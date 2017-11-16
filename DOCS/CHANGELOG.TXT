@@ -1,4 +1,8 @@
 
+   v0.8.1 changes (16.11.2017):
+   - new plugin: 'unban' -- unban's specified user/hostmask
+   - readme.md updated
+
    v0.8.0 changes (16.11.2017):
    - Bot now checks if needed extension is loaded, if no plugin will be not used
    - fix: plugin 'winamp' checks if CLAmp is specified.
