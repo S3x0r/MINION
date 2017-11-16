@@ -24,13 +24,16 @@ if (PHP_SAPI !== 'cli') {
 
 function plugin_ripe()
 {
-
     if (OnEmptyArg('ripe <ip or host>')) {
     } else {
-              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'ripe on: '.$GLOBALS['channel'].', by: '
-              .$GLOBALS['USER'].', address: '.$GLOBALS['args'], '1');
+        if (extension_loaded('openssl')) {
+            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'ripe on: '.$GLOBALS['channel'].', by: '
+            .$GLOBALS['USER'].', address: '.$GLOBALS['args'], '1');
 
-              BOT_RESPONSE(ripe_check_ip($GLOBALS['args']));
+            BOT_RESPONSE(ripe_check_ip($GLOBALS['args']));
+        } else {
+                 BOT_RESPONSE('I cannot use this plugin, i need php_openssl extension to work!');
+        }
     }
 }
 

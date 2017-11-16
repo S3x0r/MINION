@@ -93,21 +93,24 @@ if (is_file('../CONFIG.INI')) {
  
 /* check if new version on server */
 if ($GLOBALS['CONFIG_CHECK_UPDATE'] == 'yes' && !IsSilent()) {
-    $url = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
-    $CheckVersion = @file_get_contents($url);
+    if (extension_loaded('openssl')) {
+        $url = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
+        $CheckVersion = @file_get_contents($url);
         
-    if ($CheckVersion !='') {
-        $version = explode("\n", $CheckVersion);
-        if ($version[0] > VER) {
-            echo "             >>>> New version available! ($version[0]) <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
+        if ($CheckVersion !='') {
+            $version = explode("\n", $CheckVersion);
+            if ($version[0] > VER) {
+                echo "             >>>> New version available! ($version[0]) <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
+            } else {
+                     echo "       >>>> No new update, you have the latest version <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
+            }
         } else {
-                 echo "       >>>> No new update, you have the latest version <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
+                 echo "            >>>> Cannot connect to update server <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
         }
     } else {
-             echo "            >>>> Cannot connect to update server <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
+             echo "   ! I cannot check update, i need: php_openssl extension to work !".PHP_EOL.PHP_EOL.PHP_EOL;
     }
 }
-
     /* Load config */
     LoadConfig('../CONFIG.INI');
     /*  ^__^____-- */

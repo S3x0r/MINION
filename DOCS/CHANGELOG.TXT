@@ -1,4 +1,8 @@
-   
+
+   v0.8.0 changes (16.11.2017):
+   - Bot now checks if needed extension is loaded, if no plugin will be not used
+   - fix: plugin 'winamp' checks if CLAmp is specified.
+
    v0.7.9 changes (15.11.2017):
    - if bot disconnected, it will try to connect to server again
    - removed line in silent mode

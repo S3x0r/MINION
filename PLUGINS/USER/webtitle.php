@@ -25,19 +25,22 @@ function plugin_webtitle()
 {
     if (OnEmptyArg('webtitle <web address>')) {
     } else {
-             $data = str_replace('http://', '', str_replace('https://', '', $GLOBALS['args']));
-        if ($file = @file_get_contents('http://'.$data)) {
-            if (preg_match('@<title>([^<]{1,256}).*?</title>@mi', $file, $matches)) {
-                if (strlen($matches[1]) == 256) {
-                    $matches[1].='...';
-                }
-
-                CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'webtitle on: '.$GLOBALS['channel'].
+        if (extension_loaded('openssl')) {
+            $data = str_replace('http://', '', str_replace('https://', '', $GLOBALS['args']));
+            if ($file = @file_get_contents('http://'.$data)) {
+                if (preg_match('@<title>([^<]{1,256}).*?</title>@mi', $file, $matches)) {
+                    if (strlen($matches[1]) == 256) {
+                        $matches[1].='...';
+                    }
+                    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'webtitle on: '.$GLOBALS['channel'].
                     ', by: '.$GLOBALS['USER'], '1');
 
-                BOT_RESPONSE('Title: '.
+                    BOT_RESPONSE('Title: '.
                     str_replace("\n", '', str_replace("\r", '', html_entity_decode($matches[1], ENT_QUOTES, 'utf-8'))));
+                }
             }
+        } else {
+                 BOT_RESPONSE('I cannot use this plugin, i need php_openssl extension to work!');
         }
     }
 }

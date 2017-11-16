@@ -23,17 +23,21 @@ if (PHP_SAPI !== 'cli') {
 //------------------------------------------------------------------------------------------------
 function plugin_checkupdate()
 {
-    global $CheckVersion;
-    $addr = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
+    if (extension_loaded('openssl')) {
+        global $CheckVersion;
+        $addr = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
 
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'checkupdate on: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'], '1');
+        CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'checkupdate on: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'], '1');
 
-    $CheckVersion = file_get_contents($addr);
+        $CheckVersion = file_get_contents($addr);
 
-    if ($CheckVersion !='') {
-        checkVersion();
+        if ($CheckVersion !='') {
+            checkVersion();
+        } else {
+                 BOT_RESPONSE('Cannot connect to update server, try next time.');
+        }
     } else {
-              BOT_RESPONSE('Cannot connect to update server, try next time.');
+             BOT_RESPONSE('I cannot use this plugin, i need php_openssl extension to work!');
     }
 }
 //------------------------------------------------------------------------------------------------

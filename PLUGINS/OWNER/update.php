@@ -24,10 +24,13 @@ if (PHP_SAPI !== 'cli') {
 //------------------------------------------------------------------------------------------------
 function plugin_update()
 {
-
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'update on: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'], '1');
-
-    v_connect();
+    if (extension_loaded('openssl')) {
+        CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'update on: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'], '1');
+    
+        v_connect();
+    } else {
+             BOT_RESPONSE('I cannot use this plugin, i need php_openssl extension to work!');
+    }
 }
 //------------------------------------------------------------------------------------------------
 function v_connect()

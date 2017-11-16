@@ -29,51 +29,54 @@ if (PHP_SAPI !== 'cli') {
 
 function plugin_weather()
 {
-
     if (OnEmptyArg('weather <city>')) {
     } else {
-              $query = str_replace(" ", "_", $GLOBALS['args']);
-              $query = urlencode($query);
-              $w = json_decode(get_contents('http://api.wunderground.com/api/d05f04ecd492639d/conditions/q/'.
-                  $query.'.json'), true);
-        if (isset($w['response']['error'])) {
-            BOT_RESPONSE("weather: ".$w['response']['error']['description']);
-        } elseif (isset($w['current_observation'])) {
-                  $response = array(
-                  $w['current_observation']['display_location']['full'],
-                  'Conditions: '.$w['current_observation']['weather'],
-                  'Temperature: '.$w['current_observation']['temperature_string'],
-                  'Wind chill: '.$w['current_observation']['windchill_string'],
-                  'Dew point: '.$w['current_observation']['dewpoint_string'],
-                  'Humidity: '.$w['current_observation']['relative_humidity'],
-                  'Wind: '.$w['current_observation']['wind_string'],
-                  'Visibility: '.$w['current_observation']['visibility_mi'].
+        if (extension_loaded('curl')) {
+            $query = str_replace(" ", "_", $GLOBALS['args']);
+            $query = urlencode($query);
+            $w = json_decode(get_contents('http://api.wunderground.com/api/d05f04ecd492639d/conditions/q/'.
+             $query.'.json'), true);
+            if (isset($w['response']['error'])) {
+                BOT_RESPONSE("weather: ".$w['response']['error']['description']);
+            } elseif (isset($w['current_observation'])) {
+                      $response = array(
+                      $w['current_observation']['display_location']['full'],
+                      'Conditions: '.$w['current_observation']['weather'],
+                      'Temperature: '.$w['current_observation']['temperature_string'],
+                      'Wind chill: '.$w['current_observation']['windchill_string'],
+                      'Dew point: '.$w['current_observation']['dewpoint_string'],
+                      'Humidity: '.$w['current_observation']['relative_humidity'],
+                      'Wind: '.$w['current_observation']['wind_string'],
+                      'Visibility: '.$w['current_observation']['visibility_mi'].
                       'mi, '.$w['current_observation']['visibility_km'].'km',
-                  'Pressure: '.$w['current_observation']['pressure_mb'].'mb ('.
-                      $w['current_observation']['pressure_in'] . 'in)',
-                  'Precipitation today: '.$w['current_observation']['precip_today_string'],
-                   );
+                      'Pressure: '.$w['current_observation']['pressure_mb'].'mb ('.
+                       $w['current_observation']['pressure_in'] . 'in)',
+                      'Precipitation today: '.$w['current_observation']['precip_today_string'],
+                      );
 
-            BOT_RESPONSE(implode(', ', $response));
-        } elseif (isset($w['response']['results'])) {
-                  $cities = array();
-            for ($i=0; ($i <count($w['response']['results'])) && ($i <10); $i++) {
-                 $location = $w['response']['results'][$i];
-                if ($location['country_name'] == 'USA') {
-                    $cities[] = $location['name'].','.$location['state'];
-                } else {
-                          $cities[] = $location['name'].','.$location['country_name'];
+                      BOT_RESPONSE(implode(', ', $response));
+            } elseif (isset($w['response']['results'])) {
+                      $cities = array();
+                for ($i=0; ($i <count($w['response']['results'])) && ($i <10); $i++) {
+                     $location = $w['response']['results'][$i];
+                    if ($location['country_name'] == 'USA') {
+                        $cities[] = $location['name'].','.$location['state'];
+                    } else {
+                             $cities[] = $location['name'].','.$location['country_name'];
+                    }
                 }
+
+                  $message = "Clarify the location, for example: ";
+                  $message .= implode(' - ', $cities);
+
+                  BOT_RESPONSE($message);
             }
-
-            $message = "Clarify the location, for example: ";
-            $message .= implode(' - ', $cities);
-
-            BOT_RESPONSE($message);
+        } else {
+                 BOT_RESPONSE('I cannot use this plugin, i need php_curl extension to work!');
         }
-    }
 
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'weather on: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'], '1');
+        CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'weather on: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'], '1');
+    }
 }
 
 function get_contents($url, $post = null)

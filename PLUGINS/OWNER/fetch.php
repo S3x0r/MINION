@@ -27,41 +27,45 @@ function plugin_fetch()
 
     if (OnEmptyArg('fetch list / fetch get <plugin>')) {
     } else {
-        if ($GLOBALS['args'] == 'list') {
-            $addr_list = 'https://raw.githubusercontent.com/S3x0r/minion_repository_plugins/master/plugin_list.db';
-            $list = file_get_contents($addr_list);
-            BOT_RESPONSE('Repository list:');
-            BOT_RESPONSE($list);
-            BOT_RESPONSE('End list.');
-        } elseif ($GLOBALS['piece1'] == 'get') {
-            if (!empty($GLOBALS['piece2'])) {
-                $address = $GLOBALS['CONFIG_FETCH_SERVER'].'/'.$GLOBALS['piece2'].'.php';
-                BOT_RESPONSE('Downloading plugin: "'.$GLOBALS['piece2'].'" from repository');
-                $check_file = 'PLUGINS/'.$GLOBALS['piece2'].'.php';
-
-                if (file_exists($check_file)) {
-                    BOT_RESPONSE('I already have this plugin, aborting.');
-                }
-            } else {
+        if (extension_loaded('openssl')) {
+            if ($GLOBALS['args'] == 'list') {
+                $addr_list = 'https://raw.githubusercontent.com/S3x0r/minion_repository_plugins/master/plugin_list.db';
+                $list = file_get_contents($addr_list);
+                BOT_RESPONSE('Repository list:');
+                BOT_RESPONSE($list);
+                BOT_RESPONSE('End list.');
+            } elseif ($GLOBALS['piece1'] == 'get') {
                 if (!empty($GLOBALS['piece2'])) {
-                    $file = file_get_contents($address);
-                    $a = fopen('PLUGINS/'.$GLOBALS['piece2'].'.php', 'w');
+                    $address = $GLOBALS['CONFIG_FETCH_SERVER'].'/'.$GLOBALS['piece2'].'.php';
+                    BOT_RESPONSE('Downloading plugin: "'.$GLOBALS['piece2'].'" from repository');
+                    $check_file = 'PLUGINS/'.$GLOBALS['piece2'].'.php';
+
+                    if (file_exists($check_file)) {
+                        BOT_RESPONSE('I already have this plugin, aborting.');
+                    }
+                } else {
+                    if (!empty($GLOBALS['piece2'])) {
+                        $file = file_get_contents($address);
+                        $a = fopen('PLUGINS/'.$GLOBALS['piece2'].'.php', 'w');
   
-                    if (!fwrite($a, $file)) {
-                        BOT_RESPONSE('no such plugin in repository');
-                        fclose($a);
-                        $delete = 'PLUGINS/'.$GLOBALS['piece2'].'.php';
-                        unlink($delete);
-                        CLI_MSG('!fetch: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'].', plugin: '
-                        .$GLOBALS['piece2'], '1');
-                    } else {
-                        fclose($a);
-                        BOT_RESPONSE('Plugin added.');
-                        CLI_MSG('!fetch: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'].', plugin: '
-                        .$GLOBALS['piece2'], '1');
+                        if (!fwrite($a, $file)) {
+                            BOT_RESPONSE('no such plugin in repository');
+                            fclose($a);
+                            $delete = 'PLUGINS/'.$GLOBALS['piece2'].'.php';
+                            unlink($delete);
+                            CLI_MSG('!fetch: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'].', plugin: '
+                            .$GLOBALS['piece2'], '1');
+                        } else {
+                                fclose($a);
+                                BOT_RESPONSE('Plugin added.');
+                                CLI_MSG('!fetch: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'].', plugin: '
+                                .$GLOBALS['piece2'], '1');
+                        }
                     }
                 }
             }
+        } else {
+                 BOT_RESPONSE('I cannot use this plugin, i need php_openssl extension to work!');
         }
     }
 }

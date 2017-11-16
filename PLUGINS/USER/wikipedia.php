@@ -26,21 +26,25 @@ function plugin_wikipedia()
 
     if (OnEmptyArg('wikipedia <lang> <string>')) {
     } else {
-              $query = $GLOBALS['piece2'].' '.$GLOBALS['piece3'].' '.$GLOBALS['piece4'];
-              $json  = @file_get_contents('https://'.$GLOBALS['piece1'].
-                  '.wikipedia.org/w/api.php?action=opensearch&list=search&search='.urlencode($query));
-              $json  = json_decode($json);
+        if (extension_loaded('openssl')) {
+            $query = $GLOBALS['piece2'].' '.$GLOBALS['piece3'].' '.$GLOBALS['piece4'];
+            $json  = @file_get_contents('https://'.$GLOBALS['piece1'].
+            '.wikipedia.org/w/api.php?action=opensearch&list=search&search='.urlencode($query));
+            $json  = json_decode($json);
 
-        for ($i = 0; $i < 3; $i++) {
-            if (isset($json[1][$i])) {
-                $resultTitle = $json[1][$i];
-                $resultUrl   = $json[3][$i];
+            for ($i = 0; $i < 3; $i++) {
+                if (isset($json[1][$i])) {
+                    $resultTitle = $json[1][$i];
+                    $resultUrl   = $json[3][$i];
                 
-                CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'wikipedia on: '.$GLOBALS['channel'].
-                ', by: '.$GLOBALS['USER'].', search: '.$query, '1');
+                    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'wikipedia on: '.$GLOBALS['channel'].
+                    ', by: '.$GLOBALS['USER'].', search: '.$query, '1');
 
-                BOT_RESPONSE($resultTitle.' - '.$resultUrl);
+                    BOT_RESPONSE($resultTitle.' - '.$resultUrl);
+                }
             }
+        } else {
+                 BOT_RESPONSE('I cannot use this plugin, i need php_openssl extension to work!');
         }
     }
 }
