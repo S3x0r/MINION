@@ -89,6 +89,11 @@ You can change prefix in config file.
 |    md5           | Changing string to MD5 hash              | !md5 <string>                 |  USER        |  All      |
 |    memusage      | Shows how much ram is being used by BOT  | !memusage                     |  OWNER       |  All      |
 |    morse         | Converts given string to morse code      | !morse <string>               |  USER        |  All      |
+|    note          | Adds a note                              | !note                         |  USER        |  All      |
+|                  | Delete all notes                         | !note clear                   |  USER        |  All      |
+|                  | Delete specified note                    | !note del <numer>             |  USER        |  All      |
+|                  | Shows help                               | !note help                    |  USER        |  All      |
+|                  | Lists notes                              | !note list                    |  USER        |  All      |
 |    newnick       | Changes BOT nickname                     | !newnick <newnick>            |  OWNER       |  All      |
 |    op            | BOT gives op to given nick               | !op <nick>                    |  OWNER/ADMIN |  All      |
 |    panel         | Starts web admin panel for BOT           | !panel                        |  CORE/OWNER  |  WIN      |
