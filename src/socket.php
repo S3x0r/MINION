@@ -279,7 +279,9 @@ function SocketLoop()
             }
             /* Core command: "register 'password'" */
             if (isset($rawcmd[1]) && $rawcmd[1] == 'register') {
-                CoreCmd_RegisterToBot();
+			            	if ($GLOBALS['ex'][2] == $GLOBALS['BOT_NICKNAME']) {
+                    CoreCmd_RegisterToBot();
+				            }
             }
 //---------------------------------------------------------------------------------------------------------
             /* plugins */

@@ -1,4 +1,15 @@
 
+   v0.8.3 changes (18.11.2017):
+   - removed some doubled code
+   - fix: 
+        - there was possibility register to bot in channel,
+          now it's only possible via message to BOT
+	- in registration process there was passsword writed to log,
+	  we don't have it anymore.
+	- when default password was detected and after first connect
+	  there was information 'msg botnick register <password>'
+	  now we don't show password, only information about
+
    v0.8.2 changes (17.11.2017):
    - new plugin: 'note' -- you can add a note, show it, delete,
      type !note help to list commands

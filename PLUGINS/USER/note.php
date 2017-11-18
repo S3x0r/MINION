@@ -68,13 +68,13 @@ function plugin_note()
                 if (!empty($GLOBALS['piece2'])) {
                     /* if file is empty */
                     if (is_file($GLOBALS['ident']) && filesize($GLOBALS['ident']) == 0) {
-                        $note = all_note();
+                        $note = parse_ex3('5');
                       /* if there is no file */
                     } elseif (!is_file($GLOBALS['ident'])) {
-                              $note = all_note();
+                              $note = parse_ex3('5');
                       /* if file exists and not empty */
                     } elseif (is_file($GLOBALS['ident']) && filesize($GLOBALS['ident']) != 0) {
-                              $note = "\n".all_note();
+                              $note = "\n".parse_ex3('5');
                     }
 
                     $makeNote = fopen($GLOBALS['ident'], "a+");
@@ -113,18 +113,4 @@ function plugin_note()
                 break;
         }
     }
-}
-
-function all_note()
-{
-    $a = $GLOBALS['ex'];
-    $current = '';
-    $index = 5;
-    
-    while (isset($a[$index])) {
-           $current .= $a[$index].' ';
-           $index++;
-    }
-    $b = preg_replace('/^:/', '', $current, 1);
-    return $b;
 }

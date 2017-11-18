@@ -124,12 +124,15 @@ function on_topic()
 {
     /* topic change */
     CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') ('.
-        $GLOBALS['channel'].') sets topic: '.parse_ex3(), '1');
+        $GLOBALS['channel'].') sets topic: '.parse_ex3('3'), '1');
 }
 //---------------------------------------------------------------------------------------------------------
 function on_privmsg()
 {
-    CLI_MSG('['.$GLOBALS['channel'].'] <'.$GLOBALS['USER'].'> '.parse_ex3(), '1');
+    if ($GLOBALS['ex'][2] == $GLOBALS['BOT_NICKNAME'] && isset($GLOBALS['ex'][3]) && $GLOBALS['ex'][3] == ':register') {
+    } else {
+             CLI_MSG('['.$GLOBALS['channel'].'] <'.$GLOBALS['USER'].'> '.parse_ex3('3'), '1');
+    }
 }
 //---------------------------------------------------------------------------------------------------------
 function on_mode()
@@ -239,7 +242,7 @@ function on_324() /* channel modes */
 //---------------------------------------------------------------------------------------------------------
 function on_332() /* topic */
 {
-    CLI_MSG('Topic on: '.parse_ex3(), '1');
+    CLI_MSG('Topic on: '.parse_ex3('3'), '1');
 }
 //---------------------------------------------------------------------------------------------------------
 function on_353() /* on channel join inf */
@@ -270,9 +273,9 @@ function on_376() /* join after motd */
 
     /* register to bot info */
     if (isset($GLOBALS['if_first_time_pwd_change'])) {
-        CLI_MSG('****************************************************', '0');
-        CLI_MSG(TR_34.' /msg '.$GLOBALS['BOT_NICKNAME'].' register '.$GLOBALS['pwd'], '0');
-        CLI_MSG('****************************************************', '0');
+        CLI_MSG('*********************************************************', '0');
+        CLI_MSG(TR_34.' /msg '.$GLOBALS['BOT_NICKNAME'].' register <password>', '0');
+        CLI_MSG('*********************************************************', '0');
         unset($GLOBALS['pwd']);
         unset($GLOBALS['if_first_time_pwd_change']);
     }

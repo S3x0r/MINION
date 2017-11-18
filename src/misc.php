@@ -117,11 +117,11 @@ function set_bans() /* set ban from config list */
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function parse_ex3()
+function parse_ex3($position)
 {
     $a = $GLOBALS['ex'];
     $current = '';
-    $index = 3;
+    $index = $position;
     
     while (isset($a[$index])) {
            $current .= $a[$index].' ';
