@@ -27,10 +27,10 @@ function Logs()
             mkdir('../LOGS');
         }
 
-        /* random data to prevent fetch file from panel server */
-        $a = random_str('5');
+        /* + computer name to prevent fetch file from panel server */
+        $a = $_SERVER['COMPUTERNAME'];
 
-        $log_file = '../LOGS/log_'.date('dmY_H-i-s').'('.$a.').TXT';
+        $log_file = '../LOGS/'.date('Y.m.d').','.$a.'.txt';
 
         $data = "-------------------------".TR_22." ".date('d.m.Y | H:i:s')."-------------------------\r\n";
 
