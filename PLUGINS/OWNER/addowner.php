@@ -57,8 +57,8 @@ function plugin_addowner()
             fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :Owner Commands: $owner_commands\n");
             fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :User Commands: $user_commands\n");
  
-            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'addowner on: '.$GLOBALS['channel'].', by: '
-            .$GLOBALS['USER'].', OWNER ADDED: '.$host[0], '1');
+            CLI_MSG('[PLUGIN: addowner] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                $GLOBALS['channel'].' | owner host: '.$host[0], '1');
 
             BOT_RESPONSE('Host: \''.$host[0].'\' added to owner list.');
         } else {

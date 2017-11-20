@@ -1,4 +1,8 @@
 
+   v0.8.5 changes (20.11.2017):
+   - standarized cli msg after plugin usage:
+     '[PLUGIN: pluginname] by: user (nick!ident@hostname) | chan: #channel | value: value'
+
    v0.8.4 changes (19.11.2017):
    - log's file name format changed to: full_year.month.day,computer_name.txt
      (example: 2017.11.19,mycomputer.txt)

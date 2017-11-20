@@ -26,8 +26,8 @@ function plugin_webstatus()
 
     if (OnEmptyArg('webstatus <number>')) {
     } else {
-              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'webstatus on: '.$GLOBALS['channel'].
-                  ', by: '.$GLOBALS['USER'].', code: '.$GLOBALS['args'], '1');
+             CLI_MSG('[PLUGIN: webstatus] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                     $GLOBALS['channel'], '1');
 
               BOT_RESPONSE(httpstatus($GLOBALS['args']));
     }

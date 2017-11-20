@@ -29,7 +29,10 @@ function plugin_note()
             mkdir('../DATA');
         }
         $GLOBALS['ident'] = '../DATA/'.$GLOBALS['host'].'.txt';
-        
+    
+        CLI_MSG('[PLUGIN: note] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                $GLOBALS['channel'], '1');
+
         switch ($GLOBALS['args']) {
             case 'help':
                  BOT_RESPONSE('Note commands:');

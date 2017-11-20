@@ -38,7 +38,7 @@ function CoreCmd_Panel()
                                 $port.' --no-https --hide-window';
                                 popen($command, 'r');
                                 BOT_RESPONSE('Runned.');
-                                CLI_MSG('[BOT] Panel Runned at port: '.$port, '1');
+                                CLI_MSG('[PANEL] Panel Runned at port: '.$port, '1');
                             } else {
                                      BOT_RESPONSE('Cannot find web server, missing?');
                             }
@@ -56,7 +56,7 @@ function CoreCmd_Panel()
                 if (!isset($GLOBALS['OS_TYPE'])) {
                     if (kill('serv')) {
                         BOT_RESPONSE('Panel Closed');
-                        CLI_MSG('[BOT] Panel Closed', '1');
+                        CLI_MSG('[PANEL] Panel Closed', '1');
                     } else {
                          BOT_RESPONSE('Panel Not runned stupid!');
                     }

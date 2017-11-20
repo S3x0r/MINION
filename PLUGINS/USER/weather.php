@@ -75,7 +75,8 @@ function plugin_weather()
                  BOT_RESPONSE('I cannot use this plugin, i need php_curl extension to work!');
         }
 
-        CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'weather on: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'], '1');
+        CLI_MSG('[PLUGIN: weather] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                 $GLOBALS['channel'], '1');
     }
 }
 

@@ -24,7 +24,8 @@ if (PHP_SAPI !== 'cli') {
 function plugin_memusage()
 {
 
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'memusage by: '.$GLOBALS['USER'], '1');
+    CLI_MSG('[PLUGIN: memusage] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+        $GLOBALS['channel'], '1');
 
     $mem = memory_get_usage();
     $memory = byte_convert($mem);

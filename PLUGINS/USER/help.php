@@ -28,7 +28,8 @@ function plugin_help()
         $admin_cmd = implode(' ', $GLOBALS['ADMIN_PLUGINS']);
         $user_cmd  = implode(' ', $GLOBALS['USER_PLUGINS']);
         
-        CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'help on: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'], '1');
+        CLI_MSG('[PLUGIN: help] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+            $GLOBALS['channel'], '1');
 
         BOT_RESPONSE('Core Commands: '.$GLOBALS['CONFIG_CMD_PREFIX'].'load '.$GLOBALS['CONFIG_CMD_PREFIX'].'unload '.
         $GLOBALS['CONFIG_CMD_PREFIX'].'panel');
@@ -39,7 +40,8 @@ function plugin_help()
               $admin_cmd = implode(' ', $GLOBALS['ADMIN_PLUGINS']);
               $user_cmd  = implode(' ', $GLOBALS['USER_PLUGINS']);
 
-              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'help on: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'], '1');
+              CLI_MSG('[PLUGIN: help] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+               $GLOBALS['channel'], '1');
               BOT_RESPONSE('Admin Commands: '.$admin_cmd);
               BOT_RESPONSE('User Commands: '.$user_cmd);
 
@@ -49,7 +51,8 @@ function plugin_help()
     } elseif (!HasOwner($GLOBALS['mask']) && !HasAdmin($GLOBALS['mask'])) {
               $user_cmd  = implode(' ', $GLOBALS['USER_PLUGINS']);
 
-              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'help on: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'], '1');
+              CLI_MSG('[PLUGIN: help] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+              $GLOBALS['channel'], '1');
 
               BOT_RESPONSE('User Commands: '.$user_cmd);
               

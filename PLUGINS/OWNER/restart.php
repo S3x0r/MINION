@@ -33,7 +33,7 @@ function plugin_restart()
     fputs($GLOBALS['socket'], "QUIT :Restarting...\n");
 
     /* send cli messages */
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'restart on: '.$GLOBALS['channel'].' by: '.$GLOBALS['USER'], '1');
+    CLI_MSG('[PLUGIN: restart] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'], '1');
     CLI_MSG('Restarting BOT...', '1');
   
     /* execute batch script */

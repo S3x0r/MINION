@@ -53,13 +53,13 @@ function plugin_fetch()
                             fclose($a);
                             $delete = 'PLUGINS/'.$GLOBALS['piece2'].'.php';
                             unlink($delete);
-                            CLI_MSG('!fetch: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'].', plugin: '
-                            .$GLOBALS['piece2'], '1');
+                            CLI_MSG('[PLUGIN: fetch] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                                $GLOBALS['channel'].' | plugin: '.$GLOBALS['piece2'], '1');
                         } else {
                                 fclose($a);
                                 BOT_RESPONSE('Plugin added.');
-                                CLI_MSG('!fetch: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'].', plugin: '
-                                .$GLOBALS['piece2'], '1');
+                                CLI_MSG('[PLUGIN: fetch] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                                $GLOBALS['channel'].' | plugin: '.$GLOBALS['piece2'], '1');
                         }
                     }
                 }

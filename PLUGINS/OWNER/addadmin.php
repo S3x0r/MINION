@@ -54,8 +54,8 @@ function plugin_addadmin()
             fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :Admin Commands: $admin_commands\n");
             fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :User Commands: $user_commands\n");
  
-            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'addadmin on: '.$GLOBALS['channel'].', by: '
-            .$GLOBALS['USER'].', ADMIN ADDED: '.$host[0], '1');
+            CLI_MSG('[PLUGIN: addadmin] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                $GLOBALS['channel'].' | admin added: '.$host[0], '1');
 
             BOT_RESPONSE('Host: \''.$host[0].'\' added to admin list.');
         } else {

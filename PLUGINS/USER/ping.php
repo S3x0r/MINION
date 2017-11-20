@@ -41,8 +41,8 @@ function plugin_ping()
                           }
                 }
                 }
-              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'ping on: '.$GLOBALS['channel'].
-                  ', by: '.$GLOBALS['USER'].', address: '.$GLOBALS['args'], '1');
+                CLI_MSG('[PLUGIN: ping] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                $GLOBALS['channel'].' | address: '.$GLOBALS['args'], '1');
                 } else {
                          BOT_RESPONSE('This plugin works on windows only at this time.');
                 }

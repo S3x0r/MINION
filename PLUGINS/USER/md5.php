@@ -28,9 +28,9 @@ function plugin_md5()
     } else {
               $data = str_replace(" ", "", $GLOBALS['args']);
               $md5  = md5($data);
-
-              CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'md5 on: '.$GLOBALS['channel'].
-                  ', by: '.$GLOBALS['USER'].', data: '.$data, '1');
+           
+              CLI_MSG('[PLUGIN: md5] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                $GLOBALS['channel'].' | string: '.$data, '1');
 
               BOT_RESPONSE('(MD5) \''.$data.'\' -> '.$md5);
     }

@@ -29,8 +29,8 @@ function plugin_gethost()
                  $host = gethostbyaddr(trim($GLOBALS['args']));
             if ($host != '') {
                 BOT_RESPONSE('hostname: '.$host);
-                CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'gethost on: '.$GLOBALS['channel'].', by: '.
-                $GLOBALS['USER'].', hostname: '.$GLOBALS['args'].'/'.$host, '1');
+                CLI_MSG('[PLUGIN: gethost] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                $GLOBALS['channel'].' | host: '.$GLOBALS['args'].'/'.$host, '1');
             }
         }
     } catch (Exception $e) {

@@ -52,8 +52,8 @@ function plugin_remowner()
             BOT_RESPONSE('Host: \''.$GLOBALS['args'].'\' removed from owners.');
                       
             /* & to CLI */
-            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'remowner on: '.$GLOBALS['channel'].', by: '
-            .$GLOBALS['USER'].', OWNER REMOVED: '.$GLOBALS['args'], '1');
+            CLI_MSG('[PLUGIN: remowner] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                $GLOBALS['channel'].' | removed host: '.$GLOBALS['args'], '1');
         }
     }
 }

@@ -27,8 +27,8 @@ function plugin_ban()
     if (OnEmptyArg('ban <nick!ident@host>')) {
     } else {
         if (BotOpped() == true) {
-            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'ban on: '.$GLOBALS['channel'].', by: '
-            .$GLOBALS['USER'].', host: '.$GLOBALS['args'], '1');
+            CLI_MSG('[PLUGIN: ban] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'].
+            ' | banned host: '.$GLOBALS['args'], '1');
 
             fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +b '.$GLOBALS['args']."\n");
         }

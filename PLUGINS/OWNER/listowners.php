@@ -24,8 +24,8 @@ if (PHP_SAPI !== 'cli') {
 function plugin_listowners()
 {
 
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'listowners on: '.$GLOBALS['channel'].
-        ', by: '.$GLOBALS['USER'], '1');
+    CLI_MSG('[PLUGIN: listowners] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+        $GLOBALS['channel'], '1');
 
     LoadData($GLOBALS['config_file'], 'OWNER', 'bot_owners');
 

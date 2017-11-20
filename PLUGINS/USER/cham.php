@@ -43,8 +43,8 @@ function plugin_cham()
 
                 $who = trim($GLOBALS['args']);
 
-                CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'cham on: '.$GLOBALS['channel'].', by: '.
-                $GLOBALS['USER'].', who: '.$who, '1');
+                CLI_MSG('[PLUGIN: cham] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                $GLOBALS['channel'].' | to: '.$who, '1');
 
                 BOT_RESPONSE($who.': '.$text);
             } else {

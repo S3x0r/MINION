@@ -28,8 +28,8 @@ function plugin_join()
     } else {
         if (!in_array($GLOBALS['args'], $GLOBALS['BOT_CHANNELS'])) {
             JOIN_CHANNEL($GLOBALS['args']);
-            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'join on: '.$GLOBALS['channel'].', by: '
-            .$GLOBALS['USER'].', joining: '.$GLOBALS['args'], '1');
+            CLI_MSG('[PLUGIN: join] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                $GLOBALS['channel'].' | joined: '.$GLOBALS['args'], '1');
         } else {
                  BOT_RESPONSE('...');
         }

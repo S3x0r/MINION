@@ -24,8 +24,7 @@ if (PHP_SAPI !== 'cli') {
 function plugin_info()
 {
 
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'info on: '.$GLOBALS['channel'].', by: '
-    .$GLOBALS['USER'], '1');
+    CLI_MSG('[PLUGIN: info] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'], '1');
 
     NICK_MSG('MINION version '.VER);
     NICK_MSG('----------------------------------------------');

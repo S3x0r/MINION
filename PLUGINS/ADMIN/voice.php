@@ -27,8 +27,8 @@ function plugin_voice()
     if (OnEmptyArg('voice <nick>')) {
     } else {
         if (BotOpped() == true) {
-            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'voice on: '.$GLOBALS['channel'].', by: '
-            .$GLOBALS['USER'].', for: '.$GLOBALS['args'], '1');
+            CLI_MSG('[PLUGIN: voice] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'].
+                ' | voiced user: '.$GLOBALS['args'], '1');
 
             fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +v '.$GLOBALS['args']."\n");
         }

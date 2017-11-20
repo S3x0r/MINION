@@ -30,7 +30,8 @@ function plugin_quit()
     }
 
     fputs($GLOBALS['socket'], "QUIT :http://github.com/S3x0r/MINION\n");
-    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'quit received by: '.$GLOBALS['USER'], '1');
+    CLI_MSG('[PLUGIN: quit] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+            $GLOBALS['channel'], '1');
     CLI_MSG('Terminating BOT.', '1');
     CLI_MSG('------------------LOG ENDED: '.date('d.m.Y | H:i:s')."------------------\r\n", '1');
     die();

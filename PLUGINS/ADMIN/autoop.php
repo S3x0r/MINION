@@ -49,8 +49,8 @@ function plugin_autoop()
             /* Inform nick about it */
             fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :From now you are on my auto op list, enjoy.\n");
 
-            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'autoop on: '.$GLOBALS['channel'].', by: '
-            .$GLOBALS['USER'].', added: '.$GLOBALS['args'], '1');
+            CLI_MSG('[PLUGIN: autoop] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'].
+                ' | host added: '.$GLOBALS['args'], '1');
 
             BOT_RESPONSE('Host: \''.$host[0].'\' added to auto op list.');
         } else {

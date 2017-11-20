@@ -52,8 +52,8 @@ function plugin_remadmin()
             BOT_RESPONSE('Host: \''.$GLOBALS['args'].'\' removed from admin list.');
                       
             /* & to CLI */
-            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'remadmin on: '.$GLOBALS['channel'].', by: '
-            .$GLOBALS['USER'].', ADMIN REMOVED: '.$GLOBALS['args'], '1');
+            CLI_MSG('[PLUGIN: remadmin] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                $GLOBALS['channel'].' | removed host: '.$GLOBALS['args'], '1');
         }
     }
 }

@@ -25,7 +25,8 @@ if (PHP_SAPI !== 'cli') {
 function plugin_update()
 {
     if (extension_loaded('openssl')) {
-        CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'update on: '.$GLOBALS['channel'].', by: '.$GLOBALS['USER'], '1');
+        CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+            $GLOBALS['channel'], '1');
     
         v_connect();
     } else {

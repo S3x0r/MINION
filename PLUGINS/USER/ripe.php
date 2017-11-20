@@ -27,8 +27,8 @@ function plugin_ripe()
     if (OnEmptyArg('ripe <ip or host>')) {
     } else {
         if (extension_loaded('openssl')) {
-            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'ripe on: '.$GLOBALS['channel'].', by: '
-            .$GLOBALS['USER'].', address: '.$GLOBALS['args'], '1');
+            CLI_MSG('[PLUGIN: ripe] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                $GLOBALS['channel'].' | address: '.$GLOBALS['args'], '1');
 
             BOT_RESPONSE(ripe_check_ip($GLOBALS['args']));
         } else {

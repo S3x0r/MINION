@@ -28,7 +28,7 @@ function plugin_raw()
     } else {
              $msg = $GLOBALS['piece1'].' '.$GLOBALS['piece2'].' '.$GLOBALS['piece3'].' '.$GLOBALS['piece4']."\n";
              fputs($GLOBALS['socket'], $msg);
-             CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'raw on: '.$GLOBALS['channel'].
-               ', by: '.$GLOBALS['USER'].', cmd: '.$msg, '1');
+             CLI_MSG('[PLUGIN: raw] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                $GLOBALS['channel'].' | raw: '.$msg, '1');
     }
 }

@@ -38,8 +38,8 @@ function plugin_youtube()
             $piecesb = explode($searchb, $content);
             $pieceb = explode('">', $piecesb[1]);
 
-            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'youtube on: '.$GLOBALS['channel'].
-            ', by: '.$GLOBALS['USER'], '1');
+            CLI_MSG('[PLUGIN: youtube] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                 $GLOBALS['channel'], '1');
 
             BOT_RESPONSE('Youtube Title: '.htmlspecialchars_decode($piece[0]));
         }

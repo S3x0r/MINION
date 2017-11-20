@@ -27,8 +27,8 @@ function plugin_op()
     if (OnEmptyArg('op <nick>')) {
     } else {
         if (BotOpped() == true) {
-            CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'op on: '.$GLOBALS['channel'].', by: '
-            .$GLOBALS['USER'].', for: '.$GLOBALS['args'], '1');
+            CLI_MSG('[PLUGIN: op] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'].
+                ' | opped user: '.$GLOBALS['args'], '1');
 
             fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['args']."\n");
         }

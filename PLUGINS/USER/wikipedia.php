@@ -36,10 +36,10 @@ function plugin_wikipedia()
                 if (isset($json[1][$i])) {
                     $resultTitle = $json[1][$i];
                     $resultUrl   = $json[3][$i];
-                
-                    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'wikipedia on: '.$GLOBALS['channel'].
-                    ', by: '.$GLOBALS['USER'].', search: '.$query, '1');
-
+               
+                    CLI_MSG('[PLUGIN: wikipedia] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                            $GLOBALS['channel'].' | find: '.$query, '1');
+                 
                     BOT_RESPONSE($resultTitle.' - '.$resultUrl);
                 }
             }

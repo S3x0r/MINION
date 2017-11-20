@@ -32,8 +32,8 @@ function plugin_webtitle()
                     if (strlen($matches[1]) == 256) {
                         $matches[1].='...';
                     }
-                    CLI_MSG($GLOBALS['CONFIG_CMD_PREFIX'].'webtitle on: '.$GLOBALS['channel'].
-                    ', by: '.$GLOBALS['USER'], '1');
+                    CLI_MSG('[PLUGIN: webtitle] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                            $GLOBALS['channel'], '1');
 
                     BOT_RESPONSE('Title: '.
                     str_replace("\n", '', str_replace("\r", '', html_entity_decode($matches[1], ENT_QUOTES, 'utf-8'))));
