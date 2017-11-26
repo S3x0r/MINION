@@ -18,25 +18,26 @@ if (PHP_SAPI !== 'cli') {
     die('This script can\'t be run from a web browser. Use CLI to run it.');
 }
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Shows BOT owners: '.$GLOBALS['CONFIG_CMD_PREFIX'].'listowners';
-    $plugin_command = 'listowners';
+    $plugin_description = 'Shows BOT admins: '.$GLOBALS['CONFIG_CMD_PREFIX'].'listadmins';
+    $plugin_command = 'listadmins';
 
-function plugin_listowners()
+function plugin_listadmins()
 {
 
-    CLI_MSG('[PLUGIN: listowners] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+    CLI_MSG('[PLUGIN: listadmins] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
         $GLOBALS['channel'], '1');
 
-    LoadData($GLOBALS['config_file'], 'OWNER', 'bot_owners');
+    LoadData($GLOBALS['config_file'], 'ADMIN', 'admin_list');
 
-    $pieces = explode(", ", $GLOBALS['LOADED']);
-    $owners = $pieces;
+    if (empty($GLOBALS['LOADED'])) {
+        NICK_MSG('Empty admin list.');
+    } else {
+             $pieces = explode(", ", $GLOBALS['LOADED']);
 
-    $table = $owners;
- 
-    NICK_MSG('My Owner(s) Host(s):');
+             NICK_MSG('My Admin(s) Host(s):');
 
-    for ($i=0; $i<count($table); $i++) {
-         NICK_MSG($table[$i]);
+        for ($i=0; $i<count($pieces); $i++) {
+             NICK_MSG($pieces[$i]);
+        }
     }
 }

@@ -138,8 +138,8 @@ function CoreCmd_RegisterToBot()
                 NICK_MSG(TR_36);
                 NICK_MSG('Core Commands: '.$GLOBALS['CONFIG_CMD_PREFIX'].'load '.
                     $GLOBALS['CONFIG_CMD_PREFIX'].'unload '.$GLOBALS['CONFIG_CMD_PREFIX'].'panel');
-                NICK_MSG('Admin Commands: '.$admin_commands);
                 NICK_MSG(TR_59.' '.$owner_commands);
+                NICK_MSG('Admin Commands: '.$admin_commands);
                 NICK_MSG(TR_60.' '.$user_commands);
 
                 /* send info who is bot admin */

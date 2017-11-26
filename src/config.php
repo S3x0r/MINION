@@ -388,6 +388,7 @@ show_raw         = \'no\'';
         LoadConfig($filename);
     } else { /* read only file system? */
              CLI_MSG('[ERROR]: '.TR_20, '0');
+             sleep(6);
              die();
     }
 }

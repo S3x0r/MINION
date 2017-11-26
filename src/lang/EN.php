@@ -33,7 +33,7 @@ define('TR_32', 'on auto op list, giving op');
 define('TR_33', 'Nickname is reserved, changing nick to:');
 define('TR_34', 'Register to bot by typing');
 define('TR_35', 'Joining channel:');
-define('TR_36', 'From now you are on my owners list, enjoy.');
+define('TR_36', 'From now you are on my owner(s) list, enjoy.');
 define('TR_37', 'I recovered my original nickname');
 define('TR_38', 'loaded.');
 define('TR_39', 'unloaded.');

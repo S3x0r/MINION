@@ -107,7 +107,7 @@ function SocketLoop()
 //---------------------------------------------------------------------------------------------------------            
             /* put data to array */
             $ex = explode(' ', trim($data));
-    
+
             /* get channel from ex[2] */
             if (isset($ex[2])) {
                 $channel = str_replace(':#', '#', $ex[2]);

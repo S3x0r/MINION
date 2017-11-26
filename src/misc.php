@@ -161,7 +161,7 @@ function msg_without_command()
     for ($i=3; $i <= (count($GLOBALS['ex'])); $i++) {
          $input .= $GLOBALS['ex'][$i]." ";
     }
-      
+
     $in = rtrim($input);
     $data = str_replace($GLOBALS['rawcmd'][1].' ', '', $in);
 

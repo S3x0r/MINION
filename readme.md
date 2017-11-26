@@ -84,7 +84,8 @@ You can change prefix in config file.
 |    join          | BOT joins given channel                  | !join <#channel>              |  OWNER       |  All      |
 |    kick          | BOT kicks given user from channel        | !kick <#channel> <nick>       |  OWNER/ADMIN |  All      |
 |    leave         | BOT parts given channel                  | !leave <#channel>             |  OWNER       |  All      |
-|    listowners    | Shows BOT owners hosts                   | !listowners                   |  OWNER       |  All      |
+|    listadmins    | Shows BOT admin(s) host(s)               | !listadmins                   |  OWNER       |  All      |
+|    listowners    | Shows BOT owner(s) host(s)               | !listowners                   |  OWNER       |  All      |
 |    load          | Loads plugin to BOT                      | !load <plugin>                |  CORE/OWNER  |  All      |
 |    md5           | Changing string to MD5 hash              | !md5 <string>                 |  USER        |  All      |
 |    memusage      | Shows how much ram is being used by BOT  | !memusage                     |  OWNER       |  All      |
