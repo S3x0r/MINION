@@ -289,7 +289,7 @@ function on_376() /* join after motd */
         PlaySound('connected.mp3');
 
         CLI_MSG(TR_35.' '.$GLOBALS['CONFIG_CNANNEL'], '1');
-        JOIN_CHANNEL($GLOBALS['CONFIG_CNANNEL']);
+        JOIN_CHAN($GLOBALS['CONFIG_CNANNEL']);
         
         /* on first start event */
         on_first_start();
@@ -346,7 +346,7 @@ function on_474() /* if bot +banned on channel */
 function on_475() /* if +key on channel */
 {
     if (!empty($GLOBALS['CONFIG_CHANNEL_KEY'])) {
-        JOIN_CHANNEL($GLOBALS['CONFIG_CNANNEL'].' '.$GLOBALS['CONFIG_CHANNEL_KEY']);
+        JOIN_CHAN($GLOBALS['CONFIG_CNANNEL'].' '.$GLOBALS['CONFIG_CHANNEL_KEY']);
     } else {
               CLI_MSG('[BOT] I cannot join, bad channel key in config or key not set', '1');
               PlaySound('prompt.mp3');

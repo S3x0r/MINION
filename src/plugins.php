@@ -31,11 +31,13 @@ function LoadPlugins()
 //---------------------------------------------------------------------------------------------------------
     if (!IsSilent()) {
         /* CORE COMMANDS */
-        CLI_MSG('Core Commands (3):', '0');
+        CLI_MSG('Core Commands (5):', '0');
         Line(COLOR);
         echo 'load -- Loads specified plugins to BOT: !load <plugin>'.PHP_EOL;
         echo 'panel -- Starts web admin panel for BOT: !panel help'.PHP_EOL;
+        echo 'pause -- Pause all BOT activity: !pause'.PHP_EOL;
         echo 'unload -- Unloads specified plugin from BOT: !unload <plugin>'.PHP_EOL;
+        echo 'unpause -- Restore BOT from pause mode: !unpause'.PHP_EOL;
         Line(COLOR);
 //---------------------------------------------------------------------------------------------------------
         /* OWNERS PLUGINS */
@@ -104,7 +106,7 @@ function LoadPlugins()
                  echo PHP_EOL."[ERROR] Not compatible plugin: $plugin_name".PHP_EOL.PHP_EOL;
         }
     }
-    $tot = $count1+$count2+$count3+3;
+    $tot = $count1+$count2+$count3+5;
     
     if (!IsSilent()) {
         echo "----------------------------------------------------------".TR_25." ($tot)---------".PHP_EOL;

@@ -30,14 +30,14 @@ function plugin_listadmins()
     LoadData($GLOBALS['config_file'], 'ADMIN', 'admin_list');
 
     if (empty($GLOBALS['LOADED'])) {
-        NICK_MSG('Empty admin list.');
+        BOT_RESPONSE('Empty admin list.');
     } else {
              $pieces = explode(", ", $GLOBALS['LOADED']);
 
-             NICK_MSG('My Admin(s) Host(s):');
+             BOT_RESPONSE('My Admin(s) Host(s):');
 
         for ($i=0; $i<count($pieces); $i++) {
-             NICK_MSG($pieces[$i]);
+             BOT_RESPONSE($pieces[$i]);
         }
     }
 }

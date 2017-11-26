@@ -26,12 +26,11 @@ function plugin_info()
 
     CLI_MSG('[PLUGIN: info] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'], '1');
 
-    NICK_MSG('MINION version '.VER);
-    NICK_MSG('----------------------------------------------');
-    NICK_MSG('   Author: S3x0r, contact: olisek@gmail.com');
+    BOT_RESPONSE('MINION version '.VER);
+    BOT_RESPONSE('Author: S3x0r, contact: olisek@gmail.com');
 
     if (!empty($GLOBALS['CONFIG_BOT_ADMIN'])) {
-        NICK_MSG('Bot Admin: '.$GLOBALS['CONFIG_BOT_ADMIN']);
+        BOT_RESPONSE('Bot Admin: '.$GLOBALS['CONFIG_BOT_ADMIN']);
     }
-// NICK_MSG('PHP version: '.PHP_VER);
+// BOT_RESPONSE('PHP version: '.PHP_VER);
 }

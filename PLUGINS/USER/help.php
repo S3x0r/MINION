@@ -23,6 +23,7 @@ if (PHP_SAPI !== 'cli') {
 
 function plugin_help()
 {
+    /* if OWNER use help */
     if (HasOwner($GLOBALS['mask'])) {
         $owner_cmd = implode(' ', $GLOBALS['OWNER_PLUGINS']);
         $admin_cmd = implode(' ', $GLOBALS['ADMIN_PLUGINS']);
@@ -31,11 +32,20 @@ function plugin_help()
         CLI_MSG('[PLUGIN: help] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
             $GLOBALS['channel'], '1');
 
-        BOT_RESPONSE('Core Commands: '.$GLOBALS['CONFIG_CMD_PREFIX'].'load '.$GLOBALS['CONFIG_CMD_PREFIX'].'unload '.
-        $GLOBALS['CONFIG_CMD_PREFIX'].'panel');
+        BOT_RESPONSE('Core Commands: '.
+                     $GLOBALS['CONFIG_CMD_PREFIX'].'load '.
+                     $GLOBALS['CONFIG_CMD_PREFIX'].'panel '.
+                     $GLOBALS['CONFIG_CMD_PREFIX'].'pause '.
+                     $GLOBALS['CONFIG_CMD_PREFIX'].'unload '.
+                     $GLOBALS['CONFIG_CMD_PREFIX'].'unpause');
+
         BOT_RESPONSE('Owner Commands: '.$owner_cmd);
+
         BOT_RESPONSE('Admin Commands: '.$admin_cmd);
+
         BOT_RESPONSE('User Commands: '.$user_cmd);
+
+      /* if ADMIN use help */
     } elseif (!HasOwner($GLOBALS['mask']) && HasAdmin($GLOBALS['mask'])) { 
               $admin_cmd = implode(' ', $GLOBALS['ADMIN_PLUGINS']);
               $user_cmd  = implode(' ', $GLOBALS['USER_PLUGINS']);
@@ -48,6 +58,7 @@ function plugin_help()
         if (!empty($GLOBALS['CONFIG_BOT_ADMIN'])) {
             BOT_RESPONSE('Bot Admin: '.$GLOBALS['CONFIG_BOT_ADMIN']);
         }
+      /* if USER use help */
     } elseif (!HasOwner($GLOBALS['mask']) && !HasAdmin($GLOBALS['mask'])) {
               $user_cmd  = implode(' ', $GLOBALS['USER_PLUGINS']);
 

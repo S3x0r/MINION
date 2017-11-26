@@ -34,9 +34,9 @@ function plugin_listowners()
 
     $table = $owners;
  
-    NICK_MSG('My Owner(s) Host(s):');
+    BOT_RESPONSE('My Owner(s) Host(s):');
 
     for ($i=0; $i<count($table); $i++) {
-         NICK_MSG($table[$i]);
+         BOT_RESPONSE($table[$i]);
     }
 }

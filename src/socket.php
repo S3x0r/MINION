@@ -258,84 +258,103 @@ function SocketLoop()
             }
 //---------------------------------------------------------------------------------------------------------
             /* timers */
-            StartTimers();
+            if (empty($GLOBALS['stop'])) {
+                StartTimers();
+            }
 
             /* CTCP */
-            if ($GLOBALS['CONFIG_CTCP_RESPONSE'] == 'yes' && isset($rawcmd[1])) {
-                CTCP();
+            if (empty($GLOBALS['stop'])) {
+                if ($GLOBALS['CONFIG_CTCP_RESPONSE'] == 'yes' && isset($rawcmd[1])) {
+                    CTCP();
+                }
+            }
+
+            /* Core command: 'Unpause' Needs to be outside stop :) */
+            if (isset($rawcmd[1]) && HasOwner($mask) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'unpause') {
+                CoreCmd_Unpause();
             }
 //---------------------------------------------------------------------------------------------------------
-            /* Core command: 'Panel' */
-            if (isset($rawcmd[1]) && HasOwner($mask) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'panel') {
-                CoreCmd_Panel();
-            }
-            /* Core command: 'Load' */
-            if (isset($rawcmd[1]) && HasOwner($mask) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'load') {
-                CoreCmd_Load();
-            }
-            /* Core command: 'Unload' */
-            if (isset($rawcmd[1]) && HasOwner($mask) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'unload') {
-                CoreCmd_Unload();
-            }
-            /* Core command: "register 'password'" */
-            if (isset($rawcmd[1]) && $rawcmd[1] == 'register') {
-			            	if ($GLOBALS['ex'][2] == $GLOBALS['BOT_NICKNAME']) {
-                    CoreCmd_RegisterToBot();
-				            }
-            }
+            if (empty($GLOBALS['stop'])) {
+                /* Core command: 'Panel' */
+                if (isset($rawcmd[1]) && HasOwner($mask) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'panel') {
+                    CoreCmd_Panel();
+                }
+                /* Core command: 'Load' */
+                if (isset($rawcmd[1]) && HasOwner($mask) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'load') {
+                    CoreCmd_Load();
+                }
+                /* Core command: 'Unload' */
+                if (isset($rawcmd[1]) && HasOwner($mask) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'unload') {
+                    CoreCmd_Unload();
+                }
+                /* Core command: 'Pause' */
+                if (isset($rawcmd[1]) && HasOwner($mask) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'pause') {
+                    CoreCmd_Pause();
+                }
+
+                /* Core command: "register 'password'" */
+                if (isset($rawcmd[1]) && $rawcmd[1] == 'register') {
+			                	if ($GLOBALS['ex'][2] == $GLOBALS['BOT_NICKNAME']) {
+                        CoreCmd_RegisterToBot();
+				                }
+                }
 //---------------------------------------------------------------------------------------------------------
-            /* plugins */
-            if (HasOwner($mask) && isset($rawcmd[1])) {
-                $pn = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
+                /* plugins */
+                if (HasOwner($mask) && isset($rawcmd[1])) {
+                    $pn = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
 
-                if (in_array($rawcmd[1], $GLOBALS['OWNER_PLUGINS'])) {
-                    call_user_func('plugin_'.$pn);
-                }
+                    if (in_array($rawcmd[1], $GLOBALS['OWNER_PLUGINS'])) {
+                        call_user_func('plugin_'.$pn);
+                    }
 
-                if (in_array($rawcmd[1], $GLOBALS['ADMIN_PLUGINS'])) {
-                    call_user_func('plugin_'.$pn);
-                }
+                    if (in_array($rawcmd[1], $GLOBALS['ADMIN_PLUGINS'])) {
+                        call_user_func('plugin_'.$pn);
+                    }
 
-                if (in_array($rawcmd[1], $GLOBALS['USER_PLUGINS'])) {
-                    call_user_func('plugin_'.$pn);
-                }
-            } elseif (!HasOwner($mask) && HasAdmin($mask) && isset($rawcmd[1])) {
-                $pn = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
-                
-                if (in_array($rawcmd[1], $GLOBALS['ADMIN_PLUGINS'])) {
-                    call_user_func('plugin_'.$pn);
-                }
+                    if (in_array($rawcmd[1], $GLOBALS['USER_PLUGINS'])) {
+                        call_user_func('plugin_'.$pn);
+                    }
+                } elseif (!HasOwner($mask) && HasAdmin($mask) && isset($rawcmd[1])) {
+                    $pn = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
+
+                    if (in_array($rawcmd[1], $GLOBALS['ADMIN_PLUGINS'])) {
+                        call_user_func('plugin_'.$pn);
+                    }
               
-                if (in_array($rawcmd[1], $GLOBALS['USER_PLUGINS'])) {
-                    call_user_func('plugin_'.$pn);
-                }
-            } elseif (!HasOwner($mask) && !HasAdmin($mask) && isset($rawcmd[1])) {
-                $pn = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
+                    if (in_array($rawcmd[1], $GLOBALS['USER_PLUGINS'])) {
+                        call_user_func('plugin_'.$pn);
+                    }
+                } elseif (!HasOwner($mask) && !HasAdmin($mask) && isset($rawcmd[1])) {
+                    $pn = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
                 
-                if (in_array($rawcmd[1], $GLOBALS['USER_PLUGINS'])) {
-                    call_user_func('plugin_'.$pn);
+                    if (in_array($rawcmd[1], $GLOBALS['USER_PLUGINS'])) {
+                        call_user_func('plugin_'.$pn);
+                    }
                 }
-            }
 
-            if (!function_exists('plugin_')) {
-                function plugin_()
-                {
+                if (!function_exists('plugin_')) {
+                    function plugin_()
+                    {
+                    }
                 }
             }
 //---------------------------------------------------------------------------------------------------------
             /* keep nick - check every 60 sec */
-            if ($GLOBALS['CONFIG_KEEP_NICK']=='yes' && isset($GLOBALS['I_USE_RND_NICKNAME'])) {
-                if (time()-$GLOBALS['first_time'] > 60) {
-                    fputs($GLOBALS['socket'], "ISON :".$GLOBALS['NICKNAME_FROM_CONFIG']."\n");
-                    $GLOBALS['first_time'] = time();
-                }
-                if ($GLOBALS['ex'][1] == '303' && $GLOBALS['ex'][3] == ':') {
-                    fputs($GLOBALS['socket'], "NICK ".$GLOBALS['NICKNAME_FROM_CONFIG']."\n");
-                    $GLOBALS['BOT_NICKNAME'] = $GLOBALS['NICKNAME_FROM_CONFIG'];
-                    unset($GLOBALS['I_USE_RND_NICKNAME']);
-                    CLI_MSG('[BOT]: '.TR_37, '1');
-                    /* wcli extension */
-                    wcliExt();
+            if (empty($GLOBALS['stop'])) {
+                if ($GLOBALS['CONFIG_KEEP_NICK']=='yes' && isset($GLOBALS['I_USE_RND_NICKNAME'])) {
+                    if (time()-$GLOBALS['first_time'] > 60) {
+                        fputs($GLOBALS['socket'], "ISON :".$GLOBALS['NICKNAME_FROM_CONFIG']."\n");
+                        $GLOBALS['first_time'] = time();
+                    }
+                    if ($GLOBALS['ex'][1] == '303' && $GLOBALS['ex'][3] == ':') {
+                        fputs($GLOBALS['socket'], "NICK ".$GLOBALS['NICKNAME_FROM_CONFIG']."\n");
+                        $GLOBALS['BOT_NICKNAME'] = $GLOBALS['NICKNAME_FROM_CONFIG'];
+                        unset($GLOBALS['I_USE_RND_NICKNAME']);
+                        CLI_MSG('[BOT]: '.TR_37, '1');
+                      
+                        /* wcli extension */
+                        wcliExt();
+                    }
                 }
             }
 //---------------------------------------------------------------------------------------------------------

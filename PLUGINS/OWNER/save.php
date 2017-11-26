@@ -28,52 +28,52 @@ function plugin_save()
     } else {
         switch ($GLOBALS['args']) {
             case 'help':
-                 NICK_MSG('Save commands:');
-                 NICK_MSG('save auto_join      - Saving auto join on channel when connected: '
+                 BOT_RESPONSE('Save commands:');
+                 BOT_RESPONSE('save auto_join      - Saving auto join on channel when connected: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save auto_join <yes/no>');
-                 NICK_MSG('save auto_op        - Saving auto op when join channel: '
+                 BOT_RESPONSE('save auto_op        - Saving auto op when join channel: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save auto_op <yes/no>');
-                 NICK_MSG('save auto_op_list   - Saving auto op list in config: '
+                 BOT_RESPONSE('save auto_op_list   - Saving auto op list in config: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save auto_op_list <nick!ident@host, ...>');
-                 NICK_MSG('save auto_rejoin    - Saving auto rejoin when kicked from channel: '
+                 BOT_RESPONSE('save auto_rejoin    - Saving auto rejoin when kicked from channel: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save auto_rejoin <yes/no>');
-                 NICK_MSG('save bot_owners     - Saving bot owners list in config: '
+                 BOT_RESPONSE('save bot_owners     - Saving bot owners list in config: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save bot_owners <nick!ident@host, ...>');
-                 NICK_MSG('save bot_response   - Saving where bot outputs messages: '
+                 BOT_RESPONSE('save bot_response   - Saving where bot outputs messages: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save bot_response <channel/notice/priv>');
-                 NICK_MSG('save channel        - Saving channel to config: '
+                 BOT_RESPONSE('save channel        - Saving channel to config: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save channel <#new_channel>');
-                 NICK_MSG('save command_prefix - Saving prefix commands: '
+                 BOT_RESPONSE('save command_prefix - Saving prefix commands: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save command_prefix <new_prefix>');
-                 NICK_MSG('save connect_delay  - Saving connect delay value to config: '
+                 BOT_RESPONSE('save connect_delay  - Saving connect delay value to config: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save connect_delay <value>');
-                 NICK_MSG('save ctcp_finger    - Saving ctcp finger in config: '
+                 BOT_RESPONSE('save ctcp_finger    - Saving ctcp finger in config: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save ctcp_finger <string>');
-                 NICK_MSG('save ctcp_response  - Saving ctcp response in config: '
+                 BOT_RESPONSE('save ctcp_response  - Saving ctcp response in config: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save ctcp_response <yes/no>');
-                 NICK_MSG('save ctcp_version   - Saving ctcp version in config: '
+                 BOT_RESPONSE('save ctcp_version   - Saving ctcp version in config: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save ctcp_version <string>');
-                 NICK_MSG('save fetch_server   - Saving fetch server to config: '
+                 BOT_RESPONSE('save fetch_server   - Saving fetch server to config: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save fetch_server <new_server>');
-                 NICK_MSG('save ident          - Saving ident to config: '
+                 BOT_RESPONSE('save ident          - Saving ident to config: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save ident <new_ident>');
-                 NICK_MSG('save logging        - Saving logging in config: '
+                 BOT_RESPONSE('save logging        - Saving logging in config: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save logging <yes/no>');
-                 NICK_MSG('save name           - Saving name to config: '
+                 BOT_RESPONSE('save name           - Saving name to config: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save name <new_name>');
-                 NICK_MSG('save nick           - Saving nickname to config: '
+                 BOT_RESPONSE('save nick           - Saving nickname to config: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save nick <new_nick>');
-                 NICK_MSG('save owner_password - Saving bot owner password in config: '
+                 BOT_RESPONSE('save owner_password - Saving bot owner password in config: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save owner_password <password>');
-                 NICK_MSG('save port           - Saving port to config: '
+                 BOT_RESPONSE('save port           - Saving port to config: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save port <new_port>');
-                 NICK_MSG('save show_raw       - Saving show raw in config: '
+                 BOT_RESPONSE('save show_raw       - Saving show raw in config: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save show_raw <yes/no>');
-                 NICK_MSG('save server         - Saving server to config: '
+                 BOT_RESPONSE('save server         - Saving server to config: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save server <new_server>');
-                 NICK_MSG('save time_zone      - Saving time zone in config: '
+                 BOT_RESPONSE('save time_zone      - Saving time zone in config: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save time_zone <eg. Europe/Warsaw>');
-                 NICK_MSG('save try_connect    - Saving how many times try connect to server: '
+                 BOT_RESPONSE('save try_connect    - Saving how many times try connect to server: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save try_connect <value>');
                 break;
         }
@@ -85,7 +85,7 @@ function plugin_save()
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_AUTO_JOIN'] = $cfg->get("CHANNEL", "auto_join");
  
-                 NICK_MSG('Auto_join Saved.');
+                 BOT_RESPONSE('Auto_join Saved.');
                  CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                  $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
@@ -97,7 +97,7 @@ function plugin_save()
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_AUTO_OP'] = $cfg->get("AUTOMATIC", "auto_op");
  
-                 NICK_MSG('Auto_op Saved.');
+                 BOT_RESPONSE('Auto_op Saved.');
                  CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                  $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
@@ -109,7 +109,7 @@ function plugin_save()
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_AUTO_OP_LIST'] = $cfg->get("OWNER", "auto_op_list");
  
-                 NICK_MSG('Auto_op_list Saved.');
+                 BOT_RESPONSE('Auto_op_list Saved.');
                  CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                  $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
@@ -121,7 +121,7 @@ function plugin_save()
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_AUTO_REJOIN'] = $cfg->get("AUTOMATIC", "auto_rejoin");
  
-                 NICK_MSG('Auto_rejoin Saved.');
+                 BOT_RESPONSE('Auto_rejoin Saved.');
                  CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                  $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
@@ -133,7 +133,7 @@ function plugin_save()
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_OWNERS'] = $cfg->get("OWNER", "bot_owners");
  
-                 NICK_MSG('Bot_owners Saved.');
+                 BOT_RESPONSE('Bot_owners Saved.');
                  CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                  $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
@@ -145,7 +145,7 @@ function plugin_save()
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_BOT_RESPONSE'] = $cfg->get("RESPONSE", "bot_response");
  
-                 NICK_MSG('bot_response Saved.');
+                 BOT_RESPONSE('bot_response Saved.');
                  CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                  $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
@@ -157,7 +157,7 @@ function plugin_save()
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_CNANNEL'] = $cfg->get("CHANNEL", "channel");
  
-                 NICK_MSG('Channel Saved.');
+                 BOT_RESPONSE('Channel Saved.');
                  CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                  $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
@@ -173,7 +173,7 @@ function plugin_save()
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_CMD_PREFIX'] = $cfg->get("COMMAND", "command_prefix");
 
-                 NICK_MSG('Command_prefix Saved.');
+                 BOT_RESPONSE('Command_prefix Saved.');
                  CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                  $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
@@ -185,7 +185,7 @@ function plugin_save()
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_CONNECT_DELAY'] = $cfg->get("SERVER", "connect_delay");
  
-                 NICK_MSG('Connect_delay Saved.');
+                 BOT_RESPONSE('Connect_delay Saved.');
                  CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                  $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
@@ -197,7 +197,7 @@ function plugin_save()
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_CTCP_FINGER'] = $cfg->get("CTCP", "ctcp_finger");
  
-                 NICK_MSG('Ctcp_finger Saved.');
+                 BOT_RESPONSE('Ctcp_finger Saved.');
                  CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                  $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
@@ -209,7 +209,7 @@ function plugin_save()
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_CTCP_RESPONSE'] = $cfg->get("CTCP", "ctcp_response");
  
-                 NICK_MSG('Ctcp_response Saved.');
+                 BOT_RESPONSE('Ctcp_response Saved.');
                  CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                  $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
@@ -221,7 +221,7 @@ function plugin_save()
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_CTCP_VERSION'] = $cfg->get("CTCP", "ctcp_version");
  
-                 NICK_MSG('Ctcp_version Saved.');
+                 BOT_RESPONSE('Ctcp_version Saved.');
                  CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                  $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
@@ -233,7 +233,7 @@ function plugin_save()
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_FETCH_SERVER'] = $cfg->get("FETCH", "fetch_server");
  
-                 NICK_MSG('Server Saved.');
+                 BOT_RESPONSE('Server Saved.');
                  CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                  $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
@@ -245,7 +245,7 @@ function plugin_save()
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_IDENT'] = $cfg->get("BOT", "ident");
  
-                 NICK_MSG('Ident Saved.');
+                 BOT_RESPONSE('Ident Saved.');
                  CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                  $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
@@ -257,7 +257,7 @@ function plugin_save()
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_LOGGING'] = $cfg->get("LOGS", "logging");
  
-                 NICK_MSG('Logging Saved.');
+                 BOT_RESPONSE('Logging Saved.');
                  CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                  $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
@@ -269,7 +269,7 @@ function plugin_save()
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_NAME'] = $cfg->get("BOT", "name");
  
-                 NICK_MSG('Name Saved.');
+                 BOT_RESPONSE('Name Saved.');
                  CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                  $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
@@ -281,7 +281,7 @@ function plugin_save()
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_NICKNAME'] = $cfg->get("BOT", "nickname");
  
-                 NICK_MSG('Nick Saved.');
+                 BOT_RESPONSE('Nick Saved.');
                  CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                  $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
@@ -293,7 +293,7 @@ function plugin_save()
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_OWNER_PASSWD'] = $cfg->get("OWNER", "owner_password");
  
-                 NICK_MSG('Owner_password Saved.');
+                 BOT_RESPONSE('Owner_password Saved.');
                  CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                  $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
@@ -305,7 +305,7 @@ function plugin_save()
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_PORT'] = $cfg->get("SERVER", "port");
  
-                 NICK_MSG('Port Saved.');
+                 BOT_RESPONSE('Port Saved.');
                  CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                  $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
@@ -317,7 +317,7 @@ function plugin_save()
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_SHOW_RAW'] = $cfg->get("DEBUG", "show_raw");
  
-                 NICK_MSG('Show_raw Saved.');
+                 BOT_RESPONSE('Show_raw Saved.');
                  CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                  $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
@@ -329,7 +329,7 @@ function plugin_save()
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_SERVER'] = $cfg->get("SERVER", "server");
  
-                 NICK_MSG('Server Saved.');
+                 BOT_RESPONSE('Server Saved.');
                  CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                  $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
@@ -341,7 +341,7 @@ function plugin_save()
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_TIMEZONE'] = $cfg->get("TIME", "time_zone");
  
-                 NICK_MSG('Time_zone Saved.');
+                 BOT_RESPONSE('Time_zone Saved.');
                  CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                  $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
@@ -353,7 +353,7 @@ function plugin_save()
                  $cfg = new IniParser($GLOBALS['config_file']);
                  $GLOBALS['CONFIG_TRY_CONNECT'] = $cfg->get("SERVER", "try_connect");
  
-                 NICK_MSG('Try_connect Saved.');
+                 BOT_RESPONSE('Try_connect Saved.');
                  CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                  $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;

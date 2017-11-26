@@ -101,6 +101,7 @@ You can change prefix in config file.
 |                  | Lists panel commands                     | !panel help                   |  CORE/OWNER  |  WIN      |
 |                  | Starts web panel at specified port       | !panel start <port>           |  CORE/OWNER  |  WIN      |
 |                  | Stops web panel                          | !panel stop                   |  CORE/OWNER  |  WIN      |
+|    pause         | Pause BOT activity (plugins use, etc)    | !pause                        |  CORE/OWNER  |  All      |
 |    plugin        | Plugins manipulation                     | !plugin                       |  OWNER       |  All      |
 |                  | Deletes plugin from directory            | !plugin delete <plugin>       |  OWNER       |  All      |
 |                  | Lists plugin commands                    | !plugin help                  |  OWNER       |  All      |
@@ -144,6 +145,7 @@ You can change prefix in config file.
 |    update        | Updates BOT if new version is available  | !update                       |  OWNER       |  All      |
 |    uptime        | Shows BOT uptime                         | !uptime                       |  USER        |  All      |
 |    unban         | Unban specified user/hostmask            | !unban <nick!ident@host>      |  OWNER/ADMIN |  All      |
+|    unpause       | Restore BOT from !pause mode             | !unpause                      |  CORE/OWNER  |  All      |
 |    voice         | BOT gives voice                          | !voice <nick>                 |  OWNER/ADMIN |  All      |
 |    weather       | Shows actual weather                     | !weather <city/place>         |  USER        |  All      |
 |    webstatus     | Shows http status info from given number | !webstatus <number>           |  USER        |  All      |

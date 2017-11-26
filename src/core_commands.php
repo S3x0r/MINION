@@ -14,16 +14,35 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 //---------------------------------------------------------------------------------------------------------
+function CoreCmd_Pause()
+{
+    BOT_RESPONSE('Pausing all activity');
+  
+    /* hah :) */
+    $GLOBALS['stop'] = '1';
+}
+//---------------------------------------------------------------------------------------------------------
+function CoreCmd_Unpause()
+{
+    if (isset($GLOBALS['stop'])) {
+        unset($GLOBALS['stop']);
+        BOT_RESPONSE('Back to life!');
+    } else {
+             BOT_RESPONSE('I need to be paused to be unpaused :)');
+             BOT_RESPONSE('Use !pause first');
+    }
+}
+//---------------------------------------------------------------------------------------------------------
 function CoreCmd_Panel()
 {
     if (OnEmptyArg('panel <help> to list commands')) {
     } else {
         switch ($GLOBALS['args']) {
             case 'help':
-                NICK_MSG('Panel commands:');
-                NICK_MSG('start <port> - Start panel with specified port: '
+                BOT_RESPONSE('Panel commands:');
+                BOT_RESPONSE('start <port> - Start panel with specified port: '
                 .$GLOBALS['CONFIG_CMD_PREFIX'].'panel start <eg. 3131>');
-                NICK_MSG('stop         - Stop panel: '.$GLOBALS['CONFIG_CMD_PREFIX'].'panel stop');
+                BOT_RESPONSE('stop         - Stop panel: '.$GLOBALS['CONFIG_CMD_PREFIX'].'panel stop');
                 break;
         }
         switch ($GLOBALS['piece1']) {
@@ -135,16 +154,24 @@ function CoreCmd_RegisterToBot()
                 $user_commands  = implode(' ', $GLOBALS['USER_PLUGINS']);
 
                 /* send information to user about commands */
-                NICK_MSG(TR_36);
-                NICK_MSG('Core Commands: '.$GLOBALS['CONFIG_CMD_PREFIX'].'load '.
-                    $GLOBALS['CONFIG_CMD_PREFIX'].'unload '.$GLOBALS['CONFIG_CMD_PREFIX'].'panel');
-                NICK_MSG(TR_59.' '.$owner_commands);
-                NICK_MSG('Admin Commands: '.$admin_commands);
-                NICK_MSG(TR_60.' '.$user_commands);
+                BOT_RESPONSE(TR_36);
+
+                BOT_RESPONSE('Core Commands: '.
+                    $GLOBALS['CONFIG_CMD_PREFIX'].'load '.
+                    $GLOBALS['CONFIG_CMD_PREFIX'].'panel '.
+                    $GLOBALS['CONFIG_CMD_PREFIX'].'pause '.
+                    $GLOBALS['CONFIG_CMD_PREFIX'].'unload '.
+                    $GLOBALS['CONFIG_CMD_PREFIX'].'unpause');
+
+                BOT_RESPONSE(TR_59.' '.$owner_commands);
+
+                BOT_RESPONSE('Admin Commands: '.$admin_commands);
+
+                BOT_RESPONSE(TR_60.' '.$user_commands);
 
                 /* send info who is bot admin */
                 if (!empty($GLOBALS['CONFIG_BOT_ADMIN'])) {
-                    NICK_MSG('Bot Admin: '.$GLOBALS['CONFIG_BOT_ADMIN']);
+                    BOT_RESPONSE('Bot Admin: '.$GLOBALS['CONFIG_BOT_ADMIN']);
                 }
 
                 /* cli msg */
@@ -164,7 +191,7 @@ function CoreCmd_RegisterToBot()
                   $hashed = hash('sha256', $GLOBALS['args']);
             /* if user is already an owner */
             if ($hashed == $GLOBALS['CONFIG_OWNER_PASSWD']) {
-                NICK_MSG('You are already my owner');
+                BOT_RESPONSE('You are already my owner');
             }
         }
     } catch (Exception $e) {

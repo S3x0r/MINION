@@ -241,13 +241,13 @@ function BOT_RESPONSE($msg)
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function NICK_MSG($msg)
+function USER_MSG($msg)
 {
     fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['USER']." :$msg\n");
     usleep($GLOBALS['CONFIG_PRIVATE_DELAY'] * 1000000);
 }
 //---------------------------------------------------------------------------------------------------------
-function JOIN_CHANNEL($channel)
+function JOIN_CHAN($channel)
 {
     fputs($GLOBALS['socket'], 'JOIN '.$channel."\n");
 }

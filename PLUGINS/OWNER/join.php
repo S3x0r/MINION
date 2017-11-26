@@ -27,7 +27,7 @@ function plugin_join()
     if (OnEmptyArg('join <#channel>')) {
     } else {
         if (!in_array($GLOBALS['args'], $GLOBALS['BOT_CHANNELS'])) {
-            JOIN_CHANNEL($GLOBALS['args']);
+            JOIN_CHAN($GLOBALS['args']);
             CLI_MSG('[PLUGIN: join] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                 $GLOBALS['channel'].' | joined: '.$GLOBALS['args'], '1');
         } else {
