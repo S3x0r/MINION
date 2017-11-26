@@ -18,6 +18,30 @@ if (PHP_SAPI !== 'cli') {
     die('<h2>This script can\'t be run from a web browser. Use CLI to run it -> php BOT.php</h2>');
 }
 //---------------------------------------------------------------------------------------------------------
+function CheckUpdateInfo()
+{
+    /* check if new version on server */
+    if ($GLOBALS['CONFIG_CHECK_UPDATE'] == 'yes' && !IsSilent()) {
+        if (extension_loaded('openssl')) {
+            $url = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
+            $CheckVersion = @file_get_contents($url);
+        
+            if ($CheckVersion !='') {
+                $version = explode("\n", $CheckVersion);
+                if ($version[0] > VER) {
+                    echo "             >>>> New version available! ($version[0]) <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
+                } else {
+                         echo "       >>>> No new update, you have the latest version <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
+                }
+            } else {
+                     echo "            >>>> Cannot connect to update server <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
+            }
+        } else {
+                 echo "   ! I cannot check update, i need: php_openssl extension to work !".PHP_EOL.PHP_EOL.PHP_EOL;
+        }
+    }
+}
+//---------------------------------------------------------------------------------------------------------
 /* update users (OWNER,USER) array */
 function UpdatePrefix($user, $new_prefix)
 {

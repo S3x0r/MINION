@@ -20,29 +20,35 @@ if (PHP_SAPI !== 'cli') {
 //---------------------------------------------------------------------------------------------------------
 function SetLanguage()
 {
-    /* is IS config file */
+/* TODO: More from this should be in StartupConfig() */
+
+    /* is config file? */
     if (is_file('../CONFIG.INI')) {
         $config_file = '../CONFIG.INI';
         $cfg = new IniParser($config_file);
         $GLOBALS['CONFIG_LANGUAGE'] = $cfg->get("LANG", "language");
 
+        /* if language is set in config */
         if (!empty($GLOBALS['CONFIG_LANGUAGE'])) {
+            /* if is language from config in lang dir */
             if (is_file('lang/'.$GLOBALS['CONFIG_LANGUAGE'].'.php')) {
                 require('lang/'.$GLOBALS['CONFIG_LANGUAGE'].'.php');
             } else {
+                /* if no language file from config in lang dir, change to default 'EN' if is present */
                 if (is_file('lang/EN.php')) {
                     CLI_MSG('ERROR: No such language: \''.$GLOBALS['CONFIG_LANGUAGE'].'\' in LANG dir', '0');
                     CLI_MSG('[BOT] Changing to default language: EN', '0');
                     require('lang/EN.php');
                 } else {
+                         /* if no language files */
                          no_lang_file();
                 }
-            }
+            } /* if not set language in config, set to default EN if is present */
         } elseif (empty($GLOBALS['CONFIG_LANGUAGE'])) {
                   $GLOBALS['CONFIG_LANGUAGE'] = 'EN';
             if (is_file('lang/EN.php')) {
                 require('lang/EN.php');
-            } else {
+            } else { /* else no language files is directory */
                      no_lang_file();
             }
         }    /* if NO config file */
@@ -58,7 +64,10 @@ function SetLanguage()
 //---------------------------------------------------------------------------------------------------------
 function no_lang_file()
 {
-    echo PHP_EOL.PHP_EOL.'ERROR: I need at least one translation in LANG directory to work! Exiting.'.PHP_EOL.PHP_EOL;
-    sleep(6);
+    echo PHP_EOL.PHP_EOL.'  ERROR: I need at least one translation in LANG directory to work! Exiting.'.PHP_EOL,
+         PHP_EOL.'  You can download missing files from:'.PHP_EOL,
+         '  https://github.com/S3x0r/MINION/releases'.PHP_EOL,
+         PHP_EOL.'  Terminating program after 10 seconds.'.PHP_EOL.PHP_EOL.'  ';
+    sleep(10);
     die();
 }

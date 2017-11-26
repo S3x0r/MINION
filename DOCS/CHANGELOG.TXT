@@ -1,3 +1,8 @@
+   
+   v0.8.6 changes (26.11.2017):
+   - default BOT response changed to notice
+   - more config file syntax checking
+   - some code reorganized/changed
 
    v0.8.5 changes (20.11.2017):
    - standarized cli msg after plugin usage:

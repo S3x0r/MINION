@@ -18,6 +18,33 @@ if (PHP_SAPI !== 'cli') {
     die('<h2>This script can\'t be run from a web browser. Use CLI to run it -> php BOT.php</h2>');
 }
 //---------------------------------------------------------------------------------------------------------
+function StartupConfig()
+{
+    /* load some startup needed variables */
+    if (is_file('../CONFIG.INI')) {
+        $config_file = '../CONFIG.INI';
+        $cfg = new IniParser($config_file);
+
+        $GLOBALS['CONFIG_SHOW_LOGO']    = $cfg->get('PROGRAM', 'show_logo');
+        $GLOBALS['silent_mode']         = $cfg->get('PROGRAM', 'silent_mode');
+        $GLOBALS['CONFIG_CHECK_UPDATE'] = $cfg->get('PROGRAM', 'check_update');
+
+        if ($GLOBALS['CONFIG_SHOW_LOGO'] != 'no' && $GLOBALS['CONFIG_SHOW_LOGO'] != 'yes') {
+            $GLOBALS['CONFIG_SHOW_LOGO'] = 'yes';
+        }
+        if ($GLOBALS['silent_mode'] != 'no' && $GLOBALS['silent_mode'] != 'yes') {
+            $GLOBALS['silent_mode'] = 'no';
+        }
+        if ($GLOBALS['CONFIG_CHECK_UPDATE'] != 'no' && $GLOBALS['CONFIG_CHECK_UPDATE'] != 'yes') {
+            $GLOBALS['CONFIG_CHECK_UPDATE'] = 'no';
+        }
+    } else {
+             $GLOBALS['CONFIG_SHOW_LOGO']    = 'yes';
+             $GLOBALS['silent_mode']         = 'no';
+             $GLOBALS['CONFIG_CHECK_UPDATE'] = 'no';
+    }
+}
+//---------------------------------------------------------------------------------------------------------
 function LoadConfig($filename)
 {
     global $cfg;
@@ -28,10 +55,12 @@ function LoadConfig($filename)
         if (isset($_SERVER['argv'][2]) && file_exists($_SERVER['argv'][2])) {
             $config_file = $_SERVER['argv'][2];
         } elseif (isset($_SERVER['argv'][2]) && !file_exists($_SERVER['argv'][2])) {
-                   echo ' [ERROR] Config file does not exist, wrong path?'.PHP_EOL;
+                   echo '  [ERROR] Config file does not exist, wrong path?'.PHP_EOL.PHP_EOL;
+                   sleep(6);
                    die();
         } elseif (isset($_SERVER['argv'][1]) && empty($_SERVER['argv'][2])) {
-                   echo ' [ERROR] You need to specify config file! I need some data :)'.PHP_EOL;
+                   echo '  [ERROR] You need to specify config file! I need some data :)'.PHP_EOL.PHP_EOL;
+                   sleep(6);
                    die();
         }
     } else {
@@ -109,7 +138,7 @@ function LoadConfig($filename)
             die();
         }
         if (empty($GLOBALS['CONFIG_SERVER'])) {
-            CLI_MSG('[ERROR] No server in config file! Exiting.', '0');
+            CLI_MSG('[ERROR] I dont know where to connect! No server in config file, Exiting.', '0');
             sleep(6);
             die();
         }
@@ -160,11 +189,13 @@ function LoadConfig($filename)
             /* load config again */
             LoadConfig($config_file);
         }
+
         /* from what file config loaded */
         if (!IsSilent()) {
             CLI_MSG(TR_17.' '.$config_file, '0');
             Line(COLOR);
         }
+     
         /* logging init */
         if ($GLOBALS['CONFIG_LOGGING'] == 'yes') {
             Logs();
@@ -172,6 +203,7 @@ function LoadConfig($filename)
         
         /* if all ok load plugins */
         LoadPlugins();
+
     } else {
              /* set default logging */
              $GLOBALS['CONFIG_LOGGING'] = 'yes';
@@ -239,7 +271,7 @@ admin_list       = \'\'
 [RESPONSE]
 
 ; where bot should response, you can choose from: channel, notice, priv
-bot_response     = \'channel\'
+bot_response     = \'notice\'
 
 [AUTOMATIC]
 
@@ -351,12 +383,12 @@ show_raw         = \'no\'';
     /* remove variable */
     unset($default_config);
 
-    if (file_exists($filename)) {
+    if (is_file($filename)) {
         /* Load config again */
         LoadConfig($filename);
-    } elseif (!file_exists($filename)) {
-              CLI_MSG('[ERROR]: '.TR_20, '0');
-              die();
+    } else { /* read only file system? */
+             CLI_MSG('[ERROR]: '.TR_20, '0');
+             die();
     }
 }
 //---------------------------------------------------------------------------------------------------------

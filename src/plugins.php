@@ -133,7 +133,7 @@ function UnloadPlugin($plugin)
             in_array($with_prefix, $GLOBALS['USER_PLUGINS'])) {
             if (($key = array_search($with_prefix, $GLOBALS['OWNER_PLUGINS'])) !== false) {
                 unset($GLOBALS['OWNER_PLUGINS'][$key]);
-                //todo rename function
+                //TODO: rename function
                 if (!in_array($with_prefix, $GLOBALS['OWNER_PLUGINS'])) {
                     CLI_MSG('[Plugin]: \''.$without_prefix.'\' '.TR_39, '1');
                     BOT_RESPONSE(TR_40.' \''.$without_prefix.'\' '.TR_39);
@@ -142,7 +142,7 @@ function UnloadPlugin($plugin)
 //---------------------------------------------------------------------------------------------------------
             if (($key = array_search($with_prefix, $GLOBALS['ADMIN_PLUGINS'])) !== false) {
                 unset($GLOBALS['ADMIN_PLUGINS'][$key]);
-                //todo rename function
+                //TODO: rename function
                 if (!in_array($with_prefix, $GLOBALS['ADMIN_PLUGINS'])) {
                     CLI_MSG('[Plugin]: \''.$without_prefix.'\' '.TR_39, '1');
                     BOT_RESPONSE(TR_40.' \''.$without_prefix.'\' '.TR_39);
@@ -151,7 +151,7 @@ function UnloadPlugin($plugin)
 //---------------------------------------------------------------------------------------------------------
             if (($key = array_search($with_prefix, $GLOBALS['USER_PLUGINS'])) !== false) {
                 unset($GLOBALS['USER_PLUGINS'][$key]);
-                //todo rename function
+                //TODO: rename function
                 if (!in_array($with_prefix, $GLOBALS['USER_PLUGINS'])) {
                     CLI_MSG('[Plugin]: \''.$without_prefix.'\' '.TR_39, '1');
                     BOT_RESPONSE(TR_40.' \''.$without_prefix.'\' '.TR_39);

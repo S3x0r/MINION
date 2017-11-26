@@ -18,7 +18,7 @@ if (PHP_SAPI !== 'cli') {
     die('<h2>This script can\'t be run from a web browser. Use CLI to run it -> php BOT.php</h2>');
 }
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '0.8.5');
+    define('VER', '0.8.6');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());
@@ -31,20 +31,20 @@ if (PHP_SAPI !== 'cli') {
 function SetDefaultData()
 {
     /* if variable empty in config load default one */
-    if (empty($GLOBALS['CONFIG_PORT'])) {
+    if (empty($GLOBALS['CONFIG_PORT']) or !is_numeric($GLOBALS['CONFIG_PORT'])) {
         $GLOBALS['CONFIG_PORT'] = '6667';
     }
-    if (empty($GLOBALS['CONFIG_TRY_CONNECT'])) {
+    if (empty($GLOBALS['CONFIG_TRY_CONNECT']) or !is_numeric($GLOBALS['CONFIG_TRY_CONNECT'])) {
         $GLOBALS['CONFIG_TRY_CONNECT'] = '99';
     }
-    if (empty($GLOBALS['CONFIG_CONNECT_DELAY'])) {
+    if (empty($GLOBALS['CONFIG_CONNECT_DELAY']) or !is_numeric($GLOBALS['CONFIG_CONNECT_DELAY'])) {
         $GLOBALS['CONFIG_CONNECT_DELAY'] = '6';
     }
     if (empty($GLOBALS['CONFIG_OWNERS_PASSWD'])) {
         $GLOBALS['CONFIG_OWNERS_PASSWD'] = '47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed';
     }
     if (empty($GLOBALS['CONFIG_BOT_RESPONSE'])) {
-        $GLOBALS['CONFIG_BOT_RESPONSE'] = 'channel';
+        $GLOBALS['CONFIG_BOT_RESPONSE'] = 'notice';
     }
     if ($GLOBALS['CONFIG_AUTO_OP'] != 'no' && $GLOBALS['CONFIG_AUTO_OP'] != 'yes') {
         $GLOBALS['CONFIG_AUTO_OP'] = 'yes';
@@ -64,13 +64,13 @@ function SetDefaultData()
     if ($GLOBALS['CONFIG_CTCP_RESPONSE'] != 'no' && $GLOBALS['CONFIG_CTCP_RESPONSE'] != 'yes') {
         $GLOBALS['CONFIG_CTCP_RESPONSE'] = 'yes';
     }
-    if (empty($GLOBALS['CONFIG_CHANNEL_DELAY'])) {
+    if (empty($GLOBALS['CONFIG_CHANNEL_DELAY']) or !is_numeric($GLOBALS['CONFIG_CHANNEL_DELAY'])) {
         $GLOBALS['CONFIG_CHANNEL_DELAY'] = '1.5';
     }
-    if (empty($GLOBALS['CONFIG_PRIVATE_DELAY'])) {
+    if (empty($GLOBALS['CONFIG_PRIVATE_DELAY']) or !is_numeric($GLOBALS['CONFIG_PRIVATE_DELAY'])) {
         $GLOBALS['CONFIG_PRIVATE_DELAY'] = '1';
     }
-    if (empty($GLOBALS['CONFIG_NOTICE_DELAY'])) {
+    if (empty($GLOBALS['CONFIG_NOTICE_DELAY']) or !is_numeric($GLOBALS['CONFIG_NOTICE_DELAY'])) {
         $GLOBALS['CONFIG_NOTICE_DELAY'] = '1';
     }
     if ($GLOBALS['CONFIG_LOGGING'] != 'no' && $GLOBALS['CONFIG_LOGGING'] != 'yes') {

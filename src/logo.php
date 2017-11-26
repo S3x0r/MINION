@@ -18,9 +18,9 @@ if (PHP_SAPI !== 'cli') {
     die('<h2>This script can\'t be run from a web browser. Use CLI to run it -> php BOT.php</h2>');
 }
 //---------------------------------------------------------------------------------------------------------
-function logo()
+function Logo()
 {
-    if ($GLOBALS['CONFIG_SHOW_LOGO'] == 'yes' or empty($GLOBALS['CONFIG_SHOW_LOGO'])) {
+    if ($GLOBALS['CONFIG_SHOW_LOGO'] == 'yes') {
         if (!IsSilent()) {
             echo "
     B@B@B@B@@@B@B@B@B@B@B@B@@@B@B@B@B@B@@@@@@@B@B@B@B@B@@@B@B

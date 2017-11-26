@@ -47,37 +47,20 @@ foreach ($files as $file) {
     if (is_file($file)) {
         require_once($file);
     } else {
-             echo PHP_EOL.'  ERROR: I need \''.$file.'\' file to run!',
-             ' Terminating program after 5 seconds.'.PHP_EOL;
-             sleep(5);
+             echo PHP_EOL.'  ERROR: I need \''.$file.'\' file to run!'.PHP_EOL,
+                  PHP_EOL.'  You can download missing files from:'.PHP_EOL,
+                  '  https://github.com/S3x0r/MINION/releases'.PHP_EOL,
+                  PHP_EOL.'  Terminating program after 10 seconds.'.PHP_EOL.PHP_EOL.'  ';
+             sleep(10);
              die();
     }
 }
 //---------------------------------------------------------------------------------------------------------
 
-/* let's go! */
+    /* let's go! */
 
-/* load some needed variables */
-if (is_file('../CONFIG.INI')) {
-    $config_file = '../CONFIG.INI';
-    $cfg = new IniParser($config_file);
-    $GLOBALS['CONFIG_SHOW_LOGO'] = $cfg->get('PROGRAM', 'show_logo');
-    $GLOBALS['silent_mode'] = $cfg->get('PROGRAM', 'silent_mode');
-    $GLOBALS['CONFIG_CHECK_UPDATE'] = $cfg->get('PROGRAM', 'check_update');
-    if ($GLOBALS['CONFIG_SHOW_LOGO'] != 'no' && $GLOBALS['CONFIG_SHOW_LOGO'] != 'yes') {
-        $GLOBALS['CONFIG_SHOW_LOGO'] = 'yes';
-    }
-    if ($GLOBALS['silent_mode'] != 'no' && $GLOBALS['silent_mode'] != 'yes') {
-        $GLOBALS['silent_mode'] = 'no';
-    }
-    if ($GLOBALS['CONFIG_CHECK_UPDATE'] != 'no' && $GLOBALS['CONFIG_CHECK_UPDATE'] != 'yes') {
-        $GLOBALS['CONFIG_CHECK_UPDATE'] = 'no';
-    }
-} else {
-         $GLOBALS['CONFIG_SHOW_LOGO'] = 'yes';
-         $GLOBALS['silent_mode'] = 'no';
-         $GLOBALS['CONFIG_CHECK_UPDATE'] = 'no';
-}
+    /* Load startup needed variables */
+    StartupConfig();
 
     /* Load translation file */
     SetLanguage();
@@ -89,28 +72,10 @@ if (is_file('../CONFIG.INI')) {
     wcliStart();
 
     /* Logo & info :) */
-    logo();
+    Logo();
  
-/* check if new version on server */
-if ($GLOBALS['CONFIG_CHECK_UPDATE'] == 'yes' && !IsSilent()) {
-    if (extension_loaded('openssl')) {
-        $url = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
-        $CheckVersion = @file_get_contents($url);
-        
-        if ($CheckVersion !='') {
-            $version = explode("\n", $CheckVersion);
-            if ($version[0] > VER) {
-                echo "             >>>> New version available! ($version[0]) <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
-            } else {
-                     echo "       >>>> No new update, you have the latest version <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
-            }
-        } else {
-                 echo "            >>>> Cannot connect to update server <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
-        }
-    } else {
-             echo "   ! I cannot check update, i need: php_openssl extension to work !".PHP_EOL.PHP_EOL.PHP_EOL;
-    }
-}
+    /* Check if there is new version on server */
+    CheckUpdateInfo();
+   
     /* Load config */
     LoadConfig('../CONFIG.INI');
-    /*  ^__^____-- */

@@ -22,7 +22,7 @@ function CheckCLIArgs()
 {
     if (isset($_SERVER['argv'][1])) {
         switch ($_SERVER['argv'][1]) {
-            case '-h':
+            case '-h': /* show help */
                 echo PHP_EOL.'  '.TR_62.PHP_EOL.PHP_EOL,
                      '  -c '.TR_63.PHP_EOL,
                      '  -p '.TR_64.PHP_EOL,
@@ -32,7 +32,7 @@ function CheckCLIArgs()
                 die();
                 break;
 
-            case '-p':
+            case '-p': /* generate hash */
                 echo PHP_EOL.' '.TR_68.PHP_EOL;
                 echo PHP_EOL.' '.TR_69.' ';
                 $STDIN = fopen('php://stdin', 'r');
@@ -47,15 +47,21 @@ function CheckCLIArgs()
                 echo PHP_EOL.' '.TR_70." $hash".PHP_EOL.PHP_EOL;
                 die();
 
-            case '-s':
+            case '-s': /* silent mode */
                 $GLOBALS['silent_cli'] = 'yes';
                 $GLOBALS['silent_mode'] = 'yes';
                 if (extension_loaded('wcli')) {
                     wcli_minimize();
+                } else {
+                         echo PHP_EOL.PHP_EOL.'  I cannot start in silent mode, no \'wcli\' extension loaded.'.PHP_EOL,
+                              '  You can anyway use normal mode'.PHP_EOL,
+                              '  I will terminate program after 10 seconds'.PHP_EOL.PHP_EOL.'  ';
+                         sleep(10);
+                         die();
                 }
                 break;
 
-            case '-v':
+            case '-v': /* show version */
                 echo PHP_EOL.' '.TR_71.' '.VER.PHP_EOL;
                 die();
                 break;
