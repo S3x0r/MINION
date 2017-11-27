@@ -18,7 +18,7 @@ if (PHP_SAPI !== 'cli') {
     die('<h2>This script can\'t be run from a web browser. Use CLI to run it -> php BOT.php</h2>');
 }
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '0.8.8');
+    define('VER', '0.8.9');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());
@@ -63,6 +63,9 @@ function SetDefaultData()
     }
     if ($GLOBALS['CONFIG_CTCP_RESPONSE'] != 'no' && $GLOBALS['CONFIG_CTCP_RESPONSE'] != 'yes') {
         $GLOBALS['CONFIG_CTCP_RESPONSE'] = 'yes';
+    }
+    if ($GLOBALS['CONFIG_KEEPCHAN_MODES'] != 'no' && $GLOBALS['CONFIG_KEEPCHAN_MODES'] != 'yes') {
+        $GLOBALS['CONFIG_KEEPCHAN_MODES'] = 'yes';
     }
     if (empty($GLOBALS['CONFIG_CHANNEL_DELAY']) or !is_numeric($GLOBALS['CONFIG_CHANNEL_DELAY'])) {
         $GLOBALS['CONFIG_CHANNEL_DELAY'] = '1.5';

@@ -21,10 +21,10 @@ server           = 'minionki.com.pl'
 port             = '6667'
 
 ; try connect 'n' (in seconds) times to server, if cannot then quit
-try_connect      = '10'
+try_connect      = '99'
 
 ; delay (in seconds) after new connection to server
-connect_delay    = '3'
+connect_delay    = '10'
 
 [OWNER]
 
@@ -47,8 +47,8 @@ admin_list       = 'nick!ident@hostname, other, ...'
 
 [RESPONSE]
 
-; where bot should response, you can choose from: channel, notice, priv
-bot_response     = 'channel'
+; where bot should response, you can choose from: 'channel', 'notice', 'priv'
+bot_response     = 'notice'
 
 [AUTOMATIC]
 
@@ -57,6 +57,9 @@ auto_op          = 'yes'
 
 ; bot will auto rejoin channel when kicked: 'yes', 'no'
 auto_rejoin      = 'yes'
+
+; do we want to keep channel modes from channel_modes option?: 'yes', 'no'
+keep_chan_modes  = 'yes'
 
 ; this setting makes the bot try to get his original nickname back if its primary nickname is already in use
 keep_nick        = 'yes'
@@ -74,6 +77,11 @@ channel_modes    = 'nt'
 
 ; channel key if exists
 channel_key      = ''
+
+[BANS]
+
+; ban users from this list
+ban_list         = 'nick!ident@hostname, *!ident@hostname, *!*@onlyhost'
 
 [COMMAND]
 
@@ -107,6 +115,14 @@ notice_delay    = '1'
 ; log CLI messages to LOGS folder? 'yes', 'no'
 logging          = 'yes'
 
+[PANEL]
+
+; web panel login (for panel plugin)
+web_login        = 'changeme'
+
+; web panel password (for panel plugin)
+web_password     = 'changeme'
+
 [LANG]
 
 ; set BOT language: 'EN', 'PL'
@@ -125,13 +141,16 @@ fetch_server     = 'https://raw.githubusercontent.com/S3x0r/minion_repository_pl
 [PROGRAM]
 
 ; show BOT startup logo? 'yes', 'no'
-show_logo        = \'yes\'
+show_logo        = 'yes'
 
 ; silent mode - no output to CLI window 'yes', 'no'
-silent_mode      = \'no\'
+silent_mode      = 'no'
 
 ; check on program startup if new version is on server 'yes', 'no'
-check_update     = \'no\'
+check_update     = 'no'
+
+; if we want to play sounds?: 'yes', 'no'
+play_sounds      = 'yes'
 
 [DEBUG]
 

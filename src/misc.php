@@ -109,38 +109,6 @@ function random_str($length)
     return $str;
 }
 //---------------------------------------------------------------------------------------------------------
-function set_channel_modes()
-{
-    $sleep = '2';
-    
-    fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel']."\n");
-    
-    if (BotOpped() == true) {
-        if (isset($GLOBALS['CHANNEL_MODES']) && $GLOBALS['CHANNEL_MODES'] != $GLOBALS['CONFIG_CHANNEL_MODES']) {
-            sleep(1);
-            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' -'.$GLOBALS['CHANNEL_MODES']."\n");
-            sleep(1);
-            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +'.$GLOBALS['CONFIG_CHANNEL_MODES']."\n");
-        }
-        if (empty($GLOBALS['CHANNEL_MODES'])) {
-            if (!empty($GLOBALS['CONFIG_CHANNEL_MODES'])) {
-                sleep(1);
-                fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +'.$GLOBALS['CONFIG_CHANNEL_MODES']."\n");
-            }
-        }
-    }
-}
-//---------------------------------------------------------------------------------------------------------
-function set_bans() /* set ban from config list */
-{
-    if (!empty($GLOBALS['CONFIG_BAN_LIST'])) {
-        $ban_list = explode(', ', $GLOBALS['CONFIG_BAN_LIST']);
-        foreach ($ban_list as $s) {
-            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +b '.$s."\n");
-        }
-    }
-}
-//---------------------------------------------------------------------------------------------------------
 function parse_ex3($position)
 {
     $a = $GLOBALS['ex'];
@@ -219,37 +187,6 @@ function SaveToFile($f1, $f2, $f3)
     fwrite($f, $data);
     flock($f, 3);
     fclose($f);
-}
-//---------------------------------------------------------------------------------------------------------
-function BOT_RESPONSE($msg)
-{
-    switch ($GLOBALS['CONFIG_BOT_RESPONSE']) {
-        case 'channel':
-            fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :$msg\n");
-            usleep($GLOBALS['CONFIG_CHANNEL_DELAY'] * 1000000);
-            break;
-
-        case 'notice':
-            fputs($GLOBALS['socket'], 'NOTICE '.$GLOBALS['USER']." :$msg\n");
-            usleep($GLOBALS['CONFIG_NOTICE_DELAY'] * 1000000);
-            break;
-
-        case 'priv':
-            fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['USER']." :$msg\n");
-            usleep($GLOBALS['CONFIG_PRIVATE_DELAY'] * 1000000);
-            break;
-    }
-}
-//---------------------------------------------------------------------------------------------------------
-function USER_MSG($msg)
-{
-    fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['USER']." :$msg\n");
-    usleep($GLOBALS['CONFIG_PRIVATE_DELAY'] * 1000000);
-}
-//---------------------------------------------------------------------------------------------------------
-function JOIN_CHAN($channel)
-{
-    fputs($GLOBALS['socket'], 'JOIN '.$channel."\n");
 }
 //---------------------------------------------------------------------------------------------------------
 function IsSilent()

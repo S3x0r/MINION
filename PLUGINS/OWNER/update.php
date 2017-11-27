@@ -162,6 +162,7 @@ function v_extract()
         $GLOBALS['CONFIG_BOT_RESPONSE']   = $cfg->get("RESPONSE", "bot_response");
         $GLOBALS['CONFIG_AUTO_OP']        = $cfg->get("AUTOMATIC", "auto_op");
         $GLOBALS['CONFIG_AUTO_REJOIN']    = $cfg->get("AUTOMATIC", "auto_rejoin");
+        $GLOBALS['CONFIG_KEEPCHAN_MODES'] = $cfg->get("AUTOMATIC", "keep_chan_modes"); 
         $GLOBALS['CONFIG_KEEP_NICK']      = $cfg->get("AUTOMATIC", "keep_nick");
         $GLOBALS['CONFIG_CNANNEL']        = $cfg->get("CHANNEL", "channel");
         $GLOBALS['CONFIG_AUTO_JOIN']      = $cfg->get("CHANNEL", "auto_join");
@@ -205,6 +206,7 @@ function v_extract()
         SaveData($new_cf, 'RESPONSE', 'bot_response', $GLOBALS['CONFIG_BOT_RESPONSE']);
         SaveData($new_cf, 'AUTOMATIC', 'auto_op', $GLOBALS['CONFIG_AUTO_OP']);
         SaveData($new_cf, 'AUTOMATIC', 'auto_rejoin', $GLOBALS['CONFIG_AUTO_REJOIN']);
+        SaveData($new_cf, 'AUTOMATIC', 'keep_chan_modes', $GLOBALS['CONFIG_KEEPCHAN_MODES']);
         SaveData($new_cf, 'AUTOMATIC', 'keep_nick', $GLOBALS['CONFIG_KEEP_NICK']);
         SaveData($new_cf, 'CHANNEL', 'channel', $GLOBALS['CONFIG_CNANNEL']);
         SaveData($new_cf, 'CHANNEL', 'auto_join', $GLOBALS['CONFIG_AUTO_JOIN']);

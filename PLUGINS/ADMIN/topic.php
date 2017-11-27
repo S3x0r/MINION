@@ -26,11 +26,9 @@ function plugin_topic()
 
     if (OnEmptyArg('topic <new_topic>')) {
     } else {
-        if (BotOpped() == true) {
-            CLI_MSG('[PLUGIN: topic] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'].
-                ' | new topic: \''.msg_without_command().'\'', '1');
+            CLI_MSG('[PLUGIN: topic] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                    $GLOBALS['channel'], '1');
 
             fputs($GLOBALS['socket'], 'TOPIC '.$GLOBALS['channel'].' '.msg_without_command()."\n");
-        }
     }
 }

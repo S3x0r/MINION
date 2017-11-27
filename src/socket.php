@@ -294,9 +294,9 @@ function SocketLoop()
 
                 /* Core command: "register 'password'" */
                 if (isset($rawcmd[1]) && $rawcmd[1] == 'register') {
-			                	if ($GLOBALS['ex'][2] == $GLOBALS['BOT_NICKNAME']) {
+                    if ($GLOBALS['ex'][2] == $GLOBALS['BOT_NICKNAME']) {
                         CoreCmd_RegisterToBot();
-				                }
+                    }
                 }
 //---------------------------------------------------------------------------------------------------------
                 /* plugins */
@@ -363,4 +363,67 @@ function SocketLoop()
         CLI_MSG('[BOT] Disconected from server, I will try to connect again...', '1');
         Connect();
     }
+}
+//---------------------------------------------------------------------------------------------------------
+function set_channel_modes()
+{
+    if ($GLOBALS['CONFIG_KEEPCHAN_MODES'] == 'yes') {
+        fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel']."\n");
+    
+        if (BotOpped() == true) {
+            if (isset($GLOBALS['CHANNEL_MODES']) && $GLOBALS['CHANNEL_MODES'] != $GLOBALS['CONFIG_CHANNEL_MODES']) {
+                sleep(1);
+                fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' -'.$GLOBALS['CHANNEL_MODES']."\n");
+                sleep(1);
+                fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +'.$GLOBALS['CONFIG_CHANNEL_MODES']."\n");
+            }
+            if (empty($GLOBALS['CHANNEL_MODES'])) {
+                if (!empty($GLOBALS['CONFIG_CHANNEL_MODES'])) {
+                    sleep(1);
+                    fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +'.$GLOBALS['CONFIG_CHANNEL_MODES']."\n");
+                }
+            }
+        }
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function set_bans() /* set ban from config list */
+{
+    if (!empty($GLOBALS['CONFIG_BAN_LIST'])) {
+        $ban_list = explode(', ', $GLOBALS['CONFIG_BAN_LIST']);
+        foreach ($ban_list as $s) {
+            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +b '.$s."\n");
+        }
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function BOT_RESPONSE($msg)
+{
+    switch ($GLOBALS['CONFIG_BOT_RESPONSE']) {
+        case 'channel':
+            fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :$msg\n");
+            usleep($GLOBALS['CONFIG_CHANNEL_DELAY'] * 1000000);
+            break;
+
+        case 'notice':
+            fputs($GLOBALS['socket'], 'NOTICE '.$GLOBALS['USER']." :$msg\n");
+            usleep($GLOBALS['CONFIG_NOTICE_DELAY'] * 1000000);
+            break;
+
+        case 'priv':
+            fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['USER']." :$msg\n");
+            usleep($GLOBALS['CONFIG_PRIVATE_DELAY'] * 1000000);
+            break;
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function USER_MSG($msg)
+{
+    fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['USER']." :$msg\n");
+    usleep($GLOBALS['CONFIG_PRIVATE_DELAY'] * 1000000);
+}
+//---------------------------------------------------------------------------------------------------------
+function JOIN_CHAN($channel)
+{
+    fputs($GLOBALS['socket'], 'JOIN '.$channel."\n");
 }

@@ -20,6 +20,9 @@ function CoreCmd_Pause()
   
     /* hah :) */
     $GLOBALS['stop'] = '1';
+
+    CLI_MSG('[PLUGIN: pause] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'], '1');
+    CLI_MSG('[BOT] Im in Pause mode');
 }
 //---------------------------------------------------------------------------------------------------------
 function CoreCmd_Unpause()
@@ -27,8 +30,11 @@ function CoreCmd_Unpause()
     if (isset($GLOBALS['stop'])) {
         unset($GLOBALS['stop']);
         BOT_RESPONSE('Back to life!');
+        CLI_MSG('[PLUGIN: unpause] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                $GLOBALS['channel'], '1');
+        CLI_MSG('[BOT] Unpaused');
     } else {
-             BOT_RESPONSE('I need to be paused to be unpaused :)');
+             BOT_RESPONSE('First i need to be paused, then i can unpause myself :p');
              BOT_RESPONSE('Use !pause first');
     }
 }
@@ -57,6 +63,8 @@ function CoreCmd_Panel()
                                 $port.' --no-https --hide-window';
                                 popen($command, 'r');
                                 BOT_RESPONSE('Runned.');
+                                CLI_MSG('[PLUGIN: panel] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                                        $GLOBALS['channel'].' | port: '.$port, '1');
                                 CLI_MSG('[PANEL] Panel Runned at port: '.$port, '1');
                             } else {
                                      BOT_RESPONSE('Cannot find web server, missing?');
@@ -75,6 +83,8 @@ function CoreCmd_Panel()
                 if (!isset($GLOBALS['OS_TYPE'])) {
                     if (kill('serv')) {
                         BOT_RESPONSE('Panel Closed');
+                        CLI_MSG('[PLUGIN: panel] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                                $GLOBALS['channel'].' | STOP ', '1');
                         CLI_MSG('[PANEL] Panel Closed', '1');
                     } else {
                          BOT_RESPONSE('Panel Not runned stupid!');
@@ -110,88 +120,91 @@ function CoreCmd_Unload()
 function CoreCmd_RegisterToBot()
 {
     try {
-        /* check if user is not already owner */
-        if (!HasOwner($GLOBALS['mask'])) {
-            /* hash message from user to use for comparsion */
-            $hashed = hash('sha256', $GLOBALS['args']);
+        if (empty($GLOBALS['CONFIG_OWNERS'])) {
+            /* check if user is not already owner */
+            if (!HasOwner($GLOBALS['mask'])) {
+                /* hash message from user to use for comparsion */
+                $hashed = hash('sha256', $GLOBALS['args']);
         
-            /* if user password match password in config do the rest */
-            if ($hashed == $GLOBALS['CONFIG_OWNER_PASSWD']) {
-                LoadData($GLOBALS['config_file'], 'OWNER', 'bot_owners');
+                /* if user password match password in config do the rest */
+                if ($hashed == $GLOBALS['CONFIG_OWNER_PASSWD']) {
+                    LoadData($GLOBALS['config_file'], 'OWNER', 'bot_owners');
             
-                /* load owner list from config */
-                $owners_list = $GLOBALS['LOADED'];
-                $new         = trim($GLOBALS['mask']);
+                    CLI_MSG('[BOT] Successful registration as owner from: '.$GLOBALS['USER'].' ('.
+                            $GLOBALS['mask'].')', '1');
 
-                if (empty($owners_list)) {
-                    $new_list = $new.'';
+                    /* load owner list from config */
+                    $owners_list = $GLOBALS['LOADED'];
+                    $new         = trim($GLOBALS['mask']);
+
+                    if (empty($owners_list)) {
+                        $new_list = $new.'';
+                    }
+
+                    if (!empty($owners_list)) {
+                        $new_list = $owners_list.', '.$new;
+                    }
+
+                    SaveData($GLOBALS['config_file'], 'OWNER', 'bot_owners', $new_list);
+
+                    /* Add host to auto op list */
+                    LoadData($GLOBALS['config_file'], 'OWNER', 'auto_op_list');
+
+                    $auto_list   = $GLOBALS['LOADED'];
+                    $new         = trim($GLOBALS['mask']);
+
+                    if (empty($auto_list)) {
+                        $new_list = $new.'';
+                    }
+
+                    if (!empty($auto_list)) {
+                        $new_list = $auto_list.', '.$new;
+                    }
+
+                    SaveData($GLOBALS['config_file'], 'OWNER', 'auto_op_list', $new_list);
+
+                    $owner_commands = implode(' ', $GLOBALS['OWNER_PLUGINS']);
+                    $admin_commands = implode(' ', $GLOBALS['ADMIN_PLUGINS']);
+                    $user_commands  = implode(' ', $GLOBALS['USER_PLUGINS']);
+          
+                    /* cli msg */
+                    CLI_MSG('[BOT] New owner added: '.$GLOBALS['USER'].' ('.$GLOBALS['mask'].')', '1');
+                    CLI_MSG('[BOT] New auto op added: '.$GLOBALS['USER'].' ('.$GLOBALS['mask'].')', '1');
+
+                    /* send information to user about commands */
+                    BOT_RESPONSE(TR_36);
+
+                    BOT_RESPONSE('Core Commands: '.
+                        $GLOBALS['CONFIG_CMD_PREFIX'].'load '.
+                        $GLOBALS['CONFIG_CMD_PREFIX'].'panel '.
+                        $GLOBALS['CONFIG_CMD_PREFIX'].'pause '.
+                        $GLOBALS['CONFIG_CMD_PREFIX'].'unload '.
+                        $GLOBALS['CONFIG_CMD_PREFIX'].'unpause');
+
+                    BOT_RESPONSE(TR_59.' '.$owner_commands);
+                    BOT_RESPONSE('Admin Commands: '.$admin_commands);
+                    BOT_RESPONSE(TR_60.' '.$user_commands);
+
+                    /* send info who is bot admin */
+                    if (!empty($GLOBALS['CONFIG_BOT_ADMIN'])) {
+                        BOT_RESPONSE('Bot Admin: '.$GLOBALS['CONFIG_BOT_ADMIN']);
+                    }
+
+                    /* give op */
+                    if (BotOpped() == true) {
+                        fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['USER']."\n");
+                    }
+
+                    /* update variable with new owners */
+                    $cfg = new IniParser($GLOBALS['config_file']);
+                    $GLOBALS['CONFIG_OWNERS'] = $cfg->get("OWNER", "bot_owners");
                 }
-
-                if (!empty($owners_list)) {
-                    $new_list = $owners_list.', '.$new;
+            } else {
+                     $hashed = hash('sha256', $GLOBALS['args']);
+                /* if user is already an owner */
+                if ($hashed == $GLOBALS['CONFIG_OWNER_PASSWD']) {
+                    BOT_RESPONSE('You are already my owner');
                 }
-
-                SaveData($GLOBALS['config_file'], 'OWNER', 'bot_owners', $new_list);
-
-                /* Add host to auto op list */
-                LoadData($GLOBALS['config_file'], 'OWNER', 'auto_op_list');
-
-                $auto_list   = $GLOBALS['LOADED'];
-                $new         = trim($GLOBALS['mask']);
-
-                if (empty($auto_list)) {
-                    $new_list = $new.'';
-                }
-
-                if (!empty($auto_list)) {
-                    $new_list = $auto_list.', '.$new;
-                }
-
-                SaveData($GLOBALS['config_file'], 'OWNER', 'auto_op_list', $new_list);
-
-                $owner_commands = implode(' ', $GLOBALS['OWNER_PLUGINS']);
-                $admin_commands = implode(' ', $GLOBALS['ADMIN_PLUGINS']);
-                $user_commands  = implode(' ', $GLOBALS['USER_PLUGINS']);
-
-                /* send information to user about commands */
-                BOT_RESPONSE(TR_36);
-
-                BOT_RESPONSE('Core Commands: '.
-                    $GLOBALS['CONFIG_CMD_PREFIX'].'load '.
-                    $GLOBALS['CONFIG_CMD_PREFIX'].'panel '.
-                    $GLOBALS['CONFIG_CMD_PREFIX'].'pause '.
-                    $GLOBALS['CONFIG_CMD_PREFIX'].'unload '.
-                    $GLOBALS['CONFIG_CMD_PREFIX'].'unpause');
-
-                BOT_RESPONSE(TR_59.' '.$owner_commands);
-
-                BOT_RESPONSE('Admin Commands: '.$admin_commands);
-
-                BOT_RESPONSE(TR_60.' '.$user_commands);
-
-                /* send info who is bot admin */
-                if (!empty($GLOBALS['CONFIG_BOT_ADMIN'])) {
-                    BOT_RESPONSE('Bot Admin: '.$GLOBALS['CONFIG_BOT_ADMIN']);
-                }
-
-                /* cli msg */
-                CLI_MSG(TR_43.', '.$GLOBALS['channel'].', '.TR_47.' '.$GLOBALS['mask'], '1');
-                CLI_MSG(TR_44.', '.$GLOBALS['channel'].', '.TR_47.' '.$GLOBALS['mask'], '1');
-
-                /* give op */
-                if (BotOpped() == true) {
-                    fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['USER']."\n");
-                }
-
-                /* update variable with new owners */
-                $cfg = new IniParser($GLOBALS['config_file']);
-                $GLOBALS['CONFIG_OWNERS'] = $cfg->get("OWNER", "bot_owners");
-            }
-        } else {
-                  $hashed = hash('sha256', $GLOBALS['args']);
-            /* if user is already an owner */
-            if ($hashed == $GLOBALS['CONFIG_OWNER_PASSWD']) {
-                BOT_RESPONSE('You are already my owner');
             }
         }
     } catch (Exception $e) {

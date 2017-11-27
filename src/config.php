@@ -94,6 +94,7 @@ function LoadConfig($filename)
         /* AUTOMATIC */
         $GLOBALS['CONFIG_AUTO_OP']        = $cfg->get("AUTOMATIC", "auto_op");
         $GLOBALS['CONFIG_AUTO_REJOIN']    = $cfg->get("AUTOMATIC", "auto_rejoin");
+        $GLOBALS['CONFIG_KEEPCHAN_MODES'] = $cfg->get("AUTOMATIC", "keep_chan_modes");
         $GLOBALS['CONFIG_KEEP_NICK']      = $cfg->get("AUTOMATIC", "keep_nick");
         /* CHANNEL */
         $GLOBALS['CONFIG_CNANNEL']        = $cfg->get("CHANNEL", "channel");
@@ -203,7 +204,6 @@ function LoadConfig($filename)
         
         /* if all ok load plugins */
         LoadPlugins();
-
     } else {
              /* set default logging */
              $GLOBALS['CONFIG_LOGGING'] = 'yes';
@@ -280,6 +280,9 @@ auto_op          = \'yes\'
 
 ; bot will auto rejoin channel when kicked: \'yes\', \'no\'
 auto_rejoin      = \'yes\'
+
+; do we want to keep channel modes from channel_modes option?
+keep_chan_modes  = \'yes\'
 
 ; this setting makes the bot try to get his original nickname back if its primary nickname is already in use
 keep_nick        = \'yes\'
@@ -369,7 +372,7 @@ silent_mode      = \'no\'
 ; check on program startup if new version is on server: \'yes\', \'no\'
 check_update     = \'no\'
 
-; if we want to play sounds?
+; if we want to play sounds?: \'yes\', \'no\'
 play_sounds      = \'yes\'
 
 [DEBUG]

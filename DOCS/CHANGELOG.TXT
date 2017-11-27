@@ -1,10 +1,24 @@
 
+   v0.8.9 changes (27.11.2017):
+   - added missing cli info about core plugins
+   - changed cli info in registration process
+   - you can register to bot by typing '/msg bot_nick register password'
+     only once, when added host to owners there will be no such option.
+     This is for security to prevent brute force password attack.
+     So registration by bot is only possible when owners hosts is empty,
+     Of course you can always register new owner host by using !addowner plugin
+     or manually add to config.
+   - plugin !topic - not only sets topic if opped, channel can be -t :)
+   - new option in config 'keep_chan_modes' in 'automatic' section
+     if yes keep modes from channel_modes, if no = no action.
+   - updated 'config.ini info.txt'
+   - some code reorganization.
+
    v0.8.8 changes (26.11.2017):
    - now all plugins follows one bot response (where to output msg)
    - new core plugin: !pause -- pause all BOT activity
      (cannot use plugins except !unpause, no ctcp response, etc)
    - new core plugin: !unpause -- restore BOT from !pause mode
-
 
    v0.8.7 changes (26.11.2017):
    - new plugin: !listadmins -- shows BOT admin(s) host(s) list
