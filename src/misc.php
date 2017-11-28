@@ -138,19 +138,16 @@ function msg_without_command()
 //---------------------------------------------------------------------------------------------------------
 function HasAdmin($mask)
 {
-    global $admins;
-
     $admins_c = $GLOBALS['CONFIG_ADMIN_LIST'];
     $pieces = explode(", ", $admins_c);
-    $admins = $pieces;
 
     if ($mask == null) {
     }
     if ($mask == null) {
         return false;
     }
-    foreach ($admins as $admin) {
-        if (fnmatch($admin, $mask, 16)) {
+    foreach ($pieces as $piece) {
+        if (fnmatch($piece, $mask, 16)) {
             return true;
             return false;
         }
@@ -159,19 +156,16 @@ function HasAdmin($mask)
 //---------------------------------------------------------------------------------------------------------
 function HasOwner($mask)
 {
-    global $owners;
-
     $owners_c = $GLOBALS['CONFIG_OWNERS'];
     $pieces = explode(", ", $owners_c);
-    $owners = $pieces;
 
     if ($mask == null) {
     }
     if ($mask == null) {
         return false;
     }
-    foreach ($owners as $owner) {
-        if (fnmatch($owner, $mask, 16)) {
+    foreach ($pieces as $piece) {
+        if (fnmatch($piece, $mask, 16)) {
             return true;
             return false;
         }

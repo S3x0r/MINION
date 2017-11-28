@@ -67,70 +67,70 @@ function LoadConfig($filename)
               $config_file = $filename;
     }
 
-    if (file_exists($config_file)) {
+    if (is_file($config_file)) {
         $cfg = new IniParser($config_file);
 
         /* load configuration to variables */
 
         /* BOT */
-        $GLOBALS['CONFIG_NICKNAME']       = $cfg->get("BOT", "nickname");
-        $GLOBALS['CONFIG_NAME']           = $cfg->get("BOT", "name");
-        $GLOBALS['CONFIG_IDENT']          = $cfg->get("BOT", "ident");
+        $GLOBALS['CONFIG_NICKNAME']       = $cfg->get('BOT', 'nickname');
+        $GLOBALS['CONFIG_NAME']           = $cfg->get('BOT', 'name');
+        $GLOBALS['CONFIG_IDENT']          = $cfg->get('BOT', 'ident');
         /* SERVER */
-        $GLOBALS['CONFIG_SERVER']         = $cfg->get("SERVER", "server");
-        $GLOBALS['CONFIG_PORT']           = $cfg->get("SERVER", "port");
-        $GLOBALS['CONFIG_SERVER_PASSWD']  = $cfg->get("SERVER", "server_password");
-        $GLOBALS['CONFIG_TRY_CONNECT']    = $cfg->get("SERVER", "try_connect");
-        $GLOBALS['CONFIG_CONNECT_DELAY']  = $cfg->get("SERVER", "connect_delay");
+        $GLOBALS['CONFIG_SERVER']         = $cfg->get('SERVER', 'server');
+        $GLOBALS['CONFIG_PORT']           = $cfg->get('SERVER', 'port');
+        $GLOBALS['CONFIG_SERVER_PASSWD']  = $cfg->get('SERVER', 'server_password');
+        $GLOBALS['CONFIG_TRY_CONNECT']    = $cfg->get('SERVER', 'try_connect');
+        $GLOBALS['CONFIG_CONNECT_DELAY']  = $cfg->get('SERVER', 'connect_delay');
         /* OWNER */
-        $GLOBALS['CONFIG_BOT_ADMIN']      = $cfg->get("OWNER", "bot_admin");
-        $GLOBALS['CONFIG_AUTO_OP_LIST']   = $cfg->get("OWNER", "auto_op_list");
-        $GLOBALS['CONFIG_OWNERS']         = $cfg->get("OWNER", "bot_owners");
-        $GLOBALS['CONFIG_OWNER_PASSWD']   = $cfg->get("OWNER", "owner_password");
+        $GLOBALS['CONFIG_BOT_ADMIN']      = $cfg->get('OWNER', 'bot_admin');
+        $GLOBALS['CONFIG_AUTO_OP_LIST']   = $cfg->get('OWNER', 'auto_op_list');
+        $GLOBALS['CONFIG_OWNERS']         = $cfg->get('OWNER', 'bot_owners');
+        $GLOBALS['CONFIG_OWNER_PASSWD']   = $cfg->get('OWNER', 'owner_password');
         /* ADMIN */
-        $GLOBALS['CONFIG_ADMIN_LIST']     = $cfg->get("ADMIN", "admin_list");
+        $GLOBALS['CONFIG_ADMIN_LIST']     = $cfg->get('ADMIN', 'admin_list');
         /* BOT RESPONSE */
-        $GLOBALS['CONFIG_BOT_RESPONSE']   = $cfg->get("RESPONSE", "bot_response");
+        $GLOBALS['CONFIG_BOT_RESPONSE']   = $cfg->get('RESPONSE', 'bot_response');
         /* AUTOMATIC */
-        $GLOBALS['CONFIG_AUTO_OP']        = $cfg->get("AUTOMATIC", "auto_op");
-        $GLOBALS['CONFIG_AUTO_REJOIN']    = $cfg->get("AUTOMATIC", "auto_rejoin");
-        $GLOBALS['CONFIG_KEEPCHAN_MODES'] = $cfg->get("AUTOMATIC", "keep_chan_modes");
-        $GLOBALS['CONFIG_KEEP_NICK']      = $cfg->get("AUTOMATIC", "keep_nick");
+        $GLOBALS['CONFIG_AUTO_OP']        = $cfg->get('AUTOMATIC', 'auto_op');
+        $GLOBALS['CONFIG_AUTO_REJOIN']    = $cfg->get('AUTOMATIC', 'auto_rejoin');
+        $GLOBALS['CONFIG_KEEPCHAN_MODES'] = $cfg->get('AUTOMATIC', 'keep_chan_modes');
+        $GLOBALS['CONFIG_KEEP_NICK']      = $cfg->get('AUTOMATIC', 'keep_nick');
         /* CHANNEL */
-        $GLOBALS['CONFIG_CNANNEL']        = $cfg->get("CHANNEL", "channel");
-        $GLOBALS['CONFIG_AUTO_JOIN']      = $cfg->get("CHANNEL", "auto_join");
-        $GLOBALS['CONFIG_CHANNEL_MODES']  = $cfg->get("CHANNEL", "channel_modes");
-        $GLOBALS['CONFIG_CHANNEL_KEY']    = $cfg->get("CHANNEL", "channel_key");
+        $GLOBALS['CONFIG_CNANNEL']        = $cfg->get('CHANNEL', 'channel');
+        $GLOBALS['CONFIG_AUTO_JOIN']      = $cfg->get('CHANNEL', 'auto_join');
+        $GLOBALS['CONFIG_CHANNEL_MODES']  = $cfg->get('CHANNEL', 'channel_modes');
+        $GLOBALS['CONFIG_CHANNEL_KEY']    = $cfg->get('CHANNEL', 'channel_key');
         /* BANS */
-        $GLOBALS['CONFIG_BAN_LIST']       = $cfg->get("BANS", "ban_list");
+        $GLOBALS['CONFIG_BAN_LIST']       = $cfg->get('BANS', 'ban_list');
         /* COMMAND PREFIX */
-        $GLOBALS['CONFIG_CMD_PREFIX']     = $cfg->get("COMMAND", "command_prefix");
+        $GLOBALS['CONFIG_CMD_PREFIX']     = $cfg->get('COMMAND', 'command_prefix');
         /* CTCP */
-        $GLOBALS['CONFIG_CTCP_RESPONSE']  = $cfg->get("CTCP", "ctcp_response");
-        $GLOBALS['CONFIG_CTCP_VERSION']   = $cfg->get("CTCP", "ctcp_version");
-        $GLOBALS['CONFIG_CTCP_FINGER']    = $cfg->get("CTCP", "ctcp_finger");
+        $GLOBALS['CONFIG_CTCP_RESPONSE']  = $cfg->get('CTCP', 'ctcp_response');
+        $GLOBALS['CONFIG_CTCP_VERSION']   = $cfg->get('CTCP', 'ctcp_version');
+        $GLOBALS['CONFIG_CTCP_FINGER']    = $cfg->get('CTCP', 'ctcp_finger');
         /* DELAYS */
-        $GLOBALS['CONFIG_CHANNEL_DELAY']  = $cfg->get("DELAYS", "channel_delay");
-        $GLOBALS['CONFIG_PRIVATE_DELAY']  = $cfg->get("DELAYS", "private_delay");
-        $GLOBALS['CONFIG_NOTICE_DELAY']   = $cfg->get("DELAYS", "notice_delay");
+        $GLOBALS['CONFIG_CHANNEL_DELAY']  = $cfg->get('DELAYS', 'channel_delay');
+        $GLOBALS['CONFIG_PRIVATE_DELAY']  = $cfg->get('DELAYS', 'private_delay');
+        $GLOBALS['CONFIG_NOTICE_DELAY']   = $cfg->get('DELAYS', 'notice_delay');
         /* LOGGING */
-        $GLOBALS['CONFIG_LOGGING']        = $cfg->get("LOGS", "logging");
+        $GLOBALS['CONFIG_LOGGING']        = $cfg->get('LOGS', 'logging');
         /* PANEL */
-        $GLOBALS['CONFIG_WEB_LOGIN']      = $cfg->get("PANEL", "web_login");
-        $GLOBALS['CONFIG_WEB_PASSWORD']   = $cfg->get("PANEL", "web_password");
+        $GLOBALS['CONFIG_WEB_LOGIN']      = $cfg->get('PANEL', 'web_login');
+        $GLOBALS['CONFIG_WEB_PASSWORD']   = $cfg->get('PANEL', 'web_password');
         /* TIMEZONE */
-        $GLOBALS['CONFIG_TIMEZONE']       = $cfg->get("TIME", "time_zone");
+        $GLOBALS['CONFIG_TIMEZONE']       = $cfg->get('TIME', 'time_zone');
         /* FETCH */
-        $GLOBALS['CONFIG_FETCH_SERVER']   = $cfg->get("FETCH", "fetch_server");
+        $GLOBALS['CONFIG_FETCH_SERVER']   = $cfg->get('FETCH', 'fetch_server');
         /* PROGRAM */
-        $GLOBALS['CONFIG_SHOW_LOGO']      = $cfg->get("PROGRAM", "show_logo");
+        $GLOBALS['CONFIG_SHOW_LOGO']      = $cfg->get('PROGRAM', 'show_logo');
         if (empty($GLOBALS['silent_cli'])) {
-            $GLOBALS['silent_mode']       = $cfg->get("PROGRAM", "silent_mode");
+            $GLOBALS['silent_mode']       = $cfg->get('PROGRAM', 'silent_mode');
         }
-        $GLOBALS['CONFIG_CHECK_UPDATE']   = $cfg->get("PROGRAM", "check_update");
-        $GLOBALS['CONFIG_PLAY_SOUNDS']    = $cfg->get("PROGRAM", "play_sounds");
+        $GLOBALS['CONFIG_CHECK_UPDATE']   = $cfg->get('PROGRAM', 'check_update');
+        $GLOBALS['CONFIG_PLAY_SOUNDS']    = $cfg->get('PROGRAM', 'play_sounds');
         /* DEBUG */
-        $GLOBALS['CONFIG_SHOW_RAW']       = $cfg->get("DEBUG", "show_raw");
+        $GLOBALS['CONFIG_SHOW_RAW']       = $cfg->get('DEBUG', 'show_raw');
 
         /* check if we have enough data to connect */
         if (empty($GLOBALS['CONFIG_NICKNAME'])) {

@@ -52,12 +52,6 @@ function CheckCLIArgs()
                 $GLOBALS['silent_mode'] = 'yes';
                 if (extension_loaded('wcli')) {
                     wcli_minimize();
-                } else {
-                         echo PHP_EOL.PHP_EOL.'  I cannot start in silent mode, no \'wcli\' extension loaded.'.PHP_EOL,
-                              '  You can anyway use normal mode'.PHP_EOL,
-                              '  I will terminate program after 10 seconds'.PHP_EOL.PHP_EOL.'  ';
-                         sleep(10);
-                         die();
                 }
                 break;
 

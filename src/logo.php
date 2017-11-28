@@ -20,8 +20,7 @@ if (PHP_SAPI !== 'cli') {
 //---------------------------------------------------------------------------------------------------------
 function Logo()
 {
-    if ($GLOBALS['CONFIG_SHOW_LOGO'] == 'yes') {
-        if (!IsSilent()) {
+    if ($GLOBALS['CONFIG_SHOW_LOGO'] == 'yes' && !IsSilent()) {
             echo "
     B@B@B@B@@@B@B@B@B@B@B@B@@@B@B@B@B@B@@@@@@@B@B@B@B@B@@@B@B
     @B@BGB@B@B@B@B@@@B@@@B@B@B@@@B@B@B@B@B@@@B@B@B@@@B@@@@@B@
@@ -56,6 +55,5 @@ function Logo()
 
              echo PHP_EOL.'    MINION - ver: '.VER.', '.TR_10.' S3x0r, '.TR_11.' olisek@gmail.com'.PHP_EOL;
              echo '                   '.TR_12.' '.TotalLines().' :)'.PHP_EOL.PHP_EOL.PHP_EOL;
-        }
     }
 }
