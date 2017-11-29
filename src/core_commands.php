@@ -121,7 +121,6 @@ function CoreCmd_RegisterToBot()
 {
     try {
         if (empty($GLOBALS['CONFIG_OWNERS'])) {
-            /* check if user is not already owner */
             if (!HasOwner($GLOBALS['mask'])) {
                 /* hash message from user to use for comparsion */
                 $hashed = hash('sha256', $GLOBALS['args']);

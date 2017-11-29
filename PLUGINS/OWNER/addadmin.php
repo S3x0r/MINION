@@ -19,7 +19,7 @@ if (PHP_SAPI !== 'cli') {
 }
     
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Adds host to admin list in config file: '
+    $plugin_description = 'Add host to admin list in config: '
     .$GLOBALS['CONFIG_CMD_PREFIX'].'addadmin <nick!ident@host>';
     $plugin_command = 'addadmin';
 

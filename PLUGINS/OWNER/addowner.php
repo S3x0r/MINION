@@ -19,7 +19,7 @@ if (PHP_SAPI !== 'cli') {
 }
     
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Adds Owner host to config file: '
+    $plugin_description = 'Add owner host to config: '
     .$GLOBALS['CONFIG_CMD_PREFIX'].'addowner <nick!ident@hostname>';
     $plugin_command = 'addowner';
 

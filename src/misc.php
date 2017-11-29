@@ -172,10 +172,8 @@ function HasOwner($mask)
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function SaveToFile($f1, $f2, $f3)
+function SaveToFile($file, $data, $f3)
 {
-    $file = $f1;
-    $data = $f2;
     $f=fopen($file, $f3);
     flock($f, 2);
     fwrite($f, $data);

@@ -272,12 +272,12 @@ function on_376() /* join after motd */
     CLI_MSG(TR_58.' '.$GLOBALS['BOT_NICKNAME'], '1');
 
     /* register to bot info */
-    if (isset($GLOBALS['if_first_time_pwd_change'])) {
+    if (isset($GLOBALS['pwd_changed'])) {
         CLI_MSG('*********************************************************', '0');
         CLI_MSG(TR_34.' /msg '.$GLOBALS['BOT_NICKNAME'].' register <password>', '0');
         CLI_MSG('*********************************************************', '0');
         unset($GLOBALS['pwd']);
-        unset($GLOBALS['if_first_time_pwd_change']);
+        unset($GLOBALS['pwd_changed']);
     }
 
     /* wcli extension */
@@ -317,7 +317,7 @@ function on_432() /* if nick reserved */
     }
    
     /* set random nick */
-    $GLOBALS['BOT_NICKNAME'] = $GLOBALS['BOT_NICKNAME'].'|'.rand(0, 99);
+    $GLOBALS['BOT_NICKNAME'] = $GLOBALS['BOT_NICKNAME'].'|'.rand(0, 299);
     CLI_MSG(TR_33.' '.$GLOBALS['BOT_NICKNAME']."\n", '1');
 
     fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['BOT_NICKNAME']."\n");

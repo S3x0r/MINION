@@ -185,7 +185,7 @@ function LoadConfig($filename)
             unset($hashed);
 
             /* Set first time change variable */
-            $GLOBALS['if_first_time_pwd_change'] = '1';
+            $GLOBALS['pwd_changed'] = '1';
 
             /* load config again */
             LoadConfig($config_file);
