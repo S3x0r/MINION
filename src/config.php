@@ -192,10 +192,8 @@ function LoadConfig($filename)
         }
 
         /* from what file config loaded */
-        if (!IsSilent()) {
-            CLI_MSG(TR_17.' '.$config_file, '0');
-            Line(COLOR);
-        }
+        CLI_MSG(TR_17.' '.$config_file, '0');
+        Line(COLOR);
      
         /* logging init */
         if ($GLOBALS['CONFIG_LOGGING'] == 'yes') {

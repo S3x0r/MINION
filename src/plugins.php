@@ -29,23 +29,21 @@ function LoadPlugins()
     $GLOBALS['USER_PLUGINS'] = null;
 
 //---------------------------------------------------------------------------------------------------------
-    if (!IsSilent()) {
-        /* CORE COMMANDS */
-        Color(">>> Core Commands (5) <<<".PHP_EOL, '11');
-        Line(COLOR);
-        Color("[load] -- Loads specified plugins to BOT: !load <plugin>".PHP_EOL, '11');
-        Color("[panel] -- Starts web admin panel for BOT: !panel help".PHP_EOL, '11');
-        Color("[pause] -- Pause all BOT activity: !pause".PHP_EOL, '11');
-        Color("[unload] -- Unloads specified plugin from BOT: !unload <plugin>".PHP_EOL, '11');
-        Color("[unpause] -- Restore BOT from pause mode: !unpause".PHP_EOL, '11');
+    /* CORE PLUGINS */
+    Color(">>> Core Commands (5) <<<".PHP_EOL, '11');
+    Line(COLOR);
+    Color("[load] -- Loads specified plugins to BOT: !load <plugin>".PHP_EOL, '11');
+    Color("[panel] -- Starts web admin panel for BOT: !panel help".PHP_EOL, '11');
+    Color("[pause] -- Pause all BOT activity: !pause".PHP_EOL, '11');
+    Color("[unload] -- Unloads specified plugin from BOT: !unload <plugin>".PHP_EOL, '11');
+    Color("[unpause] -- Restore BOT from pause mode: !unpause".PHP_EOL, '11');
 
-        Line(COLOR);
+    Line(COLOR);
 //---------------------------------------------------------------------------------------------------------
-        /* OWNERS PLUGINS */
-        
-        Color(">>> Owner Plugins ($count1) <<<".PHP_EOL, '12');
-        Line(COLOR);
-    }
+    /* OWNER PLUGINS */
+    Color(">>> Owner Plugins ($count1) <<<".PHP_EOL, '12');
+    Line(COLOR);
+
     foreach (glob('../PLUGINS/OWNER/*.php') as $plugin_name) {
          /* simple verify plugin */
          $file = file_get_contents($plugin_name);
@@ -53,22 +51,16 @@ function LoadPlugins()
             include_once($plugin_name);
             $GLOBALS['OWNER_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ';
             $plugin_name = basename($plugin_name, '.php');
-            if (!IsSilent()) {
-                Color("[$plugin_name] -- $plugin_description".PHP_EOL, '12');
-            }
+            Color("[$plugin_name] -- $plugin_description".PHP_EOL, '12');
         } else {
                  echo PHP_EOL."[ERROR] Not compatible plugin: $plugin_name".PHP_EOL.PHP_EOL;
         }
     }
-    if (!IsSilent()) {
-        Line(COLOR);
-    }
+    Line(COLOR);
 //---------------------------------------------------------------------------------------------------------
-        /* ADMIN PLUGINS */
-        Color(">>> Admin Plugins ($count3) <<<".PHP_EOL, '14');
-    if (!IsSilent()) {
-        Line(COLOR);
-    }
+    /* ADMIN PLUGINS */
+    Color(">>> Admin Plugins ($count3) <<<".PHP_EOL, '14');
+    Line(COLOR);
 
     foreach (glob('../PLUGINS/ADMIN/*.php') as $plugin_name) {
          /* simple verify plugin */
@@ -77,23 +69,17 @@ function LoadPlugins()
             include_once($plugin_name);
             $GLOBALS['ADMIN_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ';
             $plugin_name = basename($plugin_name, '.php');
-            if (!IsSilent()) {
-                Color("[$plugin_name] -- $plugin_description".PHP_EOL, '14');
-            }
+            Color("[$plugin_name] -- $plugin_description".PHP_EOL, '14');
         } else {
                  echo PHP_EOL."[ERROR] Not compatible plugin: $plugin_name".PHP_EOL.PHP_EOL;
         }
     }
-    if (!IsSilent()) {
-        Line(COLOR);
-    }
-
+    Line(COLOR);
 //---------------------------------------------------------------------------------------------------------
     /* USER PLUGINS */
-    if (!IsSilent()) {
-        Color(">>> User Plugins ($count2) <<<".PHP_EOL, '10');
-        Line(COLOR);
-    }
+    Color(">>> User Plugins ($count2) <<<".PHP_EOL, '10');
+    Line(COLOR);
+
     foreach (glob('../PLUGINS/USER/*.php') as $plugin_name) {
          /* simple verify plugin */
          $file = file_get_contents($plugin_name);
@@ -101,9 +87,7 @@ function LoadPlugins()
             include_once($plugin_name);
             $GLOBALS['USER_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ';
             $plugin_name = basename($plugin_name, '.php');
-            if (!IsSilent()) {
-                Color("[$plugin_name] -- $plugin_description".PHP_EOL, '10');
-            }
+            Color("[$plugin_name] -- $plugin_description".PHP_EOL, '10');
         } else {
                  echo PHP_EOL."[ERROR] Not compatible plugin: $plugin_name".PHP_EOL.PHP_EOL;
         }

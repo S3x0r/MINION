@@ -231,19 +231,22 @@ function isRunned($program)
 //---------------------------------------------------------------------------------------------------------
 function Line($color)
 {
-    /* set color to line */
-    if (extension_loaded('wcli')) {
-        wcli_echo('------------------------------------------------------------------------------'.PHP_EOL, $color);
-    } else {
-             echo '------------------------------------------------------------------------------'.PHP_EOL;
+    if (!IsSilent()) {
+        if (extension_loaded('wcli')) {
+            wcli_echo('------------------------------------------------------------------------------'.PHP_EOL, $color);
+        } else {
+                 echo '------------------------------------------------------------------------------'.PHP_EOL;
+        }
     }
 }
 //---------------------------------------------------------------------------------------------------------
 function Color($data, $color)
 {
-    if (extension_loaded('wcli')) {
-        wcli_echo($data, $color);
-    } else {
-             echo $data;
+    if (!IsSilent()) {
+        if (extension_loaded('wcli')) {
+            wcli_echo($data, $color);
+        } else {
+                 echo $data;
+        }
     }
 }

@@ -65,8 +65,8 @@ function CheckCLIArgs()
 //---------------------------------------------------------------------------------------------------------
 function wcliStart()
 {
-    if (extension_loaded('wcli')) {
-        if (!IsSilent()) {
+    if (!IsSilent()) {
+        if (extension_loaded('wcli')) {
             wcli_maximize();
             wcli_set_console_title('MINION '.VER);
             wcli_hide_cursor();
@@ -76,8 +76,8 @@ function wcliStart()
 //---------------------------------------------------------------------------------------------------------
 function wcliExt()
 {
-    if (extension_loaded('wcli')) {
-        if (!IsSilent()) {
+    if (!IsSilent()) {
+        if (extension_loaded('wcli')) {
             wcli_set_console_title('MINION '.VER.' ('.TR_51.' '.$GLOBALS['CONFIG_SERVER'].':'
             .$GLOBALS['CONFIG_PORT'].' | '.TR_52.' '.$GLOBALS['BOT_NICKNAME'].' | '.TR_53.' '
             .$GLOBALS['CONFIG_CNANNEL'].')');
