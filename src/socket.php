@@ -291,6 +291,10 @@ function SocketLoop()
                 if (isset($rawcmd[1]) && HasOwner($mask) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'pause') {
                     CoreCmd_Pause();
                 }
+                /* Core commands: 'Seen' */
+                if (isset($rawcmd[1]) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'seen') {
+                    CoreCmd_Seen();
+                }
 
                 /* Core command: "register 'password'" */
                 if (isset($rawcmd[1]) && $rawcmd[1] == 'register') {

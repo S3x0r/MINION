@@ -36,6 +36,7 @@ function plugin_help()
                      $GLOBALS['CONFIG_CMD_PREFIX'].'load '.
                      $GLOBALS['CONFIG_CMD_PREFIX'].'panel '.
                      $GLOBALS['CONFIG_CMD_PREFIX'].'pause '.
+                     $GLOBALS['CONFIG_CMD_PREFIX'].'seen '.
                      $GLOBALS['CONFIG_CMD_PREFIX'].'unload '.
                      $GLOBALS['CONFIG_CMD_PREFIX'].'unpause');
 
@@ -46,12 +47,14 @@ function plugin_help()
         BOT_RESPONSE('User Commands: '.$user_cmd);
 
       /* if ADMIN use help */
-    } elseif (!HasOwner($GLOBALS['mask']) && HasAdmin($GLOBALS['mask'])) { 
+    } elseif (!HasOwner($GLOBALS['mask']) && HasAdmin($GLOBALS['mask'])) {
               $admin_cmd = implode(' ', $GLOBALS['ADMIN_PLUGINS']);
               $user_cmd  = implode(' ', $GLOBALS['USER_PLUGINS']);
 
               CLI_MSG('[PLUGIN: help] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                $GLOBALS['channel'], '1');
+
+              BOT_RESPONSE('Core Commands: '.$GLOBALS['CONFIG_CMD_PREFIX'].'seen');
               BOT_RESPONSE('Admin Commands: '.$admin_cmd);
               BOT_RESPONSE('User Commands: '.$user_cmd);
 
@@ -65,6 +68,7 @@ function plugin_help()
               CLI_MSG('[PLUGIN: help] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
               $GLOBALS['channel'], '1');
 
+              BOT_RESPONSE('Core Commands: '.$GLOBALS['CONFIG_CMD_PREFIX'].'seen');
               BOT_RESPONSE('User Commands: '.$user_cmd);
               
         if (!empty($GLOBALS['CONFIG_BOT_ADMIN'])) {

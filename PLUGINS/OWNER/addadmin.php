@@ -50,7 +50,9 @@ function plugin_addadmin()
             $admin_commands = implode(' ', $GLOBALS['ADMIN_PLUGINS']);
             $user_commands  = implode(' ', $GLOBALS['USER_PLUGINS']);
 
-            fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :From now you are on my ADMINS list, enjoy.\n");
+            fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :From now you are on my ADMIN(S) list, enjoy.\n");
+            fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :Core Commands: ".
+                $GLOBALS['CONFIG_CMD_PREFIX']."seen\n");
             fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :Admin Commands: $admin_commands\n");
             fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :User Commands: $user_commands\n");
  

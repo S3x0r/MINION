@@ -14,6 +14,20 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 //---------------------------------------------------------------------------------------------------------
+function CoreCmd_Seen()
+{
+    if (OnEmptyArg('seen <nickname> to check specified user when was last seen on channel')) {
+    } else {
+        if (is_file('../DATA/SEEN/'.$GLOBALS['args'])) {
+            BOT_RESPONSE(file_get_contents('../DATA/SEEN/'.$GLOBALS['args']));
+        } else {
+                 BOT_RESPONSE('No such user in my database.');
+        }
+        CLI_MSG('[PLUGIN: seen] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                $GLOBALS['channel'], '1');
+    }
+}
+//---------------------------------------------------------------------------------------------------------
 function CoreCmd_Pause()
 {
     BOT_RESPONSE('Pausing all activity');
@@ -177,6 +191,7 @@ function CoreCmd_RegisterToBot()
                         $GLOBALS['CONFIG_CMD_PREFIX'].'load '.
                         $GLOBALS['CONFIG_CMD_PREFIX'].'panel '.
                         $GLOBALS['CONFIG_CMD_PREFIX'].'pause '.
+                        $GLOBALS['CONFIG_CMD_PREFIX'].'seen '.
                         $GLOBALS['CONFIG_CMD_PREFIX'].'unload '.
                         $GLOBALS['CONFIG_CMD_PREFIX'].'unpause');
 

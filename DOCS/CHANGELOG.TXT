@@ -1,4 +1,9 @@
 
+   v0.9.3 changes (19.12.2017):
+   - NEW plugin: !seen -- Check specified user when was last seen on channel: !seen <nickname>
+   - colors changed :)
+   - readme file updated
+
    v0.9.2 changes (03.12.2017):
    - some silent mode clean src
 

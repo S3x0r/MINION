@@ -51,9 +51,15 @@ function plugin_addowner()
             $user_commands  = implode(' ', $GLOBALS['USER_PLUGINS']);
 
             fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :From now you are on my owners list, enjoy.\n");
+
             fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :Core Commands: ".
-                $GLOBALS['CONFIG_CMD_PREFIX']."load ".$GLOBALS['CONFIG_CMD_PREFIX']."unload ".
-                $GLOBALS['CONFIG_CMD_PREFIX']."panel\n");
+                  $GLOBALS['CONFIG_CMD_PREFIX']."load ".
+                  $GLOBALS['CONFIG_CMD_PREFIX']."panel ".
+                  $GLOBALS['CONFIG_CMD_PREFIX']."pause ".
+                  $GLOBALS['CONFIG_CMD_PREFIX']."seen ".
+                  $GLOBALS['CONFIG_CMD_PREFIX']."unload ".
+                  $GLOBALS['CONFIG_CMD_PREFIX']."unpause\n");
+
             fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :Owner Commands: $owner_commands\n");
             fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :User Commands: $user_commands\n");
  

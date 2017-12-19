@@ -35,9 +35,6 @@ function on_bot_join_channel()
 //---------------------------------------------------------------------------------------------------------
 function on_join()
 {
-    /* if someone join */
-    CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') has joined '.$GLOBALS['channel'], '1');
-    
     /* if bot join */
     if ($GLOBALS['USER'] == $GLOBALS['BOT_NICKNAME']) {
         /* add channel to array */
@@ -49,8 +46,14 @@ function on_join()
 
         /* on bot join event */
         on_bot_join_channel();
+    } else {
+             /* if someone join */
+             CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') has joined '.$GLOBALS['channel'], '1');
+
+             /* Save Seen */
+             SeenSave();
     }
-    
+
     /* auto op */
     if ($GLOBALS['CONFIG_AUTO_OP'] == 'yes' && BotOpped() == true) {
         $cfg = new IniParser($GLOBALS['config_file']);
@@ -87,8 +90,13 @@ function on_part()
         
         /* delete channel modes */
         unset($GLOBALS['CHANNEL_MODES']);
+    } else {
+             /* if someone part channel */
+             CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') has leaved '.$GLOBALS['channel'], '1');
+          
+             /* Save to database for seen purpose */
+             SeenSave();
     }
-    CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') has leaved '.$GLOBALS['channel'], '1');
 }
 //---------------------------------------------------------------------------------------------------------
 function on_kick()
@@ -118,6 +126,9 @@ function on_kick()
     /* else */
     CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') kicked '.
         $GLOBALS['ex'][3].' from '.$GLOBALS['channel'], '1');
+
+    /* Save to database for seen purpose */
+    SeenSave();
 }
 //---------------------------------------------------------------------------------------------------------
 function on_topic()
@@ -215,6 +226,9 @@ function on_quit()
     } //need fix not showing all
    
     CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') Quit ('.$quit.')', '1');
+
+    /* Save to database for seen purpose */
+    SeenSave();
 }
 //---------------------------------------------------------------------------------------------------------
 function on_001() /* server message */
