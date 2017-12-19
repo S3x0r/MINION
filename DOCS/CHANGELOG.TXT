@@ -1,4 +1,10 @@
 
+   v0.9.4 changes (19.12.2017):
+   - plugins count corrected
+   - fixed: now showing full quit message on cli
+   - new cli switch '-u' -- you can check if new version is on server
+   - new file: update_check.bat -- it will automatic check if there is new version
+
    v0.9.3 changes (19.12.2017):
    - NEW plugin: !seen -- Check specified user when was last seen on channel: !seen <nickname>
    - colors changed :)

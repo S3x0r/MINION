@@ -30,7 +30,7 @@ function LoadPlugins()
 
 //---------------------------------------------------------------------------------------------------------
     /* CORE PLUGINS */
-    Color(">>> Core Commands (5) <<<".PHP_EOL, '11');
+    Color(">>> Core Commands (6) <<<".PHP_EOL, '11');
     Line(COLOR);
     Color("[load] -- Loads specified plugins to BOT: !load <plugin>".PHP_EOL, '14');
     Color("[panel] -- Starts web admin panel for BOT: !panel help".PHP_EOL, '14');
@@ -93,7 +93,7 @@ function LoadPlugins()
                  echo PHP_EOL."[ERROR] Not compatible plugin: $plugin_name".PHP_EOL.PHP_EOL;
         }
     }
-    $tot = $count1+$count2+$count3+5;
+    $tot = $count1+$count2+$count3+6;
     
     if (!IsSilent()) {
         echo "----------------------------------------------------------".TR_25." ($tot)---------".PHP_EOL;

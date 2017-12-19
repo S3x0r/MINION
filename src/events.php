@@ -220,10 +220,10 @@ function on_nick()
 function on_quit()
 {
     if (isset($GLOBALS['ex'][2])) {
-        $quit = $GLOBALS['ex'][2];
+        $quit = trim(parse_ex3(3));
     } else {
               $quit = '';
-    } //need fix not showing all
+    }
    
     CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') Quit ('.$quit.')', '1');
 

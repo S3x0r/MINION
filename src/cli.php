@@ -25,10 +25,11 @@ function CheckCLIArgs()
             case '-h': /* show help */
                 echo PHP_EOL.'  '.TR_62.PHP_EOL.PHP_EOL,
                      '  -c '.TR_63.PHP_EOL,
+                     '  -h '.TR_67.PHP_EOL,
                      '  -p '.TR_64.PHP_EOL,
                      '  -s '.TR_65.PHP_EOL,
-                     '  -v '.TR_66.PHP_EOL,
-                     '  -h '.TR_67.PHP_EOL.PHP_EOL;
+                     '  -u check if there is new bot version on server'.PHP_EOL,
+                     '  -v '.TR_66.PHP_EOL.PHP_EOL;
                 die();
                 break;
 
@@ -59,6 +60,36 @@ function CheckCLIArgs()
                 echo PHP_EOL.' '.TR_71.' '.VER.PHP_EOL;
                 die();
                 break;
+
+            case '-u': /* update check */
+                if (extension_loaded('openssl')) {
+                    $addr = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
+                    $CheckVersion = @file_get_contents($addr);
+                    if ($CheckVersion !='') {
+                        $version = explode("\n", $CheckVersion);
+                        if ($version[0] > VER) {
+                            echo PHP_EOL.' New version available!'.PHP_EOL;
+                            echo PHP_EOL.' My version: '.VER;
+                            echo PHP_EOL.' Version on server: '.$version[0].PHP_EOL;
+                            echo PHP_EOL.' To update me msg to bot by typing: !update'.PHP_EOL.PHP_EOL;
+                            sleep(10);
+                            die();
+                        } else {
+                                 echo PHP_EOL.' Checking if there is new version...'.PHP_EOL;
+                                 echo PHP_EOL.' No new update, you have the latest version.'.PHP_EOL.PHP_EOL;
+                                 sleep(8);
+                                 die();
+                        }
+                    } else {
+                             echo PHP_EOL.' Cannot connect to update server, try next time.'.PHP_EOL.PHP_EOL;
+                             sleep(7);
+                             die();
+                    }
+                } else {
+                         echo PHP_EOL.' I cannot update, i need php_openssl extension to work!'.PHP_EOL.PHP_EOL;
+                         sleep(7);
+                         die();
+                }
         }
     }
 }
