@@ -18,10 +18,20 @@ function CoreCmd_Seen()
 {
     if (OnEmptyArg('seen <nickname> to check specified user when was last seen on channel')) {
     } else {
-        if (is_file('../DATA/SEEN/'.$GLOBALS['args'])) {
-            BOT_RESPONSE(file_get_contents('../DATA/SEEN/'.$GLOBALS['args']));
+        if ($GLOBALS['args'] == $GLOBALS['BOT_NICKNAME']) {
+            BOT_RESPONSE('Yes im here! :)');
+        } elseif ($GLOBALS['args'] == $GLOBALS['USER']) {
+                  BOT_RESPONSE('Look at mirror!');
+        } elseif ($GLOBALS['args'] == 'owner') {
+            if ($GLOBALS['CONFIG_BOT_ADMIN'] != '') {
+                BOT_RESPONSE('My Owner: '.$GLOBALS['CONFIG_BOT_ADMIN']);
+            }
         } else {
-                 BOT_RESPONSE('No such user in my database.');
+            if (is_file('../DATA/SEEN/'.$GLOBALS['args'])) {
+                BOT_RESPONSE(file_get_contents('../DATA/SEEN/'.$GLOBALS['args']));
+            } else {
+                     BOT_RESPONSE('No such user in my database.');
+            }
         }
         CLI_MSG('[PLUGIN: seen] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                 $GLOBALS['channel'], '1');
