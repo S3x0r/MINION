@@ -251,29 +251,3 @@ function Color($data, $color)
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function SeenSave()
-{
-    if (!is_dir('../DATA')) {
-        mkdir('../DATA');
-        if (!is_dir('../DATA/SEEN')) {
-            mkdir('../DATA/SEEN');
-        }
-    }
-    
-    $seen_dir = '../DATA/SEEN/';
-
-    if (substr($GLOBALS['channel'], 0, 1) != '#') {
-        $chan = $GLOBALS['CONFIG_CNANNEL'];
-    } else {
-             $chan = $GLOBALS['channel'];
-    }
-
-    $data = 'Last seen user: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') On channel: '.$chan.
-        ', Date: '.date("d.m.Y").', Time: '.date("H:i:s");
-
-    if (is_file($seen_dir.$GLOBALS['USER'])) {
-        file_put_contents($seen_dir.$GLOBALS['USER'], $data);
-    } else {
-             file_put_contents($seen_dir.$GLOBALS['USER'], $data);
-    }
-}

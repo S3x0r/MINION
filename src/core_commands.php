@@ -17,7 +17,8 @@
 function CoreCmd_Seen()
 {
     if (OnEmptyArg('seen <nickname> to check specified user when was last seen on channel')) {
-    } else {
+    } else { /* prevent directory traversal */
+             $GLOBALS['args'] = str_replace('..', '', str_replace('/', '', $GLOBALS['args']));
         if ($GLOBALS['args'] == $GLOBALS['BOT_NICKNAME']) {
             BOT_RESPONSE('Yes im here! :)');
         } elseif ($GLOBALS['args'] == $GLOBALS['USER']) {
@@ -27,6 +28,11 @@ function CoreCmd_Seen()
                 BOT_RESPONSE('My Owner: '.$GLOBALS['CONFIG_BOT_ADMIN']);
             }
         } else {
+                 /* revert from illegal chars file */
+                 $bad   = array(chr('0x5c'), '/', ':', '*', '?', '"', '<', '>', '|');
+                 $good  = array("@[1]", "@[2]", "@[3]", "@[4]", "@[5]", "@[6]", "@[7]", "@[8]", "@[9]");
+                 $GLOBALS['args'] = str_replace($bad, $good, $GLOBALS['args']);
+
             if (is_file('../DATA/SEEN/'.$GLOBALS['args'])) {
                 BOT_RESPONSE(file_get_contents('../DATA/SEEN/'.$GLOBALS['args']));
             } else {
@@ -35,6 +41,38 @@ function CoreCmd_Seen()
         }
         CLI_MSG('[PLUGIN: seen] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                 $GLOBALS['channel'], '1');
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function SeenSave()
+{
+    if (!is_dir('../DATA')) {
+        mkdir('../DATA');
+        if (!is_dir('../DATA/SEEN')) {
+            mkdir('../DATA/SEEN');
+        }
+    }
+    
+    $seen_dir = '../DATA/SEEN/';
+
+    if (substr($GLOBALS['channel'], 0, 1) != '#') {
+        $chan = $GLOBALS['CONFIG_CNANNEL'];
+    } else {
+             $chan = $GLOBALS['channel'];
+    }
+
+    $data = 'Last seen user: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') On channel: '.$chan.
+        ', Date: '.date("d.m.Y").', Time: '.date("H:i:s");
+
+    /* illegal chars for file */
+    $bad  = array(chr('0x5c'), '/', ':', '*', '?', '"', '<', '>', '|');
+    $good = array("@[1]", "@[2]", "@[3]", "@[4]", "@[5]", "@[6]", "@[7]", "@[8]", "@[9]");
+    $GLOBALS['USER'] = str_replace($bad, $good, $GLOBALS['USER']);
+
+    if (is_file($seen_dir.$GLOBALS['USER'])) {
+        file_put_contents($seen_dir.$GLOBALS['USER'], $data);
+    } else {
+             file_put_contents($seen_dir.$GLOBALS['USER'], $data);
     }
 }
 //---------------------------------------------------------------------------------------------------------
