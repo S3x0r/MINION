@@ -10,8 +10,8 @@ if (PHP_SAPI !== 'cli') {
 define('TR_10', 'author:');
 define('TR_11', 'email:');
 define('TR_12', 'Total Lines of code:');
-define('TR_13', 'Default owner bot password detected!');
-define('TR_14', 'For security please change it');
+define('TR_13', 'Default BOT owner(s) password detected!');
+define('TR_14', 'For security please change it (password can not contain spaces)');
 define('TR_15', 'New Password:');
 define('TR_16', 'Password too short, password must be at least 6 characters long');
 define('TR_17', 'Configuration Loaded from:');

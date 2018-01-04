@@ -147,7 +147,7 @@ function LoadConfig($filename)
         /* Set default data */
         SetDefaultData();
        
-        /* if default master password, prompt for change it! */
+        /* if default BOT owner(s) password, prompt for change it! */
         if ($GLOBALS['CONFIG_OWNER_PASSWD'] == '47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed') {
             /* play sound */
             PlaySound('error_conn.mp3');
@@ -157,36 +157,32 @@ function LoadConfig($filename)
             CLI_MSG(TR_14, '0');
 
             /* 'New Password:' */
-            echo '['.@date('H:i:s').'] '.TR_15.' ';
+            $new_pwd = getPasswd('['.@date('H:i:s').'] New Password: '.PHP_EOL);
 
-            /* handle to input */
-            $STDIN = fopen('php://stdin', 'r');
-            $new_pwd = str_replace(' ', '', fread($STDIN, 30));
-
-            while (strlen($new_pwd) < 8) {
+            while (strlen($new_pwd) < 6) {
                 echo '['.@date('H:i:s').'] '.TR_16.PHP_EOL;
-                echo '['.@date('H:i:s').'] '.TR_15.' ';
                 unset($new_pwd);
-                $new_pwd = fread($STDIN, 30);
+                $new_pwd = getPasswd('['.@date('H:i:s').'] New Password: '.PHP_EOL);
             }
 
-            /* keep pwd as normal text */
-            $GLOBALS['pwd'] = rtrim($new_pwd, "\n\r");
+            /* join spaces in password */
+            $new_pwd = str_replace(' ', '', $new_pwd);
 
             /* hash pwd */
-            $hashed = hash('sha256', $GLOBALS['pwd']);
+            $hashed = hash('sha256', $new_pwd);
 
             /* save pwd to file */
             SaveData($config_file, 'OWNER', 'owner_password', $hashed);
 
             /* remove pwd checking vars */
             unset($new_pwd);
-            unset($STDIN);
             unset($hashed);
 
             /* Set first time change variable */
             $GLOBALS['pwd_changed'] = '1';
 
+            CLI_MSG('Password changed', '0');
+          
             /* load config again */
             LoadConfig($config_file);
         }

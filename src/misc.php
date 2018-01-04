@@ -251,3 +251,25 @@ function Color($data, $color)
     }
 }
 //---------------------------------------------------------------------------------------------------------
+function getPasswd($string = '')
+{
+    echo $string;
+ 
+    if (!isset($GLOBALS['OS_TYPE'])) {
+        if (is_file('php\hide.exe')) {
+            $psw = `php\hide.exe`;
+        } else {
+                 echo PHP_EOL.'  ERROR: I need \'hide.exe\' file to run!'.PHP_EOL,
+                 PHP_EOL.'  You can download missing files from:'.PHP_EOL,
+                 '  https://github.com/S3x0r/MINION/releases'.PHP_EOL,
+                 PHP_EOL.'  Terminating program after 10 seconds.'.PHP_EOL.PHP_EOL.'  ';
+                 sleep(10);
+                 die();
+        }
+    } else {
+             system('stty -echo');
+             $psw = fgets(STDIN);
+             system('stty echo');
+    }
+    return rtrim($psw, PHP_EOL);
+}

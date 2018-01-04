@@ -1,4 +1,10 @@
 
+   v0.9.7 changes (04.01.2018):
+   - if panel was not closed properly bot will detect it on next start
+     and will try to kill it.
+   - info updated if default password detected
+   - when entering owner password from default prompt, it will be not visible
+
    v0.9.6 changes (23.12.2017):
    - !seen - fixed possible exploit
    - !seen - fixed illegal characters in file

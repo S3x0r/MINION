@@ -23,9 +23,14 @@ function on_server_ping()
     fputs($GLOBALS['socket'], "PONG ".$GLOBALS['ex'][1]."\n");
 }
 //---------------------------------------------------------------------------------------------------------
-function on_first_start()
+function on_first_start() /* event after end motd */
 {
-    /* event after end motd */
+    /* check if panel is not closed */
+    if (isRunned('serv')) {
+        if (kill('serv')) {
+            CLI_MSG('[BOT] Detected Panel still running, Terminating.', '1');
+        }
+    }
 }
 //---------------------------------------------------------------------------------------------------------
 function on_bot_join_channel()
@@ -290,7 +295,6 @@ function on_376() /* join after motd */
         CLI_MSG('*********************************************************', '0');
         CLI_MSG(TR_34.' /msg '.$GLOBALS['BOT_NICKNAME'].' register <password>', '0');
         CLI_MSG('*********************************************************', '0');
-        unset($GLOBALS['pwd']);
         unset($GLOBALS['pwd_changed']);
     }
 
