@@ -5,7 +5,7 @@ function GetDataFromBotConfig()
     $cfg = new IniParser('../web.ini');
     $GLOBALS['WEB_BOT_CONFIG_FILE'] = $cfg->get("MAIN", "WEB_BOT_CONFIG_FILE");
 
-    $cfg = new IniParser('../../../'.$GLOBALS['WEB_BOT_CONFIG_FILE']);
+    $cfg = new IniParser('../../'.$GLOBALS['WEB_BOT_CONFIG_FILE']);
         /* BOT */
         $GLOBALS['CONFIG_NICKNAME']       = $cfg->get("BOT", "nickname");
         $GLOBALS['CONFIG_NAME']           = $cfg->get("BOT", "name");
@@ -202,15 +202,18 @@ function ListPlugins()
         $count2 = count(glob("../../../PLUGINS/ADMIN/*.php", GLOB_BRACE));
         $count3 = count(glob("../../../PLUGINS/USER/*.php", GLOB_BRACE));
 
-        $tot = $count1+$count2+$count3+3;
+        $tot = $count1+$count2+$count3+6;
         
         echo "<h4>All Plugins: $tot</h4><br>";
     
         /* CORE COMMANDS */
-        echo 'Core Commands (3):<br>';
+        echo 'Core Commands (6):<br>';
         echo '- load<br>';
         echo '- panel<br>';
+        echo '- pause<br>';
+        echo '- seen<br>';
         echo '- unload<br>';
+        echo '- unpause<br>';
         echo '<br>';
 
         /* OWNERS PLUGINS */

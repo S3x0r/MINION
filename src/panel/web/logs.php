@@ -48,7 +48,7 @@ if (isset($_COOKIE['xs']) && $_COOKIE['xs'] == hash('sha512', $password.$salt)) 
 <?php
 
  $path = "../../../LOGS/";
- $files = glob($path . "*.TXT");
+ $files = glob($path . "*.txt");
 
 foreach ($files as $file) {
     echo '<h4><a href=\logs\\'.$file.'>'.basename($file).'</a></h4><br>';

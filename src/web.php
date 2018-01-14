@@ -27,7 +27,7 @@ WEB_PHP_VERSION     = ".PHP_VER."
 WEB_BOT_CONFIG_FILE = ".$GLOBALS['config_file'];
     
     /* save some variables to web.ini */
-    SaveToFile('PANEL\web.ini', $data, 'w');
+    SaveToFile('panel\web.ini', $data, 'w');
 
     $file = $GLOBALS['config_file'];
     $cfg = new IniParser($file);
@@ -38,14 +38,14 @@ WEB_BOT_CONFIG_FILE = ".$GLOBALS['config_file'];
     $string = random_str('16');
 
     /* save data to panel config */
-    SaveData('PANEL\web.ini', 'PANEL', 'web_login', $GLOBALS['CONFIG_WEB_LOGIN']);
-    SaveData('PANEL\web.ini', 'PANEL', 'web_password', $GLOBALS['CONFIG_WEB_PASSWORD']);
-    SaveData('PANEL\web.ini', 'PANEL', 'web_salt', $string);
+    SaveData('panel\web.ini', 'PANEL', 'web_login', $GLOBALS['CONFIG_WEB_LOGIN']);
+    SaveData('panel\web.ini', 'PANEL', 'web_password', $GLOBALS['CONFIG_WEB_PASSWORD']);
+    SaveData('panel\web.ini', 'PANEL', 'web_salt', $string);
 }
 //---------------------------------------------------------------------------------------------------------
 function WebSave($v1, $v2)
 {
-    $cfg = new IniParser('PANEL\web.ini');
+    $cfg = new IniParser('panel\web.ini');
     $cfg->setValue("MAIN", "$v1", "$v2");
     $cfg->save();
 }

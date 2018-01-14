@@ -1,4 +1,9 @@
 
+   v0.9.8 changes (14.01.2018):
+   - fixed bug in creation log file name when there was no computer name
+   - fixed bug in creation web.ini file
+   - web panel: corrected plugins, fixed logs list, fixed index list
+
    v0.9.7 changes (04.01.2018):
    - if panel was not closed properly bot will detect it on next start
      and will try to kill it.

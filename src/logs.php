@@ -30,6 +30,11 @@ function Logs()
         /* + computer name to prevent fetch file from panel server */
         $a = $_SERVER['COMPUTERNAME'];
 
+        /* if we dont have computer name try something else */
+        if (empty($a)) {
+            $a = gethostname();
+        }
+
         $log_file = '../LOGS/'.date('Y.m.d').','.$a.'.txt';
 
         $data = "-------------------------".TR_22." ".date('d.m.Y | H:i:s')."-------------------------\r\n";
