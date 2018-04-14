@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2017, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -41,9 +41,7 @@ function plugin_help()
                      $GLOBALS['CONFIG_CMD_PREFIX'].'unpause');
 
         BOT_RESPONSE('Owner Commands: '.$owner_cmd);
-
         BOT_RESPONSE('Admin Commands: '.$admin_cmd);
-
         BOT_RESPONSE('User Commands: '.$user_cmd);
 
       /* if ADMIN use help */

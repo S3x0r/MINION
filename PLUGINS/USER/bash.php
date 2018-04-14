@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2017, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -43,10 +43,10 @@ function plugin_bash()
                        $pr = false;
             } else {
             }
-            CLI_MSG('[PLUGIN: bash] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                 $GLOBALS['channel'], '1');
             BOT_RESPONSE(str_replace('<br />', '', html_entity_decode($quotes[1][$i], ENT_QUOTES)));
         }
+            CLI_MSG('[PLUGIN: bash] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                 $GLOBALS['channel'], '1');
     } catch (Exception $e) {
                              BOT_RESPONSE(TR_49.' plugin_bash() '.TR_50);
                              CLI_MSG('[ERROR]: '.TR_49.' plugin_bash() '.TR_50, '1');

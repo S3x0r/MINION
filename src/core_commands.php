@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2017, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -84,7 +84,7 @@ function CoreCmd_Pause()
     $GLOBALS['stop'] = '1';
 
     CLI_MSG('[PLUGIN: pause] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'], '1');
-    CLI_MSG('[BOT] Im in Pause mode');
+    CLI_MSG('[BOT] Im in Pause mode', '1');
 }
 //---------------------------------------------------------------------------------------------------------
 function CoreCmd_Unpause()
@@ -94,7 +94,7 @@ function CoreCmd_Unpause()
         BOT_RESPONSE('Back to life!');
         CLI_MSG('[PLUGIN: unpause] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                 $GLOBALS['channel'], '1');
-        CLI_MSG('[BOT] Unpaused');
+        CLI_MSG('[BOT] Unpaused', '1');
     } else {
              BOT_RESPONSE('First i need to be paused, then i can unpause myself :p');
              BOT_RESPONSE('Use !pause first');

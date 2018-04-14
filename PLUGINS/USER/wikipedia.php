@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2017, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -36,13 +36,12 @@ function plugin_wikipedia()
                 if (isset($json[1][$i])) {
                     $resultTitle = $json[1][$i];
                     $resultUrl   = $json[3][$i];
-               
-                    CLI_MSG('[PLUGIN: wikipedia] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                            $GLOBALS['channel'].' | find: '.$query, '1');
-                 
+
                     BOT_RESPONSE($resultTitle.' - '.$resultUrl);
                 }
             }
+            CLI_MSG('[PLUGIN: wikipedia] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+            $GLOBALS['channel'].' | find: '.$query, '1');
         } else {
                  BOT_RESPONSE('I cannot use this plugin, i need php_openssl extension to work!');
         }

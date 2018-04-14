@@ -36,7 +36,7 @@ define('TR_35', 'Joining channel:');
 define('TR_36', 'From now you are on my owner(s) list, enjoy.');
 define('TR_37', 'I recovered my original nickname');
 define('TR_38', 'loaded.');
-define('TR_39', 'unloaded.');
+define('TR_39', 'unloaded by:');
 define('TR_40', 'Plugin:');
 define('TR_41', 'Plugin already Loaded!');
 define('TR_42', 'No such plugin to unload');

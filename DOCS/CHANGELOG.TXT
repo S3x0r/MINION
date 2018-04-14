@@ -1,4 +1,16 @@
 
+   v0.9.9 changes (14.04.2018):
+   - plugin 'bash' corrected doubled cli messages
+   - plugin 'gethost' more response from plugin
+   - plugin 'morse' little correction
+   - plugin 'ping' little info correction
+   - plugin 'ripe' only ip to check
+   - plugin 'webtitle' response if no website or empty title
+   - plugin 'wikipedia' corrected doubled cli messages
+   - plugins 'pause', 'unpause' fixed error message
+   - plugins 'load', 'unload' more cli messages
+   - copyright years updated
+
    v0.9.8 changes (14.01.2018):
    - fixed bug in creation log file name when there was no computer name
    - fixed bug in creation web.ini file

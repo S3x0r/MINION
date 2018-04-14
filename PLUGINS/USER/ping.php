@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2017, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -18,20 +18,20 @@ if (PHP_SAPI !== 'cli') {
     die('This script can\'t be run from a web browser. Use CLI to run it.');
 }
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Pings a host: '.$GLOBALS['CONFIG_CMD_PREFIX'].'ping <host>';
+    $plugin_description = 'Pings host/ip: '.$GLOBALS['CONFIG_CMD_PREFIX'].'ping <host/ip>';
     $plugin_command = 'ping';
 
 function plugin_ping()
 {
     try {
-        if (OnEmptyArg('ping <host>')) {
+        if (OnEmptyArg('ping <host/ip>')) {
         } else {
                  if (!isset($GLOBALS['OS_TYPE'])) {
                      $ip = gethostbyname($GLOBALS['args']);
                  
                  if ((!preg_match('/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/', $ip)) and
                       (($ip == $GLOBALS['args']) or ($ip === false))) {
-                        BOT_RESPONSE('Unknown host: \''.$GLOBALS['args'].'\'');
+                        BOT_RESPONSE('Unknown host/ip: \''.$GLOBALS['args'].'\'');
                  } else {
                           $ping = ping($ip);
                           if ($ping) {

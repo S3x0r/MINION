@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2017, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -28,11 +28,10 @@ function Logs()
         }
 
         /* + computer name to prevent fetch file from panel server */
-        $a = $_SERVER['COMPUTERNAME'];
-
-        /* if we dont have computer name try something else */
-        if (empty($a)) {
-            $a = gethostname();
+        if (!empty($_SERVER['COMPUTERNAME'])) {
+            $a = $_SERVER['COMPUTERNAME'];
+        } else { /* if we dont have computer name try something else */
+                 $a = gethostname();
         }
 
         $log_file = '../LOGS/'.date('Y.m.d').','.$a.'.txt';

@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2017, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -124,8 +124,9 @@ function UnloadPlugin($plugin)
                 unset($GLOBALS['OWNER_PLUGINS'][$key]);
                 //TODO: rename function
                 if (!in_array($with_prefix, $GLOBALS['OWNER_PLUGINS'])) {
-                    CLI_MSG('[Plugin]: \''.$without_prefix.'\' '.TR_39, '1');
-                    BOT_RESPONSE(TR_40.' \''.$without_prefix.'\' '.TR_39);
+                    CLI_MSG('[Plugin]: \''.$without_prefix.'\' '.TR_39.' '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].
+                        ') | chan: '.$GLOBALS['channel'], '1');
+                    BOT_RESPONSE(TR_40.' \''.$without_prefix.'\' unloaded.');
                 }
             }
 //---------------------------------------------------------------------------------------------------------
@@ -133,8 +134,9 @@ function UnloadPlugin($plugin)
                 unset($GLOBALS['ADMIN_PLUGINS'][$key]);
                 //TODO: rename function
                 if (!in_array($with_prefix, $GLOBALS['ADMIN_PLUGINS'])) {
-                    CLI_MSG('[Plugin]: \''.$without_prefix.'\' '.TR_39, '1');
-                    BOT_RESPONSE(TR_40.' \''.$without_prefix.'\' '.TR_39);
+                    CLI_MSG('[Plugin]: \''.$without_prefix.'\' '.TR_39.' '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].
+                        ') | chan: '.$GLOBALS['channel'], '1');
+                    BOT_RESPONSE(TR_40.' \''.$without_prefix.'\' unloaded.');
                 }
             }
 //---------------------------------------------------------------------------------------------------------
@@ -142,12 +144,14 @@ function UnloadPlugin($plugin)
                 unset($GLOBALS['USER_PLUGINS'][$key]);
                 //TODO: rename function
                 if (!in_array($with_prefix, $GLOBALS['USER_PLUGINS'])) {
-                    CLI_MSG('[Plugin]: \''.$without_prefix.'\' '.TR_39, '1');
-                    BOT_RESPONSE(TR_40.' \''.$without_prefix.'\' '.TR_39);
+                    CLI_MSG('[Plugin]: \''.$without_prefix.'\' '.TR_39.' '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].
+                        ') | chan: '.$GLOBALS['channel'], '1');
+                    BOT_RESPONSE(TR_40.' \''.$without_prefix.'\' unloaded.');
                 }
             }
         } else {
-                  CLI_MSG('[PLUGIN]: '.TR_42, '1');
+                  CLI_MSG('[PLUGIN]: '.TR_42.': \''.$GLOBALS['piece1'].'\' by: '.$GLOBALS['USER'].' ('
+                  .$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'], '1');
                   BOT_RESPONSE(TR_42);
         }
     } catch (Exception $e) {
@@ -179,7 +183,8 @@ function LoadPlugin($plugin)
  
                 /* bot responses */
                 BOT_RESPONSE(TR_40.' \''.$without_prefix.'\' '.TR_38);
-                CLI_MSG('[PLUGIN]: '.TR_61.' '.$without_prefix.', '.TR_48.' '.$GLOBALS['USER'], '1');
+                CLI_MSG('[PLUGIN]: '.TR_61.' '.$without_prefix.', '.TR_48.' '.$GLOBALS['USER'].' ('
+                .$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'], '1');
             } elseif (file_exists('../PLUGINS/ADMIN/'.$without_prefix.'.php')) {
                 /* include that file */
                 include_once('../PLUGINS/ADMIN/'.$without_prefix.'.php');
@@ -189,7 +194,8 @@ function LoadPlugin($plugin)
 
                 /* bot responses */
                 BOT_RESPONSE(TR_40.' \''.$without_prefix.'\' '.TR_38);
-                CLI_MSG('[PLUGIN]: '.TR_61.' '.$without_prefix.', '.TR_48.' '.$GLOBALS['USER'], '1');
+                CLI_MSG('[PLUGIN]: '.TR_61.' '.$without_prefix.', '.TR_48.' '.$GLOBALS['USER'].' ('
+                .$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'], '1');
             } elseif (file_exists('../PLUGINS/USER/'.$without_prefix.'.php')) {
                 /* include that file */
                 include_once('../PLUGINS/USER/'.$without_prefix.'.php');
@@ -199,7 +205,8 @@ function LoadPlugin($plugin)
 
                 /* bot responses */
                 BOT_RESPONSE(TR_40.' \''.$without_prefix.'\' '.TR_38);
-                CLI_MSG('[PLUGIN]: '.TR_61.' '.$without_prefix.', '.TR_48.' '.$GLOBALS['USER'], '1');
+                CLI_MSG('[PLUGIN]: '.TR_61.' '.$without_prefix.', '.TR_48.' '.$GLOBALS['USER'].' ('
+                .$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'], '1');
             } else {
                      BOT_RESPONSE('No such plugin to load.');
             }

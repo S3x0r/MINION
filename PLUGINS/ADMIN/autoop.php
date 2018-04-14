@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2017, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -49,8 +49,8 @@ function plugin_autoop()
             /* Inform nick about it */
             fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :From now you are on my auto op list, enjoy.\n");
 
-            CLI_MSG('[PLUGIN: autoop] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'].
-                ' | host added: '.$GLOBALS['args'], '1');
+            CLI_MSG('[PLUGIN: autoop] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                $GLOBALS['channel'].' | host added: '.$GLOBALS['args'], '1');
 
             BOT_RESPONSE('Host: \''.$host[0].'\' added to auto op list.');
         } else {

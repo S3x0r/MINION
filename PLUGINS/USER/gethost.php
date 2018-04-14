@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2017, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -23,18 +23,17 @@ if (PHP_SAPI !== 'cli') {
 
 function plugin_gethost()
 {
-    try {
-        if (OnEmptyArg('gethost <ip>')) {
-        } else {
-                 $host = gethostbyaddr(trim($GLOBALS['args']));
-            if ($host != '') {
-                BOT_RESPONSE('hostname: '.$host);
-                CLI_MSG('[PLUGIN: gethost] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                $GLOBALS['channel'].' | host: '.$GLOBALS['args'].'/'.$host, '1');
-            }
+    if (OnEmptyArg('gethost <ip>')) {
+    } else {
+             $host = gethostbyaddr(trim($GLOBALS['args']));
+        if (!empty($host) && $host != $GLOBALS['args']) {
+            BOT_RESPONSE('hostname: '.$host);
+        } elseif ($host == $GLOBALS['args']) {
+                  BOT_RESPONSE('Cannot resolve '.$GLOBALS['args']);
+        } elseif (empty($host)) {
+                  BOT_RESPONSE('Address is not a valid IPv4 or IPv6 address');
         }
-    } catch (Exception $e) {
-                          BOT_RESPONSE(TR_49.' plugin_gethost() '.TR_50);
-                          CLI_MSG('[ERROR]: '.TR_49.' plugin_gethost() '.TR_50, '1');
+        CLI_MSG('[PLUGIN: gethost] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+        $GLOBALS['channel'].' | host: '.$GLOBALS['args'].'/'.$host, '1');
     }
 }

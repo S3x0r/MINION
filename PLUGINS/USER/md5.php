@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2017, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -30,7 +30,7 @@ function plugin_md5()
               $md5  = md5($data);
            
               CLI_MSG('[PLUGIN: md5] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                $GLOBALS['channel'].' | string: '.$data, '1');
+                $GLOBALS['channel'].' | string: \''.$data.'\'', '1');
 
               BOT_RESPONSE('(MD5) \''.$data.'\' -> '.$md5);
     }

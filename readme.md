@@ -108,13 +108,13 @@ You can change prefix in config file.
 |                  | Loads given plugin to BOT                | !plugin load <plugin>         |  OWNER       |  All      |
 |                  | Move plugin from OWNER dir to USER dir   | !plugin move <plugin>         |  OWNER       |  All      |
 |                  | Unloads plugin from BOT                  | !plugin unload <plugin>       |  OWNER       |  All      |
-|    ping          | Ping given host                          | !ping <address>               |  ALL         |  WIN      |
+|    ping          | Ping given host/ip                       | !ping <host/ip>               |  ALL         |  WIN      |
 |    quit          | Shutdown BOT                             | !quit                         |  OWNER       |  All      |
 |    raw           | Sends raw string to server               | !raw <string> <2> <3> <4>     |  OWNER       |  All      |
 |    remadmin      | Removes admin from config file           | !remadmin <nick!ident@host>   |  OWNER       |  All      |
 |    remowner      | Removes owner host from config file      | !remowner <nick!ident@host>   |  OWNER       |  All      |
 |    restart       | Restarts BOT                             | !restart                      |  OWNER       |  All      |
-|    ripe          | Checks ip/host address and show results  | !ripe <address>               |  ALL         |  All      |
+|    ripe          | Checks ip address and show results       | !ripe <ip address>            |  ALL         |  All      |
 |    save          | Saving to config file                    | !save                         |  OWNER       |  All      |
 |                  | Saving auto join value in config         | !save auto_join <string>      |  OWNER       |  All      |
 |                  | Saving auto op value in config           | !save auto_op <string>        |  OWNER       |  All      |

@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2017, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -19,12 +19,12 @@ if (PHP_SAPI !== 'cli') {
 }
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = 'Checks ip or host address and shows results: '
-    .$GLOBALS['CONFIG_CMD_PREFIX'].'ripe <ip or host>';
+    .$GLOBALS['CONFIG_CMD_PREFIX'].'ripe <ip>';
     $plugin_command = 'ripe';
 
 function plugin_ripe()
 {
-    if (OnEmptyArg('ripe <ip or host>')) {
+    if (OnEmptyArg('ripe <ip>')) {
     } else {
         if (extension_loaded('openssl')) {
             CLI_MSG('[PLUGIN: ripe] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
@@ -44,9 +44,9 @@ function ripe_check_ip($args)
         $result = json_decode(file_get_contents("https://stat.ripe.net/data/whois/data.json?resource="
         .urlencode($args)."/32"), true);
         if ($result["status"]=!"ok") {
-            $returnstring = 'Cannot check, no connection to server';
+            $returnstring = 'Cannot check IP, no connection to server.';
         } elseif (count($result["data"]["records"])==0) {
-            $returnstring = 'Error, no results';
+            $returnstring = 'No results.';
         } else {
             $data = 'IP-block: ';
             foreach ($result["data"]["records"][0] as $record) {
@@ -75,7 +75,7 @@ function ripe_check_ip($args)
         if (!isset($something)) {
             return ripe_check_ip($ip);
         } else {
-            $returnstring = 'Cannot resolve, Enter valid ip or address!';
+            $returnstring = 'Cannot resolve, Enter valid IP!';
         }
     }
     return $returnstring;
