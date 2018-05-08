@@ -116,7 +116,7 @@ function CoreCmd_Panel()
         switch ($GLOBALS['piece1']) {
             case 'start':
                 /* if windows system */
-                if (!isset($GLOBALS['OS_TYPE'])) {
+                if (!isset($GLOBALS['OS'])) {
                     $port = $GLOBALS['piece2'];
                     if (!empty($port)) {
                         if (!isRunned('serv')) {
@@ -142,7 +142,7 @@ function CoreCmd_Panel()
                 }
                 break;
             case 'stop':
-                if (!isset($GLOBALS['OS_TYPE'])) {
+                if (!isset($GLOBALS['OS'])) {
                     if (kill('serv')) {
                         BOT_RESPONSE('Panel Closed');
                         CLI_MSG('[PLUGIN: panel] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
@@ -200,10 +200,8 @@ function CoreCmd_RegisterToBot()
 
                     if (empty($owners_list)) {
                         $new_list = $new.'';
-                    }
-
-                    if (!empty($owners_list)) {
-                        $new_list = $owners_list.', '.$new;
+                    } else {
+                             $new_list = $owners_list.', '.$new;
                     }
 
                     SaveData($GLOBALS['config_file'], 'OWNER', 'bot_owners', $new_list);
@@ -216,10 +214,8 @@ function CoreCmd_RegisterToBot()
 
                     if (empty($auto_list)) {
                         $new_list = $new.'';
-                    }
-
-                    if (!empty($auto_list)) {
-                        $new_list = $auto_list.', '.$new;
+                    } else {
+                             $new_list = $auto_list.', '.$new;
                     }
 
                     SaveData($GLOBALS['config_file'], 'OWNER', 'auto_op_list', $new_list);
@@ -270,7 +266,6 @@ function CoreCmd_RegisterToBot()
             }
         }
     } catch (Exception $e) {
-                             BOT_RESPONSE(TR_49.' RegisterToBot() '.TR_50);
-                             CLI_MSG('[ERROR]: '.TR_49.' RegisterToBot() '.TR_50, '1');
+                             CLI_MSG('[ERROR]: '.TR_49.' '.__FUNCTION__.' '.TR_50, '1');
     }
 }

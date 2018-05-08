@@ -15,7 +15,8 @@
  */
 //---------------------------------------------------------------------------------------------------------
 if (PHP_SAPI !== 'cli') {
-    die('<h2>This script can\'t be run from a web browser. Use CLI to run it -> php BOT.php</h2>');
+    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
 //---------------------------------------------------------------------------------------------------------
 function StartupConfig()
@@ -52,9 +53,9 @@ function LoadConfig($filename)
 
     /* check if config is loaded from -c switch */
     if (isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == '-c') {
-        if (isset($_SERVER['argv'][2]) && file_exists($_SERVER['argv'][2])) {
+        if (isset($_SERVER['argv'][2]) && is_file($_SERVER['argv'][2])) {
             $config_file = $_SERVER['argv'][2];
-        } elseif (isset($_SERVER['argv'][2]) && !file_exists($_SERVER['argv'][2])) {
+        } elseif (isset($_SERVER['argv'][2]) && !is_file($_SERVER['argv'][2])) {
                    echo '  [ERROR] Config file does not exist, wrong path?'.PHP_EOL.PHP_EOL;
                    sleep(6);
                    die();
@@ -77,8 +78,14 @@ function LoadConfig($filename)
         $GLOBALS['CONFIG_NAME']           = $cfg->get('BOT', 'name');
         $GLOBALS['CONFIG_IDENT']          = $cfg->get('BOT', 'ident');
         /* SERVER */
-        $GLOBALS['CONFIG_SERVER']         = $cfg->get('SERVER', 'server');
-        $GLOBALS['CONFIG_PORT']           = $cfg->get('SERVER', 'port');
+        /* if -o switch server */
+        if (empty($_SERVER['argv'][2])) {
+            $GLOBALS['CONFIG_SERVER']     = $cfg->get('SERVER', 'server');
+        }
+        /* if -o switch port */
+        if (empty($_SERVER['argv'][3])) {
+            $GLOBALS['CONFIG_PORT']       = $cfg->get('SERVER', 'port');
+        }
         $GLOBALS['CONFIG_SERVER_PASSWD']  = $cfg->get('SERVER', 'server_password');
         $GLOBALS['CONFIG_TRY_CONNECT']    = $cfg->get('SERVER', 'try_connect');
         $GLOBALS['CONFIG_CONNECT_DELAY']  = $cfg->get('SERVER', 'connect_delay');
@@ -124,6 +131,7 @@ function LoadConfig($filename)
         $GLOBALS['CONFIG_FETCH_SERVER']   = $cfg->get('FETCH', 'fetch_server');
         /* PROGRAM */
         $GLOBALS['CONFIG_SHOW_LOGO']      = $cfg->get('PROGRAM', 'show_logo');
+        /* if switch used */
         if (empty($GLOBALS['silent_cli'])) {
             $GLOBALS['silent_mode']       = $cfg->get('PROGRAM', 'silent_mode');
         }

@@ -1,14 +1,15 @@
 <?php
 
 if (PHP_SAPI !== 'cli') {
-    die('<h2>This script can\'t be run from a web browser. Use CLI to run it -> php BOT.php</h2>');
+    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
 
 
 /* English Language File */
 
-define('TR_10', 'author:');
-define('TR_11', 'email:');
+define('TR_10', 'Author:');
+define('TR_11', 'Email:');
 define('TR_12', 'Total Lines of code:');
 define('TR_13', 'Default BOT owner(s) password detected!');
 define('TR_14', 'For security please change it (password can not contain spaces)');

@@ -15,7 +15,8 @@
  */
 
 if (PHP_SAPI !== 'cli') {
-    die('This script can\'t be run from a web browser. Use CLI to run it.');
+    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = 'Adds host to autoop list in config file: '
@@ -31,28 +32,33 @@ function plugin_autoop()
         if (preg_match('/^(.+?)!(.+?)@(.+?)$/', $GLOBALS['args'], $host)) {
             LoadData($GLOBALS['config_file'], 'OWNER', 'auto_op_list');
 
-            $auto_list   = $GLOBALS['LOADED'];
-            $new         = $host[0];
-            if ($auto_list == '') {
-                $new_list = $new.'';
-            }
-            if ($auto_list != '') {
-                $new_list = $auto_list.', '.$new;
-            }
+            if (strpos($GLOBALS['LOADED'], $GLOBALS['args']) !== false) {
+                BOT_RESPONSE('I already have this host.');
+            } else {
+                     $auto_list   = $GLOBALS['LOADED'];
+                     $new         = $host[0];
+
+                if (empty($auto_list)) {
+                    $new_list = $new.'';
+                } else {
+                         $new_list = $auto_list.', '.$new;
+                }
  
-            SaveData($GLOBALS['config_file'], 'OWNER', 'auto_op_list', $new_list);
+                     SaveData($GLOBALS['config_file'], 'OWNER', 'auto_op_list', $new_list);
 
-            /* update variable with new owners */
-            $cfg = new IniParser($GLOBALS['config_file']);
-            $GLOBALS['CONFIG_AUTO_OP_LIST'] = $cfg->get("OWNER", "auto_op_list");
+                     /* update variable with new owners */
+                     $cfg = new IniParser($GLOBALS['config_file']);
+                     $GLOBALS['CONFIG_AUTO_OP_LIST'] = $cfg->get("OWNER", "auto_op_list");
 
-            /* Inform nick about it */
-            fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :From now you are on my auto op list, enjoy.\n");
+                     /* Inform nick about it */
+                     fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0].
+                           " :From now you are on my auto op list, enjoy.\n");
 
-            CLI_MSG('[PLUGIN: autoop] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                $GLOBALS['channel'].' | host added: '.$GLOBALS['args'], '1');
+                     BOT_RESPONSE('Host: \''.$host[0].'\' added to auto op list.');
 
-            BOT_RESPONSE('Host: \''.$host[0].'\' added to auto op list.');
+                     CLI_MSG('[PLUGIN: autoop] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                             $GLOBALS['channel'].' | host added: '.$GLOBALS['args'], '1');
+            }
         } else {
                  BOT_RESPONSE('Bad input, try: nick!ident@hostname');
         }

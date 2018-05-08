@@ -15,7 +15,8 @@
  */
 
 if (PHP_SAPI !== 'cli') {
-    die('This script can\'t be run from a web browser. Use CLI to run it.');
+    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = 'Shows BOT owners: '.$GLOBALS['CONFIG_CMD_PREFIX'].'listowners';
@@ -23,20 +24,20 @@ if (PHP_SAPI !== 'cli') {
 
 function plugin_listowners()
 {
-
-    CLI_MSG('[PLUGIN: listowners] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-        $GLOBALS['channel'], '1');
-
     LoadData($GLOBALS['config_file'], 'OWNER', 'bot_owners');
 
-    $pieces = explode(", ", $GLOBALS['LOADED']);
-    $owners = $pieces;
-
-    $table = $owners;
+    if (empty($GLOBALS['LOADED'])) {
+        BOT_RESPONSE('Empty owner(s) list.');
+    } else {
+             $pieces = explode(", ", $GLOBALS['LOADED']);
  
-    BOT_RESPONSE('My Owner(s) Host(s):');
+             BOT_RESPONSE('My Owner(s) Host(s):');
 
-    for ($i=0; $i<count($table); $i++) {
-         BOT_RESPONSE($table[$i]);
+        for ($i=0; $i<count($pieces); $i++) {
+             BOT_RESPONSE($pieces[$i]);
+        }
     }
+
+    CLI_MSG('[PLUGIN: listowners] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+            $GLOBALS['channel'], '1');
 }

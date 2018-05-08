@@ -15,10 +15,11 @@
  */
 
 if (PHP_SAPI !== 'cli') {
-    die('<h2>This script can\'t be run from a web browser. Use CLI to run it -> php BOT.php</h2>');
+    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '0.9.9');
+    define('VER', '1.0.0');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());

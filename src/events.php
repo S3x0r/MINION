@@ -15,7 +15,8 @@
  */
 
 if (PHP_SAPI !== 'cli') {
-    die('<h2>This script can\'t be run from a web browser. Use CLI to run it -> php BOT.php</h2>');
+    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
 //---------------------------------------------------------------------------------------------------------
 function on_server_ping()
@@ -130,7 +131,7 @@ function on_kick()
     }
     /* else */
     CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') kicked '.
-        $GLOBALS['ex'][3].' from '.$GLOBALS['channel'], '1');
+            $GLOBALS['ex'][3].' from '.$GLOBALS['channel'], '1');
 
     /* Save to database for seen purpose */
     SeenSave();
@@ -140,7 +141,7 @@ function on_topic()
 {
     /* topic change */
     CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') ('.
-        $GLOBALS['channel'].') sets topic: '.parse_ex3('3'), '1');
+            $GLOBALS['channel'].') sets topic: '.parse_ex3('3'), '1');
 }
 //---------------------------------------------------------------------------------------------------------
 function on_privmsg()
@@ -166,7 +167,7 @@ function on_mode()
             if (isset($GLOBALS['ex'][3]) && $GLOBALS['ex'][3] == '+o') {
                 /* info */
                 CLI_MSG('[BOT] I have OP now on: '.$GLOBALS['channel']. ', from: '.$GLOBALS['USER'].
-                    ' ('.$GLOBALS['USER_HOST'].')', '1');
+                        ' ('.$GLOBALS['USER_HOST'].')', '1');
                 
                 /* set to opped var */
                 $GLOBALS['BOT_OPPED'] = 'yes';
@@ -187,7 +188,7 @@ function on_mode()
             if (isset($GLOBALS['ex'][3]) && $GLOBALS['ex'][3] == '-o') {
                 /* info */
                 CLI_MSG('[BOT] User: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') DEOPED ME on channel: '.
-                    $GLOBALS['channel'], '1');
+                        $GLOBALS['channel'], '1');
                 
                 /* bot not opped anymore */
                 unset($GLOBALS['BOT_OPPED']);

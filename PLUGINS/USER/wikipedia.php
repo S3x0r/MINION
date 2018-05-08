@@ -15,7 +15,8 @@
  */
 
 if (PHP_SAPI !== 'cli') {
-    die('This script can\'t be run from a web browser. Use CLI to run it.');
+    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = 'Searchs wikipedia: '.$GLOBALS['CONFIG_CMD_PREFIX'].'wikipedia <lang> <string>';
@@ -23,25 +24,30 @@ if (PHP_SAPI !== 'cli') {
 
 function plugin_wikipedia()
 {
-
     if (OnEmptyArg('wikipedia <lang> <string>')) {
     } else {
         if (extension_loaded('openssl')) {
             $query = $GLOBALS['piece2'].' '.$GLOBALS['piece3'].' '.$GLOBALS['piece4'];
-            $json  = @file_get_contents('https://'.$GLOBALS['piece1'].
+            
+            $json  = @file_get_contents('http://'.$GLOBALS['piece1'].
             '.wikipedia.org/w/api.php?action=opensearch&list=search&search='.urlencode($query));
-            $json  = json_decode($json);
+            
+            if (!empty($json)) {
+                $json  = json_decode($json);
 
-            for ($i = 0; $i < 3; $i++) {
-                if (isset($json[1][$i])) {
-                    $resultTitle = $json[1][$i];
-                    $resultUrl   = $json[3][$i];
+                for ($i = 0; $i < 3; $i++) {
+                    if (isset($json[1][$i])) {
+                        $resultTitle = $json[1][$i];
+                        $resultUrl   = $json[3][$i];
 
-                    BOT_RESPONSE($resultTitle.' - '.$resultUrl);
+                        BOT_RESPONSE($resultTitle.' - '.$resultUrl);
+                    }
                 }
+                CLI_MSG('[PLUGIN: wikipedia] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                        $GLOBALS['channel'].' | find: '.$query, '1');
+            } else {
+                     BOT_RESPONSE('No such language.');
             }
-            CLI_MSG('[PLUGIN: wikipedia] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-            $GLOBALS['channel'].' | find: '.$query, '1');
         } else {
                  BOT_RESPONSE('I cannot use this plugin, i need php_openssl extension to work!');
         }

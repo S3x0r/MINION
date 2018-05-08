@@ -15,11 +15,11 @@
  */
 
 if (PHP_SAPI !== 'cli') {
-    die('This script can\'t be run from a web browser. Use CLI to run it.');
+    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Checks ip or host address and shows results: '
-    .$GLOBALS['CONFIG_CMD_PREFIX'].'ripe <ip>';
+    $plugin_description = 'Checks ip address and shows results: '.$GLOBALS['CONFIG_CMD_PREFIX'].'ripe <ip>';
     $plugin_command = 'ripe';
 
 function plugin_ripe()
@@ -27,10 +27,10 @@ function plugin_ripe()
     if (OnEmptyArg('ripe <ip>')) {
     } else {
         if (extension_loaded('openssl')) {
-            CLI_MSG('[PLUGIN: ripe] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                $GLOBALS['channel'].' | address: '.$GLOBALS['args'], '1');
-
             BOT_RESPONSE(ripe_check_ip($GLOBALS['args']));
+
+            CLI_MSG('[PLUGIN: ripe] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                    $GLOBALS['channel'].' | ip: '.$GLOBALS['args'], '1');
         } else {
                  BOT_RESPONSE('I cannot use this plugin, i need php_openssl extension to work!');
         }
@@ -39,44 +39,35 @@ function plugin_ripe()
 
 function ripe_check_ip($args)
 {
+    $result = json_decode(file_get_contents("https://stat.ripe.net/data/whois/data.json?resource="
+              .urlencode($args)."/32"), true);
 
-    if (!isset($something)) {
-        $result = json_decode(file_get_contents("https://stat.ripe.net/data/whois/data.json?resource="
-        .urlencode($args)."/32"), true);
-        if ($result["status"]=!"ok") {
-            $returnstring = 'Cannot check IP, no connection to server.';
-        } elseif (count($result["data"]["records"])==0) {
-            $returnstring = 'No results.';
-        } else {
-            $data = 'IP-block: ';
-            foreach ($result["data"]["records"][0] as $record) {
-                switch ($record["key"]) {
-                    case 'inetnum':
-                    case 'netname':
-                    case 'descr':
-                    case 'country':
-                         $data .= "[".$record["value"]."] ";
-                    // FALL-TROUGH
-                    default:
-                }
-            }
-            foreach ($result["data"]["irr_records"][0] as $record) {
-                switch ($record["key"]) {
-                    case 'origin':
-                         $data .= "| Network: AS".$record["value"]." |";
-                    // FALL-TROUGH
-                    default:
-                }
-            }
-            $returnstring = "Info about ".$args.": ".$data." rDNS: ".gethostbyaddr($args);
-        }
+    if (empty($result)) {
+        $returnstring = 'Cannot check IP, no connection to ripe server.';
+    } elseif (count($result["data"]["records"])==0) {
+              $returnstring = 'No results.';
     } else {
-        $ip = gethostbyname($args);
-        if (!isset($something)) {
-            return ripe_check_ip($ip);
-        } else {
-            $returnstring = 'Cannot resolve, Enter valid IP!';
+             $data = 'IP-block: ';
+        foreach ($result["data"]["records"][0] as $record) {
+            switch ($record["key"]) {
+                case 'inetnum':
+                case 'netname':
+                case 'descr':
+                case 'country':
+                    $data .= "[".$record["value"]."] ";
+                    //fall-through
+                default:
+            }
         }
+        foreach ($result["data"]["irr_records"][0] as $record) {
+            switch ($record["key"]) {
+                case 'origin':
+                    $data .= "| Network: AS".$record["value"]." |";
+                    //fall-through
+                default:
+            }
+        }
+            $returnstring = "Info about ".$args.": ".$data." rDNS: ".gethostbyaddr($args);
     }
     return $returnstring;
 }

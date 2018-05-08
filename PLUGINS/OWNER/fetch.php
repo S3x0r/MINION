@@ -15,7 +15,8 @@
  */
 
 if (PHP_SAPI !== 'cli') {
-    die('This script can\'t be run from a web browser. Use CLI to run it.');
+    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = 'Downloads plugins from repository: '.$GLOBALS['CONFIG_CMD_PREFIX'].
@@ -24,20 +25,22 @@ if (PHP_SAPI !== 'cli') {
 
 function plugin_fetch()
 {
-
     if (OnEmptyArg('fetch list / fetch get <plugin>')) {
     } else {
         if (extension_loaded('openssl')) {
             if ($GLOBALS['args'] == 'list') {
                 $addr_list = 'https://raw.githubusercontent.com/S3x0r/minion_repository_plugins/master/plugin_list.db';
                 $list = file_get_contents($addr_list);
+
                 BOT_RESPONSE('Repository list:');
                 BOT_RESPONSE($list);
                 BOT_RESPONSE('End list.');
             } elseif ($GLOBALS['piece1'] == 'get') {
                 if (!empty($GLOBALS['piece2'])) {
                     $address = $GLOBALS['CONFIG_FETCH_SERVER'].'/'.$GLOBALS['piece2'].'.php';
+
                     BOT_RESPONSE('Downloading plugin: "'.$GLOBALS['piece2'].'" from repository');
+                    
                     $check_file = 'PLUGINS/'.$GLOBALS['piece2'].'.php';
 
                     if (file_exists($check_file)) {
@@ -53,13 +56,15 @@ function plugin_fetch()
                             fclose($a);
                             $delete = 'PLUGINS/'.$GLOBALS['piece2'].'.php';
                             unlink($delete);
+
                             CLI_MSG('[PLUGIN: fetch] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                                $GLOBALS['channel'].' | plugin: '.$GLOBALS['piece2'], '1');
+                                    $GLOBALS['channel'].' | plugin: '.$GLOBALS['piece2'], '1');
                         } else {
                                 fclose($a);
                                 BOT_RESPONSE('Plugin added.');
+
                                 CLI_MSG('[PLUGIN: fetch] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                                $GLOBALS['channel'].' | plugin: '.$GLOBALS['piece2'], '1');
+                                        $GLOBALS['channel'].' | plugin: '.$GLOBALS['piece2'], '1');
                         }
                     }
                 }

@@ -15,7 +15,8 @@
  */
 
 if (PHP_SAPI !== 'cli') {
-    die('This script can\'t be run from a web browser. Use CLI to run it.');
+    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = 'Shows webpage titile: '.$GLOBALS['CONFIG_CMD_PREFIX'].'webtitle <web address>';
@@ -32,11 +33,11 @@ function plugin_webtitle()
                     if (strlen($matches[1]) == 256) {
                         $matches[1].='...';
                     }
-                    CLI_MSG('[PLUGIN: webtitle] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                            $GLOBALS['channel'], '1');
-
                     BOT_RESPONSE('Title: '.
                     str_replace("\n", '', str_replace("\r", '', html_entity_decode($matches[1], ENT_QUOTES, 'utf-8'))));
+
+                    CLI_MSG('[PLUGIN: webtitle] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                            $GLOBALS['channel'], '1');
                 }
             } elseif (empty($file)) {
                       BOT_RESPONSE('No title or cannot resolve website.');

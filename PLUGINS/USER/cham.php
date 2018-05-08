@@ -15,7 +15,8 @@
  */
 
 if (PHP_SAPI !== 'cli') {
-    die('This script can\'t be run from a web browser. Use CLI to run it.');
+    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = 'Shows random text from file: '.$GLOBALS['CONFIG_CMD_PREFIX'].'cham <nick>';
@@ -43,16 +44,15 @@ function plugin_cham()
 
                 $who = trim($GLOBALS['args']);
 
+                BOT_RESPONSE($who.': '.$text);
+
                 CLI_MSG('[PLUGIN: cham] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                 $GLOBALS['channel'].' | to: '.$who, '1');
-
-                BOT_RESPONSE($who.': '.$text);
             } else {
                      BOT_RESPONSE('no file specified to use plugin');
             }
         }
     } catch (Exception $e) {
-                             BOT_RESPONSE(TR_49.' plugin_cham() '.TR_50);
-                             CLI_MSG('[ERROR]: '.TR_49.' plugin_cham() '.TR_50, '1');
+                             CLI_MSG('[ERROR]: '.TR_49.' '.__FUNCTION__.' '.TR_50, '1');
     }
 }

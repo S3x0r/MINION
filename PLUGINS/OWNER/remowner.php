@@ -15,7 +15,8 @@
  */
 
 if (PHP_SAPI !== 'cli') {
-    die('This script can\'t be run from a web browser. Use CLI to run it.');
+    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = 'Removes owner from config file: '
@@ -24,36 +25,41 @@ if (PHP_SAPI !== 'cli') {
 
 function plugin_remowner()
 {
-
     if (OnEmptyArg('remowner <nick!ident@hostname>')) {
     } else {
-              /* read owners from config */
-              LoadData($GLOBALS['config_file'], 'OWNER', 'bot_owners');
-              $owners_list = $GLOBALS['LOADED'];
-              $array = explode(" ", str_replace(',', '', $owners_list));
-
+        if (preg_match('/^(.+?)!(.+?)@(.+?)$/', $GLOBALS['args'], $host)) {
+            /* read owners from config */
+            LoadData($GLOBALS['config_file'], 'OWNER', 'bot_owners');
+            $owners_list = $GLOBALS['LOADED'];
+            $array = explode(" ", str_replace(',', '', $owners_list));
             $key = array_search($GLOBALS['args'], $array);
-        if ($key !== false) {
-            /* remove from host from array */
-            unset($array[$key]);
-                      
-            /* new owners string */
-            $string = implode(' ', $array);
-            $string2 = str_replace(' ', ', ', $string);
 
-            /* save new list to config */
-            SaveData($GLOBALS['config_file'], 'OWNER', 'bot_owners', $string2);
+            if ($key !== false) {
+                /* remove from host from array */
+                unset($array[$key]);
 
-            /* update variable with new owners */
-            $cfg = new IniParser($GLOBALS['config_file']);
-            $GLOBALS['CONFIG_OWNERS'] = $cfg->get("OWNER", "bot_owners");
+                /* new owners string */
+                $string = implode(' ', $array);
+                $string2 = str_replace(' ', ', ', $string);
 
-            /* send info to user */
-            BOT_RESPONSE('Host: \''.$GLOBALS['args'].'\' removed from owners.');
-                      
-            /* & to CLI */
-            CLI_MSG('[PLUGIN: remowner] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                $GLOBALS['channel'].' | removed host: '.$GLOBALS['args'], '1');
+                /* save new list to config */
+                SaveData($GLOBALS['config_file'], 'OWNER', 'bot_owners', $string2);
+
+                /* update variable with new owners */
+                $cfg = new IniParser($GLOBALS['config_file']);
+                $GLOBALS['CONFIG_OWNERS'] = $cfg->get("OWNER", "bot_owners");
+
+                /* send info to user */
+                BOT_RESPONSE('Host: \''.$GLOBALS['args'].'\' removed from owners.');
+
+                /* & to CLI */
+                CLI_MSG('[PLUGIN: remowner] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                        $GLOBALS['channel'].' | removed host: '.$GLOBALS['args'], '1');
+            } else {
+                     BOT_RESPONSE('No such host in my list.');
+            }
+        } else {
+                 BOT_RESPONSE('Bad input, try: nick!ident@hostname');
         }
     }
 }

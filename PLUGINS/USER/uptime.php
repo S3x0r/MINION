@@ -15,7 +15,8 @@
  */
  
 if (PHP_SAPI !== 'cli') {
-    die('This script can\'t be run from a web browser. Use CLI to run it.');
+    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = 'Shows BOT uptime: '.$GLOBALS['CONFIG_CMD_PREFIX'].'uptime';
@@ -23,14 +24,13 @@ if (PHP_SAPI !== 'cli') {
 
 function plugin_uptime()
 {
-
     $time = uptime_parse(microtime(true) - START_TIME);
 
+    BOT_RESPONSE('I\'ve been running since ('.date('d.m.Y, H:i:s', START_TIME).
+                  ') and been running for '.$time);
+ 
     CLI_MSG('[PLUGIN: uptime] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
             $GLOBALS['channel'], '1');
-
-    BOT_RESPONSE("I've been running since (".date('d.m.Y, H:i:s', START_TIME).
-        ") and been running for ".$time);
 }
 
 function uptime_parse($seconds)
@@ -45,36 +45,36 @@ function uptime_parse($seconds)
     $divisor_for_seconds = $divisor_for_minutes % 60;
     $seconds = ceil($divisor_for_seconds);
 
-    $result = "";
+    $result = '';
     if (!empty($weeks) && $days > 0) {
-        $result .= $weeks . " week";
+        $result .= $weeks.' week';
     }
     if ($weeks > 1) {
-        $result .= "s";
+        $result .= 's';
     }
     if (!empty($days) && $days > 0) {
-        $result .= $days . " day";
+        $result .= $days.' day';
     }
     if ($days > 1) {
-        $result .= "s";
+        $result .= 's';
     }
     if (!empty($hours) && $hours > 0) {
-        $result .= $hours . " hour";
+        $result .= $hours.' hour';
     }
     if ($hours > 1) {
-        $result .= "s";
+        $result .= 's';
     }
     if (!empty($minutes) && $minutes > 0) {
-        $result .= " " . $minutes . " minute";
+        $result .= ' '.$minutes.' minute';
     }
     if ($minutes > 1) {
-        $result .= "s";
+        $result .= 's';
     }
     if (!empty($seconds) && $seconds > 0) {
-        $result .= " " . $seconds . " second";
+        $result .= ' '.$seconds.' second';
     }
     if ($seconds > 1) {
-        $result .= "s";
+        $result .= 's';
     }
 
     return trim($result);

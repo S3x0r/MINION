@@ -15,7 +15,8 @@
  */
 
 if (PHP_SAPI !== 'cli') {
-    die('This script can\'t be run from a web browser. Use CLI to run it.');
+    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = 'Shows quotes from bash.org: '.$GLOBALS['CONFIG_CMD_PREFIX'].'bash';
@@ -29,26 +30,25 @@ function plugin_bash()
         } else {
                  $page = file_get_contents('http://bash.org/?random1');
                  preg_match_all('@<p class="qt">(.*?)</p>@s', $page, $quotes);
-        }
 
-        if (!isset($matches[1])) {
-            $matches[1] = 3;
-        } elseif ($matches[1]>50) {
-                  $matches[1] = 50;
-        }
-
-        $pr = true;
-        for ($i=0; $i < $matches[1]; $i++) {
-            if ($pr) {
-                       $pr = false;
-            } else {
+            if (!isset($matches[1])) {
+                $matches[1] = 3;
+            } elseif ($matches[1]>50) {
+                      $matches[1] = 50;
             }
-            BOT_RESPONSE(str_replace('<br />', '', html_entity_decode($quotes[1][$i], ENT_QUOTES)));
+
+             $pr = true;
+            for ($i=0; $i < $matches[1]; $i++) {
+                if ($pr) {
+                    $pr = false;
+                } else {
+                }
+                BOT_RESPONSE(str_replace('<br />', '', html_entity_decode($quotes[1][$i], ENT_QUOTES)));
+            }
         }
             CLI_MSG('[PLUGIN: bash] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                 $GLOBALS['channel'], '1');
+                    $GLOBALS['channel'], '1');
     } catch (Exception $e) {
-                             BOT_RESPONSE(TR_49.' plugin_bash() '.TR_50);
-                             CLI_MSG('[ERROR]: '.TR_49.' plugin_bash() '.TR_50, '1');
+                             CLI_MSG('[ERROR]: '.TR_49.' '.__FUNCTION__.' '.TR_50, '1');
     }
 }

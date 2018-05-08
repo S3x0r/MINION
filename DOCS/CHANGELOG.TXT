@@ -1,4 +1,24 @@
 
+   v1.0.0 changes (08.05.2018):
+   - new switch '-o' You can specify server address, eg: 'BOT.php -o irc.example.net 6667'
+   - no more Errors in bot response
+   - now first actions then cli msg's
+   - plugin 'bash' fix: there was if no connection info
+   - plugin 'ripe' no info fix & little code changed
+   - plugin 'hash' added info if no algo
+   - plugin 'help' doubled code removed
+   - plugins 'autoop', 'addadmin', 'addowner' now checks if already have that host
+   - plugin 'listowners' removed unused vars and added info if no owner host
+   - plugin 'wikipedia' added info if no language available
+   - plugin 'showconfig' now prints all config
+   - plugin 'remadmin' more checks and infos
+   - plugin 'remowner' more checks and infos
+   - plugin 'plugin move' now in format: move <plugin name> <from> <to>
+            eg: !plugin move bash USER ADMIN
+   - now bot checks at startup if it has all extensions loaded
+     if no information apear.
+   - info about php version and os type at startup
+
    v0.9.9 changes (14.04.2018):
    - plugin 'bash' corrected doubled cli messages
    - plugin 'gethost' more response from plugin

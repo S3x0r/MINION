@@ -15,7 +15,8 @@
  */
 
 if (PHP_SAPI !== 'cli') {
-    die('<h2>This script can\'t be run from a web browser. Use CLI to run it -> php BOT.php</h2>');
+    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
 //---------------------------------------------------------------------------------------------------------
 function ErrorHandler($errno, $errstr, $errfile, $errline)
@@ -42,9 +43,6 @@ function ErrorHandler($errno, $errstr, $errfile, $errline)
 
         default:
              CLI_MSG("Error: $errstr", '1');
-            if (isset($GLOBALS['socket']) && isset($GLOBALS['channel'])) {
-                BOT_RESPONSE("Error: $errstr");
-            }
             break;
     }
 

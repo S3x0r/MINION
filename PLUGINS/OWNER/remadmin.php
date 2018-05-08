@@ -15,7 +15,8 @@
  */
 
 if (PHP_SAPI !== 'cli') {
-    die('This script can\'t be run from a web browser. Use CLI to run it.');
+    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = 'Removes admin from config file: '
@@ -24,36 +25,42 @@ if (PHP_SAPI !== 'cli') {
 
 function plugin_remadmin()
 {
-
     if (OnEmptyArg('remadmin <nick!ident@hostname>')) {
     } else {
-              /* read owners from config */
-              LoadData($GLOBALS['config_file'], 'ADMIN', 'admin_list');
-              $admin_list = $GLOBALS['LOADED'];
-              $array = explode(" ", str_replace(',', '', $admin_list));
+        if (preg_match('/^(.+?)!(.+?)@(.+?)$/', $GLOBALS['args'], $host)) {
+            /* read owners from config */
+            LoadData($GLOBALS['config_file'], 'ADMIN', 'admin_list');
+            $admin_list = $GLOBALS['LOADED'];
+            $array = explode(" ", str_replace(',', '', $admin_list));
 
-              $key = array_search($GLOBALS['args'], $array);
-        if ($key !== false) {
-            /* remove from host from array */
-            unset($array[$key]);
+            $key = array_search($GLOBALS['args'], $array);
+       
+            if ($key !== false) {
+                /* remove from host from array */
+                unset($array[$key]);
                       
-            /* new owners string */
-            $string = implode(' ', $array);
-            $string2 = str_replace(' ', ', ', $string);
+                /* new owners string */
+                $string = implode(' ', $array);
+                $string2 = str_replace(' ', ', ', $string);
 
-            /* save new list to config */
-            SaveData($GLOBALS['config_file'], 'ADMIN', 'admin_list', $string2);
+                /* save new list to config */
+                SaveData($GLOBALS['config_file'], 'ADMIN', 'admin_list', $string2);
 
-            /* update variable with new owners */
-            $cfg = new IniParser($GLOBALS['config_file']);
-            $GLOBALS['CONFIG_ADMIN_LIST'] = $cfg->get("ADMIN", "admin_list");
+                /* update variable with new owners */
+                $cfg = new IniParser($GLOBALS['config_file']);
+                $GLOBALS['CONFIG_ADMIN_LIST'] = $cfg->get("ADMIN", "admin_list");
 
-            /* send info to user */
-            BOT_RESPONSE('Host: \''.$GLOBALS['args'].'\' removed from admin list.');
-                      
-            /* & to CLI */
-            CLI_MSG('[PLUGIN: remadmin] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                $GLOBALS['channel'].' | removed host: '.$GLOBALS['args'], '1');
+                /* send info to user */
+                BOT_RESPONSE('Host: \''.$GLOBALS['args'].'\' removed from admin list.');
+
+                /* & to CLI */
+                CLI_MSG('[PLUGIN: remadmin] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                        $GLOBALS['channel'].' | removed host: '.$GLOBALS['args'], '1');
+            } else {
+                     BOT_RESPONSE('No such host in my list.');
+            }
+        } else {
+                 BOT_RESPONSE('Bad input, try: nick!ident@hostname');
         }
     }
 }

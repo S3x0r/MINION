@@ -15,7 +15,8 @@
  */
 
 if (PHP_SAPI !== 'cli') {
-    die('<h2>This script can\'t be run from a web browser. Use CLI to run it -> php BOT.php</h2>');
+    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
 //---------------------------------------------------------------------------------------------------------
 function CheckUpdateInfo()
@@ -26,7 +27,7 @@ function CheckUpdateInfo()
             $url = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
             $CheckVersion = @file_get_contents($url);
         
-            if ($CheckVersion !='') {
+            if (!empty($CheckVersion)) {
                 $version = explode("\n", $CheckVersion);
                 if ($version[0] > VER) {
                     echo "             >>>> New version available! ($version[0]) <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
@@ -192,7 +193,7 @@ function IsSilent()
 //---------------------------------------------------------------------------------------------------------
 function PlaySound($sound)
 {
-    if (!IsSilent() && $GLOBALS['CONFIG_PLAY_SOUNDS'] == 'yes' && !isset($GLOBALS['OS_TYPE'])) {
+    if (!IsSilent() && $GLOBALS['CONFIG_PLAY_SOUNDS'] == 'yes' && !isset($GLOBALS['OS'])) {
         if (is_file('php/play.exe') && is_file('sounds/'.$sound)) {
             $command = 'start /b php/play.exe sounds/'.$sound;
             pclose(popen($command, 'r'));
@@ -255,7 +256,7 @@ function getPasswd($string = '')
 {
     echo $string;
  
-    if (!isset($GLOBALS['OS_TYPE'])) {
+    if (!isset($GLOBALS['OS'])) {
         if (is_file('php\hide.exe')) {
             $psw = `php\hide.exe`;
         } else {

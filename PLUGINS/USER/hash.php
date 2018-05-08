@@ -15,7 +15,8 @@
  */
 
 if (PHP_SAPI !== 'cli') {
-    die('This script can\'t be run from a web browser. Use CLI to run it.');
+    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = 'Changing string to choosed algorithm: '.
@@ -24,16 +25,17 @@ if (PHP_SAPI !== 'cli') {
 
 function plugin_hash()
 {
-
     if (OnEmptyArg('hash help to get algorithms list')) {
     } elseif ($GLOBALS['args'] == 'help') {
               BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'hash <algorithm> <string>');
               BOT_RESPONSE('Valid algos: ' . implode(' ', hash_algos()));
     } else {
         if (hash($GLOBALS['piece1'], $GLOBALS['piece2'])) {
-            CLI_MSG('[PLUGIN: hash] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                $GLOBALS['channel'].' | string: '.$GLOBALS['args'], '1');
             BOT_RESPONSE($GLOBALS['piece1'].': ' . hash($GLOBALS['piece1'], $GLOBALS['piece2']));
+        } else {
+                 BOT_RESPONSE('Unknown hashing algorithm.');
         }
+                    CLI_MSG('[PLUGIN: hash] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                    $GLOBALS['channel'].' | string: '.$GLOBALS['args'], '1');
     }
 }

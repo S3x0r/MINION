@@ -15,7 +15,8 @@
  */
 
 if (PHP_SAPI !== 'cli') {
-    die('<h2>This script can\'t be run from a web browser. Use CLI to run it -> php BOT.php</h2>');
+    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
 //---------------------------------------------------------------------------------------------------------
 function Logo()
@@ -53,7 +54,29 @@ function Logo()
     B@B@@@B@B@B@B@@@B@B@@s           Srri;i;rrrssssssss22S5HS
     @B@B@B@B@B@BBMMGG9G:              :,::::iir;rs22SXGGMMMMB".PHP_EOL;
 
-             echo PHP_EOL.'    MINION - ver: '.VER.', '.TR_10.' S3x0r, '.TR_11.' olisek@gmail.com'.PHP_EOL;
+             echo PHP_EOL.'      MINION '.VER.' | '.TR_10.' S3x0r | '.TR_11.' olisek@gmail.com'.PHP_EOL;
+             echo '    ---------------------------------------------------------'.PHP_EOL;
+             
+        /* os variable */
+        if (empty($GLOBALS['OS'])) {
+            $system = 'Windows';
+        } else {
+                 $system = 'Linux';
+        }
+
+        /* check extensions */
+        if (extension_loaded('curl') && extension_loaded('openssl')) {
+            $string = '                    All needed extensions loaded'.PHP_EOL;
+        } elseif (!extension_loaded('curl')) {
+                  $string = '       Extension \'curl\' missing, some plugins will not work.'.PHP_EOL;
+        } elseif (!extension_loaded('openssl')) {
+                  $string = '      Extension \'openssl\' missing, some plugins will not work.'.PHP_EOL;
+        }
+
+             echo $string;
+             echo '                    PHP Ver: '.PHP_VER.', OS: '.$system.PHP_EOL;
+             echo '    ---------------------------------------------------------'.PHP_EOL;
              echo '                   '.TR_12.' '.TotalLines().' :)'.PHP_EOL.PHP_EOL.PHP_EOL;
     }
 }
+//---------------------------------------------------------------------------------------------------------

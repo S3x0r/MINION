@@ -15,7 +15,8 @@
  */
 
 if (PHP_SAPI !== 'cli') {
-    die('This script can\'t be run from a web browser. Use CLI to run it.');
+    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = 'Kicks from channel: '.$GLOBALS['CONFIG_CMD_PREFIX'].'kick <#channel> <who>';
@@ -23,14 +24,13 @@ if (PHP_SAPI !== 'cli') {
 
 function plugin_kick()
 {
-
     if (OnEmptyArg('kick <#channel> <who>')) {
     } else {
         if (BotOpped() == true) {
-            CLI_MSG('[PLUGIN: kick] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'].
-                ' | kicked user: '.$GLOBALS['args'], '1');
-
             fputs($GLOBALS['socket'], 'KICK '.$GLOBALS['piece1'].' :'.$GLOBALS['piece2']."\n");
+
+            CLI_MSG('[PLUGIN: kick] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'].
+                    ' | kicked user: '.$GLOBALS['args'], '1');
         }
     }
 }

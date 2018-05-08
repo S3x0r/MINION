@@ -15,9 +15,9 @@
  */
 
 if (PHP_SAPI !== 'cli') {
-    die('This script can\'t be run from a web browser. Use CLI to run it.');
+    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
-    
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = 'Add host to admin list in config: '
     .$GLOBALS['CONFIG_CMD_PREFIX'].'addadmin <nick!ident@host>';
@@ -32,34 +32,39 @@ function plugin_addadmin()
         if (preg_match('/^(.+?)!(.+?)@(.+?)$/', $GLOBALS['args'], $host)) {
             LoadData($GLOBALS['config_file'], 'ADMIN', 'admin_list');
  
-            $admin_list = $GLOBALS['LOADED'];
-            $new         = $host[0];
-            if ($admin_list == '') {
-                $new_list = $new.'';
+            if (strpos($GLOBALS['LOADED'], $GLOBALS['args']) !== false) {
+                BOT_RESPONSE('I already have this host.');
+            } else {
+                     $admin_list = $GLOBALS['LOADED'];
+                     $new         = $host[0];
+
+                if (empty($admin_list)) {
+                    $new_list = $new.'';
+                } else {
+                         $new_list = $admin_list.', '.$new;
+                }
+
+                SaveData($GLOBALS['config_file'], 'ADMIN', 'admin_list', $new_list);
+
+                /* update variable with new owners */
+                $cfg = new IniParser($GLOBALS['config_file']);
+                $GLOBALS['CONFIG_ADMIN_LIST'] = $cfg->get("ADMIN", "admin_list");
+
+                /* inform nick about it */
+                $admin_commands = implode(' ', $GLOBALS['ADMIN_PLUGINS']);
+                $user_commands  = implode(' ', $GLOBALS['USER_PLUGINS']);
+
+                fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :From now you are on my ADMIN(S) list, enjoy.\n");
+                fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :Core Commands: ".
+                      $GLOBALS['CONFIG_CMD_PREFIX']."seen\n");
+                fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :Admin Commands: $admin_commands\n");
+                fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :User Commands: $user_commands\n");
+
+                BOT_RESPONSE('Host: \''.$host[0].'\' added to admin list.');
+            
+                CLI_MSG('[PLUGIN: addadmin] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                        $GLOBALS['channel'].' | admin added: '.$host[0], '1');
             }
-            if ($admin_list != '') {
-                $new_list = $admin_list.', '.$new;
-            }
-            SaveData($GLOBALS['config_file'], 'ADMIN', 'admin_list', $new_list);
-
-            /* update variable with new owners */
-            $cfg = new IniParser($GLOBALS['config_file']);
-            $GLOBALS['CONFIG_ADMIN_LIST'] = $cfg->get("ADMIN", "admin_list");
-
-            /* inform nick about it */
-            $admin_commands = implode(' ', $GLOBALS['ADMIN_PLUGINS']);
-            $user_commands  = implode(' ', $GLOBALS['USER_PLUGINS']);
-
-            fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :From now you are on my ADMIN(S) list, enjoy.\n");
-            fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :Core Commands: ".
-                $GLOBALS['CONFIG_CMD_PREFIX']."seen\n");
-            fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :Admin Commands: $admin_commands\n");
-            fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0]." :User Commands: $user_commands\n");
- 
-            CLI_MSG('[PLUGIN: addadmin] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                $GLOBALS['channel'].' | admin added: '.$host[0], '1');
-
-            BOT_RESPONSE('Host: \''.$host[0].'\' added to admin list.');
         } else {
                  BOT_RESPONSE('Bad input, try: nick!ident@hostname');
         }

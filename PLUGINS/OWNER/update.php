@@ -15,7 +15,8 @@
  */
 
 if (PHP_SAPI !== 'cli') {
-    die('This script can\'t be run from a web browser. Use CLI to run it.');
+    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = 'Updates the BOT if new version is available: '.$GLOBALS['CONFIG_CMD_PREFIX'].'update';
@@ -25,10 +26,10 @@ if (PHP_SAPI !== 'cli') {
 function plugin_update()
 {
     if (extension_loaded('openssl')) {
-        CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-            $GLOBALS['channel'], '1');
-    
         v_connect();
+
+        CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
+                $GLOBALS['channel'], '1');
     } else {
              BOT_RESPONSE('I cannot use this plugin, i need php_openssl extension to work!');
     }
@@ -36,13 +37,12 @@ function plugin_update()
 //------------------------------------------------------------------------------------------------
 function v_connect()
 {
-
     $GLOBALS['v_addr']   = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
     $GLOBALS['CheckVersion'] = file_get_contents($GLOBALS['v_addr']);
     $GLOBALS['newdir']   = '../../minion'.$GLOBALS['CheckVersion'];
     $GLOBALS['v_source'] = 'http://github.com/S3x0r/MINION/archive/master.zip';
 
-    if ($GLOBALS['CheckVersion'] !='') {
+    if (!empty($GLOBALS['CheckVersion'])) {
         v_checkVersion();
     } else {
               BOT_RESPONSE('Cannot connect to update server, try next time.');
@@ -57,7 +57,9 @@ function v_checkVersion()
 
     if ($version[0] > VER) {
         BOT_RESPONSE('My version: '.VER.', version on server: '.$version[0].'');
+
         CLI_MSG('[BOT] New bot update on server: '.$version[0], '1');
+        
         v_tryDownload();
     } else {
               BOT_RESPONSE('No new update, you have the latest version.');
@@ -67,8 +69,8 @@ function v_checkVersion()
 //------------------------------------------------------------------------------------------------
 function v_tryDownload()
 {
-
     BOT_RESPONSE('Downloading update...');
+
     CLI_MSG('[BOT] Downloading update...', '1');
 
     $newUpdate = file_get_contents($GLOBALS['v_source']);
@@ -76,6 +78,7 @@ function v_tryDownload()
       
     if (!fwrite($dlHandler, $newUpdate)) {
         BOT_RESPONSE('Could not save new update, operation aborted');
+
         CLI_MSG('[BOT] Could not save new update, operation aborted', '1');
     }
 
@@ -88,7 +91,6 @@ function v_tryDownload()
 //------------------------------------------------------------------------------------------------
 function recurse_copy($src, $dst)
 {
-
     $dir = opendir($src);
     @mkdir($dst);
     while (false !== ($file = readdir($dir))) {
@@ -105,7 +107,6 @@ function recurse_copy($src, $dst)
 //------------------------------------------------------------------------------------------------
 function delete_files($target)
 {
-
     if (is_dir($target)) {
         $files = glob($target . '*', GLOB_MARK);
         
@@ -120,7 +121,6 @@ function delete_files($target)
 //------------------------------------------------------------------------------------------------
 function v_extract()
 {
-
     BOT_RESPONSE('Extracting update');
     CLI_MSG('[BOT] Extracting update', '1');
 
@@ -162,7 +162,7 @@ function v_extract()
         $GLOBALS['CONFIG_BOT_RESPONSE']   = $cfg->get("RESPONSE", "bot_response");
         $GLOBALS['CONFIG_AUTO_OP']        = $cfg->get("AUTOMATIC", "auto_op");
         $GLOBALS['CONFIG_AUTO_REJOIN']    = $cfg->get("AUTOMATIC", "auto_rejoin");
-        $GLOBALS['CONFIG_KEEPCHAN_MODES'] = $cfg->get("AUTOMATIC", "keep_chan_modes"); 
+        $GLOBALS['CONFIG_KEEPCHAN_MODES'] = $cfg->get("AUTOMATIC", "keep_chan_modes");
         $GLOBALS['CONFIG_KEEP_NICK']      = $cfg->get("AUTOMATIC", "keep_nick");
         $GLOBALS['CONFIG_CNANNEL']        = $cfg->get("CHANNEL", "channel");
         $GLOBALS['CONFIG_AUTO_JOIN']      = $cfg->get("CHANNEL", "auto_join");

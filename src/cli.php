@@ -15,7 +15,8 @@
  */
 
 if (PHP_SAPI !== 'cli') {
-    die('<h2>This script can\'t be run from a web browser. Use CLI to run it -> php BOT.php</h2>');
+    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
 //---------------------------------------------------------------------------------------------------------
 function CheckCLIArgs()
@@ -24,13 +25,33 @@ function CheckCLIArgs()
         switch ($_SERVER['argv'][1]) {
             case '-h': /* show help */
                 echo PHP_EOL.'  '.TR_62.PHP_EOL.PHP_EOL,
-                     '  -c '.TR_63.PHP_EOL,
-                     '  -h '.TR_67.PHP_EOL,
-                     '  -p '.TR_64.PHP_EOL,
-                     '  -s '.TR_65.PHP_EOL,
-                     '  -u check if there is new bot version on server'.PHP_EOL,
-                     '  -v '.TR_66.PHP_EOL.PHP_EOL;
+                     '  -c '.TR_63.PHP_EOL, /* config file */
+                     '  -h '.TR_67.PHP_EOL, /* help */
+                     '  -o connect to specified server: eg: BOT.php irc.dal.net 6667'.PHP_EOL, /* server */
+                     '  -p '.TR_64.PHP_EOL, /* hash */
+                     '  -s '.TR_65.PHP_EOL, /* silent mode */
+                     '  -u check if there is new bot version on server'.PHP_EOL, /* update */
+                     '  -v '.TR_66.PHP_EOL.PHP_EOL; /* version */
                 die();
+                break;
+
+            case '-o': /* server connect: eg: irc.example.net 6667 */
+                if (!empty($_SERVER['argv'][2]) && !empty($_SERVER['argv'][3]) && is_numeric($_SERVER['argv'][3])) {
+                    $GLOBALS['CONFIG_SERVER'] = $_SERVER['argv'][2];
+                    $GLOBALS['CONFIG_PORT'] = $_SERVER['argv'][3];
+                } elseif (empty($_SERVER['argv'][2])) {
+                          echo PHP_EOL.' ERROR: You need to specify server address, Exiting.'.PHP_EOL;
+                          sleep(3);
+                          die();
+                } elseif (empty($_SERVER['argv'][3])) {
+                          echo PHP_EOL.' ERROR: You need to specify server port, Exiting.'.PHP_EOL;
+                          sleep(3);
+                          die();
+                } elseif (!is_numeric($_SERVER['argv'][3])) {
+                          echo PHP_EOL.' ERROR: Wrong server port, Exiting.'.PHP_EOL;
+                          sleep(3);
+                          die();
+                }
                 break;
 
             case '-p': /* generate hash */
@@ -65,7 +86,7 @@ function CheckCLIArgs()
                 if (extension_loaded('openssl')) {
                     $addr = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
                     $CheckVersion = @file_get_contents($addr);
-                    if ($CheckVersion !='') {
+                    if (!empty($CheckVersion)) {
                         $version = explode("\n", $CheckVersion);
                         if ($version[0] > VER) {
                             echo PHP_EOL.' New version available!'.PHP_EOL;
