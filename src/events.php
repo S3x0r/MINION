@@ -32,6 +32,9 @@ function on_first_start() /* event after end motd */
             CLI_MSG('[BOT] Detected Panel still running, Terminating.', '1');
         }
     }
+
+    /* send anonymous bot usage statistics */
+    Statistics();
 }
 //---------------------------------------------------------------------------------------------------------
 function on_bot_join_channel()
@@ -299,26 +302,20 @@ function on_376() /* join after motd */
         unset($GLOBALS['pwd_changed']);
     }
 
+    /* if autojoin */
+    if ($GLOBALS['CONFIG_AUTO_JOIN'] == 'yes') {
+        CLI_MSG(TR_35.' '.$GLOBALS['CONFIG_CNANNEL'], '1');
+        JOIN_CHAN($GLOBALS['CONFIG_CNANNEL']);
+    }
+
+    /* on first start event */
+    on_first_start();
+
     /* wcli extension */
     wcliExt();
 
-    /* if autojoin */
-    if ($GLOBALS['CONFIG_AUTO_JOIN'] == 'yes') {
-        /* play sound :) */
-        PlaySound('connected.mp3');
-
-        CLI_MSG(TR_35.' '.$GLOBALS['CONFIG_CNANNEL'], '1');
-        JOIN_CHAN($GLOBALS['CONFIG_CNANNEL']);
-        
-        /* on first start event */
-        on_first_start();
-    } else {
-             /* play sound :) */
-             PlaySound('connected.mp3');
-
-             /* on first start event */
-             on_first_start();
-    }
+    /* play sound :) */
+    PlaySound('connected.mp3');
 }
 //---------------------------------------------------------------------------------------------------------
 function on_422() /* join if no motd */

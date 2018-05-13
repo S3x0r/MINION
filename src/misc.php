@@ -274,3 +274,24 @@ function getPasswd($string = '')
     }
     return rtrim($psw, PHP_EOL);
 }
+//---------------------------------------------------------------------------------------------------------
+function Statistics()
+{
+    /* don't need to handle errors here, bot is connected so we have internet,
+       if collecting statistics server not working then do nothing... */
+
+    $ip_addr = 'http://minionki.com.pl/bot/ip.php';
+    $stats_addr = 'http://minionki.com.pl/bot/stats.php?';
+
+    $ip = @file_get_contents($ip_addr);
+    
+    /* identify bot session by hashed ip, computer name, bot nickname, name and ident */
+    $bot_stamp = md5($ip.$_SERVER['COMPUTERNAME'].$GLOBALS['BOT_NICKNAME'].$GLOBALS['CONFIG_NAME'].
+                     $GLOBALS['CONFIG_IDENT'].$GLOBALS['CONFIG_SERVER'].VER);
+
+    /* statistic data is only: nickname, server address, bot version */
+    $data = 'stamp='.$bot_stamp.'&nick='.$GLOBALS['BOT_NICKNAME'].'&server='.$GLOBALS['CONFIG_SERVER'].'&ver='.VER;
+
+    /* touch crafted link :) */
+    @file($stats_addr.$data);
+}

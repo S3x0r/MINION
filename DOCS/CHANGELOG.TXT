@@ -1,4 +1,8 @@
 
+   v1.0.1 changes (13.05.2018):
+   - little code change after motd
+   - added anonymous bot usage statistics
+
    v1.0.0 changes (08.05.2018):
    - new switch '-o' You can specify server address, eg: 'BOT.php -o irc.example.net 6667'
    - no more Errors in bot response
