@@ -27,7 +27,7 @@ function plugin_unban()
     if (OnEmptyArg('unban <nick!ident@host>')) {
     } else {
         if (BotOpped() == true) {
-            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' -b '.$GLOBALS['args']."\n");
+            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' -b '.$GLOBALS['args'].PHP_EOL);
 
             CLI_MSG('[PLUGIN: unban] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'].
                     ' | unbaned host: '.$GLOBALS['args'], '1');

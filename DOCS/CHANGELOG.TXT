@@ -1,4 +1,10 @@
 
+   v1.0.2 changes (24.05.2018):
+   - keep nick works now properly
+   - if no connection php error removed
+   - ctcp cli logs now with user hostname
+   - changed some \n to PHP_EOL
+
    v1.0.1 changes (13.05.2018):
    - little code change after motd
    - added anonymous bot usage statistics

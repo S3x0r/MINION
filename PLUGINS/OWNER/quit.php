@@ -26,7 +26,7 @@ function plugin_quit()
 {
     /* give op before restart */
     if (BotOpped() == true) {
-        fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['USER']."\n");
+        fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['USER'].PHP_EOL);
     }
 
     BOT_RESPONSE('Bye!');

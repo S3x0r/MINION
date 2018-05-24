@@ -21,7 +21,7 @@ if (PHP_SAPI !== 'cli') {
 //---------------------------------------------------------------------------------------------------------
 function on_server_ping()
 {
-    fputs($GLOBALS['socket'], "PONG ".$GLOBALS['ex'][1]."\n");
+    fputs($GLOBALS['socket'], 'PONG '.$GLOBALS['ex'][1].PHP_EOL);
 }
 //---------------------------------------------------------------------------------------------------------
 function on_first_start() /* event after end motd */
@@ -39,7 +39,6 @@ function on_first_start() /* event after end motd */
 //---------------------------------------------------------------------------------------------------------
 function on_bot_join_channel()
 {
-    BOT_RESPONSE('bello! :)');
 }
 //---------------------------------------------------------------------------------------------------------
 function on_join()
@@ -75,7 +74,7 @@ function on_join()
 
         if (in_array($mask2, $pieces)) {
             CLI_MSG(TR_31.' '.$GLOBALS['USER'].' '.TR_32, '1');
-            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['USER']."\n");
+            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['USER'].PHP_EOL);
             PlaySound('prompt.mp3');
         }
     }
@@ -128,7 +127,7 @@ function on_kick()
         if ($GLOBALS['CONFIG_AUTO_REJOIN'] == 'yes') {
             CLI_MSG(TR_30, '1');
             sleep(2);
-            fputs($GLOBALS['socket'], "JOIN :".$GLOBALS['ex'][2]."\n");
+            fputs($GLOBALS['socket'], "JOIN :".$GLOBALS['ex'][2].PHP_EOL);
             PlaySound('prompt.mp3');
         }
     }
@@ -179,7 +178,7 @@ function on_mode()
                 PlaySound('prompt.mp3');
 
                 /* and set it */
-                fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel']."\n");
+                fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].PHP_EOL);
                 set_channel_modes();
 
                 /* set ban list */
@@ -255,6 +254,21 @@ function on_003() /* server creation time */
     CLI_MSG('S>'.$GLOBALS['srv_msg'], '1');
 }
 //---------------------------------------------------------------------------------------------------------
+function on_303() /* ison */
+{
+    if ($GLOBALS['ex'][3] == ':') {
+        fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['NICKNAME_FROM_CONFIG'].PHP_EOL);
+        $GLOBALS['BOT_NICKNAME'] = $GLOBALS['NICKNAME_FROM_CONFIG'];
+
+        unset($GLOBALS['I_USE_RND_NICKNAME']);
+
+        CLI_MSG('[BOT]: '.TR_37, '1');
+
+        /* update wcli extension */
+        wcliExt();
+    }
+}
+//---------------------------------------------------------------------------------------------------------
 function on_324() /* channel modes */
 {
     if (isset($GLOBALS['ex'][4])) {
@@ -289,9 +303,7 @@ function on_353() /* on channel join inf */
 //---------------------------------------------------------------------------------------------------------
 function on_376() /* join after motd */
 {
-    if (empty($GLOBALS['silent_mode'])) {
-        echo "\n";
-    }
+    /* OK im connected, my nickname is: */
     CLI_MSG(TR_58.' '.$GLOBALS['BOT_NICKNAME'], '1');
 
     /* register to bot info */
@@ -325,18 +337,17 @@ function on_422() /* join if no motd */
 //---------------------------------------------------------------------------------------------------------
 function on_432() /* if nick reserved */
 {
-    /* keep nick */
-    if ($GLOBALS['CONFIG_KEEP_NICK']=='yes') {
+    /* vars for keep nick functionality */
+    if ($GLOBALS['CONFIG_KEEP_NICK'] == 'yes') {
         $GLOBALS['NICKNAME_FROM_CONFIG'] = $GLOBALS['CONFIG_NICKNAME'];
-        $GLOBALS['I_USE_RND_NICKNAME']='1';
-        $GLOBALS['first_time'] = time();
+        $GLOBALS['I_USE_RND_NICKNAME'] = '1';
     }
    
     /* set random nick */
     $GLOBALS['BOT_NICKNAME'] = $GLOBALS['BOT_NICKNAME'].'|'.rand(0, 299);
-    CLI_MSG(TR_33.' '.$GLOBALS['BOT_NICKNAME']."\n", '1');
+    CLI_MSG(TR_33.' '.$GLOBALS['BOT_NICKNAME'], '1');
 
-    fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['BOT_NICKNAME']."\n");
+    fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['BOT_NICKNAME'].PHP_EOL);
 }
 //---------------------------------------------------------------------------------------------------------
 function on_433() /* if nick already exists */

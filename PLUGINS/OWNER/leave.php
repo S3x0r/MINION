@@ -27,7 +27,7 @@ function plugin_leave()
     if (OnEmptyArg('leave <#channel>')) {
     } else {
         if (in_array($GLOBALS['args'], $GLOBALS['BOT_CHANNELS'])) {
-            fputs($GLOBALS['socket'], 'PART '.$GLOBALS['args']."\n");
+            fputs($GLOBALS['socket'], 'PART '.$GLOBALS['args'].PHP_EOL);
 
             CLI_MSG('[PLUGIN: leave] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                     $GLOBALS['channel'].' | leaved: '.$GLOBALS['args'], '1');

@@ -27,7 +27,7 @@ function plugin_op()
     if (OnEmptyArg('op <nick>')) {
     } else {
         if (BotOpped() == true) {
-            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['args']."\n");
+            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['args'].PHP_EOL);
 
             CLI_MSG('[PLUGIN: op] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'].
                     ' | opped user: '.$GLOBALS['args'], '1');

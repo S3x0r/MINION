@@ -26,9 +26,9 @@ function Connect()
     $i=0;
 
     while ($i++ < $GLOBALS['CONFIG_TRY_CONNECT']) {
-           $GLOBALS['socket'] = fsockopen($GLOBALS['CONFIG_SERVER'], $GLOBALS['CONFIG_PORT']);
+           $GLOBALS['socket'] = @fsockopen($GLOBALS['CONFIG_SERVER'], $GLOBALS['CONFIG_PORT']);
            //socket_set_blocking($GLOBALS['socket'], false);
-        if ($GLOBALS['socket']==false) {
+        if ($GLOBALS['socket'] == false) {
             PlaySound('error_conn.mp3');
             CLI_MSG(TR_28, '1');
             usleep($GLOBALS['CONFIG_CONNECT_DELAY'] * 1000000);
@@ -48,12 +48,12 @@ function Identify()
     /* send PASSWORD / NICK / USER to server */
 
     if (!empty($GLOBALS['CONFIG_SERVER_PASSWD'])) {
-        fputs($GLOBALS['socket'], 'PASS '.$GLOBALS['CONFIG_SERVER_PASSWD']."\n");
+        fputs($GLOBALS['socket'], 'PASS '.$GLOBALS['CONFIG_SERVER_PASSWD'].PHP_EOL);
     }
 
-    fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['CONFIG_NICKNAME']."\n");
+    fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['CONFIG_NICKNAME'].PHP_EOL);
 
-    fputs($GLOBALS['socket'], 'USER '.$GLOBALS['CONFIG_IDENT'].' 8 * :'.$GLOBALS['CONFIG_NAME']."\n");
+    fputs($GLOBALS['socket'], 'USER '.$GLOBALS['CONFIG_IDENT'].' 8 * :'.$GLOBALS['CONFIG_NAME'].PHP_EOL);
 
     SocketLoop();
 }
@@ -79,7 +79,6 @@ function SocketLoop()
     global $BOT_NICKNAME;
     global $channel;
     global $I_USE_RND_NICKNAME;
-
 //---------------------------------------------------------------------------------------------------------
     /* set initial */
     $USER_IDENT = null;
@@ -95,6 +94,11 @@ function SocketLoop()
     /* main socket loop */
     while (1) {
         while (!feof($GLOBALS['socket'])) {
+            /* timers */
+            if (empty($GLOBALS['stop'])) {
+                StartTimers();
+            }
+
             $mask = null;
 
             /* get data */
@@ -222,6 +226,9 @@ function SocketLoop()
                     case '003': /* server creation time */
                         on_003();
                         break;
+                    case '303': /* ison */
+                        on_303();
+                        break;
                     case '332': /* topic */
                         on_332();
                         break;
@@ -258,11 +265,6 @@ function SocketLoop()
                 }
             }
 //---------------------------------------------------------------------------------------------------------
-            /* timers */
-            if (empty($GLOBALS['stop'])) {
-                StartTimers();
-            }
-
             /* CTCP */
             if (empty($GLOBALS['stop'])) {
                 if ($GLOBALS['CONFIG_CTCP_RESPONSE'] == 'yes' && isset($rawcmd[1])) {
@@ -344,25 +346,6 @@ function SocketLoop()
                 }
             }
 //---------------------------------------------------------------------------------------------------------
-            /* keep nick - check every 60 sec */
-            if (empty($GLOBALS['stop'])) {
-                if ($GLOBALS['CONFIG_KEEP_NICK']=='yes' && isset($GLOBALS['I_USE_RND_NICKNAME'])) {
-                    if (time()-$GLOBALS['first_time'] > 60) {
-                        fputs($GLOBALS['socket'], "ISON :".$GLOBALS['NICKNAME_FROM_CONFIG']."\n");
-                        $GLOBALS['first_time'] = time();
-                    }
-                    if ($GLOBALS['ex'][1] == '303' && $GLOBALS['ex'][3] == ':') {
-                        fputs($GLOBALS['socket'], "NICK ".$GLOBALS['NICKNAME_FROM_CONFIG']."\n");
-                        $GLOBALS['BOT_NICKNAME'] = $GLOBALS['NICKNAME_FROM_CONFIG'];
-                        unset($GLOBALS['I_USE_RND_NICKNAME']);
-                        CLI_MSG('[BOT]: '.TR_37, '1');
-                      
-                        /* wcli extension */
-                        wcliExt();
-                    }
-                }
-            }
-//---------------------------------------------------------------------------------------------------------
         }
         /* if disconected */
         CLI_MSG('[BOT] Disconected from server, I will try to connect again...', '1');
@@ -373,19 +356,20 @@ function SocketLoop()
 function set_channel_modes()
 {
     if ($GLOBALS['CONFIG_KEEPCHAN_MODES'] == 'yes') {
-        fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel']."\n");
+        fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].PHP_EOL);
     
         if (BotOpped() == true) {
             if (isset($GLOBALS['CHANNEL_MODES']) && $GLOBALS['CHANNEL_MODES'] != $GLOBALS['CONFIG_CHANNEL_MODES']) {
                 sleep(1);
-                fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' -'.$GLOBALS['CHANNEL_MODES']."\n");
+                fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' -'.$GLOBALS['CHANNEL_MODES'].PHP_EOL);
                 sleep(1);
-                fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +'.$GLOBALS['CONFIG_CHANNEL_MODES']."\n");
+                fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +'.$GLOBALS['CONFIG_CHANNEL_MODES'].PHP_EOL);
             }
             if (empty($GLOBALS['CHANNEL_MODES'])) {
                 if (!empty($GLOBALS['CONFIG_CHANNEL_MODES'])) {
                     sleep(1);
-                    fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +'.$GLOBALS['CONFIG_CHANNEL_MODES']."\n");
+                    fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +'.
+                        $GLOBALS['CONFIG_CHANNEL_MODES'].PHP_EOL);
                 }
             }
         }
@@ -397,7 +381,7 @@ function set_bans() /* set ban from config list */
     if (!empty($GLOBALS['CONFIG_BAN_LIST'])) {
         $ban_list = explode(', ', $GLOBALS['CONFIG_BAN_LIST']);
         foreach ($ban_list as $s) {
-            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +b '.$s."\n");
+            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +b '.$s.PHP_EOL);
         }
     }
 }
@@ -430,5 +414,5 @@ function USER_MSG($msg)
 //---------------------------------------------------------------------------------------------------------
 function JOIN_CHAN($channel)
 {
-    fputs($GLOBALS['socket'], 'JOIN '.$channel."\n");
+    fputs($GLOBALS['socket'], 'JOIN '.$channel.PHP_EOL);
 }

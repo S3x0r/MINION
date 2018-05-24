@@ -26,7 +26,7 @@ function plugin_topic()
 {
     if (OnEmptyArg('topic <new_topic>')) {
     } else {
-            fputs($GLOBALS['socket'], 'TOPIC '.$GLOBALS['channel'].' '.msg_without_command()."\n");
+            fputs($GLOBALS['socket'], 'TOPIC '.$GLOBALS['channel'].' '.msg_without_command().PHP_EOL);
 
             CLI_MSG('[PLUGIN: topic] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                     $GLOBALS['channel'], '1');

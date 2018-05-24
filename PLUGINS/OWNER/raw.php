@@ -26,7 +26,7 @@ function plugin_raw()
 {
     if (OnEmptyArg('raw <string>')) {
     } else {
-             $msg = $GLOBALS['piece1'].' '.$GLOBALS['piece2'].' '.$GLOBALS['piece3'].' '.$GLOBALS['piece4']."\n";
+             $msg = $GLOBALS['piece1'].' '.$GLOBALS['piece2'].' '.$GLOBALS['piece3'].' '.$GLOBALS['piece4'].PHP_EOL;
              fputs($GLOBALS['socket'], $msg);
 
              CLI_MSG('[PLUGIN: raw] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.

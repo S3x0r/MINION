@@ -27,7 +27,7 @@ function plugin_deop()
     if (OnEmptyArg('deop <nick>')) {
     } else {
         if (BotOpped() == true) {
-            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' -o '. $GLOBALS['args'] ."\n");
+            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' -o '.$GLOBALS['args'].PHP_EOL);
 
             CLI_MSG('[PLUGIN: deop] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'].
                     ' | deoped user: '.$GLOBALS['args'], '1');

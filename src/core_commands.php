@@ -250,7 +250,7 @@ function CoreCmd_RegisterToBot()
 
                     /* give op */
                     if (BotOpped() == true) {
-                        fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['USER']."\n");
+                        fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['USER'].PHP_EOL);
                     }
 
                     /* update variable with new owners */

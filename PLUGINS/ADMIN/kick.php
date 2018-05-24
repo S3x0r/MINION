@@ -27,7 +27,7 @@ function plugin_kick()
     if (OnEmptyArg('kick <#channel> <who>')) {
     } else {
         if (BotOpped() == true) {
-            fputs($GLOBALS['socket'], 'KICK '.$GLOBALS['piece1'].' :'.$GLOBALS['piece2']."\n");
+            fputs($GLOBALS['socket'], 'KICK '.$GLOBALS['piece1'].' :'.$GLOBALS['piece2'].PHP_EOL);
 
             CLI_MSG('[PLUGIN: kick] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'].
                     ' | kicked user: '.$GLOBALS['args'], '1');

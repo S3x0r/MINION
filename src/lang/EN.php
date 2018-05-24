@@ -31,7 +31,7 @@ define('TR_29', 'Unable to connect to server, exiting program.');
 define('TR_30', 'I was kicked from channel, joining again..');
 define('TR_31', 'I have nick:');
 define('TR_32', 'on auto op list, giving op');
-define('TR_33', 'Nickname is reserved, changing nick to:');
+define('TR_33', 'Nickname is already in use, changing to:');
 define('TR_34', 'Register to bot by typing');
 define('TR_35', 'Joining channel:');
 define('TR_36', 'From now you are on my owner(s) list, enjoy.');

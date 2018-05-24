@@ -27,7 +27,7 @@ function plugin_newnick()
     if (OnEmptyArg('newnick <new_nick>')) {
     } else {
         if ($GLOBALS['args'] != $GLOBALS['BOT_NICKNAME']) {
-            fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['args']."\n");
+            fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['args'].PHP_EOL);
 
             /* wcli extension */
             wcliExt();
