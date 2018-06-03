@@ -19,7 +19,7 @@ if (PHP_SAPI !== 'cli') {
          Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
 }
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '1.0.2');
+    define('VER', '1.0.3');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());
@@ -47,25 +47,25 @@ function SetDefaultData()
     if (empty($GLOBALS['CONFIG_BOT_RESPONSE'])) {
         $GLOBALS['CONFIG_BOT_RESPONSE'] = 'notice';
     }
-    if ($GLOBALS['CONFIG_AUTO_OP'] != 'no' && $GLOBALS['CONFIG_AUTO_OP'] != 'yes') {
+    if (!in_array($GLOBALS['CONFIG_AUTO_OP'], ['yes', 'no'], true)) {
         $GLOBALS['CONFIG_AUTO_OP'] = 'yes';
     }
-    if ($GLOBALS['CONFIG_AUTO_REJOIN'] != 'no' && $GLOBALS['CONFIG_AUTO_REJOIN'] != 'yes') {
+    if (!in_array($GLOBALS['CONFIG_AUTO_REJOIN'], ['yes', 'no'], true)) {
         $GLOBALS['CONFIG_AUTO_REJOIN'] = 'yes';
     }
-    if ($GLOBALS['CONFIG_KEEP_NICK'] != 'no' && $GLOBALS['CONFIG_KEEP_NICK'] != 'yes') {
+    if (!in_array($GLOBALS['CONFIG_KEEP_NICK'], ['yes', 'no'], true)) {
         $GLOBALS['CONFIG_KEEP_NICK'] = 'yes';
     }
-    if ($GLOBALS['CONFIG_AUTO_JOIN'] != 'no' && $GLOBALS['CONFIG_AUTO_JOIN'] != 'yes') {
+    if (!in_array($GLOBALS['CONFIG_AUTO_JOIN'], ['yes', 'no'], true)) {
         $GLOBALS['CONFIG_AUTO_JOIN'] = 'yes';
     }
     if (empty($GLOBALS['CONFIG_CMD_PREFIX'])) {
         $GLOBALS['CONFIG_CMD_PREFIX'] = '!';
     }
-    if ($GLOBALS['CONFIG_CTCP_RESPONSE'] != 'no' && $GLOBALS['CONFIG_CTCP_RESPONSE'] != 'yes') {
+    if (!in_array($GLOBALS['CONFIG_CTCP_RESPONSE'], ['yes', 'no'], true)) {
         $GLOBALS['CONFIG_CTCP_RESPONSE'] = 'yes';
     }
-    if ($GLOBALS['CONFIG_KEEPCHAN_MODES'] != 'no' && $GLOBALS['CONFIG_KEEPCHAN_MODES'] != 'yes') {
+    if (!in_array($GLOBALS['CONFIG_KEEPCHAN_MODES'], ['yes', 'no'], true)) {
         $GLOBALS['CONFIG_KEEPCHAN_MODES'] = 'yes';
     }
     if (empty($GLOBALS['CONFIG_CHANNEL_DELAY']) or !is_numeric($GLOBALS['CONFIG_CHANNEL_DELAY'])) {
@@ -77,10 +77,10 @@ function SetDefaultData()
     if (empty($GLOBALS['CONFIG_NOTICE_DELAY']) or !is_numeric($GLOBALS['CONFIG_NOTICE_DELAY'])) {
         $GLOBALS['CONFIG_NOTICE_DELAY'] = '1';
     }
-    if ($GLOBALS['CONFIG_LOGGING'] != 'no' && $GLOBALS['CONFIG_LOGGING'] != 'yes') {
+    if (!in_array($GLOBALS['CONFIG_LOGGING'], ['yes', 'no'], true)) {
         $GLOBALS['CONFIG_LOGGING'] = 'yes';
     }
-    if ($GLOBALS['CONFIG_LANGUAGE'] != 'EN' && $GLOBALS['CONFIG_LANGUAGE'] != 'PL') {
+    if (!in_array($GLOBALS['CONFIG_LANGUAGE'], ['EN', 'PL'], true)) {
         $GLOBALS['CONFIG_LANGUAGE'] = 'EN';
     }
     if (empty($GLOBALS['CONFIG_WEB_LOGIN'])) {
@@ -95,19 +95,19 @@ function SetDefaultData()
     if (empty($GLOBALS['CONFIG_FETCH_SERVER'])) {
         $GLOBALS['CONFIG_FETCH_SERVER'] = 'https://raw.githubusercontent.com/S3x0r/minion_repository_plugins/master';
     }
-    if ($GLOBALS['silent_mode'] != 'no' && $GLOBALS['silent_mode'] != 'yes') {
+    if (!in_array($GLOBALS['silent_mode'], ['yes', 'no'], true)) {
         $GLOBALS['silent_mode'] = 'no';
     }
-    if ($GLOBALS['CONFIG_CHECK_UPDATE'] != 'no' && $GLOBALS['CONFIG_CHECK_UPDATE'] != 'yes') {
+    if (!in_array($GLOBALS['CONFIG_CHECK_UPDATE'], ['yes', 'no'], true)) {
         $GLOBALS['CONFIG_CHECK_UPDATE'] = 'no';
     }
-    if ($GLOBALS['CONFIG_PLAY_SOUNDS'] != 'no' && $GLOBALS['CONFIG_PLAY_SOUNDS'] != 'yes') {
+    if (!in_array($GLOBALS['CONFIG_PLAY_SOUNDS'], ['yes', 'no'], true)) {
         $GLOBALS['CONFIG_PLAY_SOUNDS'] = 'yes';
     }
-    if ($GLOBALS['CONFIG_SHOW_LOGO'] != 'no' && $GLOBALS['CONFIG_SHOW_LOGO'] != 'yes') {
+    if (!in_array($GLOBALS['CONFIG_SHOW_LOGO'], ['yes', 'no'], true)) {
         $GLOBALS['CONFIG_SHOW_LOGO'] = 'yes';
     }
-    if ($GLOBALS['CONFIG_SHOW_RAW'] != 'no' && $GLOBALS['CONFIG_SHOW_RAW'] != 'yes') {
+    if (!in_array($GLOBALS['CONFIG_SHOW_RAW'], ['yes', 'no'], true)) {
         $GLOBALS['CONFIG_SHOW_RAW'] = 'no';
     }
 

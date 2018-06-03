@@ -27,22 +27,22 @@ if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
          $GLOBALS['OS'] = 'Linux';
 }
     
-$files = array('cli.php',
-               'config.php',
-               'core_commands.php',
-               'ctcp.php',
-               'debug.php',
-               'define.php',
-               'events.php',
-               'language.php',
-               'logo.php',
-               'logs.php',
-               'misc.php',
-               'plugins.php',
-               'socket.php',
-               'timers.php',
-               'web.php'
-              );
+$files = ['cli.php',
+          'config.php',
+          'core_commands.php',
+          'ctcp.php',
+          'debug.php',
+          'define.php',
+          'events.php',
+          'language.php',
+          'logo.php',
+          'logs.php',
+          'misc.php',
+          'plugins.php',
+          'socket.php',
+          'timers.php',
+          'web.php'
+           ];
 
 foreach ($files as $file) {
     if (is_file($file)) {

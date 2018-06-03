@@ -24,13 +24,13 @@ function CoreCmd_Seen()
         } elseif ($GLOBALS['args'] == $GLOBALS['USER']) {
                   BOT_RESPONSE('Look at mirror!');
         } elseif ($GLOBALS['args'] == 'owner') {
-            if ($GLOBALS['CONFIG_BOT_ADMIN'] != '') {
+            if (!empty($GLOBALS['CONFIG_BOT_ADMIN'])) {
                 BOT_RESPONSE('My Owner: '.$GLOBALS['CONFIG_BOT_ADMIN']);
             }
         } else {
                  /* revert from illegal chars file */
-                 $bad   = array(chr('0x5c'), '/', ':', '*', '?', '"', '<', '>', '|');
-                 $good  = array("@[1]", "@[2]", "@[3]", "@[4]", "@[5]", "@[6]", "@[7]", "@[8]", "@[9]");
+                 $bad   = [chr('0x5c'), '/', ':', '*', '?', '"', '<', '>', '|'];
+                 $good  = ["@[1]", "@[2]", "@[3]", "@[4]", "@[5]", "@[6]", "@[7]", "@[8]", "@[9]"];
                  $GLOBALS['args'] = str_replace($bad, $good, $GLOBALS['args']);
 
             if (is_file('../DATA/SEEN/'.$GLOBALS['args'])) {
@@ -65,8 +65,8 @@ function SeenSave()
         ', Date: '.date("d.m.Y").', Time: '.date("H:i:s");
 
     /* illegal chars for file */
-    $bad  = array(chr('0x5c'), '/', ':', '*', '?', '"', '<', '>', '|');
-    $good = array("@[1]", "@[2]", "@[3]", "@[4]", "@[5]", "@[6]", "@[7]", "@[8]", "@[9]");
+    $bad  = [chr('0x5c'), '/', ':', '*', '?', '"', '<', '>', '|'];
+    $good = ["@[1]", "@[2]", "@[3]", "@[4]", "@[5]", "@[6]", "@[7]", "@[8]", "@[9]"];
     $GLOBALS['USER'] = str_replace($bad, $good, $GLOBALS['USER']);
 
     if (is_file($seen_dir.$GLOBALS['USER'])) {

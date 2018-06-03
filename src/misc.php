@@ -76,7 +76,7 @@ function GetBotChannels()
     return $GLOBALS['BOT_CHANNELS'];
 }
 //---------------------------------------------------------------------------------------------------------
-function CountLines($exts = array('php'))
+function CountLines($exts = ['php'])
 {
     $fpath = '../';
     $files=array();

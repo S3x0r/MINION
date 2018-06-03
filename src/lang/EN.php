@@ -66,7 +66,7 @@ define('TR_64', '<password> hash password to SHA256');
 define('TR_65', 'silent mode (no output from bot)');
 define('TR_66', 'prints bot version');
 define('TR_67', 'this help');
-define('TR_68', 'I will hash your password to SHA256');
+define('TR_68', 'I will encrypt your password to SHA256');
 define('TR_69', 'Password:');
 define('TR_70', 'Hashed:');
 define('TR_71', 'MINION version:');

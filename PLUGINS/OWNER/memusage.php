@@ -35,7 +35,7 @@ function plugin_memusage()
 
 function byte_convert($bytes)
 {
-    $symbol = array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB');
+    $symbol = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
     $exp = 0;
     $converted_value = 0;
 

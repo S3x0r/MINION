@@ -58,7 +58,7 @@ function DEBUG($where)
               echo PHP_EOL.PHP_EOL.'[DEBUG] ---'.PHP_EOL;
     }
     if (isset($GLOBALS['ex'][0])) {
-        echo "[DEBUG] EX0: ".$GLOBALS['ex'][0].PHP_EOL;
+        echo '[DEBUG] EX0: '.$GLOBALS['ex'][0].PHP_EOL;
     } else {
               echo '[DEBUG] EX0: ---'.PHP_EOL;
     }

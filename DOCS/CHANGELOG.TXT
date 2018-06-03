@@ -1,4 +1,10 @@
 
+   v1.0.3 changes(04.06.2018):
+   - generate_password.bat changed to encrypt_password.bat
+   - '-p' argument or encrypt_password.bat now asks if you want
+     save password to config file, if yes it will save it.
+   - some code cleanup
+
    v1.0.2 changes (24.05.2018):
    - keep nick works now properly
    - if no connection php error removed

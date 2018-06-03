@@ -30,13 +30,13 @@ function StartupConfig()
         $GLOBALS['silent_mode']         = $cfg->get('PROGRAM', 'silent_mode');
         $GLOBALS['CONFIG_CHECK_UPDATE'] = $cfg->get('PROGRAM', 'check_update');
 
-        if ($GLOBALS['CONFIG_SHOW_LOGO'] != 'no' && $GLOBALS['CONFIG_SHOW_LOGO'] != 'yes') {
+        if (!in_array($GLOBALS['CONFIG_SHOW_LOGO'], ['yes', 'no'], true)) {
             $GLOBALS['CONFIG_SHOW_LOGO'] = 'yes';
         }
-        if ($GLOBALS['silent_mode'] != 'no' && $GLOBALS['silent_mode'] != 'yes') {
+        if (!in_array($GLOBALS['silent_mode'], ['yes', 'no'], true)) {
             $GLOBALS['silent_mode'] = 'no';
         }
-        if ($GLOBALS['CONFIG_CHECK_UPDATE'] != 'no' && $GLOBALS['CONFIG_CHECK_UPDATE'] != 'yes') {
+        if (!in_array($GLOBALS['CONFIG_CHECK_UPDATE'], ['yes', 'no'], true)) {
             $GLOBALS['CONFIG_CHECK_UPDATE'] = 'no';
         }
     } else {

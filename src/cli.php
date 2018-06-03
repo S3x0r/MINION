@@ -54,7 +54,7 @@ function CheckCLIArgs()
                 }
                 break;
 
-            case '-p': /* generate hash */
+            case '-p': /* encrypt password to sha256 */
                 echo PHP_EOL.' '.TR_68.PHP_EOL;
                 echo PHP_EOL.' '.TR_69.' ';
                 $STDIN = fopen('php://stdin', 'r');
@@ -67,7 +67,25 @@ function CheckCLIArgs()
                 }
                 $hash = hash('sha256', rtrim($pwd, "\n\r"));
                 echo PHP_EOL.' '.TR_70." $hash".PHP_EOL.PHP_EOL;
-                die();
+
+                /* ask to save password to config */
+                echo PHP_EOL.' Save password to Config file? (yes/no)'.PHP_EOL;
+                echo ' > ';
+
+                $answer = fgets($STDIN);
+                if (trim($answer) == 'yes') {
+                    if (is_file('../CONFIG.INI')) {
+                        SaveData('../CONFIG.INI', 'OWNER', 'owner_password', $hash);
+                        echo PHP_EOL.' Password saved to config file, Exiting.'.PHP_EOL;
+                        sleep(3);
+                        die();
+                    } else {
+                             echo PHP_EOL.' Cannot find CONFIG.INI file, exiting!'.PHP_EOL;
+                             die();
+                    }
+                } else {
+                         die();
+                }
 
             case '-s': /* silent mode */
                 $GLOBALS['silent_cli'] = 'yes';
@@ -98,17 +116,17 @@ function CheckCLIArgs()
                         } else {
                                  echo PHP_EOL.' Checking if there is new version...'.PHP_EOL;
                                  echo PHP_EOL.' No new update, you have the latest version.'.PHP_EOL.PHP_EOL;
-                                 sleep(8);
+                                 sleep(4);
                                  die();
                         }
                     } else {
                              echo PHP_EOL.' Cannot connect to update server, try next time.'.PHP_EOL.PHP_EOL;
-                             sleep(7);
+                             sleep(4);
                              die();
                     }
                 } else {
                          echo PHP_EOL.' I cannot update, i need php_openssl extension to work!'.PHP_EOL.PHP_EOL;
-                         sleep(7);
+                         sleep(4);
                          die();
                 }
         }
@@ -140,10 +158,10 @@ function wcliExt()
 function CLI_MSG($msg, $log)
 {
     if (!IsSilent()) {
-        $line='['.@date('H:i:s').'] '.$msg.PHP_EOL;
+        $line = '['.@date('H:i:s').'] '.$msg.PHP_EOL;
 
         if (isset($GLOBALS['CONFIG_LOGGING']) && $GLOBALS['CONFIG_LOGGING'] == 'yes') {
-            if ($log=='1') {
+            if ($log == '1') {
                 SaveToFile($GLOBALS['log_file'], $line, 'a');
             }
         }
