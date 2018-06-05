@@ -139,7 +139,9 @@ You can change prefix in config file.
 |                  | Saving show raw value in config          | !save show_raw <string>           |  OWNER       | All |
 |                  | Saving time zone value in config         | !save time_zone <string>          |  OWNER       | All |
 |                  | Saving try connect value in config       | !save try_connect <string>        |  OWNER       | All |
+|    say           | Say specified text to channel            | !say <text>                       |  OWNER/ADMIN | All |
 |    seen          | Check nick when was last seen on channel | !seen <nickname>                  |  ALL         | All |
+|    server        | Connects to specified server             | !server <server port>             |  OWNER       | All |
 |    showconfig    | Shows BOT configuration                  | !showconfig                       |  OWNER       | All |
 |    topic         | Changes topic on channel                 | !topic <string>                   |  OWNER/ADMIN | All |
 |    unload        | Unloads plugin from BOT                  | !unload <plugin>                  |  OWNER       | All |

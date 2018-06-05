@@ -348,8 +348,10 @@ function SocketLoop()
 //---------------------------------------------------------------------------------------------------------
         }
         /* if disconected */
-        CLI_MSG('[BOT] Disconected from server, I will try to connect again...', '1');
-        Connect();
+        if (empty($GLOBALS['disconnected'])) {
+            CLI_MSG('[BOT] Disconected from server, I will try to connect again...', '1');
+            Connect();
+        }
     }
 }
 //---------------------------------------------------------------------------------------------------------

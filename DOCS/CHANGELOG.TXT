@@ -1,5 +1,11 @@
 
-   v1.0.3 changes(04.06.2018):
+   v1.0.4 changes (05.06.2018):
+   - new plugin: !server - Connects to specified server, eg: !server irc.dal.net 6667
+   - new plugin: !say - Says specified text to channel, eg: !say hello
+   - plugin !cham moved to ADMIN permisions
+   - added file 'arguments.txt' to Docs dir.
+
+   v1.0.3 changes (04.06.2018):
    - generate_password.bat changed to encrypt_password.bat
    - '-p' argument or encrypt_password.bat now asks if you want
      save password to config file, if yes it will save it.
