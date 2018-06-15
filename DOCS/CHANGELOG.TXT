@@ -1,8 +1,11 @@
 
+   v1.0.5 changes (15.06.2018):
+   - plugin !fetch works now as expected.
+
    v1.0.4 changes (05.06.2018):
    - new plugin: !server - Connects to specified server, eg: !server irc.dal.net 6667
    - new plugin: !say - Says specified text to channel, eg: !say hello
-   - plugin !cham moved to ADMIN permisions
+   - plugin !cham moved to ADMIN permissions
    - added file 'arguments.txt' to Docs dir.
 
    v1.0.3 changes (04.06.2018):

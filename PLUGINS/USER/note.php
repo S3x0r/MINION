@@ -29,7 +29,7 @@ function plugin_note()
         if (!is_dir('../DATA')) {
             mkdir('../DATA');
         }
-        $GLOBALS['ident'] = '../DATA/'.$GLOBALS['host'].'.txt';
+        $GLOBALS['ident'] = '../DATA/'.$GLOBALS['host'].'.txt'; // nie tu
     
         switch ($GLOBALS['args']) {
             case 'help':
@@ -51,16 +51,16 @@ function plugin_note()
                     }
                     fclose($currentNotes);
                 } else {
-                         BOT_RESPONSE('You have no notes yet');
+                         BOT_RESPONSE('You have no notes yet.');
                 }
                 break;
 
             case 'clear':
                 if (is_file($GLOBALS['ident'])) {
                     unlink($GLOBALS['ident']);
-                    BOT_RESPONSE('Notes Cleared');
+                    BOT_RESPONSE('Notes Deleted.');
                 } else {
-                         BOT_RESPONSE('There was no notes for that user');
+                         BOT_RESPONSE('What to delete? You have no notes yet.');
                 }
                 break;
         }
@@ -81,7 +81,7 @@ function plugin_note()
                     $makeNote = fopen($GLOBALS['ident'], "a+");
                     fwrite($makeNote, $note);
                     fclose($makeNote);
-                    BOT_RESPONSE('Note added');
+                    BOT_RESPONSE('Note added.');
                 } else {
                          BOT_RESPONSE('I need some data :)');
                 }
@@ -104,12 +104,12 @@ function plugin_note()
                         }
                         fclose($newNotes);
 
-                        BOT_RESPONSE('Note Deleted');
+                        BOT_RESPONSE('Note Deleted.');
                     } else {
-                             BOT_RESPONSE('Not Valid Entry');
+                             BOT_RESPONSE('Not Valid Entry.');
                     }
                 } else {
-                         BOT_RESPONSE('You have no notes yet to delete');
+                         BOT_RESPONSE('You have no notes yet to delete.');
                 }
                 break;
         }

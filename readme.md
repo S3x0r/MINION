@@ -70,13 +70,13 @@ You can change prefix in config file.
 |    autoop        | Adds host to auto op list in config file | !autoop <nick!ident@host>         |  OWNER/ADMIN | All |
 |    ban           | Ban specified hostname                   | !ban <nick!ident@host>            |  OWNER/ADMIN | All |
 |    bash          | Shows quotes from bash.org               | !bash                             |  ALL         | All |
-|    cham          | Shows random text from file              | !cham <nick>                      |  ALL         | All |
+|    cham          | Shows random text from file              | !cham <nick>                      |  OWNER/ADMIN | All |
 |    checkupdate   | Checking for updates                     | !checkupdate                      |  OWNER       | All |
 |    deop          | Deops someone                            | !deop <nick>                      |  OWNER/ADMIN | All |
 |    devoice       | Devoice someone                          | !devoice <nick>                   |  OWNER/ADMIN | All |
 |    gethost       | Ip address to hostname                   | !gethost <ip>                     |  ALL         | All |
-|    fetch         | Plugins repository list                  | !fetch list                       |  OWNER       | All |
-|                  | Downloads plugins from repository        | !fetch get <plugin>               |  OWNER       | All |
+|    fetch         | Plugins repository list / get            | !fetch list                       |  OWNER       | All |
+|                  | Downloads plugins from repository        | !fetch get <plugin> <permissions> |  OWNER       | All |
 |    hash          | Changing string to choosed algorithm     | !hash <algo> <string>             |  ALL         | All |
 |                  | Lists available algorithms               | !hash help                        |  ALL         | All |
 |    help          | Shows BOT commands                       | !help                             |  ALL         | All |
