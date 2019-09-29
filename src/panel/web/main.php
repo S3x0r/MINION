@@ -71,6 +71,6 @@ if (isset($_COOKIE['xs']) && $_COOKIE['xs'] == hash('sha512', $password.$salt)) 
 
 <?php
 } else {
-         die();
+         exit;
 }
 ?>

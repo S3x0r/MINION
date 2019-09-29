@@ -1,4 +1,9 @@
 
+   v1.0.6 changes (29.09.2019):
+   - errors pause now only in Windows
+   - fixed !addowner - now adds also to auto op list
+   - little code cleanup
+
    v1.0.5 changes (15.06.2018):
    - plugin !fetch works now as expected.
 

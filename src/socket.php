@@ -14,14 +14,13 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-if (PHP_SAPI !== 'cli') {
-    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
-}
+PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
 //---------------------------------------------------------------------------------------------------------
+
 function Connect()
 {
-    CLI_MSG(TR_27.' '.$GLOBALS['CONFIG_SERVER'].', '.TR_26.' '.$GLOBALS['CONFIG_PORT'].PHP_EOL, '1');
+    CLI_MSG(TR_27.' '.$GLOBALS['CONFIG_SERVER'].', '.TR_26.' '.$GLOBALS['CONFIG_PORT'].N, '1');
 
     $i=0;
 
@@ -32,10 +31,10 @@ function Connect()
             PlaySound('error_conn.mp3');
             CLI_MSG(TR_28, '1');
             usleep($GLOBALS['CONFIG_CONNECT_DELAY'] * 1000000);
-            if ($i==$GLOBALS['CONFIG_TRY_CONNECT']) {
+            if ($i == $GLOBALS['CONFIG_TRY_CONNECT']) {
                 PlaySound('error_conn.mp3');
                 CLI_MSG(TR_29, '1');
-                die();
+                exit;
             }
         } else {
                  Identify();
@@ -48,12 +47,12 @@ function Identify()
     /* send PASSWORD / NICK / USER to server */
 
     if (!empty($GLOBALS['CONFIG_SERVER_PASSWD'])) {
-        fputs($GLOBALS['socket'], 'PASS '.$GLOBALS['CONFIG_SERVER_PASSWD'].PHP_EOL);
+        fputs($GLOBALS['socket'], 'PASS '.$GLOBALS['CONFIG_SERVER_PASSWD'].N);
     }
 
-    fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['CONFIG_NICKNAME'].PHP_EOL);
+    fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['CONFIG_NICKNAME'].N);
 
-    fputs($GLOBALS['socket'], 'USER '.$GLOBALS['CONFIG_IDENT'].' 8 * :'.$GLOBALS['CONFIG_NAME'].PHP_EOL);
+    fputs($GLOBALS['socket'], 'USER '.$GLOBALS['CONFIG_IDENT'].' 8 * :'.$GLOBALS['CONFIG_NAME'].N);
 
     SocketLoop();
 }
@@ -95,9 +94,7 @@ function SocketLoop()
     while (1) {
         while (!feof($GLOBALS['socket'])) {
             /* timers */
-            if (empty($GLOBALS['stop'])) {
-                StartTimers();
-            }
+            empty($GLOBALS['stop']) ? StartTimers() : false;
 
             $mask = null;
 
@@ -114,9 +111,8 @@ function SocketLoop()
             $ex = explode(' ', trim($data));
 
             /* get channel from ex[2] */
-            if (isset($ex[2])) {
-                $channel = str_replace(':#', '#', $ex[2]);
-            }
+            isset($ex[2]) ? $channel = str_replace(':#', '#', $ex[2]) : false;
+
 //---------------------------------------------------------------------------------------------------------
             /* PING PONG game */
             if (isset($ex[0]) && $ex[0] == 'PING') {
@@ -135,37 +131,29 @@ function SocketLoop()
             }
 //---------------------------------------------------------------------------------------------------------
             /* ON JOIN */
-            if (isset($ex[1]) && $ex[1] == 'JOIN') {
-                on_join();
-            }
+            isset($ex[1]) && $ex[1] == 'JOIN' ? on_join() : false;
+
             /* ON PART */
-            if (isset($ex[1]) && $ex[1] == 'PART') {
-                on_part();
-            }
+            isset($ex[1]) && $ex[1] == 'PART' ? on_part() : false;
+
             /* ON KICK */
-            if (isset($ex[1]) && $ex[1] == 'KICK') {
-                on_kick();
-            }
+            isset($ex[1]) && $ex[1] == 'KICK' ? on_kick() : false;
+
             /* ON TOPIC */
-            if (isset($ex[1]) && $ex[1] == 'TOPIC') {
-                on_topic();
-            }
+            isset($ex[1]) && $ex[1] == 'TOPIC' ? on_topic() : false;
+
             /* ON PRIVMSG */
-            if (isset($ex[1]) && $ex[1] == 'PRIVMSG') {
-                on_privmsg();
-            }
+            isset($ex[1]) && $ex[1] == 'PRIVMSG' ? on_privmsg() : false;
+
             /* ON MODE */
-            if (isset($ex[1]) && $ex[1] == 'MODE') {
-                on_mode();
-            }
+            isset($ex[1]) && $ex[1] == 'MODE' ? on_mode() : false;
+
             /* ON NICK */
-            if (isset($ex[1]) && $ex[1] == 'NICK') {
-                on_nick();
-            }
+            isset($ex[1]) && $ex[1] == 'NICK' ? on_nick() : false;
+
             /* ON QUIT */
-            if (isset($ex[1]) && $ex[1] == 'QUIT') {
-                on_quit();
-            }
+            isset($ex[1]) && $ex[1] == 'QUIT' ? on_quit() : false;
+
 //---------------------------------------------------------------------------------------------------------
             if (count($ex) < 4) {
                 continue;
@@ -174,9 +162,7 @@ function SocketLoop()
             $rawcmd = explode(':', $ex[3]);
 
             /* Case sensitive */
-            if (isset($rawcmd[1])) {
-                $rawcmd[1] = strtolower($rawcmd[1]);
-            }
+            isset($rawcmd[1]) ? $rawcmd[1] = strtolower($rawcmd[1]) : false;
 
             $args = null; for ($i=4; $i < count($ex); $i++) {
                 $args .= $ex[$i].'';
@@ -188,32 +174,14 @@ function SocketLoop()
                 $srv_msg .= str_replace(':', '', $ex[$i]).' ';
             }
 
-            if (isset($USER)) {
-                $mask = $USER.'!'.$USER_IDENT.'@'.$host;
-            }
+            isset($USER) ? $mask = $USER.'!'.$USER_IDENT.'@'.$host : false;
 
             $pieces = explode(" ", $args1);
 
-            if (isset($pieces[0])) {
-                $piece1 = $pieces[0];
-            } else {
-                     $piece1 = '';
-            }
-            if (isset($pieces[1])) {
-                $piece2 = $pieces[1];
-            } else {
-                     $piece2 = '';
-            }
-            if (isset($pieces[2])) {
-                $piece3 = $pieces[2];
-            } else {
-                     $piece3 = '';
-            }
-            if (isset($pieces[3])) {
-                $piece4 = $pieces[3];
-            } else {
-                     $piece4 = '';
-            }
+            isset($pieces[0]) ? $piece1 = $pieces[0] : $piece1 = '';
+            isset($pieces[1]) ? $piece2 = $pieces[1] : $piece2 = '';
+            isset($pieces[2]) ? $piece3 = $pieces[2] : $piece3 = '';
+            isset($pieces[3]) ? $piece4 = $pieces[3] : $piece4 = '';
 //---------------------------------------------------------------------------------------------------------
             if (isset($ex[1])) {
                 switch ($ex[1]) {
@@ -310,33 +278,18 @@ function SocketLoop()
                 if (HasOwner($mask) && isset($rawcmd[1])) {
                     $pn = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
 
-                    if (in_array($rawcmd[1], $GLOBALS['OWNER_PLUGINS'])) {
-                        call_user_func('plugin_'.$pn);
-                    }
-
-                    if (in_array($rawcmd[1], $GLOBALS['ADMIN_PLUGINS'])) {
-                        call_user_func('plugin_'.$pn);
-                    }
-
-                    if (in_array($rawcmd[1], $GLOBALS['USER_PLUGINS'])) {
-                        call_user_func('plugin_'.$pn);
-                    }
+                    in_array($rawcmd[1], $GLOBALS['OWNER_PLUGINS']) ? call_user_func('plugin_'.$pn) : false;
+                    in_array($rawcmd[1], $GLOBALS['ADMIN_PLUGINS']) ? call_user_func('plugin_'.$pn) : false;
+                    in_array($rawcmd[1], $GLOBALS['USER_PLUGINS']) ? call_user_func('plugin_'.$pn) : false;
                 } elseif (!HasOwner($mask) && HasAdmin($mask) && isset($rawcmd[1])) {
                     $pn = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
 
-                    if (in_array($rawcmd[1], $GLOBALS['ADMIN_PLUGINS'])) {
-                        call_user_func('plugin_'.$pn);
-                    }
-              
-                    if (in_array($rawcmd[1], $GLOBALS['USER_PLUGINS'])) {
-                        call_user_func('plugin_'.$pn);
-                    }
+                    in_array($rawcmd[1], $GLOBALS['ADMIN_PLUGINS']) ? call_user_func('plugin_'.$pn) : false;
+                    in_array($rawcmd[1], $GLOBALS['USER_PLUGINS']) ? call_user_func('plugin_'.$pn) : false;
                 } elseif (!HasOwner($mask) && !HasAdmin($mask) && isset($rawcmd[1])) {
                     $pn = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
                 
-                    if (in_array($rawcmd[1], $GLOBALS['USER_PLUGINS'])) {
-                        call_user_func('plugin_'.$pn);
-                    }
+                    in_array($rawcmd[1], $GLOBALS['USER_PLUGINS']) ? call_user_func('plugin_'.$pn) : false;
                 }
 
                 if (!function_exists('plugin_')) {
@@ -358,20 +311,20 @@ function SocketLoop()
 function set_channel_modes()
 {
     if ($GLOBALS['CONFIG_KEEPCHAN_MODES'] == 'yes') {
-        fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].PHP_EOL);
+        fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].N);
     
         if (BotOpped() == true) {
             if (isset($GLOBALS['CHANNEL_MODES']) && $GLOBALS['CHANNEL_MODES'] != $GLOBALS['CONFIG_CHANNEL_MODES']) {
                 sleep(1);
-                fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' -'.$GLOBALS['CHANNEL_MODES'].PHP_EOL);
+                fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' -'.$GLOBALS['CHANNEL_MODES'].N);
                 sleep(1);
-                fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +'.$GLOBALS['CONFIG_CHANNEL_MODES'].PHP_EOL);
+                fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +'.$GLOBALS['CONFIG_CHANNEL_MODES'].N);
             }
             if (empty($GLOBALS['CHANNEL_MODES'])) {
                 if (!empty($GLOBALS['CONFIG_CHANNEL_MODES'])) {
                     sleep(1);
                     fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +'.
-                        $GLOBALS['CONFIG_CHANNEL_MODES'].PHP_EOL);
+                        $GLOBALS['CONFIG_CHANNEL_MODES'].N);
                 }
             }
         }
@@ -383,7 +336,7 @@ function set_bans() /* set ban from config list */
     if (!empty($GLOBALS['CONFIG_BAN_LIST'])) {
         $ban_list = explode(', ', $GLOBALS['CONFIG_BAN_LIST']);
         foreach ($ban_list as $s) {
-            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +b '.$s.PHP_EOL);
+            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +b '.$s.N);
         }
     }
 }
@@ -416,5 +369,5 @@ function USER_MSG($msg)
 //---------------------------------------------------------------------------------------------------------
 function JOIN_CHAN($channel)
 {
-    fputs($GLOBALS['socket'], 'JOIN '.$channel.PHP_EOL);
+    fputs($GLOBALS['socket'], 'JOIN '.$channel.N);
 }

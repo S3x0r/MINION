@@ -13,12 +13,11 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
+
+PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
 //---------------------------------------------------------------------------------------------------------
-if (PHP_SAPI !== 'cli') {
-    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
-}
-//---------------------------------------------------------------------------------------------------------
+
 function StartupConfig()
 {
     /* load some startup needed variables */
@@ -56,13 +55,13 @@ function LoadConfig($filename)
         if (isset($_SERVER['argv'][2]) && is_file($_SERVER['argv'][2])) {
             $config_file = $_SERVER['argv'][2];
         } elseif (isset($_SERVER['argv'][2]) && !is_file($_SERVER['argv'][2])) {
-                   echo '  [ERROR] Config file does not exist, wrong path?'.PHP_EOL.PHP_EOL;
-                   sleep(6);
-                   die();
+                   echo '  [ERROR] Config file does not exist, wrong path?'.N.N;
+                   WinSleep(6);
+                   exit;
         } elseif (isset($_SERVER['argv'][1]) && empty($_SERVER['argv'][2])) {
-                   echo '  [ERROR] You need to specify config file! I need some data :)'.PHP_EOL.PHP_EOL;
-                   sleep(6);
-                   die();
+                   echo '  [ERROR] You need to specify config file! I need some data :)'.N.N;
+                   WinSleep(6);
+                   exit;
         }
     } else {
               $config_file = $filename;
@@ -142,35 +141,35 @@ function LoadConfig($filename)
 
         /* check if we have enough data to connect */
         if (empty($GLOBALS['CONFIG_NICKNAME'])) {
-            CLI_MSG('[ERROR] I need nickname! No nickname in config file, Exiting.', '0');
-            sleep(6);
-            die();
+            CLI_MSG('[ERROR] I need nickname! No nickname in config file, Exiting.');
+            WinSleep(6);
+            exit;
         }
         if (empty($GLOBALS['CONFIG_SERVER'])) {
-            CLI_MSG('[ERROR] I dont know where to connect! No server in config file, Exiting.', '0');
-            sleep(6);
-            die();
+            CLI_MSG('[ERROR] I dont know where to connect! No server in config file, Exiting.');
+            WinSleep(6);
+            exit;
         }
 
         /* Set default data */
         SetDefaultData();
        
-        /* if default BOT owner(s) password, prompt for change it! */
+        /* if default BOT owner(s) password, prompt to change it! */
         if ($GLOBALS['CONFIG_OWNER_PASSWD'] == '47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed') {
             /* play sound */
             PlaySound('error_conn.mp3');
 
             /* show info about it */
-            CLI_MSG(TR_13, '0');
-            CLI_MSG(TR_14, '0');
+            CLI_MSG(TR_13);
+            CLI_MSG(TR_14);
 
             /* 'New Password:' */
-            $new_pwd = getPasswd('['.@date('H:i:s').'] New Password: '.PHP_EOL);
+            $new_pwd = getPasswd('['.@date('H:i:s').'] New Password: '.N);
 
             while (strlen($new_pwd) < 6) {
-                echo '['.@date('H:i:s').'] '.TR_16.PHP_EOL;
+                echo '['.@date('H:i:s').'] '.TR_16.N;
                 unset($new_pwd);
-                $new_pwd = getPasswd('['.@date('H:i:s').'] New Password: '.PHP_EOL);
+                $new_pwd = getPasswd('['.@date('H:i:s').'] New Password: '.N);
             }
 
             /* join spaces in password */
@@ -189,14 +188,14 @@ function LoadConfig($filename)
             /* Set first time change variable */
             $GLOBALS['pwd_changed'] = '1';
 
-            CLI_MSG('Password changed', '0');
+            CLI_MSG('Password changed');
           
             /* load config again */
             LoadConfig($config_file);
         }
 
         /* from what file config loaded */
-        CLI_MSG(TR_17.' '.$config_file, '0');
+        CLI_MSG(TR_17.' '.$config_file);
         Line(COLOR);
      
         /* logging init */
@@ -210,8 +209,8 @@ function LoadConfig($filename)
              /* set default logging */
              $GLOBALS['CONFIG_LOGGING'] = 'yes';
  
-             CLI_MSG(TR_18, '0');
-             CLI_MSG(TR_19.' CONFIG.INI '.PHP_EOL, '0');
+             CLI_MSG(TR_18);
+             CLI_MSG(TR_19.' CONFIG.INI '.N);
 
              /* create default config if missing */
              CreateDefaultConfig('../CONFIG.INI');
@@ -221,7 +220,7 @@ function LoadConfig($filename)
 function CreateDefaultConfig($filename)
 {
     /* default config */
-    $default_config = ';<?php die(); ?>
+    $default_config = ';<?php exit; ?>
 
 [BOT]
 
@@ -392,9 +391,9 @@ show_raw         = \'no\'';
         /* Load config again */
         LoadConfig($filename);
     } else { /* read only file system? */
-             CLI_MSG('[ERROR]: '.TR_20, '0');
-             sleep(6);
-             die();
+             CLI_MSG('[ERROR]: '.TR_20);
+             WinSleep(6);
+             exit;
     }
 }
 //---------------------------------------------------------------------------------------------------------

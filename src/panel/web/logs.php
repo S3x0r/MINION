@@ -65,6 +65,6 @@ foreach ($files as $file) {
 
 <?php
 } else {
-         die();
+         exit;
 }
 ?>

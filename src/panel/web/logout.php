@@ -12,5 +12,5 @@ if (isset($_COOKIE['xs']) && $_COOKIE['xs'] == hash('sha512', $password.$salt)) 
     setcookie('xs', '', time() - 3600);
     header('Location: index.php');
 } else {
-         die();
+         exit;
 }

@@ -14,10 +14,11 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-if (PHP_SAPI !== 'cli') {
-    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
-}
+//---------------------------------------------------------------------------------------------------------
+PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+//---------------------------------------------------------------------------------------------------------
+
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = 'Adds host to autoop list in config file: '
     .$GLOBALS['CONFIG_CMD_PREFIX'].'autoop <nick!ident@host>';
@@ -38,11 +39,7 @@ function plugin_autoop()
                      $auto_list   = $GLOBALS['LOADED'];
                      $new         = $host[0];
 
-                if (empty($auto_list)) {
-                    $new_list = $new.'';
-                } else {
-                         $new_list = $auto_list.', '.$new;
-                }
+                empty($auto_list) ? $new_list = $new : $new_list = $auto_list.', '.$new;
  
                      SaveData($GLOBALS['config_file'], 'OWNER', 'auto_op_list', $new_list);
 

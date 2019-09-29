@@ -14,10 +14,11 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-if (PHP_SAPI !== 'cli') {
-    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
-}
+//---------------------------------------------------------------------------------------------------------
+PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+//---------------------------------------------------------------------------------------------------------
+
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = 'Shutdown BOT: '.$GLOBALS['CONFIG_CMD_PREFIX'].'quit';
     $plugin_command = 'quit';
@@ -38,5 +39,5 @@ function plugin_quit()
     CLI_MSG('Terminating BOT.', '1');
     CLI_MSG('------------------LOG ENDED: '.date('d.m.Y | H:i:s')."------------------\r\n", '1');
 
-    die();
+    exit;
 }

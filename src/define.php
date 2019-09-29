@@ -14,12 +14,10 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-if (PHP_SAPI !== 'cli') {
-    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
-}
+PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '1.0.5');
+    define('VER', '1.0.6');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());
@@ -28,6 +26,37 @@ if (PHP_SAPI !== 'cli') {
     set_time_limit(0);
     set_error_handler('ErrorHandler');
     error_reporting(-1);
+//---------------------------------------------------------------------------------------------------------
+function ErrorHandler($errno, $errstr, $errfile, $errline)
+{
+    if (!(error_reporting() & $errno)) {
+        return false;
+    }
+
+    switch ($errno) {
+        case E_USER_ERROR:
+            CLI_MSG("[ERROR]: [$errno] $errstr", '1');
+            CLI_MSG(TR_54." $errline ".TR_55." $errfile, PHP".PHP_VERSION." (".PHP_OS.")", '1');
+            CLI_MSG(TR_56, '1');
+            exit(1);
+            break;
+
+        case E_USER_WARNING:
+            CLI_MSG("[WARNING]: [$errno] $errstr", '1');
+            break;
+
+        case E_USER_NOTICE:
+            CLI_MSG("[NOTICE]: [$errno] $errstr", '1');
+            break;
+
+        default:
+             CLI_MSG("Error: $errstr", '1');
+            break;
+    }
+
+    /* Don't execute PHP internal error handler */
+    return true;
+}
 //---------------------------------------------------------------------------------------------------------
 function SetDefaultData()
 {

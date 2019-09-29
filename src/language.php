@@ -14,11 +14,10 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-if (PHP_SAPI !== 'cli') {
-    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
-}
+PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
 //---------------------------------------------------------------------------------------------------------
+
 function SetLanguage()
 {
 /* TODO: More from this should be in StartupConfig() */
@@ -65,10 +64,10 @@ function SetLanguage()
 //---------------------------------------------------------------------------------------------------------
 function no_lang_file()
 {
-    echo PHP_EOL.PHP_EOL.'  ERROR: I need at least one translation in LANG directory to work! Exiting.'.PHP_EOL,
-         PHP_EOL.'  You can download missing files from:'.PHP_EOL,
-         '  https://github.com/S3x0r/MINION/releases'.PHP_EOL,
-         PHP_EOL.'  Terminating program after 10 seconds.'.PHP_EOL.PHP_EOL.'  ';
-    sleep(10);
-    die();
+    echo N.N.'  ERROR: I need at least one translation in LANG directory to work! Exiting.'.N,
+         N.'  You can download missing files from:'.N,
+         '  https://github.com/S3x0r/MINION/releases'.N,
+         N.'  Terminating program after 10 seconds.'.N.N.'  ';
+    WinSleep(10);
+    exit;
 }

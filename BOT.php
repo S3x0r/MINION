@@ -13,12 +13,14 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
+
 //---------------------------------------------------------------------------------------------------------
-if (PHP_SAPI !== 'cli') {
-    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
-}
+PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
 //---------------------------------------------------------------------------------------------------------
+
+define('N', PHP_EOL);
+
 /* check os type and set path */
 if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
     chdir('../');
@@ -48,17 +50,15 @@ foreach ($files as $file) {
     if (is_file($file)) {
         require_once($file);
     } else {
-             echo PHP_EOL.'  ERROR: I need \''.$file.'\' file to run!'.PHP_EOL,
-                  PHP_EOL.'  You can download missing files from:'.PHP_EOL,
-                  '  https://github.com/S3x0r/MINION/releases'.PHP_EOL,
-                  PHP_EOL.'  Terminating program after 10 seconds.'.PHP_EOL.PHP_EOL.'  ';
-             sleep(10);
-             die();
+             echo N.'  ERROR: I need \''.$file.'\' file to run!'.N,
+                  N.'  You can download missing files from:'.N,
+                  '  https://github.com/S3x0r/MINION/releases'.N,
+                  N.'  Terminating program after 10 seconds.'.N.N.'  ';
+             WinSleep(10);
+             exit;
     }
 }
 //---------------------------------------------------------------------------------------------------------
-    /* let's go! */
-
     /* Load startup needed variables */
     StartupConfig();
 
@@ -66,7 +66,7 @@ foreach ($files as $file) {
     SetLanguage();
 
     /* Check if cli arguments */
-    CheckCLIArgs();
+    CheckCliArgs();
     
     /* wcli extension */
     wcliStart();

@@ -13,7 +13,11 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
+
+PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
 //---------------------------------------------------------------------------------------------------------
+
 function CoreCmd_Seen()
 {
     if (OnEmptyArg('seen <nickname> to check specified user when was last seen on channel')) {
@@ -33,11 +37,9 @@ function CoreCmd_Seen()
                  $good  = ["@[1]", "@[2]", "@[3]", "@[4]", "@[5]", "@[6]", "@[7]", "@[8]", "@[9]"];
                  $GLOBALS['args'] = str_replace($bad, $good, $GLOBALS['args']);
 
-            if (is_file('../DATA/SEEN/'.$GLOBALS['args'])) {
-                BOT_RESPONSE(file_get_contents('../DATA/SEEN/'.$GLOBALS['args']));
-            } else {
-                     BOT_RESPONSE('No such user in my database.');
-            }
+            is_file('../DATA/SEEN/'.$GLOBALS['args']) ?
+                BOT_RESPONSE(file_get_contents('../DATA/SEEN/'.$GLOBALS['args'])) : BOT_RESPONSE('No such user in my database.');
+            
         }
         CLI_MSG('[PLUGIN: seen] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                 $GLOBALS['channel'], '1');
@@ -55,11 +57,7 @@ function SeenSave()
     
     $seen_dir = '../DATA/SEEN/';
 
-    if (substr($GLOBALS['channel'], 0, 1) != '#') {
-        $chan = $GLOBALS['CONFIG_CNANNEL'];
-    } else {
-             $chan = $GLOBALS['channel'];
-    }
+    substr($GLOBALS['channel'], 0, 1) != '#' ? $chan = $GLOBALS['CONFIG_CNANNEL'] : $chan = $GLOBALS['channel'];
 
     $data = 'Last seen user: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') On channel: '.$chan.
         ', Date: '.date("d.m.Y").', Time: '.date("H:i:s");
@@ -69,11 +67,8 @@ function SeenSave()
     $good = ["@[1]", "@[2]", "@[3]", "@[4]", "@[5]", "@[6]", "@[7]", "@[8]", "@[9]"];
     $GLOBALS['USER'] = str_replace($bad, $good, $GLOBALS['USER']);
 
-    if (is_file($seen_dir.$GLOBALS['USER'])) {
-        file_put_contents($seen_dir.$GLOBALS['USER'], $data);
-    } else {
-             file_put_contents($seen_dir.$GLOBALS['USER'], $data);
-    }
+    is_file($seen_dir.$GLOBALS['USER']) ?
+        file_put_contents($seen_dir.$GLOBALS['USER'], $data) : file_put_contents($seen_dir.$GLOBALS['USER'], $data);
 }
 //---------------------------------------------------------------------------------------------------------
 function CoreCmd_Pause()
@@ -198,11 +193,7 @@ function CoreCmd_RegisterToBot()
                     $owners_list = $GLOBALS['LOADED'];
                     $new         = trim($GLOBALS['mask']);
 
-                    if (empty($owners_list)) {
-                        $new_list = $new.'';
-                    } else {
-                             $new_list = $owners_list.', '.$new;
-                    }
+                    empty($owners_list) ? $new_list = $new : $new_list = $owners_list.', '.$new;
 
                     SaveData($GLOBALS['config_file'], 'OWNER', 'bot_owners', $new_list);
 
@@ -212,11 +203,7 @@ function CoreCmd_RegisterToBot()
                     $auto_list   = $GLOBALS['LOADED'];
                     $new         = trim($GLOBALS['mask']);
 
-                    if (empty($auto_list)) {
-                        $new_list = $new.'';
-                    } else {
-                             $new_list = $auto_list.', '.$new;
-                    }
+                    empty($auto_list) ? $new_list = $new : $new_list = $auto_list.', '.$new;
 
                     SaveData($GLOBALS['config_file'], 'OWNER', 'auto_op_list', $new_list);
 
@@ -250,7 +237,7 @@ function CoreCmd_RegisterToBot()
 
                     /* give op */
                     if (BotOpped() == true) {
-                        fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['USER'].PHP_EOL);
+                        fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['USER'].N);
                     }
 
                     /* update variable with new owners */

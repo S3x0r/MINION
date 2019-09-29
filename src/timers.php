@@ -14,10 +14,9 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-if (PHP_SAPI !== 'cli') {
-    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
-}
+PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+//---------------------------------------------------------------------------------------------------------
 
 /* set timers */
 $GLOBALS['TIMER1'] = time();
@@ -108,7 +107,7 @@ function every_1_minute()
     /* check if bot can change nick to original */
     if (empty($GLOBALS['stop'])) {
         if ($GLOBALS['CONFIG_KEEP_NICK'] == 'yes' && isset($GLOBALS['I_USE_RND_NICKNAME'])) {
-            fputs($GLOBALS['socket'], 'ISON :'.$GLOBALS['NICKNAME_FROM_CONFIG'].PHP_EOL);
+            fputs($GLOBALS['socket'], 'ISON :'.$GLOBALS['NICKNAME_FROM_CONFIG'].N);
         }
     }
 }

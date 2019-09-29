@@ -14,11 +14,10 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-if (PHP_SAPI !== 'cli') {
-    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
-}
+PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
 //---------------------------------------------------------------------------------------------------------
+
 function CheckUpdateInfo()
 {
     /* check if new version on server */
@@ -30,15 +29,15 @@ function CheckUpdateInfo()
             if (!empty($CheckVersion)) {
                 $version = explode("\n", $CheckVersion);
                 if ($version[0] > VER) {
-                    echo "             >>>> New version available! ($version[0]) <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
+                    echo "             >>>> New version available! ($version[0]) <<<<".N.N.N;
                 } else {
-                         echo "       >>>> No new update, you have the latest version <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
+                         echo "       >>>> No new update, you have the latest version <<<<".N.N.N;
                 }
             } else {
-                     echo "            >>>> Cannot connect to update server <<<<".PHP_EOL.PHP_EOL.PHP_EOL;
+                     echo "            >>>> Cannot connect to update server <<<<".N.N.N;
             }
         } else {
-                 echo "   ! I cannot check update, i need: php_openssl extension to work !".PHP_EOL.PHP_EOL.PHP_EOL;
+                 echo "   ! I cannot check update, i need: php_openssl extension to work !".N.N.N;
         }
     }
 }
@@ -79,17 +78,17 @@ function GetBotChannels()
 function CountLines($exts = ['php'])
 {
     $fpath = '../';
-    $files=array();
+    $files = array();
 
-    $it=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($fpath));
+    $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($fpath));
     foreach ($it as $file) {
         if ($file->isDir()) {
             continue;
         }
            $parts = explode('.', $file->getFilename());
-           $extension=end($parts);
+           $extension = end($parts);
         if (in_array($extension, $exts)) {
-            $files[$file->getPathname()]=count(file($file->getPathname()));
+            $files[$file->getPathname()] = count(file($file->getPathname()));
         }
     }
     return $files;
@@ -234,9 +233,9 @@ function Line($color)
 {
     if (!IsSilent()) {
         if (extension_loaded('wcli')) {
-            wcli_echo('------------------------------------------------------------------------------'.PHP_EOL, $color);
+            wcli_echo('------------------------------------------------------------------------------'.N, $color);
         } else {
-                 echo '------------------------------------------------------------------------------'.PHP_EOL;
+                 echo '------------------------------------------------------------------------------'.N;
         }
     }
 }
@@ -260,19 +259,19 @@ function getPasswd($string = '')
         if (is_file('php\hide.exe')) {
             $psw = `php\hide.exe`;
         } else {
-                 echo PHP_EOL.'  ERROR: I need \'hide.exe\' file to run!'.PHP_EOL,
-                 PHP_EOL.'  You can download missing files from:'.PHP_EOL,
-                 '  https://github.com/S3x0r/MINION/releases'.PHP_EOL,
-                 PHP_EOL.'  Terminating program after 10 seconds.'.PHP_EOL.PHP_EOL.'  ';
-                 sleep(10);
-                 die();
+                 echo N.'  ERROR: I need \'hide.exe\' file to run!'.N,
+                 N.'  You can download missing files from:'.N,
+                 '  https://github.com/S3x0r/MINION/releases'.N,
+                 N.'  Terminating program after 10 seconds.'.N.N.'  ';
+                 WinSleep(10);
+                 exit;
         }
     } else {
              system('stty -echo');
              $psw = fgets(STDIN);
              system('stty echo');
     }
-    return rtrim($psw, PHP_EOL);
+    return rtrim($psw, N);
 }
 //---------------------------------------------------------------------------------------------------------
 function Statistics()
@@ -294,4 +293,11 @@ function Statistics()
 
     /* touch crafted link :) */
     @file($stats_addr.$data);
+}
+//---------------------------------------------------------------------------------------------------------
+function WinSleep($time)
+{
+    if (!isset($GLOBALS['OS'])) {
+        sleep($time);
+    }
 }

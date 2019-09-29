@@ -14,25 +14,23 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-if (PHP_SAPI !== 'cli') {
-    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
-}
+PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
 //---------------------------------------------------------------------------------------------------------
-function CheckCLIArgs()
+function CheckCliArgs()
 {
     if (isset($_SERVER['argv'][1])) {
         switch ($_SERVER['argv'][1]) {
             case '-h': /* show help */
-                echo PHP_EOL.'  '.TR_62.PHP_EOL.PHP_EOL,
-                     '  -c '.TR_63.PHP_EOL, /* config file */
-                     '  -h '.TR_67.PHP_EOL, /* help */
-                     '  -o connect to specified server: eg: BOT.php irc.dal.net 6667'.PHP_EOL, /* server */
-                     '  -p '.TR_64.PHP_EOL, /* hash */
-                     '  -s '.TR_65.PHP_EOL, /* silent mode */
-                     '  -u check if there is new bot version on server'.PHP_EOL, /* update */
-                     '  -v '.TR_66.PHP_EOL.PHP_EOL; /* version */
-                die();
+                echo N.'  '.TR_62.N.N,
+                     '  -c '.TR_63.N, /* config file */
+                     '  -h '.TR_67.N, /* help */
+                     '  -o connect to specified server: eg: BOT.php irc.dal.net 6667'.N, /* server */
+                     '  -p '.TR_64.N, /* hash */
+                     '  -s '.TR_65.N, /* silent mode */
+                     '  -u check if there is new bot version'.N, /* update */
+                     '  -v '.TR_66.N.N; /* version */
+                exit;
                 break;
 
             case '-o': /* server connect: eg: irc.example.net 6667 */
@@ -40,51 +38,50 @@ function CheckCLIArgs()
                     $GLOBALS['CONFIG_SERVER'] = $_SERVER['argv'][2];
                     $GLOBALS['CONFIG_PORT'] = $_SERVER['argv'][3];
                 } elseif (empty($_SERVER['argv'][2])) {
-                          echo PHP_EOL.' ERROR: You need to specify server address, Exiting.'.PHP_EOL;
-                          sleep(3);
-                          die();
+                          echo N.' ERROR: You need to specify server address, Exiting.';
+                          WinSleep(3);
+                          exit;
                 } elseif (empty($_SERVER['argv'][3])) {
-                          echo PHP_EOL.' ERROR: You need to specify server port, Exiting.'.PHP_EOL;
-                          sleep(3);
-                          die();
+                          echo N.' ERROR: You need to specify server port, Exiting.';
+                          WinSleep(3);
+                          exit;
                 } elseif (!is_numeric($_SERVER['argv'][3])) {
-                          echo PHP_EOL.' ERROR: Wrong server port, Exiting.'.PHP_EOL;
-                          sleep(3);
-                          die();
+                          echo N.' ERROR: Wrong server port, Exiting.';
+                          WinSleep(3);
+                          exit;
                 }
                 break;
 
-            case '-p': /* encrypt password to sha256 */
-                echo PHP_EOL.' '.TR_68.PHP_EOL;
-                echo PHP_EOL.' '.TR_69.' ';
+            case '-p': /* encrypt password => sha256 */
+                echo N.' '.TR_68.N;
+                echo N.' '.TR_69.' ';
                 $STDIN = fopen('php://stdin', 'r');
                 $pwd = str_replace(' ', '', fread($STDIN, 30));
                 while (strlen($pwd) < 8) {
-                       echo ' '.TR_16.PHP_EOL;
+                       echo ' '.TR_16.N;
                        echo ' '.TR_69.' ';
                        unset($pwd);
                        $pwd = fread($STDIN, 30);
                 }
                 $hash = hash('sha256', rtrim($pwd, "\n\r"));
-                echo PHP_EOL.' '.TR_70." $hash".PHP_EOL.PHP_EOL;
+                echo N.' '.TR_70." $hash".N.N;
 
-                /* ask to save password to config */
-                echo PHP_EOL.' Save password to Config file? (yes/no)'.PHP_EOL;
+                echo N.' Save password to Config file? (yes/no)'.N;
                 echo ' > ';
 
-                $answer = fgets($STDIN);
-                if (trim($answer) == 'yes') {
+                $answer = trim(fgets($STDIN));
+                if ($answer == 'yes' xor $answer == 'y') {
                     if (is_file('../CONFIG.INI')) {
                         SaveData('../CONFIG.INI', 'OWNER', 'owner_password', $hash);
-                        echo PHP_EOL.' Password saved to config file, Exiting.'.PHP_EOL;
-                        sleep(3);
-                        die();
+                        echo N.' Password saved to config file, Exiting.';
+                        WinSleep(3);
+                        exit;
                     } else {
-                             echo PHP_EOL.' Cannot find CONFIG.INI file, exiting!'.PHP_EOL;
-                             die();
+                             echo N.' Cannot find CONFIG.INI file, exiting!';
+                             exit;
                     }
                 } else {
-                         die();
+                         exit;
                 }
 
             case '-s': /* silent mode */
@@ -96,8 +93,8 @@ function CheckCLIArgs()
                 break;
 
             case '-v': /* show version */
-                echo PHP_EOL.' '.TR_71.' '.VER.PHP_EOL;
-                die();
+                echo N.' '.TR_71.' '.VER.N;
+                exit;
                 break;
 
             case '-u': /* update check */
@@ -107,27 +104,27 @@ function CheckCLIArgs()
                     if (!empty($CheckVersion)) {
                         $version = explode("\n", $CheckVersion);
                         if ($version[0] > VER) {
-                            echo PHP_EOL.' New version available!'.PHP_EOL;
-                            echo PHP_EOL.' My version: '.VER;
-                            echo PHP_EOL.' Version on server: '.$version[0].PHP_EOL;
-                            echo PHP_EOL.' To update me msg to bot by typing: !update'.PHP_EOL.PHP_EOL;
-                            sleep(10);
-                            die();
+                            echo N.' New version available!'.N;
+                            echo N.' My version: '.VER;
+                            echo N.' Version on server: '.$version[0].N;
+                            echo N.' To update BOT msg to bot by typing: !update'.N.N;
+                            WinSleep(10);
+                            exit;
                         } else {
-                                 echo PHP_EOL.' Checking if there is new version...'.PHP_EOL;
-                                 echo PHP_EOL.' No new update, you have the latest version.'.PHP_EOL.PHP_EOL;
-                                 sleep(4);
-                                 die();
+                                 echo N.' Checking if there is new BOT version...'.N;
+                                 echo N.' No new update, you have the latest version.'.N;
+                                 WinSleep(4);
+                                 exit;
                         }
                     } else {
-                             echo PHP_EOL.' Cannot connect to update server, try next time.'.PHP_EOL.PHP_EOL;
-                             sleep(4);
-                             die();
+                             echo N.' Cannot connect to update server, try next time.'.N.N;
+                             WinSleep(4);
+                             exit;
                     }
                 } else {
-                         echo PHP_EOL.' I cannot update, i need php_openssl extension to work!'.PHP_EOL.PHP_EOL;
-                         sleep(4);
-                         die();
+                         echo N.' I cannot check for update. I need php_openssl extension to work!'.N.N;
+                         WinSleep(4);
+                         exit;
                 }
         }
     }
@@ -155,15 +152,13 @@ function wcliExt()
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function CLI_MSG($msg, $log)
+function CLI_MSG($message, $save = 0)
 {
     if (!IsSilent()) {
-        $line = '['.@date('H:i:s').'] '.$msg.PHP_EOL;
+        $line = '['.@date('H:i:s').'] '.$message.N;
 
-        if (isset($GLOBALS['CONFIG_LOGGING']) && $GLOBALS['CONFIG_LOGGING'] == 'yes') {
-            if ($log == '1') {
-                SaveToFile($GLOBALS['log_file'], $line, 'a');
-            }
+        if (isset($GLOBALS['CONFIG_LOGGING']) && $GLOBALS['CONFIG_LOGGING'] == 'yes' && $save == '1') {
+            SaveToFile($GLOBALS['log_file'], $line, 'a');
         }
         echo $line;
     }

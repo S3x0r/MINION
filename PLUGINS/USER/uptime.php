@@ -14,10 +14,11 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
  
-if (PHP_SAPI !== 'cli') {
-    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
-}
+//---------------------------------------------------------------------------------------------------------
+PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+//---------------------------------------------------------------------------------------------------------
+
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = 'Shows BOT uptime: '.$GLOBALS['CONFIG_CMD_PREFIX'].'uptime';
     $plugin_command = 'uptime';
@@ -46,36 +47,17 @@ function uptime_parse($seconds)
     $seconds = ceil($divisor_for_seconds);
 
     $result = '';
-    if (!empty($weeks) && $days > 0) {
-        $result .= $weeks.' week';
-    }
-    if ($weeks > 1) {
-        $result .= 's';
-    }
-    if (!empty($days) && $days > 0) {
-        $result .= $days.' day';
-    }
-    if ($days > 1) {
-        $result .= 's';
-    }
-    if (!empty($hours) && $hours > 0) {
-        $result .= $hours.' hour';
-    }
-    if ($hours > 1) {
-        $result .= 's';
-    }
-    if (!empty($minutes) && $minutes > 0) {
-        $result .= ' '.$minutes.' minute';
-    }
-    if ($minutes > 1) {
-        $result .= 's';
-    }
-    if (!empty($seconds) && $seconds > 0) {
-        $result .= ' '.$seconds.' second';
-    }
-    if ($seconds > 1) {
-        $result .= 's';
-    }
+    
+    !empty($weeks) && $days > 0 ? $result .= $weeks.' week' : false;
+    $weeks > 1 ? $result .= 's' : false;
+    !empty($days) && $days > 0 ? $result .= $days.' day' : false;
+    $days > 1 ? $result .= 's' : false;
+    !empty($hours) && $hours > 0 ? $result .= $hours.' hour' : false;
+    $hours > 1 ? $result .= 's' : false;
+    !empty($minutes) && $minutes > 0 ? $result .= ' '.$minutes.' minute' : false;
+    $minutes > 1 ? $result .= 's' : false;
+    !empty($seconds) && $seconds > 0 ? $result .= ' '.$seconds.' second' : false;
+    $seconds > 1 ? $result .= 's' : false;
 
     return trim($result);
 }

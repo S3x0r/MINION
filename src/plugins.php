@@ -14,11 +14,10 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-if (PHP_SAPI !== 'cli') {
-    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
-}
+PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
 //---------------------------------------------------------------------------------------------------------
+
 function LoadPlugins()
 {
     $count1 = count(glob("../PLUGINS/OWNER/*.php", GLOB_BRACE));
@@ -31,19 +30,19 @@ function LoadPlugins()
 
 //---------------------------------------------------------------------------------------------------------
     /* CORE PLUGINS */
-    Color(">>> Core Commands (6) <<<".PHP_EOL, '11');
+    Color(">>> Core Commands (6) <<<".N, '11');
     Line(COLOR);
-    Color("[load] -- Loads specified plugins to BOT: !load <plugin>".PHP_EOL, '14');
-    Color("[panel] -- Starts web admin panel for BOT: !panel help".PHP_EOL, '14');
-    Color("[pause] -- Pause all BOT activity: !pause".PHP_EOL, '14');
-    Color("[seen] -- Check specified user when was last seen on channel: !seen <nickname>".PHP_EOL, '14');
-    Color("[unload] -- Unloads specified plugin from BOT: !unload <plugin>".PHP_EOL, '14');
-    Color("[unpause] -- Restore BOT from pause mode: !unpause".PHP_EOL, '14');
+    Color("[load] -- Loads specified plugins to BOT: !load <plugin>".N, '14');
+    Color("[panel] -- Starts web admin panel for BOT: !panel help".N, '14');
+    Color("[pause] -- Pause all BOT activity: !pause".N, '14');
+    Color("[seen] -- Check specified user when was last seen on channel: !seen <nickname>".N, '14');
+    Color("[unload] -- Unloads specified plugin from BOT: !unload <plugin>".N, '14');
+    Color("[unpause] -- Restore BOT from pause mode: !unpause".N, '14');
 
     Line(COLOR);
 //---------------------------------------------------------------------------------------------------------
     /* OWNER PLUGINS */
-    Color(">>> Owner Plugins ($count1) <<<".PHP_EOL, '11');
+    Color(">>> Owner Plugins ($count1) <<<".N, '11');
     Line(COLOR);
 
     foreach (glob('../PLUGINS/OWNER/*.php') as $plugin_name) {
@@ -53,15 +52,15 @@ function LoadPlugins()
             include_once($plugin_name);
             $GLOBALS['OWNER_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ';
             $plugin_name = basename($plugin_name, '.php');
-            Color("[$plugin_name] -- $plugin_description".PHP_EOL, '14');
+            Color("[$plugin_name] -- $plugin_description".N, '14');
         } else {
-                 echo PHP_EOL."[ERROR] Not compatible plugin: $plugin_name".PHP_EOL.PHP_EOL;
+                 echo N."[ERROR] Not compatible plugin: $plugin_name".N.N;
         }
     }
     Line(COLOR);
 //---------------------------------------------------------------------------------------------------------
     /* ADMIN PLUGINS */
-    Color(">>> Admin Plugins ($count3) <<<".PHP_EOL, '11');
+    Color(">>> Admin Plugins ($count3) <<<".N, '11');
     Line(COLOR);
 
     foreach (glob('../PLUGINS/ADMIN/*.php') as $plugin_name) {
@@ -71,15 +70,15 @@ function LoadPlugins()
             include_once($plugin_name);
             $GLOBALS['ADMIN_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ';
             $plugin_name = basename($plugin_name, '.php');
-            Color("[$plugin_name] -- $plugin_description".PHP_EOL, '14');
+            Color("[$plugin_name] -- $plugin_description".N, '14');
         } else {
-                 echo PHP_EOL."[ERROR] Not compatible plugin: $plugin_name".PHP_EOL.PHP_EOL;
+                 echo N."[ERROR] Not compatible plugin: $plugin_name".N.N;
         }
     }
     Line(COLOR);
 //---------------------------------------------------------------------------------------------------------
     /* USER PLUGINS */
-    Color(">>> User Plugins ($count2) <<<".PHP_EOL, '11');
+    Color(">>> User Plugins ($count2) <<<".N, '11');
     Line(COLOR);
 
     foreach (glob('../PLUGINS/USER/*.php') as $plugin_name) {
@@ -89,15 +88,15 @@ function LoadPlugins()
             include_once($plugin_name);
             $GLOBALS['USER_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ';
             $plugin_name = basename($plugin_name, '.php');
-            Color("[$plugin_name] -- $plugin_description".PHP_EOL, '14');
+            Color("[$plugin_name] -- $plugin_description".N, '14');
         } else {
-                 echo PHP_EOL."[ERROR] Not compatible plugin: $plugin_name".PHP_EOL.PHP_EOL;
+                 echo N."[ERROR] Not compatible plugin: $plugin_name".N.N;
         }
     }
     $tot = $count1+$count2+$count3+6;
     
     if (!IsSilent()) {
-        echo "----------------------------------------------------------".TR_25." ($tot)---------".PHP_EOL;
+        echo "----------------------------------------------------------".TR_25." ($tot)---------".N;
     }
 //---------------------------------------------------------------------------------------------------------
     /* OWNER Plugins array */

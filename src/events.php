@@ -14,14 +14,13 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-if (PHP_SAPI !== 'cli') {
-    die('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-         Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>');
-}
+PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
+                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
 //---------------------------------------------------------------------------------------------------------
+
 function on_server_ping()
 {
-    fputs($GLOBALS['socket'], 'PONG '.$GLOBALS['ex'][1].PHP_EOL);
+    fputs($GLOBALS['socket'], 'PONG '.$GLOBALS['ex'][1].N);
 }
 //---------------------------------------------------------------------------------------------------------
 function on_first_start() /* event after end motd */
@@ -74,7 +73,7 @@ function on_join()
 
         if (in_array($mask2, $pieces)) {
             CLI_MSG(TR_31.' '.$GLOBALS['USER'].' '.TR_32, '1');
-            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['USER'].PHP_EOL);
+            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['USER'].N);
             PlaySound('prompt.mp3');
         }
     }
@@ -127,7 +126,7 @@ function on_kick()
         if ($GLOBALS['CONFIG_AUTO_REJOIN'] == 'yes') {
             CLI_MSG(TR_30, '1');
             sleep(2);
-            fputs($GLOBALS['socket'], "JOIN :".$GLOBALS['ex'][2].PHP_EOL);
+            fputs($GLOBALS['socket'], "JOIN :".$GLOBALS['ex'][2].N);
             PlaySound('prompt.mp3');
         }
     }
@@ -178,7 +177,7 @@ function on_mode()
                 PlaySound('prompt.mp3');
 
                 /* and set it */
-                fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].PHP_EOL);
+                fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].N);
                 set_channel_modes();
 
                 /* set ban list */
@@ -199,11 +198,9 @@ function on_mode()
                 PlaySound('prompt.mp3');
             }
         }
-        if (isset($GLOBALS['ex'][4])) {
-            $rest = $GLOBALS['ex'][4];
-        } else {
-                  $rest = '';
-        }
+
+        isset($GLOBALS['ex'][4]) ? $rest = $GLOBALS['ex'][4] : $rest = '';
+
         /* show message about modes */
         CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') sets mode: '.$GLOBALS['ex'][3].' '.$rest, '1');
     }
@@ -227,11 +224,7 @@ function on_nick()
 //---------------------------------------------------------------------------------------------------------
 function on_quit()
 {
-    if (isset($GLOBALS['ex'][2])) {
-        $quit = trim(parse_ex3(3));
-    } else {
-              $quit = '';
-    }
+    isset($GLOBALS['ex'][2]) ? $quit = trim(parse_ex3(3)) : $quit = '';
    
     CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') Quit ('.$quit.')', '1');
 
@@ -257,7 +250,7 @@ function on_003() /* server creation time */
 function on_303() /* ison */
 {
     if ($GLOBALS['ex'][3] == ':') {
-        fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['NICKNAME_FROM_CONFIG'].PHP_EOL);
+        fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['NICKNAME_FROM_CONFIG'].N);
         $GLOBALS['BOT_NICKNAME'] = $GLOBALS['NICKNAME_FROM_CONFIG'];
 
         unset($GLOBALS['I_USE_RND_NICKNAME']);
@@ -347,7 +340,7 @@ function on_432() /* if nick reserved */
     $GLOBALS['BOT_NICKNAME'] = $GLOBALS['BOT_NICKNAME'].'|'.rand(0, 299);
     CLI_MSG(TR_33.' '.$GLOBALS['BOT_NICKNAME'], '1');
 
-    fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['BOT_NICKNAME'].PHP_EOL);
+    fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['BOT_NICKNAME'].N);
 }
 //---------------------------------------------------------------------------------------------------------
 function on_433() /* if nick already exists */
