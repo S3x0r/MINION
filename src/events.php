@@ -20,7 +20,7 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 
 function on_server_ping()
 {
-    fputs($GLOBALS['socket'], 'PONG '.$GLOBALS['ex'][1].N);
+    fputs($GLOBALS['socket'], "PONG {$GLOBALS['ex'][1]}\n");
 }
 //---------------------------------------------------------------------------------------------------------
 function on_first_start() /* event after end motd */
@@ -38,6 +38,7 @@ function on_first_start() /* event after end motd */
 //---------------------------------------------------------------------------------------------------------
 function on_bot_join_channel()
 {
+	CLI_MSG("Bot joined channel: {$GLOBALS['channel']}", '1');
 }
 //---------------------------------------------------------------------------------------------------------
 function on_join()
@@ -54,8 +55,8 @@ function on_join()
         /* on bot join event */
         on_bot_join_channel();
     } else {
-             /* if someone join */
-             CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') has joined '.$GLOBALS['channel'], '1');
+             /* if user joined channel */
+             CLI_MSG("* {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) has joined {$GLOBALS['channel']}", '1');
 
              /* Save Seen */
              SeenSave();
@@ -72,8 +73,8 @@ function on_join()
         $mask2 = $GLOBALS['USER'].'!'.$GLOBALS['USER_IDENT'].'@'.$GLOBALS['host'];
 
         if (in_array($mask2, $pieces)) {
-            CLI_MSG(TR_31.' '.$GLOBALS['USER'].' '.TR_32, '1');
-            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['USER'].N);
+            CLI_MSG("I have nick: {$GLOBALS['USER']} on auto op list, giving op", '1');
+            fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} +o {$GLOBALS['USER']}\n");
             PlaySound('prompt.mp3');
         }
     }
@@ -81,7 +82,7 @@ function on_join()
 //---------------------------------------------------------------------------------------------------------
 function on_part()
 {
-    /* if bot part */
+    /* if bot part channel */
     if ($GLOBALS['USER'] == $GLOBALS['BOT_NICKNAME']) {
         /* delete channel from array */
         $key = array_search($GLOBALS['channel'], $GLOBALS['BOT_CHANNELS']);
@@ -99,7 +100,7 @@ function on_part()
         unset($GLOBALS['CHANNEL_MODES']);
     } else {
              /* if someone part channel */
-             CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') has leaved '.$GLOBALS['channel'], '1');
+             CLI_MSG("* {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) has leaved {$GLOBALS['channel']}", '1');
           
              /* Save to database for seen purpose */
              SeenSave();
@@ -122,17 +123,16 @@ function on_kick()
         /* delete channel modes */
         unset($GLOBALS['CHANNEL_MODES']);
 
-        /* rejoin if kicked? */
+        /* rejoin when kicked? */
         if ($GLOBALS['CONFIG_AUTO_REJOIN'] == 'yes') {
-            CLI_MSG(TR_30, '1');
+            CLI_MSG('I was kicked from channel, rejoining..', '1');
             sleep(2);
-            fputs($GLOBALS['socket'], "JOIN :".$GLOBALS['ex'][2].N);
+            fputs($GLOBALS['socket'], "JOIN :{$GLOBALS['ex'][2]}\n");
             PlaySound('prompt.mp3');
         }
     }
     /* else */
-    CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') kicked '.
-            $GLOBALS['ex'][3].' from '.$GLOBALS['channel'], '1');
+    CLI_MSG("* {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) kicked {$GLOBALS['ex'][3]} from {$GLOBALS['channel']}", '1');
 
     /* Save to database for seen purpose */
     SeenSave();
@@ -141,15 +141,14 @@ function on_kick()
 function on_topic()
 {
     /* topic change */
-    CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') ('.
-            $GLOBALS['channel'].') sets topic: '.parse_ex3('3'), '1');
+    CLI_MSG("* {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) ({$GLOBALS['channel']}) sets topic: ".parse_ex3('3'), '1');
 }
 //---------------------------------------------------------------------------------------------------------
 function on_privmsg()
 {
     if ($GLOBALS['ex'][2] == $GLOBALS['BOT_NICKNAME'] && isset($GLOBALS['ex'][3]) && $GLOBALS['ex'][3] == ':register') {
     } else {
-             CLI_MSG('['.$GLOBALS['channel'].'] <'.$GLOBALS['USER'].'> '.parse_ex3('3'), '1');
+             CLI_MSG("[{$GLOBALS['channel']}] <{$GLOBALS['USER']}> ".parse_ex3('3'), '1');
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -202,7 +201,7 @@ function on_mode()
         isset($GLOBALS['ex'][4]) ? $rest = $GLOBALS['ex'][4] : $rest = '';
 
         /* show message about modes */
-        CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') sets mode: '.$GLOBALS['ex'][3].' '.$rest, '1');
+        CLI_MSG("* {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) sets mode: {$GLOBALS['ex'][3]} {$rest}", '1');
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -226,7 +225,7 @@ function on_quit()
 {
     isset($GLOBALS['ex'][2]) ? $quit = trim(parse_ex3(3)) : $quit = '';
    
-    CLI_MSG('* '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') Quit ('.$quit.')', '1');
+    CLI_MSG("* {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) Quit ({$quit})", '1');
 
     /* Save to database for seen purpose */
     SeenSave();
@@ -234,28 +233,28 @@ function on_quit()
 //---------------------------------------------------------------------------------------------------------
 function on_001() /* server message */
 {
-    CLI_MSG('S>'.$GLOBALS['srv_msg'], '1');
+    CLI_MSG("S> {$GLOBALS['srv_msg']}", '1');
 }
 //---------------------------------------------------------------------------------------------------------
 function on_002() /* host, version server */
 {
-    CLI_MSG('S>'.$GLOBALS['srv_msg'], '1');
+    CLI_MSG("S> {$GLOBALS['srv_msg']}", '1');
 }
 //---------------------------------------------------------------------------------------------------------
 function on_003() /* server creation time */
 {
-    CLI_MSG('S>'.$GLOBALS['srv_msg'], '1');
+    CLI_MSG("S> {$GLOBALS['srv_msg']}", '1');
 }
 //---------------------------------------------------------------------------------------------------------
 function on_303() /* ison */
 {
     if ($GLOBALS['ex'][3] == ':') {
-        fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['NICKNAME_FROM_CONFIG'].N);
+        fputs($GLOBALS['socket'], "NICK {$GLOBALS['NICKNAME_FROM_CONFIG']}\n");
         $GLOBALS['BOT_NICKNAME'] = $GLOBALS['NICKNAME_FROM_CONFIG'];
 
         unset($GLOBALS['I_USE_RND_NICKNAME']);
 
-        CLI_MSG('[BOT]: '.TR_37, '1');
+        CLI_MSG('[BOT]: I recovered my original nickname', '1');
 
         /* update wcli extension */
         wcliExt();
@@ -296,20 +295,19 @@ function on_353() /* on channel join inf */
 //---------------------------------------------------------------------------------------------------------
 function on_376() /* join after motd */
 {
-    /* OK im connected, my nickname is: */
-    CLI_MSG(TR_58.' '.$GLOBALS['BOT_NICKNAME'], '1');
+    CLI_MSG("Connected, my nickname is: {$GLOBALS['BOT_NICKNAME']}", '1');
 
     /* register to bot info */
     if (isset($GLOBALS['pwd_changed'])) {
         CLI_MSG('*********************************************************', '0');
-        CLI_MSG(TR_34.' /msg '.$GLOBALS['BOT_NICKNAME'].' register <password>', '0');
+        CLI_MSG("Register to bot by typing /msg {$GLOBALS['BOT_NICKNAME']} register <password>", '0');
         CLI_MSG('*********************************************************', '0');
         unset($GLOBALS['pwd_changed']);
     }
 
     /* if autojoin */
     if ($GLOBALS['CONFIG_AUTO_JOIN'] == 'yes') {
-        CLI_MSG(TR_35.' '.$GLOBALS['CONFIG_CNANNEL'], '1');
+        CLI_MSG("Trying to join channel: {$GLOBALS['CONFIG_CNANNEL']}", '1');
         JOIN_CHAN($GLOBALS['CONFIG_CNANNEL']);
     }
 
@@ -338,7 +336,7 @@ function on_432() /* if nick reserved */
    
     /* set random nick */
     $GLOBALS['BOT_NICKNAME'] = $GLOBALS['BOT_NICKNAME'].'|'.rand(0, 299);
-    CLI_MSG(TR_33.' '.$GLOBALS['BOT_NICKNAME'], '1');
+    CLI_MSG("Nickname from config is already in use on server, changing nickname to: {$GLOBALS['BOT_NICKNAME']}", '1');
 
     fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['BOT_NICKNAME'].N);
 }

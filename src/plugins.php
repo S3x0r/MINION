@@ -47,10 +47,9 @@ function LoadPlugins()
 
     foreach (glob('../PLUGINS/OWNER/*.php') as $plugin_name) {
          /* simple verify plugin */
-         $file = file_get_contents($plugin_name);
-        if (strpos($file, PLUGIN_HASH)) {
+        if (strpos(file_get_contents($plugin_name), PLUGIN_HASH)) {
             include_once($plugin_name);
-            $GLOBALS['OWNER_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ';
+            $GLOBALS['OWNER_PLUGINS'] .= "{$GLOBALS['CONFIG_CMD_PREFIX']}{$plugin_command} ";
             $plugin_name = basename($plugin_name, '.php');
             Color("[$plugin_name] -- $plugin_description".N, '14');
         } else {
@@ -65,10 +64,9 @@ function LoadPlugins()
 
     foreach (glob('../PLUGINS/ADMIN/*.php') as $plugin_name) {
          /* simple verify plugin */
-         $file = file_get_contents($plugin_name);
-        if (strpos($file, PLUGIN_HASH)) {
+        if (strpos(file_get_contents($plugin_name), PLUGIN_HASH)) {
             include_once($plugin_name);
-            $GLOBALS['ADMIN_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ';
+            $GLOBALS['ADMIN_PLUGINS'] .= "{$GLOBALS['CONFIG_CMD_PREFIX']}{$plugin_command} ";
             $plugin_name = basename($plugin_name, '.php');
             Color("[$plugin_name] -- $plugin_description".N, '14');
         } else {
@@ -83,10 +81,9 @@ function LoadPlugins()
 
     foreach (glob('../PLUGINS/USER/*.php') as $plugin_name) {
          /* simple verify plugin */
-         $file = file_get_contents($plugin_name);
-        if (strpos($file, PLUGIN_HASH)) {
+        if (strpos(file_get_contents($plugin_name), PLUGIN_HASH)) {
             include_once($plugin_name);
-            $GLOBALS['USER_PLUGINS'] .= $GLOBALS['CONFIG_CMD_PREFIX'].''.$plugin_command.' ';
+            $GLOBALS['USER_PLUGINS'] .= "{$GLOBALS['CONFIG_CMD_PREFIX']}{$plugin_command} ";
             $plugin_name = basename($plugin_name, '.php');
             Color("[$plugin_name] -- $plugin_description".N, '14');
         } else {
@@ -96,7 +93,7 @@ function LoadPlugins()
     $tot = $count1+$count2+$count3+6;
     
     if (!IsSilent()) {
-        echo "----------------------------------------------------------".TR_25." ($tot)---------".N;
+        echo "----------------------------------------------------------Total: ({$tot})---------".N;
     }
 //---------------------------------------------------------------------------------------------------------
     /* OWNER Plugins array */
@@ -124,9 +121,9 @@ function UnloadPlugin($plugin)
                 unset($GLOBALS['OWNER_PLUGINS'][$key]);
                 //TODO: rename function
                 if (!in_array($with_prefix, $GLOBALS['OWNER_PLUGINS'])) {
-                    CLI_MSG('[Plugin]: \''.$without_prefix.'\' '.TR_39.' '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].
+                    CLI_MSG('[Plugin]: \''.$without_prefix.'\' unloaded by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].
                             ') | chan: '.$GLOBALS['channel'], '1');
-                    BOT_RESPONSE(TR_40.' \''.$without_prefix.'\' unloaded.');
+                    BOT_RESPONSE('Plugin: \''.$without_prefix.'\' unloaded.');
                 }
             }
 //---------------------------------------------------------------------------------------------------------
@@ -134,9 +131,9 @@ function UnloadPlugin($plugin)
                 unset($GLOBALS['ADMIN_PLUGINS'][$key]);
                 //TODO: rename function
                 if (!in_array($with_prefix, $GLOBALS['ADMIN_PLUGINS'])) {
-                    CLI_MSG('[Plugin]: \''.$without_prefix.'\' '.TR_39.' '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].
+                    CLI_MSG('[Plugin]: \''.$without_prefix.'\' unloaded by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].
                             ') | chan: '.$GLOBALS['channel'], '1');
-                    BOT_RESPONSE(TR_40.' \''.$without_prefix.'\' unloaded.');
+                    BOT_RESPONSE('Plugin: \''.$without_prefix.'\' unloaded.');
                 }
             }
 //---------------------------------------------------------------------------------------------------------
@@ -144,18 +141,18 @@ function UnloadPlugin($plugin)
                 unset($GLOBALS['USER_PLUGINS'][$key]);
                 //TODO: rename function
                 if (!in_array($with_prefix, $GLOBALS['USER_PLUGINS'])) {
-                    CLI_MSG('[Plugin]: \''.$without_prefix.'\' '.TR_39.' '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].
+                    CLI_MSG('[Plugin]: \''.$without_prefix.'\' unloaded by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].
                             ') | chan: '.$GLOBALS['channel'], '1');
-                    BOT_RESPONSE(TR_40.' \''.$without_prefix.'\' unloaded.');
+                    BOT_RESPONSE('Plugin: \''.$without_prefix.'\' unloaded.');
                 }
             }
         } else {
-                  CLI_MSG('[PLUGIN]: '.TR_42.': \''.$GLOBALS['piece1'].'\' by: '.$GLOBALS['USER'].' ('
+                  CLI_MSG('[PLUGIN]: No such plugin to unload: \''.$GLOBALS['piece1'].'\' by: '.$GLOBALS['USER'].' ('
                           .$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'], '1');
-                  BOT_RESPONSE(TR_42);
+                  BOT_RESPONSE('No such plugin to unload');
         }
     } catch (Exception $e) {
-                              CLI_MSG('[ERROR]: '.TR_49.' '.__FUNCTION__.' '.TR_50, '1');
+                              CLI_MSG('[ERROR]: Function: '.__FUNCTION__.' failed', '1');
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -167,7 +164,7 @@ function LoadPlugin($plugin)
 
         if (in_array($with_prefix, $GLOBALS['OWNER_PLUGINS']) || in_array($with_prefix, $GLOBALS['ADMIN_PLUGINS']) ||
             in_array($with_prefix, $GLOBALS['USER_PLUGINS'])) {
-            BOT_RESPONSE(TR_41);
+            BOT_RESPONSE('Plugin already Loaded!');
 
           /* if there is no plugin name in plugins array */
         } elseif (!in_array($with_prefix, $GLOBALS['OWNER_PLUGINS']) ||
@@ -181,8 +178,8 @@ function LoadPlugin($plugin)
                 array_push($GLOBALS['OWNER_PLUGINS'], $with_prefix);
  
                 /* bot responses */
-                BOT_RESPONSE(TR_40.' \''.$without_prefix.'\' '.TR_38);
-                CLI_MSG('[PLUGIN]: '.TR_61.' '.$without_prefix.', '.TR_48.' '.$GLOBALS['USER'].' ('
+                BOT_RESPONSE('Plugin: \''.$without_prefix.'\' loaded.');
+                CLI_MSG('[PLUGIN]: Plugin Loaded: '.$without_prefix.', by: '.$GLOBALS['USER'].' ('
                         .$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'], '1');
             } elseif (is_file('../PLUGINS/ADMIN/'.$without_prefix.'.php')) {
                 /* include that file */
@@ -192,8 +189,8 @@ function LoadPlugin($plugin)
                 array_push($GLOBALS['ADMIN_PLUGINS'], $with_prefix);
 
                 /* bot responses */
-                BOT_RESPONSE(TR_40.' \''.$without_prefix.'\' '.TR_38);
-                CLI_MSG('[PLUGIN]: '.TR_61.' '.$without_prefix.', '.TR_48.' '.$GLOBALS['USER'].' ('
+                BOT_RESPONSE('Plugin: \''.$without_prefix.'\' loaded.');
+                CLI_MSG('[PLUGIN]: Plugin Loaded: '.$without_prefix.', by: '.$GLOBALS['USER'].' ('
                         .$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'], '1');
             } elseif (is_file('../PLUGINS/USER/'.$without_prefix.'.php')) {
                 /* include that file */
@@ -203,14 +200,14 @@ function LoadPlugin($plugin)
                 array_push($GLOBALS['USER_PLUGINS'], $with_prefix);
 
                 /* bot responses */
-                BOT_RESPONSE(TR_40.' \''.$without_prefix.'\' '.TR_38);
-                CLI_MSG('[PLUGIN]: '.TR_61.' '.$without_prefix.', '.TR_48.' '.$GLOBALS['USER'].' ('
+                BOT_RESPONSE('Plugin: \''.$without_prefix.'\' loaded.');
+                CLI_MSG('[PLUGIN]: Plugin Loaded: '.$without_prefix.', by: '.$GLOBALS['USER'].' ('
                         .$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'], '1');
             } else {
                      BOT_RESPONSE('No such plugin to load.');
             }
         }
     } catch (Exception $e) {
-                             CLI_MSG('[ERROR]: '.TR_49.' '.__FUNCTION__.' '.TR_50, '1');
+                             CLI_MSG('[ERROR]: Function: '.__FUNCTION__.' failed', '1');
     }
 }

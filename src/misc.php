@@ -259,10 +259,11 @@ function getPasswd($string = '')
         if (is_file('php\hide.exe')) {
             $psw = `php\hide.exe`;
         } else {
-                 echo N.'  ERROR: I need \'hide.exe\' file to run!'.N,
-                 N.'  You can download missing files from:'.N,
-                 '  https://github.com/S3x0r/MINION/releases'.N,
-                 N.'  Terminating program after 10 seconds.'.N.N.'  ';
+                 echo N;
+				 echo '  ERROR: I need \'hide.exe\' file to run!'.N.N,
+                      '  You can download missing files from:'.N,
+                      '  https://github.com/S3x0r/MINION/releases'.N.N,
+                      '  Terminating program after 10 seconds.'.N.N.'  ';
                  WinSleep(10);
                  exit;
         }
@@ -289,7 +290,7 @@ function Statistics()
                      $GLOBALS['CONFIG_IDENT'].$GLOBALS['CONFIG_SERVER'].VER);
 
     /* statistic data is only: nickname, server address, bot version */
-    $data = 'stamp='.$bot_stamp.'&nick='.$GLOBALS['BOT_NICKNAME'].'&server='.$GLOBALS['CONFIG_SERVER'].'&ver='.VER;
+    $data = "stamp={$bot_stamp}&nick={$GLOBALS['BOT_NICKNAME']}&server={$GLOBALS['CONFIG_SERVER']}&ver={VER}";
 
     /* touch crafted link :) */
     @file($stats_addr.$data);

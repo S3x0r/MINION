@@ -21,7 +21,7 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 function Logs()
 {
     if (!isSilent()) {
-        global $log_file;
+        global $logFile;
 
         if (!is_dir('../LOGS')) {
             mkdir('../LOGS');
@@ -30,10 +30,10 @@ function Logs()
         /* + computer name to prevent fetch file from panel server */
         !empty($_SERVER['COMPUTERNAME']) ? $a = $_SERVER['COMPUTERNAME'] : $a = gethostname();
 
-        $log_file = '../LOGS/'.date('Y.m.d').','.$a.'.txt';
+        $logFile = "../LOGS/".date('Y.m.d').",{$a}.txt";
 
-        $data = "-------------------------".TR_22." ".date('d.m.Y | H:i:s')."-------------------------\r\n";
+        $data = "-------------------------LOG CREATED: ".date('d.m.Y | H:i:s')."-------------------------\r\n";
 
-        SaveToFile($log_file, $data, 'a');
+        SaveToFile($logFile, $data, 'a');
     }
 }

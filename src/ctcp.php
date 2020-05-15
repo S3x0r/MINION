@@ -25,7 +25,7 @@ function CTCP()
             fputs($GLOBALS['socket'], 'NOTICE '.$GLOBALS['USER'].' :VERSION '.
                   $GLOBALS['CONFIG_CTCP_VERSION'].N);
 
-            CLI_MSG('[CTCP REQUEST] VERSION '.TR_48.' '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].')', '1');
+            CLI_MSG('[CTCP REQUEST] VERSION by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].')', '1');
             PlaySound('ctcp.mp3');
             break;
 
@@ -33,28 +33,28 @@ function CTCP()
             fputs($GLOBALS['socket'], 'NOTICE '.$GLOBALS['USER'].' :CLIENTINFO '.
                   $GLOBALS['CONFIG_CTCP_VERSION'].N);
 
-            CLI_MSG('[CTCP REQUEST] CLIENTINFO '.TR_48.' '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].')', '1');
+            CLI_MSG('[CTCP REQUEST] CLIENTINFO by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].')', '1');
             PlaySound('ctcp.mp3');
             break;
 
         case 'source':
             fputs($GLOBALS['socket'], 'NOTICE '.$GLOBALS['USER']." :SOURCE http://github.com/S3x0r/MINION\n");
 
-            CLI_MSG('[CTCP REQUEST] SOURCE '.TR_48.' '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].')', '1');
+            CLI_MSG('[CTCP REQUEST] SOURCE by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].')', '1');
             PlaySound('ctcp.mp3');
             break;
 
         case 'userinfo':
             fputs($GLOBALS['socket'], 'NOTICE '.$GLOBALS['USER']." :USERINFO Powered by Minions!\n");
 
-            CLI_MSG('[CTCP REQUEST] USERINFO '.TR_48.' '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].')', '1');
+            CLI_MSG('[CTCP REQUEST] USERINFO by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].')', '1');
             PlaySound('ctcp.mp3');
             break;
 
         case 'finger':
             fputs($GLOBALS['socket'], 'NOTICE '.$GLOBALS['USER'].' :FINGER '.$GLOBALS['CONFIG_CTCP_FINGER'].N);
 
-            CLI_MSG('[CTCP REQUEST] FINGER '.TR_48.' '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].')', '1');
+            CLI_MSG('[CTCP REQUEST] FINGER by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].')', '1');
             PlaySound('ctcp.mp3');
             break;
 
@@ -62,7 +62,7 @@ function CTCP()
             $a = str_replace(' ', '', $GLOBALS['args']);
             fputs($GLOBALS['socket'], 'NOTICE '.$GLOBALS['USER'].' :PING '.$a.N);
 
-            CLI_MSG('[CTCP REQUEST] PING '.TR_48.' '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].')', '1');
+            CLI_MSG('[CTCP REQUEST] PING by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].')', '1');
             PlaySound('ctcp.mp3');
             break;
 
@@ -70,7 +70,7 @@ function CTCP()
             $a = date("F j, Y, g:i a");
             fputs($GLOBALS['socket'], 'NOTICE '.$GLOBALS['USER'].' :TIME '.$a.N);
 
-            CLI_MSG('[CTCP REQUEST] TIME '.TR_48.' '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].')', '1');
+            CLI_MSG('[CTCP REQUEST] TIME by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].')', '1');
             PlaySound('ctcp.mp3');
             break;
     }

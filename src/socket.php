@@ -20,21 +20,20 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 
 function Connect()
 {
-    CLI_MSG(TR_27.' '.$GLOBALS['CONFIG_SERVER'].', '.TR_26.' '.$GLOBALS['CONFIG_PORT'].N, '1');
+    CLI_MSG("Connecting to: {$GLOBALS['CONFIG_SERVER']}, port: {$GLOBALS['CONFIG_PORT']}\n", '1');
 
-    $i=0;
+    $i = 0;
 
-    while ($i++ < $GLOBALS['CONFIG_TRY_CONNECT']) {
+    while ($i++ <= $GLOBALS['CONFIG_TRY_CONNECT']) {
            $GLOBALS['socket'] = @fsockopen($GLOBALS['CONFIG_SERVER'], $GLOBALS['CONFIG_PORT']);
-           //socket_set_blocking($GLOBALS['socket'], false);
         if ($GLOBALS['socket'] == false) {
+            CLI_MSG("Cannot connect to: {$GLOBALS['CONFIG_SERVER']}:{$GLOBALS['CONFIG_PORT']}, trying again ({$i}/{$GLOBALS['CONFIG_TRY_CONNECT']})...", '1');
             PlaySound('error_conn.mp3');
-            CLI_MSG(TR_28, '1');
-            usleep($GLOBALS['CONFIG_CONNECT_DELAY'] * 1000000);
+			usleep($GLOBALS['CONFIG_CONNECT_DELAY'] * 1000000); // reconnect delay
             if ($i == $GLOBALS['CONFIG_TRY_CONNECT']) {
+                CLI_MSG('Unable to connect to server, exiting program.', '1');
                 PlaySound('error_conn.mp3');
-                CLI_MSG(TR_29, '1');
-                exit;
+				exit;
             }
         } else {
                  Identify();
@@ -47,12 +46,12 @@ function Identify()
     /* send PASSWORD / NICK / USER to server */
 
     if (!empty($GLOBALS['CONFIG_SERVER_PASSWD'])) {
-        fputs($GLOBALS['socket'], 'PASS '.$GLOBALS['CONFIG_SERVER_PASSWD'].N);
+        fputs($GLOBALS['socket'], "PASS {$GLOBALS['CONFIG_SERVER_PASSWD']}\n");
     }
 
-    fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['CONFIG_NICKNAME'].N);
+    fputs($GLOBALS['socket'], "NICK {$GLOBALS['CONFIG_NICKNAME']}\n");
 
-    fputs($GLOBALS['socket'], 'USER '.$GLOBALS['CONFIG_IDENT'].' 8 * :'.$GLOBALS['CONFIG_NAME'].N);
+    fputs($GLOBALS['socket'], "USER {$GLOBALS['CONFIG_IDENT']} 8 * :{$GLOBALS['CONFIG_NAME']}\n");
 
     SocketLoop();
 }
@@ -302,7 +301,7 @@ function SocketLoop()
         }
         /* if disconected */
         if (empty($GLOBALS['disconnected'])) {
-            CLI_MSG('[BOT] Disconected from server, I will try to connect again...', '1');
+            CLI_MSG("Cannot connect to: {$GLOBALS['CONFIG_SERVER']}:{$GLOBALS['CONFIG_PORT']}, trying again...", '1');
             Connect();
         }
     }
@@ -316,15 +315,14 @@ function set_channel_modes()
         if (BotOpped() == true) {
             if (isset($GLOBALS['CHANNEL_MODES']) && $GLOBALS['CHANNEL_MODES'] != $GLOBALS['CONFIG_CHANNEL_MODES']) {
                 sleep(1);
-                fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' -'.$GLOBALS['CHANNEL_MODES'].N);
+                fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} -{$GLOBALS['CHANNEL_MODES']}\n");
                 sleep(1);
-                fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +'.$GLOBALS['CONFIG_CHANNEL_MODES'].N);
+                fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} +{$GLOBALS['CONFIG_CHANNEL_MODES']}\n");
             }
             if (empty($GLOBALS['CHANNEL_MODES'])) {
                 if (!empty($GLOBALS['CONFIG_CHANNEL_MODES'])) {
                     sleep(1);
-                    fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +'.
-                        $GLOBALS['CONFIG_CHANNEL_MODES'].N);
+                    fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} +{$GLOBALS['CONFIG_CHANNEL_MODES']}\n");
                 }
             }
         }
@@ -335,8 +333,8 @@ function set_bans() /* set ban from config list */
 {
     if (!empty($GLOBALS['CONFIG_BAN_LIST'])) {
         $ban_list = explode(', ', $GLOBALS['CONFIG_BAN_LIST']);
-        foreach ($ban_list as $s) {
-            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +b '.$s.N);
+        foreach ($ban_list as $ban_address) {
+            fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} +b {$ban_address}\n");
         }
     }
 }
@@ -345,17 +343,17 @@ function BOT_RESPONSE($msg)
 {
     switch ($GLOBALS['CONFIG_BOT_RESPONSE']) {
         case 'channel':
-            fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel']." :$msg\n");
+            fputs($GLOBALS['socket'], "PRIVMSG {$GLOBALS['channel']} :$msg\n");
             usleep($GLOBALS['CONFIG_CHANNEL_DELAY'] * 1000000);
             break;
 
         case 'notice':
-            fputs($GLOBALS['socket'], 'NOTICE '.$GLOBALS['USER']." :$msg\n");
+            fputs($GLOBALS['socket'], "NOTICE {$GLOBALS['USER']} :$msg\n");
             usleep($GLOBALS['CONFIG_NOTICE_DELAY'] * 1000000);
             break;
 
         case 'priv':
-            fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['USER']." :$msg\n");
+            fputs($GLOBALS['socket'], "PRIVMSG {$GLOBALS['USER']} :$msg\n");
             usleep($GLOBALS['CONFIG_PRIVATE_DELAY'] * 1000000);
             break;
     }
@@ -363,11 +361,11 @@ function BOT_RESPONSE($msg)
 //---------------------------------------------------------------------------------------------------------
 function USER_MSG($msg)
 {
-    fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['USER']." :$msg\n");
+    fputs($GLOBALS['socket'], "PRIVMSG {$GLOBALS['USER']} :$msg\n");
     usleep($GLOBALS['CONFIG_PRIVATE_DELAY'] * 1000000);
 }
 //---------------------------------------------------------------------------------------------------------
 function JOIN_CHAN($channel)
 {
-    fputs($GLOBALS['socket'], 'JOIN '.$channel.N);
+    fputs($GLOBALS['socket'], "JOIN {$channel}\n");
 }

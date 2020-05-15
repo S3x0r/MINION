@@ -53,7 +53,7 @@ function Logo()
     B@B@@@B@B@B@B@@@B@B@@s           Srri;i;rrrssssssss22S5HS
     @B@B@B@B@B@BBMMGG9G:              :,::::iir;rs22SXGGMMMMB".N;
 
-             echo N.'      MINION '.VER.' | '.TR_10.' S3x0r | '.TR_11.' olisek@gmail.com'.N;
+             echo N.'                 - MINION '.VER.' | Author: S3x0r -'.N;
              echo '    ---------------------------------------------------------'.N;
              
         /* os variable */
@@ -71,7 +71,7 @@ function Logo()
              echo $string;
              echo '                    PHP Ver: '.PHP_VER.', OS: '.$system.N;
              echo '    ---------------------------------------------------------'.N;
-             echo '                   '.TR_12.' '.TotalLines().' :)'.N.N.N;
+             echo '                   Total Lines of code: '.TotalLines().' :)'.N.N.N;
     }
 }
 //---------------------------------------------------------------------------------------------------------

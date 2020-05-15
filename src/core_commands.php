@@ -155,7 +155,7 @@ function CoreCmd_Panel()
 function CoreCmd_Load()
 {
     if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE(TR_46.' '.$GLOBALS['CONFIG_CMD_PREFIX'].'load <'.TR_45.'>');
+        BOT_RESPONSE('Usage '.$GLOBALS['CONFIG_CMD_PREFIX'].'load <plugin_name>');
     } else {
         if (!empty($GLOBALS['piece1'])) {
             LoadPlugin($GLOBALS['piece1']);
@@ -166,7 +166,7 @@ function CoreCmd_Load()
 function CoreCmd_Unload()
 {
     if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE(TR_46.' '.$GLOBALS['CONFIG_CMD_PREFIX'].'unload <'.TR_45.'>');
+        BOT_RESPONSE('Usage '.$GLOBALS['CONFIG_CMD_PREFIX'].'unload <plugin_name>');
     } else {
         if (!empty($GLOBALS['piece1'])) {
             UnloadPlugin($GLOBALS['piece1']);
@@ -216,7 +216,7 @@ function CoreCmd_RegisterToBot()
                     CLI_MSG('[BOT] New auto op added: '.$GLOBALS['USER'].' ('.$GLOBALS['mask'].')', '1');
 
                     /* send information to user about commands */
-                    BOT_RESPONSE(TR_36);
+                    BOT_RESPONSE('From now you are on my owner(s) list, enjoy.');
 
                     BOT_RESPONSE('Core Commands: '.
                         $GLOBALS['CONFIG_CMD_PREFIX'].'load '.
@@ -226,9 +226,9 @@ function CoreCmd_RegisterToBot()
                         $GLOBALS['CONFIG_CMD_PREFIX'].'unload '.
                         $GLOBALS['CONFIG_CMD_PREFIX'].'unpause');
 
-                    BOT_RESPONSE(TR_59.' '.$owner_commands);
-                    BOT_RESPONSE('Admin Commands: '.$admin_commands);
-                    BOT_RESPONSE(TR_60.' '.$user_commands);
+                    BOT_RESPONSE("Owner Commands: {$owner_commands}");
+                    BOT_RESPONSE("Admin Commands: {$admin_commands}");
+                    BOT_RESPONSE("User Commands: {$user_commands}");
 
                     /* send info who is bot admin */
                     if (!empty($GLOBALS['CONFIG_BOT_ADMIN'])) {
@@ -253,6 +253,6 @@ function CoreCmd_RegisterToBot()
             }
         }
     } catch (Exception $e) {
-                             CLI_MSG('[ERROR]: '.TR_49.' '.__FUNCTION__.' '.TR_50, '1');
+                             CLI_MSG('[ERROR]: Function: '.__FUNCTION__.' failed', '1');
     }
 }

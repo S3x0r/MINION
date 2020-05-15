@@ -50,6 +50,6 @@ function plugin_bash()
             CLI_MSG('[PLUGIN: bash] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
                     $GLOBALS['channel'], '1');
     } catch (Exception $e) {
-                             CLI_MSG('[ERROR]: '.TR_49.' '.__FUNCTION__.' '.TR_50, '1');
+                             CLI_MSG('[ERROR]: Function: '.__FUNCTION__.' failed', '1');
     }
 }

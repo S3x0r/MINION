@@ -34,6 +34,6 @@ function plugin_say()
                  $GLOBALS['channel'], '1');
         }
     } catch (Exception $e) {
-                             CLI_MSG('[ERROR]: '.TR_49.' '.__FUNCTION__.' '.TR_50, '1');
+                             CLI_MSG('[ERROR]: Function: '.__FUNCTION__.' failed', '1');
     }
 }

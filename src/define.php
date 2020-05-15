@@ -17,13 +17,12 @@
 PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
                            Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '1.0.6');
+    define('VER', '1.0.7');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());
     define('PLUGIN_HASH', 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c');
     define('COLOR', '6');
-    set_time_limit(0);
     set_error_handler('ErrorHandler');
     error_reporting(-1);
 //---------------------------------------------------------------------------------------------------------
@@ -36,8 +35,8 @@ function ErrorHandler($errno, $errstr, $errfile, $errline)
     switch ($errno) {
         case E_USER_ERROR:
             CLI_MSG("[ERROR]: [$errno] $errstr", '1');
-            CLI_MSG(TR_54." $errline ".TR_55." $errfile, PHP".PHP_VERSION." (".PHP_OS.")", '1');
-            CLI_MSG(TR_56, '1');
+            CLI_MSG("Fatal error on line {$errline} in file {$errfile}, PHP ".PHP_VERSION." (".PHP_OS.")", '1');
+            CLI_MSG('Aborting..', '1');
             exit(1);
             break;
 
@@ -108,9 +107,6 @@ function SetDefaultData()
     }
     if (!in_array($GLOBALS['CONFIG_LOGGING'], ['yes', 'no'], true)) {
         $GLOBALS['CONFIG_LOGGING'] = 'yes';
-    }
-    if (!in_array($GLOBALS['CONFIG_LANGUAGE'], ['EN', 'PL'], true)) {
-        $GLOBALS['CONFIG_LANGUAGE'] = 'EN';
     }
     if (empty($GLOBALS['CONFIG_WEB_LOGIN'])) {
         $GLOBALS['CONFIG_WEB_LOGIN'] = 'changeme';

@@ -22,14 +22,14 @@ function CheckCliArgs()
     if (isset($_SERVER['argv'][1])) {
         switch ($_SERVER['argv'][1]) {
             case '-h': /* show help */
-                echo N.'  '.TR_62.N.N,
-                     '  -c '.TR_63.N, /* config file */
-                     '  -h '.TR_67.N, /* help */
+                echo N.'  Bot cli commands usage: BOT.php [option]'.N.N,
+                     '  -c <config_file> loads config'.N, /* config file */
+                     '  -h this help'.N, /* help */
                      '  -o connect to specified server: eg: BOT.php irc.dal.net 6667'.N, /* server */
-                     '  -p '.TR_64.N, /* hash */
-                     '  -s '.TR_65.N, /* silent mode */
+                     '  -p <password> hash password to SHA256'.N, /* hash */
+                     '  -s silent mode (no output from bot)'.N, /* silent mode */
                      '  -u check if there is new bot version'.N, /* update */
-                     '  -v '.TR_66.N.N; /* version */
+                     '  -v prints bot version'.N.N; /* version */
                 exit;
                 break;
 
@@ -53,18 +53,18 @@ function CheckCliArgs()
                 break;
 
             case '-p': /* encrypt password => sha256 */
-                echo N.' '.TR_68.N;
-                echo N.' '.TR_69.' ';
+                echo N.' I will encrypt your password to SHA256'.N;
+                echo N.' Password: ';
                 $STDIN = fopen('php://stdin', 'r');
                 $pwd = str_replace(' ', '', fread($STDIN, 30));
                 while (strlen($pwd) < 8) {
-                       echo ' '.TR_16.N;
-                       echo ' '.TR_69.' ';
+                       echo ' Password too short, password must be at least 6 characters long'.N;
+                       echo ' Password: ';
                        unset($pwd);
                        $pwd = fread($STDIN, 30);
                 }
                 $hash = hash('sha256', rtrim($pwd, "\n\r"));
-                echo N.' '.TR_70." $hash".N.N;
+                echo N." Hashed: {$hash}".N.N;
 
                 echo N.' Save password to Config file? (yes/no)'.N;
                 echo ' > ';
@@ -93,7 +93,7 @@ function CheckCliArgs()
                 break;
 
             case '-v': /* show version */
-                echo N.' '.TR_71.' '.VER.N;
+                echo N.' MINION version: '.VER.N;
                 exit;
                 break;
 
@@ -111,8 +111,8 @@ function CheckCliArgs()
                             WinSleep(10);
                             exit;
                         } else {
-                                 echo N.' Checking if there is new BOT version...'.N;
-                                 echo N.' No new update, you have the latest version.'.N;
+                                 echo N.' I am checking if there is a newer version of MINION Bot...'.N;
+                                 echo N.' No new update, you have the latest version.'.N.N;
                                  WinSleep(4);
                                  exit;
                         }
@@ -134,7 +134,6 @@ function wcliStart()
 {
     if (!IsSilent()) {
         if (extension_loaded('wcli')) {
-            wcli_maximize();
             wcli_set_console_title('MINION '.VER);
             wcli_hide_cursor();
         }
@@ -145,8 +144,8 @@ function wcliExt()
 {
     if (!IsSilent()) {
         if (extension_loaded('wcli')) {
-            wcli_set_console_title('MINION '.VER.' ('.TR_51.' '.$GLOBALS['CONFIG_SERVER'].':'
-            .$GLOBALS['CONFIG_PORT'].' | '.TR_52.' '.$GLOBALS['BOT_NICKNAME'].' | '.TR_53.' '
+            wcli_set_console_title('MINION '.VER.' (server: '.$GLOBALS['CONFIG_SERVER'].':'
+            .$GLOBALS['CONFIG_PORT'].' | nickname: '.$GLOBALS['BOT_NICKNAME'].' | channel: '
             .$GLOBALS['CONFIG_CNANNEL'].')');
         }
     }
@@ -155,10 +154,10 @@ function wcliExt()
 function CLI_MSG($message, $save = 0)
 {
     if (!IsSilent()) {
-        $line = '['.@date('H:i:s').'] '.$message.N;
+        $line = "[".@date('H:i:s')."] {$message}".N;
 
         if (isset($GLOBALS['CONFIG_LOGGING']) && $GLOBALS['CONFIG_LOGGING'] == 'yes' && $save == '1') {
-            SaveToFile($GLOBALS['log_file'], $line, 'a');
+            SaveToFile($GLOBALS['logFile'], $line, 'a');
         }
         echo $line;
     }

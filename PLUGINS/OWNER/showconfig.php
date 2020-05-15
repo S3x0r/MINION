@@ -81,9 +81,6 @@ function plugin_showconfig()
     BOT_RESPONSE('[LOGS]');
     BOT_RESPONSE('Logging         : '.$GLOBALS['CONFIG_LOGGING'].'');
 
-    BOT_RESPONSE('[LANG]');
-    BOT_RESPONSE('Language        : '.$GLOBALS['CONFIG_LANGUAGE'].'');
-
     BOT_RESPONSE('[TIME]');
     BOT_RESPONSE('Time Zone       : '.$GLOBALS['CONFIG_TIMEZONE'].'');
 

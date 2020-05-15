@@ -21,7 +21,6 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 
 define('N', PHP_EOL);
 
-/* check os type and set path */
 if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
     chdir('../');
 } else {
@@ -30,30 +29,30 @@ if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 }
     
 $files = ['cli.php',
-          'config.php',
+          'misc.php',
+		  'config.php',
           'core_commands.php',
-          'ctcp.php',
           'debug.php',
           'define.php',
           'events.php',
-          'language.php',
           'logo.php',
           'logs.php',
-          'misc.php',
           'plugins.php',
           'socket.php',
           'timers.php',
-          'web.php'
+          'web.php',
+	      'ctcp.php'
            ];
 
 foreach ($files as $file) {
     if (is_file($file)) {
         require_once($file);
     } else {
-             echo N.'  ERROR: I need \''.$file.'\' file to run!'.N,
-                  N.'  You can download missing files from:'.N,
-                  '  https://github.com/S3x0r/MINION/releases'.N,
-                  N.'  Terminating program after 10 seconds.'.N.N.'  ';
+		     echo N;
+             echo "  ERROR: I need a file '{$file}' to work!".N.N,
+			      '  You can download missing files from:'.N,
+                  '  https://github.com/S3x0r/MINION/releases'.N.N,
+                  '  Terminating program after 10 seconds.'.N.N.'  ';
              WinSleep(10);
              exit;
     }
@@ -61,9 +60,6 @@ foreach ($files as $file) {
 //---------------------------------------------------------------------------------------------------------
     /* Load startup needed variables */
     StartupConfig();
-
-    /* Load translation file */
-    SetLanguage();
 
     /* Check if cli arguments */
     CheckCliArgs();

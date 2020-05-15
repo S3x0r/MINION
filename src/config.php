@@ -160,16 +160,16 @@ function LoadConfig($filename)
             PlaySound('error_conn.mp3');
 
             /* show info about it */
-            CLI_MSG(TR_13);
-            CLI_MSG(TR_14);
+            CLI_MSG('Default BOT owner(s) password detected!');
+            CLI_MSG('For security please change it (password can not contain spaces)');
 
             /* 'New Password:' */
-            $new_pwd = getPasswd('['.@date('H:i:s').'] New Password: '.N);
+            $new_pwd = getPasswd('['.@date('H:i:s').'] New Password: ');
 
             while (strlen($new_pwd) < 6) {
-                echo '['.@date('H:i:s').'] '.TR_16.N;
+                echo N.'['.@date('H:i:s').'] Password too short, password must be at least 6 characters long'.N;
                 unset($new_pwd);
-                $new_pwd = getPasswd('['.@date('H:i:s').'] New Password: '.N);
+                $new_pwd = getPasswd('['.@date('H:i:s').'] New Password: ');
             }
 
             /* join spaces in password */
@@ -187,7 +187,8 @@ function LoadConfig($filename)
 
             /* Set first time change variable */
             $GLOBALS['pwd_changed'] = '1';
-
+            
+			echo N;
             CLI_MSG('Password changed');
           
             /* load config again */
@@ -195,7 +196,7 @@ function LoadConfig($filename)
         }
 
         /* from what file config loaded */
-        CLI_MSG(TR_17.' '.$config_file);
+        CLI_MSG("Configuration Loaded from: {$config_file}");
         Line(COLOR);
      
         /* logging init */
@@ -209,8 +210,8 @@ function LoadConfig($filename)
              /* set default logging */
              $GLOBALS['CONFIG_LOGGING'] = 'yes';
  
-             CLI_MSG(TR_18);
-             CLI_MSG(TR_19.' CONFIG.INI '.N);
+             CLI_MSG('Configuration file missing!');
+             CLI_MSG('Creating default config: CONFIG.INI '.N);
 
              /* create default config if missing */
              CreateDefaultConfig('../CONFIG.INI');
@@ -253,7 +254,7 @@ connect_delay    = \'6\'
 [OWNER]
 
 ; bot administrator information
-bot_admin        = \'S3x0r <olisek@gmail.com>\'
+bot_admin        = \'S3x0r <user@localhost>\'
 
 ; bot will give op\'s if this hosts join channel <nick!ident@hostname>
 auto_op_list     = \'\'
@@ -347,11 +348,6 @@ web_login        = \'changeme\'
 ; web panel password
 web_password     = \'changeme\'
 
-[LANG]
-
-; set BOT language: \'EN\', \'PL\'
-language         = \'EN\'
-
 [TIME]
 
 ; bot time zone
@@ -391,7 +387,7 @@ show_raw         = \'no\'';
         /* Load config again */
         LoadConfig($filename);
     } else { /* read only file system? */
-             CLI_MSG('[ERROR]: '.TR_20);
+             CLI_MSG('[ERROR]: Cannot make default config! Exiting');
              WinSleep(6);
              exit;
     }
@@ -416,7 +412,7 @@ class IniParser
     public $iniFilename = '';
     public $iniParsedArray = array();
 
-    public function iniParser($file)
+    public function __construct($file)
     {
         $this->iniFilename = $file;
         if ($this->iniParsedArray = parse_ini_file($file, true)) {

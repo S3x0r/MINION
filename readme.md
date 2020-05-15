@@ -1,11 +1,8 @@
-![Powered by S3x0r](http://minionki.com.pl/powered.png)
-
-![extreme programming](http://minionki.com.pl/xp-logo.png)
 ### Easy to use IRC BOT in PHP language, ready to use from first start
 
 <dl>
 <pre>
-    Author: S3x0r, contact: olisek@gmail.com
+    Author: S3x0r
 </pre>
 </dl>
 
@@ -19,13 +16,13 @@ You can also edit owner host in CONFIG.INI:
 
 <dl>
 <pre>
-	      nick ! ident@ host
-                |      |      |
-example: S3x0r!~S3x0r@12-13-38-219.dsl.dynamic.simnet.is
+	  nick!ident@hostname
+           |      |      |
+example: S3x0r!~ident@hostname.com
 </pre>
 </dl>
 
-Bot was writted to run from Windows systems (tested on Windows 7)
+Bot was writted to run from Windows systems (tested on Windows 10)
 but you can also run it from Linux/Unix by typing: 'php BOT.php'
 To have almost all plugins working on Linux/Unix you need to enable
 two extension modules in your 'php.ini' config:

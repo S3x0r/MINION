@@ -123,11 +123,6 @@ web_login        = 'changeme'
 ; web panel password (for panel plugin)
 web_password     = 'changeme'
 
-[LANG]
-
-; set BOT language: 'EN', 'PL'
-language         = 'EN'
-
 [TIME]
 
 ; bot time zone
