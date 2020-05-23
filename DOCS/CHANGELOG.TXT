@@ -1,4 +1,22 @@
-   
+
+   v1.0.8 changes (23.05.2020):
+   - fixed path bugs, you can run bot now from diffrent php loc
+   - fixed '-c' argument, config can be now loaded from diffrent loc
+   - fixed '-o' server/port argument
+   - Owner's password must be at least 8 characters from now on
+   - little cleanup with config logic
+   - fixed plugins verification (hash)
+   - Plugin: gethost - prevention against disclosure of the own hostname
+   - Plugin: ripe - prevention against disclosure of the own hostname
+   - Plugin: md5 - we can now hash whole sentences
+   - Plugin: ping - moved to ADMIN rights
+   - Plugin: weather - removed
+   - Plugin: deop - prevention against deoping bot
+   - Plugin: kick - prevention against kicking bot
+   - Plugin: join - fixed bug
+   - Plugin: leave - fixed bug
+   - other code cleanup
+
    v1.0.7 changes (15.05.2020):
    - PHP version changed to 7.4.5
    - removed languages option/translation

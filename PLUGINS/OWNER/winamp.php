@@ -20,7 +20,7 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Controls winamp: '.$GLOBALS['CONFIG_CMD_PREFIX'].'winamp <help>';
+    $plugin_description = "Controls winamp: {$GLOBALS['CONFIG_CMD_PREFIX']}winamp <help>";
     $plugin_command = 'winamp';
 
 /*
@@ -39,13 +39,13 @@ function plugin_winamp()
         if (!empty($GLOBALS['winamp_loc'])) {
             switch ($GLOBALS['args']) {
                 case 'help':
-                     BOT_RESPONSE('Winamp commands:');
-                     BOT_RESPONSE('winamp stop  - Stop music: !winamp stop');
-                     BOT_RESPONSE('winamp pause - Pause music: !winamp pause');
-                     BOT_RESPONSE('winamp play  - Play music: !winamp play');
-                     BOT_RESPONSE('winamp next  - Next song: !winamp next');
-                     BOT_RESPONSE('winamp prev  - Previous song: !winamp prev');
-                     BOT_RESPONSE('winamp title - Show song title: !winamp title');
+                     response('Winamp commands:');
+                     response('winamp stop  - Stop music: !winamp stop');
+                     response('winamp pause - Pause music: !winamp pause');
+                     response('winamp play  - Play music: !winamp play');
+                     response('winamp next  - Next song: !winamp next');
+                     response('winamp prev  - Previous song: !winamp prev');
+                     response('winamp title - Show song title: !winamp title');
                     break;
 
                 case 'stop':
@@ -71,16 +71,15 @@ function plugin_winamp()
                     break;
             }
         } else {
-                 BOT_RESPONSE('CLAmp not specified!');
+                 response('CLAmp not specified!');
         }
 
-        CLI_MSG('[PLUGIN: winamp] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                $GLOBALS['channel'], '1');
+        CLI_MSG("[PLUGIN: winamp] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
     }
 }
 
 function sendTitle($target)
 {
     $title = exec($GLOBALS['winamp_loc'].' /title');
-    BOT_RESPONSE("Playing: ".$title, $target);
+    response("Playing: {$title}, {$target}");
 }

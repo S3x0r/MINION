@@ -18,6 +18,19 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
                            Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
 //---------------------------------------------------------------------------------------------------------
 
+function SaveData($v1, $v2, $v3, $v4)
+{
+    $cfg = new IniParser($v1);
+    $cfg->setValue("$v2", "$v3", "$v4");
+    $cfg->save();
+}
+//---------------------------------------------------------------------------------------------------------
+function LoadData($configFile, $section, $config)
+{
+    $cfg = new IniParser($configFile);
+    $GLOBALS['LOADED'] = $cfg->get("$section", "$config");
+}
+//---------------------------------------------------------------------------------------------------------
 function CheckUpdateInfo()
 {
     /* check if new version on server */
@@ -52,7 +65,7 @@ function UpdatePrefix($user, $new_prefix)
 function OnEmptyArg($info)
 {
     if (empty($GLOBALS['args'])) {
-        BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].''.$info);
+        response("Usage: {$GLOBALS['CONFIG_CMD_PREFIX']}{$info}");
         return true;
     } else {
               return false;
@@ -77,7 +90,7 @@ function GetBotChannels()
 //---------------------------------------------------------------------------------------------------------
 function CountLines($exts = ['php'])
 {
-    $fpath = '../';
+    $fpath = '.';
     $files = array();
 
     $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($fpath));
@@ -109,7 +122,7 @@ function random_str($length)
     return $str;
 }
 //---------------------------------------------------------------------------------------------------------
-function parse_ex3($position)
+function parse_ex3($position) //TODO: wtf is that?
 {
     $a = $GLOBALS['ex'];
     $current = '';
@@ -123,7 +136,7 @@ function parse_ex3($position)
     return $b;
 }
 //---------------------------------------------------------------------------------------------------------
-function msg_without_command()
+function msg_without_command() //TODO: wtf?
 {
     $input = null;
     for ($i=3; $i <= (count($GLOBALS['ex'])); $i++) {
@@ -136,7 +149,7 @@ function msg_without_command()
     return $data;
 }
 //---------------------------------------------------------------------------------------------------------
-function HasAdmin($mask)
+function HasAdmin($mask) //TODO: wtf
 {
     $admins_c = $GLOBALS['CONFIG_ADMIN_LIST'];
     $pieces = explode(", ", $admins_c);
@@ -154,7 +167,7 @@ function HasAdmin($mask)
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function HasOwner($mask)
+function HasOwner($mask) //TODO: wtf
 {
     $owners_c = $GLOBALS['CONFIG_OWNERS'];
     $pieces = explode(", ", $owners_c);
@@ -193,8 +206,8 @@ function IsSilent()
 function PlaySound($sound)
 {
     if (!IsSilent() && $GLOBALS['CONFIG_PLAY_SOUNDS'] == 'yes' && !isset($GLOBALS['OS'])) {
-        if (is_file('php/play.exe') && is_file('sounds/'.$sound)) {
-            $command = 'start /b php/play.exe sounds/'.$sound;
+        if (is_file('src/php/play.exe') && is_file('src/sounds/'.$sound)) {
+            $command = 'start /b src/php/play.exe src/sounds/'.$sound;
             pclose(popen($command, 'r'));
         } else {
                  echo "\x07";
@@ -229,25 +242,17 @@ function isRunned($program)
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function Line($color)
+function Line()
 {
     if (!IsSilent()) {
-        if (extension_loaded('wcli')) {
-            wcli_echo('------------------------------------------------------------------------------'.N, $color);
-        } else {
-                 echo '------------------------------------------------------------------------------'.N;
-        }
+        echo '------------------------------------------------------------------------------'.N;
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function Color($data, $color)
+function cli($data)
 {
     if (!IsSilent()) {
-        if (extension_loaded('wcli')) {
-            wcli_echo($data, $color);
-        } else {
-                 echo $data;
-        }
+        echo $data;
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -256,8 +261,8 @@ function getPasswd($string = '')
     echo $string;
  
     if (!isset($GLOBALS['OS'])) {
-        if (is_file('php\hide.exe')) {
-            $psw = `php\hide.exe`;
+        if (is_file('src\php\hide.exe')) {
+            $psw = `src\php\hide.exe`;
         } else {
                  echo N;
 				 echo '  ERROR: I need \'hide.exe\' file to run!'.N.N,
@@ -301,4 +306,10 @@ function WinSleep($time)
     if (!isset($GLOBALS['OS'])) {
         sleep($time);
     }
+}
+//---------------------------------------------------------------------------------------------------------
+function responsePriv($message)
+{
+	$nick = explode('!', trim($GLOBALS['args']));
+    fputs($GLOBALS['socket'], "PRIVMSG {$nick[0]} :{$message}\n");
 }

@@ -20,82 +20,81 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Shows BOT configuration: '.$GLOBALS['CONFIG_CMD_PREFIX'].'showconfig';
+    $plugin_description = "Shows BOT configuration: {$GLOBALS['CONFIG_CMD_PREFIX']}showconfig";
     $plugin_command = 'showconfig';
 
 function plugin_showconfig()
 {
-    BOT_RESPONSE('My Config:');
+    response('My Config:');
 
-    BOT_RESPONSE('[BOT]');
-    BOT_RESPONSE('Nickname        : '.$GLOBALS['CONFIG_NICKNAME'].'');
-    BOT_RESPONSE('Name            : '.$GLOBALS['CONFIG_NAME'].'');
-    BOT_RESPONSE('Ident           : '.$GLOBALS['CONFIG_IDENT'].'');
+    response('[BOT]');
+    response('Nickname        : '.$GLOBALS['CONFIG_NICKNAME'].'');
+    response('Name            : '.$GLOBALS['CONFIG_NAME'].'');
+    response('Ident           : '.$GLOBALS['CONFIG_IDENT'].'');
 
-    BOT_RESPONSE('[Server]');
-    BOT_RESPONSE('Server          : '.$GLOBALS['CONFIG_SERVER'].'');
-    BOT_RESPONSE('Port            : '.$GLOBALS['CONFIG_PORT'].'');
-    BOT_RESPONSE('Server Pass     : '.$GLOBALS['CONFIG_SERVER_PASSWD'].'');
-    BOT_RESPONSE('Try Connect     : '.$GLOBALS['CONFIG_TRY_CONNECT'].'');
-    BOT_RESPONSE('Connect Delay   : '.$GLOBALS['CONFIG_CONNECT_DELAY'].'');
+    response('[Server]');
+    response('Server          : '.$GLOBALS['CONFIG_SERVER'].'');
+    response('Port            : '.$GLOBALS['CONFIG_PORT'].'');
+    response('Server Pass     : '.$GLOBALS['CONFIG_SERVER_PASSWD'].'');
+    response('Try Connect     : '.$GLOBALS['CONFIG_TRY_CONNECT'].'');
+    response('Connect Delay   : '.$GLOBALS['CONFIG_CONNECT_DELAY'].'');
 
-    BOT_RESPONSE('[OWNER]');
-    BOT_RESPONSE('Bot Admin       : '.$GLOBALS['CONFIG_BOT_ADMIN'].'');
-    BOT_RESPONSE('Auto OP List    : '.$GLOBALS['CONFIG_AUTO_OP_LIST'].'');
-    BOT_RESPONSE('Bot Owners      : '.$GLOBALS['CONFIG_OWNERS'].'');
+    response('[OWNER]');
+    response('Bot Admin       : '.$GLOBALS['CONFIG_BOT_ADMIN'].'');
+    response('Auto OP List    : '.$GLOBALS['CONFIG_AUTO_OP_LIST'].'');
+    response('Bot Owners      : '.$GLOBALS['CONFIG_OWNERS'].'');
 
-    BOT_RESPONSE('[ADMIN]');
-    BOT_RESPONSE('Admin List      : '.$GLOBALS['CONFIG_ADMIN_LIST'].'');
+    response('[ADMIN]');
+    response('Admin List      : '.$GLOBALS['CONFIG_ADMIN_LIST'].'');
     
-    BOT_RESPONSE('[RESPONSE]');
-    BOT_RESPONSE('Bot Response    : '.$GLOBALS['CONFIG_BOT_RESPONSE'].'');
+    response('[RESPONSE]');
+    response('Bot Response    : '.$GLOBALS['CONFIG_BOT_RESPONSE'].'');
     
-    BOT_RESPONSE('[AUTOMATIC]');
-    BOT_RESPONSE('Auto OP         : '.$GLOBALS['CONFIG_AUTO_OP'].'');
-    BOT_RESPONSE('Auto Rejoin     : '.$GLOBALS['CONFIG_AUTO_REJOIN'].'');
-    BOT_RESPONSE('Keep Chan Modes : '.$GLOBALS['CONFIG_KEEPCHAN_MODES'].'');
-    BOT_RESPONSE('Keep Nick       : '.$GLOBALS['CONFIG_KEEP_NICK'].'');
+    response('[AUTOMATIC]');
+    response('Auto OP         : '.$GLOBALS['CONFIG_AUTO_OP'].'');
+    response('Auto Rejoin     : '.$GLOBALS['CONFIG_AUTO_REJOIN'].'');
+    response('Keep Chan Modes : '.$GLOBALS['CONFIG_KEEPCHAN_MODES'].'');
+    response('Keep Nick       : '.$GLOBALS['CONFIG_KEEP_NICK'].'');
 
-    BOT_RESPONSE('[CHANNEL]');
-    BOT_RESPONSE('Channel         : '.$GLOBALS['CONFIG_CNANNEL'].'');
-    BOT_RESPONSE('Auto Join       : '.$GLOBALS['CONFIG_AUTO_JOIN'].'');
-    BOT_RESPONSE('Channel Modes   : '.$GLOBALS['CONFIG_CHANNEL_MODES'].'');
-    BOT_RESPONSE('Channel Key     : '.$GLOBALS['CONFIG_CHANNEL_KEY'].'');
+    response('[CHANNEL]');
+    response('Channel         : '.$GLOBALS['CONFIG_CNANNEL'].'');
+    response('Auto Join       : '.$GLOBALS['CONFIG_AUTO_JOIN'].'');
+    response('Channel Modes   : '.$GLOBALS['CONFIG_CHANNEL_MODES'].'');
+    response('Channel Key     : '.$GLOBALS['CONFIG_CHANNEL_KEY'].'');
 
-    BOT_RESPONSE('[BANS]');
-    BOT_RESPONSE('Ban List        : '.$GLOBALS['CONFIG_BAN_LIST'].'');
+    response('[BANS]');
+    response('Ban List        : '.$GLOBALS['CONFIG_BAN_LIST'].'');
 
-    BOT_RESPONSE('[COMMAND]');
-    BOT_RESPONSE('Command Prefix  : '.$GLOBALS['CONFIG_CMD_PREFIX'].'');
+    response('[COMMAND]');
+    response('Command Prefix  : '.$GLOBALS['CONFIG_CMD_PREFIX'].'');
 
-    BOT_RESPONSE('[CTCP]');
-    BOT_RESPONSE('CTCP Response   : '.$GLOBALS['CONFIG_CTCP_RESPONSE'].'');
-    BOT_RESPONSE('CTCP Version    : '.$GLOBALS['CONFIG_CTCP_VERSION'].'');
-    BOT_RESPONSE('CTCP Finger     : '.$GLOBALS['CONFIG_CTCP_FINGER'].'');
+    response('[CTCP]');
+    response('CTCP Response   : '.$GLOBALS['CONFIG_CTCP_RESPONSE'].'');
+    response('CTCP Version    : '.$GLOBALS['CONFIG_CTCP_VERSION'].'');
+    response('CTCP Finger     : '.$GLOBALS['CONFIG_CTCP_FINGER'].'');
 
-    BOT_RESPONSE('[DELAYS]');
-    BOT_RESPONSE('Channel Delay   : '.$GLOBALS['CONFIG_CHANNEL_DELAY'].'');
-    BOT_RESPONSE('Private Delay   : '.$GLOBALS['CONFIG_PRIVATE_DELAY'].'');
-    BOT_RESPONSE('Notice Delay    : '.$GLOBALS['CONFIG_NOTICE_DELAY'].'');
+    response('[DELAYS]');
+    response('Channel Delay   : '.$GLOBALS['CONFIG_CHANNEL_DELAY'].'');
+    response('Private Delay   : '.$GLOBALS['CONFIG_PRIVATE_DELAY'].'');
+    response('Notice Delay    : '.$GLOBALS['CONFIG_NOTICE_DELAY'].'');
 
-    BOT_RESPONSE('[LOGS]');
-    BOT_RESPONSE('Logging         : '.$GLOBALS['CONFIG_LOGGING'].'');
+    response('[LOGS]');
+    response('Logging         : '.$GLOBALS['CONFIG_LOGGING'].'');
 
-    BOT_RESPONSE('[TIME]');
-    BOT_RESPONSE('Time Zone       : '.$GLOBALS['CONFIG_TIMEZONE'].'');
+    response('[TIME]');
+    response('Time Zone       : '.$GLOBALS['CONFIG_TIMEZONE'].'');
 
-    BOT_RESPONSE('[FETCH]');
-    BOT_RESPONSE('Fetch Server    : '.$GLOBALS['CONFIG_FETCH_SERVER'].'');
+    response('[FETCH]');
+    response('Fetch Server    : '.$GLOBALS['CONFIG_FETCH_SERVER'].'');
 
-    BOT_RESPONSE('[PROGRAM]');
-    BOT_RESPONSE('Show Logo       : '.$GLOBALS['CONFIG_SHOW_LOGO'].'');
-    BOT_RESPONSE('Silent Mode     : '.$GLOBALS['silent_mode'].'');
-    BOT_RESPONSE('Check Update    : '.$GLOBALS['CONFIG_CHECK_UPDATE'].'');
-    BOT_RESPONSE('Play Sounds     : '.$GLOBALS['CONFIG_PLAY_SOUNDS'].'');
+    response('[PROGRAM]');
+    response('Show Logo       : '.$GLOBALS['CONFIG_SHOW_LOGO'].'');
+    response('Silent Mode     : '.$GLOBALS['silent_mode'].'');
+    response('Check Update    : '.$GLOBALS['CONFIG_CHECK_UPDATE'].'');
+    response('Play Sounds     : '.$GLOBALS['CONFIG_PLAY_SOUNDS'].'');
 
-    BOT_RESPONSE('[DEBUG]');
-    BOT_RESPONSE('Show RAW        : '.$GLOBALS['CONFIG_SHOW_RAW'].'');
+    response('[DEBUG]');
+    response('Show RAW        : '.$GLOBALS['CONFIG_SHOW_RAW'].'');
 
-    CLI_MSG('[PLUGIN: showconfig] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-            $GLOBALS['channel'], '1');
+    CLI_MSG("[PLUGIN: showconfig] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
 }

@@ -20,18 +20,15 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Gives voice: '.$GLOBALS['CONFIG_CMD_PREFIX'].'voice <nick>';
+    $plugin_description = "Gives voice: {$GLOBALS['CONFIG_CMD_PREFIX']}voice <nick>";
     $plugin_command = 'voice';
 
 function plugin_voice()
 {
     if (OnEmptyArg('voice <nick>')) {
-    } else {
-        if (BotOpped() == true) {
-            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +v '.$GLOBALS['args'].PHP_EOL);
+    } else if (BotOpped() == true) {
+               fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} +v {$GLOBALS['args']}".PHP_EOL);
 
-            CLI_MSG('[PLUGIN: voice] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'].
-                    ' | voiced user: '.$GLOBALS['args'], '1');
-        }
-    }
+               CLI_MSG("[PLUGIN: voice] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | voiced user: {$GLOBALS['args']}", '1');
+	}
 }

@@ -20,16 +20,17 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Changing Topic in channel: '.$GLOBALS['CONFIG_CMD_PREFIX'].'topic <new_topic>';
+    $plugin_description = "Changing Topic in channel: {$GLOBALS['CONFIG_CMD_PREFIX']}topic <new_topic>";
     $plugin_command = 'topic';
 
 function plugin_topic()
 {
     if (OnEmptyArg('topic <new_topic>')) {
     } else {
-            fputs($GLOBALS['socket'], 'TOPIC '.$GLOBALS['channel'].' '.msg_without_command().PHP_EOL);
+            fputs($GLOBALS['socket'], "TOPIC {$GLOBALS['channel']} ".msg_without_command().PHP_EOL);
 
-            CLI_MSG('[PLUGIN: topic] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                    $GLOBALS['channel'], '1');
+            CLI_MSG("[PLUGIN: topic] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
     }
 }
+
+// TODO: add if bot opped or channel -t, privmsg fucked

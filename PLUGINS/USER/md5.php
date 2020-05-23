@@ -20,19 +20,18 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Changing string to MD5: '.$GLOBALS['CONFIG_CMD_PREFIX'].'md5 <string>';
+    $plugin_description = "Changing string to MD5: {$GLOBALS['CONFIG_CMD_PREFIX']}md5 <string>";
     $plugin_command = 'md5';
 
 function plugin_md5()
 {
     if (OnEmptyArg('md5 <string>')) {
-    } else {
-              $data = str_replace(" ", "", $GLOBALS['args']);
+    } elseif (msg_without_command()[0] === ':') {
+              $data = substr(msg_without_command(), 1);
               $md5  = md5($data);
 
-              BOT_RESPONSE('(MD5) \''.$data.'\' -> '.$md5);
+              response("'{$data}' -> {$md5}");
 
-              CLI_MSG('[PLUGIN: md5] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                      $GLOBALS['channel'].' | string: \''.$data.'\'', '1');
+			  CLI_MSG("[PLUGIN: md5] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | string: '{$data}'", '1');
     }
 }

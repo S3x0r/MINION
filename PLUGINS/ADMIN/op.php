@@ -20,18 +20,15 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Gives op: '.$GLOBALS['CONFIG_CMD_PREFIX'].'op <nick>';
+    $plugin_description = "Gives op: {$GLOBALS['CONFIG_CMD_PREFIX']}op <nick>";
     $plugin_command = 'op';
 
 function plugin_op()
 {
     if (OnEmptyArg('op <nick>')) {
-    } else {
-        if (BotOpped() == true) {
-            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['args'].PHP_EOL);
+    } else if (BotOpped() == true) {
+               fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} +o {$GLOBALS['args']}".PHP_EOL);
 
-            CLI_MSG('[PLUGIN: op] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'].
-                    ' | opped user: '.$GLOBALS['args'], '1');
-        }
-    }
+               CLI_MSG("[PLUGIN: op] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | opped user: {$GLOBALS['args']}", '1');
+	}
 }

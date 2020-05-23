@@ -20,18 +20,14 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Shows BOT commands: '.$GLOBALS['CONFIG_CMD_PREFIX'].'help';
+    $plugin_description = "Shows BOT commands: {$GLOBALS['CONFIG_CMD_PREFIX']}help";
     $plugin_command = 'help';
 
 function plugin_help()
 {
-    $owner_cmd = implode(' ', $GLOBALS['OWNER_PLUGINS']);
-    $admin_cmd = implode(' ', $GLOBALS['ADMIN_PLUGINS']);
-    $user_cmd  = implode(' ', $GLOBALS['USER_PLUGINS']);
-    
     /* if OWNER use help */
     if (HasOwner($GLOBALS['mask'])) {
-        BOT_RESPONSE('Core Commands: '.
+        response('Core Commands: '.
                      $GLOBALS['CONFIG_CMD_PREFIX'].'load '.
                      $GLOBALS['CONFIG_CMD_PREFIX'].'panel '.
                      $GLOBALS['CONFIG_CMD_PREFIX'].'pause '.
@@ -39,30 +35,25 @@ function plugin_help()
                      $GLOBALS['CONFIG_CMD_PREFIX'].'unload '.
                      $GLOBALS['CONFIG_CMD_PREFIX'].'unpause');
 
-        BOT_RESPONSE('Owner Commands: '.$owner_cmd);
-        BOT_RESPONSE('Admin Commands: '.$admin_cmd);
-        BOT_RESPONSE('User Commands: '.$user_cmd);
+        response('Owner Commands: '.implode(' ', $GLOBALS['OWNER_PLUGINS']));
+        response('Admin Commands: '.implode(' ', $GLOBALS['ADMIN_PLUGINS']));
+        response('User Commands: '.implode(' ', $GLOBALS['USER_PLUGINS']));
 
       /* if ADMIN use help */
     } elseif (!HasOwner($GLOBALS['mask']) && HasAdmin($GLOBALS['mask'])) {
-              BOT_RESPONSE('Core Commands: '.$GLOBALS['CONFIG_CMD_PREFIX'].'seen');
-              BOT_RESPONSE('Admin Commands: '.$admin_cmd);
-              BOT_RESPONSE('User Commands: '.$user_cmd);
+              response("Core Commands: {$GLOBALS['CONFIG_CMD_PREFIX']}seen");
+              response('Admin Commands: '.implode(' ', $GLOBALS['ADMIN_PLUGINS']));
+              response('User Commands: '.implode(' ', $GLOBALS['USER_PLUGINS']));
 
-        if (!empty($GLOBALS['CONFIG_BOT_ADMIN'])) {
-            BOT_RESPONSE('Bot Admin: '.$GLOBALS['CONFIG_BOT_ADMIN']);
-        }
+        !empty($GLOBALS['CONFIG_BOT_ADMIN']) ? response("Bot Admin: {$GLOBALS['CONFIG_BOT_ADMIN']}") : false;
       
       /* if USER use help */
     } elseif (!HasOwner($GLOBALS['mask']) && !HasAdmin($GLOBALS['mask'])) {
-              BOT_RESPONSE('Core Commands: '.$GLOBALS['CONFIG_CMD_PREFIX'].'seen');
-              BOT_RESPONSE('User Commands: '.$user_cmd);
+              response("Core Commands: {$GLOBALS['CONFIG_CMD_PREFIX']}seen");
+              response('User Commands: '.implode(' ', $GLOBALS['USER_PLUGINS']));
               
-        if (!empty($GLOBALS['CONFIG_BOT_ADMIN'])) {
-            BOT_RESPONSE('Bot Admin: '.$GLOBALS['CONFIG_BOT_ADMIN']);
-        }
+        !empty($GLOBALS['CONFIG_BOT_ADMIN']) ? response("Bot Admin: {$GLOBALS['CONFIG_BOT_ADMIN']}") : false;
     }
 
-    CLI_MSG('[PLUGIN: help] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-            $GLOBALS['channel'], '1');
+    CLI_MSG("[PLUGIN: help] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
 }

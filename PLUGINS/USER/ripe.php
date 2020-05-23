@@ -20,25 +20,25 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Checks ip address and shows results: '.$GLOBALS['CONFIG_CMD_PREFIX'].'ripe <ip>';
+    $plugin_description = "Checks ip address and shows results: {$GLOBALS['CONFIG_CMD_PREFIX']}ripe <ip>";
     $plugin_command = 'ripe';
 
 function plugin_ripe()
 {
     if (OnEmptyArg('ripe <ip>')) {
-    } else {
-        if (extension_loaded('openssl')) {
-            BOT_RESPONSE(ripe_check_ip($GLOBALS['args']));
+    } else if (extension_loaded('openssl')) {
+               if ($GLOBALS['args'] == '127.0.0.1' or $GLOBALS['args'] == '0.0.0.0') { // TODO: !=
+			   } else {
+			            response(ripeCheckAddress($GLOBALS['args']));
 
-            CLI_MSG('[PLUGIN: ripe] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                    $GLOBALS['channel'].' | ip: '.$GLOBALS['args'], '1');
+                        CLI_MSG("[PLUGIN: ripe] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | ip: {$GLOBALS['args']}", '1');
+			   }
         } else {
-                 BOT_RESPONSE('I cannot use this plugin, i need php_openssl extension to work!');
+                 response('I cannot use this plugin, i need php_openssl extension to work!');
         }
-    }
 }
 
-function ripe_check_ip($args)
+function ripeCheckAddress($args)
 {
     $result = json_decode(file_get_contents("https://stat.ripe.net/data/whois/data.json?resource="
               .urlencode($args)."/32"), true);
@@ -68,7 +68,7 @@ function ripe_check_ip($args)
                 default:
             }
         }
-            $returnstring = "Info about ".$args.": ".$data." rDNS: ".gethostbyaddr($args);
+            $returnstring = "Info about {$args}: {$data} rDNS: ".gethostbyaddr($args);
     }
     return $returnstring;
 }

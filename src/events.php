@@ -64,7 +64,7 @@ function on_join()
 
     /* auto op */
     if ($GLOBALS['CONFIG_AUTO_OP'] == 'yes' && BotOpped() == true) {
-        $cfg = new IniParser($GLOBALS['config_file']);
+        $cfg = new IniParser($GLOBALS['configFile']);
         $GLOBALS['CONFIG_AUTO_OP_LIST'] = $cfg->get("OWNER", "auto_op_list");
 
         $auto_op_list_c = $GLOBALS['CONFIG_AUTO_OP_LIST'];
@@ -73,7 +73,7 @@ function on_join()
         $mask2 = $GLOBALS['USER'].'!'.$GLOBALS['USER_IDENT'].'@'.$GLOBALS['host'];
 
         if (in_array($mask2, $pieces)) {
-            CLI_MSG("I have nick: {$GLOBALS['USER']} on auto op list, giving op", '1');
+            CLI_MSG("[BOT] I have nick: {$GLOBALS['USER']} on auto op list, giving op", '1');
             fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} +o {$GLOBALS['USER']}\n");
             PlaySound('prompt.mp3');
         }
@@ -166,8 +166,7 @@ function on_mode()
         if (isset($GLOBALS['ex'][4]) && $GLOBALS['ex'][4] == $GLOBALS['BOT_NICKNAME']) {
             if (isset($GLOBALS['ex'][3]) && $GLOBALS['ex'][3] == '+o') {
                 /* info */
-                CLI_MSG('[BOT] I have OP now on: '.$GLOBALS['channel']. ', from: '.$GLOBALS['USER'].
-                        ' ('.$GLOBALS['USER_HOST'].')', '1');
+                CLI_MSG("[BOT] I have OP now on: {$GLOBALS['channel']}, from: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})", '1');
                 
                 /* set to opped var */
                 $GLOBALS['BOT_OPPED'] = 'yes';
@@ -187,8 +186,7 @@ function on_mode()
         if (isset($GLOBALS['ex'][4]) && $GLOBALS['ex'][4] == $GLOBALS['BOT_NICKNAME']) {
             if (isset($GLOBALS['ex'][3]) && $GLOBALS['ex'][3] == '-o') {
                 /* info */
-                CLI_MSG('[BOT] User: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') DEOPED ME on channel: '.
-                        $GLOBALS['channel'], '1');
+                CLI_MSG("[BOT] User: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) DEOPED ME on channel: {$GLOBALS['channel']}", '1');
                 
                 /* bot not opped anymore */
                 unset($GLOBALS['BOT_OPPED']);
@@ -209,12 +207,10 @@ function on_nick()
 {
     if ($GLOBALS['USER'] == $GLOBALS['CONFIG_NICKNAME'] && empty($GLOBALS['I_USE_RND_NICKNAME'])) {
         $GLOBALS['BOT_NICKNAME'] = str_replace(':', '', $GLOBALS['ex'][2]);
-        wcliExt();
-        CLI_MSG('[BOT] My new nickname is: '.$GLOBALS['BOT_NICKNAME'], '1');
+        CLI_MSG("[BOT] My new nickname is: {$GLOBALS['BOT_NICKNAME']}", '1');
     } elseif (isset($GLOBALS['BOT_NICKNAME']) && $GLOBALS['USER'] == $GLOBALS['BOT_NICKNAME']) {
               $GLOBALS['BOT_NICKNAME'] = str_replace(':', '', $GLOBALS['ex'][2]);
-              wcliExt();
-              CLI_MSG('[BOT] My new nickname is: '.$GLOBALS['BOT_NICKNAME'], '1');
+              CLI_MSG("[BOT] My new nickname is: {$GLOBALS['BOT_NICKNAME']}", '1');
     } else {
               $new = str_replace(':', '', $GLOBALS['ex'][2]);
               CLI_MSG(' * '.$GLOBALS['USER']. ' changed nick to '.$new, '1');
@@ -255,9 +251,6 @@ function on_303() /* ison */
         unset($GLOBALS['I_USE_RND_NICKNAME']);
 
         CLI_MSG('[BOT]: I recovered my original nickname', '1');
-
-        /* update wcli extension */
-        wcliExt();
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -298,24 +291,21 @@ function on_376() /* join after motd */
     CLI_MSG("Connected, my nickname is: {$GLOBALS['BOT_NICKNAME']}", '1');
 
     /* register to bot info */
-    if (isset($GLOBALS['pwd_changed'])) {
-        CLI_MSG('*********************************************************', '0');
-        CLI_MSG("Register to bot by typing /msg {$GLOBALS['BOT_NICKNAME']} register <password>", '0');
-        CLI_MSG('*********************************************************', '0');
-        unset($GLOBALS['pwd_changed']);
+    if (isset($GLOBALS['defaultPwdChanged'])) {
+        cli(N.'*********************************************************'.N, '0');
+        cli("Register to bot by typing /msg {$GLOBALS['BOT_NICKNAME']} register <password>".N, '0');
+        cli('*********************************************************'.N.N, '0');
+        unset($GLOBALS['defaultPwdChanged']);
     }
 
     /* if autojoin */
     if ($GLOBALS['CONFIG_AUTO_JOIN'] == 'yes') {
         CLI_MSG("Trying to join channel: {$GLOBALS['CONFIG_CNANNEL']}", '1');
-        JOIN_CHAN($GLOBALS['CONFIG_CNANNEL']);
+        joinChannel($GLOBALS['CONFIG_CNANNEL']);
     }
 
     /* on first start event */
     on_first_start();
-
-    /* wcli extension */
-    wcliExt();
 
     /* play sound :) */
     PlaySound('connected.mp3');
@@ -338,7 +328,7 @@ function on_432() /* if nick reserved */
     $GLOBALS['BOT_NICKNAME'] = $GLOBALS['BOT_NICKNAME'].'|'.rand(0, 299);
     CLI_MSG("Nickname from config is already in use on server, changing nickname to: {$GLOBALS['BOT_NICKNAME']}", '1');
 
-    fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['BOT_NICKNAME'].N);
+    fputs($GLOBALS['socket'], "NICK {$GLOBALS['BOT_NICKNAME']}".N);
 }
 //---------------------------------------------------------------------------------------------------------
 function on_433() /* if nick already exists */
@@ -364,7 +354,7 @@ function on_474() /* if bot +banned on channel */
 function on_475() /* if +key on channel */
 {
     if (!empty($GLOBALS['CONFIG_CHANNEL_KEY'])) {
-        JOIN_CHAN($GLOBALS['CONFIG_CNANNEL'].' '.$GLOBALS['CONFIG_CHANNEL_KEY']);
+        joinChannel("{$GLOBALS['CONFIG_CNANNEL']} {$GLOBALS['CONFIG_CHANNEL_KEY']}");
     } else {
               CLI_MSG('[BOT] I cannot join, bad channel key in config or key not set', '1');
               PlaySound('prompt.mp3');

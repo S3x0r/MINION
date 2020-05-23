@@ -20,22 +20,22 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Ip address to hostname change: '.$GLOBALS['CONFIG_CMD_PREFIX'].'gethost <ip>';
+    $plugin_description = "Ip address to hostname change: {$GLOBALS['CONFIG_CMD_PREFIX']}gethost <ip>";
     $plugin_command = 'gethost';
 
 function plugin_gethost()
 {
     if (OnEmptyArg('gethost <ip>')) {
     } else {
-             $host = gethostbyaddr(trim($GLOBALS['args']));
-        if (!empty($host) && $host != $GLOBALS['args']) {
-            BOT_RESPONSE('hostname: '.$host);
+             $host = @gethostbyaddr(trim($GLOBALS['args']));
+        if (!empty($host) && $host != $GLOBALS['args'] && $GLOBALS['args'] != '127.0.0.1' && $GLOBALS['args'] != '0.0.0.0') {
+            response("hostname: $host");
         } elseif ($host == $GLOBALS['args']) {
-                  BOT_RESPONSE('Cannot resolve '.$GLOBALS['args']);
+                  response("Cannot resolve {$GLOBALS['args']}");
         } elseif (empty($host)) {
-                  BOT_RESPONSE('Address is not a valid IPv4 or IPv6 address');
+                  response('Address is not a valid IPv4 or IPv6 address');
         }
-        CLI_MSG('[PLUGIN: gethost] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-        $GLOBALS['channel'].' | host: '.$GLOBALS['args'].'/'.$host, '1');
+
+        CLI_MSG("[PLUGIN: gethost] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | {$host}/{$GLOBALS['args']}", '1');
     }
 }

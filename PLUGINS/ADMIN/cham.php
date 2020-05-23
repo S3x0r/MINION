@@ -20,7 +20,7 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Shows random text from file: '.$GLOBALS['CONFIG_CMD_PREFIX'].'cham <nick>';
+    $plugin_description = "Shows random text from file: {$GLOBALS['CONFIG_CMD_PREFIX']}cham <nick>";
     $plugin_command = 'cham';
 
 /*
@@ -45,12 +45,11 @@ function plugin_cham()
 
                 $who = trim($GLOBALS['args']);
 
-                BOT_RESPONSE($who.': '.$text);
+                response("{$who}: {$text}");
 
-                CLI_MSG('[PLUGIN: cham] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                $GLOBALS['channel'].' | to: '.$who, '1');
+                CLI_MSG("[PLUGIN: cham] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | to: {$who}", '1');
             } else {
-                     BOT_RESPONSE('no file specified to use plugin');
+                     response('no file specified to use plugin');
             }
         }
     } catch (Exception $e) {

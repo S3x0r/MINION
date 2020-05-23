@@ -20,14 +20,14 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Shows quotes from bash.org: '.$GLOBALS['CONFIG_CMD_PREFIX'].'bash';
+    $plugin_description = "Shows quotes from bash.org: {$GLOBALS['CONFIG_CMD_PREFIX']}bash";
     $plugin_command = 'bash';
 
 function plugin_bash()
 {
     try {
         if (!file_get_contents('http://bash.org/?random1')) {
-            BOT_RESPONSE('Cannot fetch from bash');
+            response('Cannot fetch from bash');
         } else {
                  $page = file_get_contents('http://bash.org/?random1');
                  preg_match_all('@<p class="qt">(.*?)</p>@s', $page, $quotes);
@@ -44,11 +44,10 @@ function plugin_bash()
                     $pr = false;
                 } else {
                 }
-                BOT_RESPONSE(str_replace('<br />', '', html_entity_decode($quotes[1][$i], ENT_QUOTES)));
+                response(str_replace('<br />', '', html_entity_decode($quotes[1][$i], ENT_QUOTES)));
             }
         }
-            CLI_MSG('[PLUGIN: bash] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                    $GLOBALS['channel'], '1');
+            CLI_MSG("[PLUGIN: bash] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
     } catch (Exception $e) {
                              CLI_MSG('[ERROR]: Function: '.__FUNCTION__.' failed', '1');
     }

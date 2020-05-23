@@ -20,7 +20,7 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Plugins manipulation: '.$GLOBALS['CONFIG_CMD_PREFIX'].'plugin help to list commands';
+    $plugin_description = "Plugins manipulation: {$GLOBALS['CONFIG_CMD_PREFIX']}plugin help to list commands";
     $plugin_command = 'plugin';
 
 function plugin_plugin()
@@ -31,15 +31,11 @@ function plugin_plugin()
         switch ($GLOBALS['args']) {
 //---------------------------------------------------------------------------------------------------------
             case 'help':
-                 BOT_RESPONSE('Plugin commands:');
-                 BOT_RESPONSE('plugin delete - Deletes plugin from directory: '
-                 .$GLOBALS['CONFIG_CMD_PREFIX'].'plugin delete <plugin_name>');
-                 BOT_RESPONSE('plugin move <plugin name> <from> <to> - Move plugin from group to group: '
-                 .$GLOBALS['CONFIG_CMD_PREFIX'].'plugin move <plugin name> <from> <to>');
-                 BOT_RESPONSE('plugin load   - Load plugin to BOT: '.$GLOBALS['CONFIG_CMD_PREFIX'].
-                     'plugin load <plugin_name>');
-                 BOT_RESPONSE('plugin unload - Unload plugin from BOT: '.$GLOBALS['CONFIG_CMD_PREFIX'].
-                     'plugin unload <plugin_name>');
+                 response('Plugin commands:');
+                 response("plugin delete - Deletes plugin from directory: {$GLOBALS['CONFIG_CMD_PREFIX']}plugin delete <plugin_name>");
+                 response("plugin move <plugin name> <from> <to> - Move plugin from group to group: {$GLOBALS['CONFIG_CMD_PREFIX']}plugin move <plugin name> <from> <to>");
+                 response("plugin load   - Load plugin to BOT: {$GLOBALS['CONFIG_CMD_PREFIX']}plugin load <plugin_name>");
+                 response("plugin unload - Unload plugin from BOT: {$GLOBALS['CONFIG_CMD_PREFIX']}plugin unload <plugin_name>");
                 break;
 //---------------------------------------------------------------------------------------------------------
         }
@@ -47,41 +43,38 @@ function plugin_plugin()
         switch ($GLOBALS['piece1']) {
 //---------------------------------------------------------------------------------------------------------
             case 'delete':
-                if (is_file('../PLUGINS/USER/'.$GLOBALS['piece2'].'.php') xor
-                    is_file('../PLUGINS/OWNER/'.$GLOBALS['piece2'].'.php') xor
-                    is_file('../PLUGINS/ADMIN/'.$GLOBALS['piece2'].'.php')) {
-                    if (is_file('../PLUGINS/USER/'.$GLOBALS['piece2'].'.php')) {
-                        unlink('../PLUGINS/USER/'.$GLOBALS['piece2'].'.php');
+                if (is_file("PLUGINS/USER/{$GLOBALS['piece2']}.php") xor
+                    is_file("PLUGINS/OWNER/{$GLOBALS['piece2']}.php") xor
+                    is_file("PLUGINS/ADMIN/{$GLOBALS['piece2']}.php")) {
+                    if (is_file("PLUGINS/USER/{$GLOBALS['piece2']}.php")) {
+                        unlink("PLUGINS/USER/{$GLOBALS['piece2']}.php");
 
-                        BOT_RESPONSE('Plugin: '.$GLOBALS['piece2'].' removed from: USER dir.');
+                        response("Plugin: {$GLOBALS['piece2']} removed from: USER group.");
 
-                        CLI_MSG('[PLUGIN: plugin] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                                $GLOBALS['channel'].' | deleted: '.$GLOBALS['piece2'], '1');
-                    } elseif (is_file('../PLUGINS/OWNER/'.$GLOBALS['piece2'].'.php')) {
-                              unlink('../PLUGINS/OWNER/'.$GLOBALS['piece2'].'.php');
+                        CLI_MSG("[PLUGIN: plugin] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | deleted: {$GLOBALS['piece2']}", '1');
+                    } elseif (is_file("PLUGINS/OWNER/{$GLOBALS['piece2']}.php")) {
+                              unlink("PLUGINS/OWNER/{$GLOBALS['piece2']}.php");
 
-                              BOT_RESPONSE('Plugin: '.$GLOBALS['piece2'].' removed from OWNER dir.');
+                              response("Plugin: {$GLOBALS['piece2']} removed from OWNER group.");
 
-                              CLI_MSG('[PLUGIN: plugin] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                                      $GLOBALS['channel'].' | deleted: '.$GLOBALS['piece2'], '1');
-                    } elseif (is_file('../PLUGINS/ADMIN/'.$GLOBALS['piece2'].'.php')) {
-                              unlink('../PLUGINS/ADMIN/'.$GLOBALS['piece2'].'.php');
+                              CLI_MSG("[PLUGIN: plugin] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | deleted: {$GLOBALS['piece2']}", '1');
+                    } elseif (is_file("PLUGINS/ADMIN/{$GLOBALS['piece2']}.php")) {
+                              unlink("PLUGINS/ADMIN/{$GLOBALS['piece2']}.php");
 
-                              BOT_RESPONSE('Plugin: '.$GLOBALS['piece2'].' removed from: ADMIN dir.');
+                              response("Plugin: {$GLOBALS['piece2']} removed from: ADMIN group.");
 
-                              CLI_MSG('[PLUGIN: plugin] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                                      $GLOBALS['channel'].' | deleted: '.$GLOBALS['piece2'], '1');
+                              CLI_MSG("[PLUGIN: plugin] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | deleted: {$GLOBALS['piece2']}", '1');
                     }
                 } else {
-                         BOT_RESPONSE('No such plugin.');
+                         response('No such plugin.');
                 }
                 break;
 //---------------------------------------------------------------------------------------------------------
             case 'move':
-                if (is_dir('../PLUGINS')) {
+                if (is_dir('PLUGINS')) {
                     if (!empty($GLOBALS['piece2']) && !empty($GLOBALS['piece3']) && !empty($GLOBALS['piece4'])) {
                         /* scan directory for groups */
-                        $directory = '../PLUGINS';
+                        $directory = 'PLUGINS';
                         $groups = array_diff(scandir($directory), array('..', '.'));
                         $GLOBALS['piece2'] = strtolower($GLOBALS['piece2']);
                         $GLOBALS['piece3'] = strtoupper($GLOBALS['piece3']);
@@ -91,28 +84,26 @@ function plugin_plugin()
                         if (in_array($GLOBALS['piece3'], $groups)) {
                             if (in_array($GLOBALS['piece4'], $groups)) {
                                 /* try to move it */
-                                if (is_file('../PLUGINS/'.$GLOBALS['piece3'].'/'.$GLOBALS['piece2'].'.php')) {
+                                if (is_file("PLUGINS/{$GLOBALS['piece3']}/{$GLOBALS['piece2']}.php")) {
                                     rename(
-                                        '../PLUGINS/'.$GLOBALS['piece3'].'/'.$GLOBALS['piece2'].'.php',
-                                        '../PLUGINS/'.$GLOBALS['piece4'].'/'.$GLOBALS['piece2'].'.php'
+                                        "PLUGINS/{$GLOBALS['piece3']}/{$GLOBALS['piece2']}.php",
+                                        "PLUGINS/{$GLOBALS['piece4']}/{$GLOBALS['piece2']}.php"
                                     );
 
-                                    BOT_RESPONSE('Plugin: '.$GLOBALS['piece2'].' moved to \''
-                                                 .$GLOBALS['piece4'].'\' group.');
+                                    response("Plugin: {$GLOBALS['piece2']} moved to '{$GLOBALS['piece4']}' group.");
 
-                                    CLI_MSG('[PLUGIN: plugin] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST']
-                                            .') | chan: '.$GLOBALS['channel'].' | moved: '.$GLOBALS['piece2'], '1');
-                                } elseif (!is_file('../PLUGINS/'.$GLOBALS['piece3'].'/'.$GLOBALS['piece2'].'.php')) {
-                                          BOT_RESPONSE('No such plugin in \''.$GLOBALS['piece3'].'\' group!');
+                                    CLI_MSG("[PLUGIN: plugin] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | moved: {$GLOBALS['piece2']}", '1');
+                                } elseif (!is_file("PLUGINS/{$GLOBALS['piece3']}/{$GLOBALS['piece2']}.php")) {
+                                          response("No such plugin in '{$GLOBALS['piece3']}' group!");
                                 }
                             } else {
-                                     BOT_RESPONSE('Group \''.$GLOBALS['piece4'].'\' does not exist.');
+                                     response("Group '{$GLOBALS['piece4']}' does not exist.");
                             }
                         } else {
-                                 BOT_RESPONSE('Group \''.$GLOBALS['piece3'].'\' does not exist.');
+                                 response("Group '{$GLOBALS['piece3']}' does not exist.");
                         }
                     } else {
-                             BOT_RESPONSE('use: <plugin_name> <from> <to>');
+                             response('use: <plugin_name> <from> <to>');
                     }
                 } else {
                          BOT_RESPONE('Cannot find PLUGINS directory, deleted?');

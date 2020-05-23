@@ -20,7 +20,8 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 
 function Logo()
 {
-    if ($GLOBALS['CONFIG_SHOW_LOGO'] == 'yes' && !IsSilent()) {
+    if (!IsSilent()) {
+		if ($GLOBALS['CONFIG_SHOW_LOGO'] == 'yes') {
             echo "
     B@B@B@B@@@B@B@B@B@B@B@B@@@B@B@B@B@B@@@@@@@B@B@B@B@B@@@B@B
     @B@BGB@B@B@B@B@@@B@@@B@B@B@@@B@B@B@B@B@@@B@B@B@@@B@@@@@B@
@@ -53,25 +54,29 @@ function Logo()
     B@B@@@B@B@B@B@@@B@B@@s           Srri;i;rrrssssssss22S5HS
     @B@B@B@B@B@BBMMGG9G:              :,::::iir;rs22SXGGMMMMB".N;
 
-             echo N.'                 - MINION '.VER.' | Author: S3x0r -'.N;
-             echo '    ---------------------------------------------------------'.N;
+        echo N.'                 - MINION '.VER.' | Author: S3x0r -'.N;
+        echo '    ---------------------------------------------------------'.N;
              
         /* os variable */
         empty($GLOBALS['OS']) ? $system = 'Windows' : $system = 'Linux';
 
-        /* check extensions */
+        /* check if we have needed extensions */
         if (extension_loaded('curl') && extension_loaded('openssl')) {
-            $string = '                    All needed extensions loaded'.N;
-        } elseif (!extension_loaded('curl')) {
-                  $string = '       Extension \'curl\' missing, some plugins will not work.'.N;
-        } elseif (!extension_loaded('openssl')) {
-                  $string = '      Extension \'openssl\' missing, some plugins will not work.'.N;
+            echo '                   All needed extensions loaded'.N;
+        }
+		
+		if (!extension_loaded('curl')) {
+            echo "       Extension 'curl' missing, some plugins will not work".N;
+        }
+		
+		if (!extension_loaded('openssl')) {
+            echo "     Extension 'openssl' missing, some plugins will not work".N;
         }
 
-             echo $string;
-             echo '                    PHP Ver: '.PHP_VER.', OS: '.$system.N;
-             echo '    ---------------------------------------------------------'.N;
-             echo '                   Total Lines of code: '.TotalLines().' :)'.N.N.N;
-    }
+        echo '                    PHP Ver: '.PHP_VER.', OS: '.$system.N;
+        echo '    ---------------------------------------------------------'.N;
+        echo '                   Total Lines of code: '.TotalLines().' :)'.N.N.N;
+		}
+	}
 }
 //---------------------------------------------------------------------------------------------------------

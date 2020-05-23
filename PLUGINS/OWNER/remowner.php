@@ -20,8 +20,7 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Removes owner from config file: '
-    .$GLOBALS['CONFIG_CMD_PREFIX'].'remowner <nick!ident@hostname>';
+    $plugin_description = "Removes owner from config file: {$GLOBALS['CONFIG_CMD_PREFIX']}remowner <nick!ident@hostname>";
     $plugin_command = 'remowner';
 
 function plugin_remowner()
@@ -30,7 +29,7 @@ function plugin_remowner()
     } else {
         if (preg_match('/^(.+?)!(.+?)@(.+?)$/', $GLOBALS['args'], $host)) {
             /* read owners from config */
-            LoadData($GLOBALS['config_file'], 'OWNER', 'bot_owners');
+            LoadData($GLOBALS['configFile'], 'OWNER', 'bot_owners');
             $owners_list = $GLOBALS['LOADED'];
             $array = explode(" ", str_replace(',', '', $owners_list));
             $key = array_search($GLOBALS['args'], $array);
@@ -44,23 +43,22 @@ function plugin_remowner()
                 $string2 = str_replace(' ', ', ', $string);
 
                 /* save new list to config */
-                SaveData($GLOBALS['config_file'], 'OWNER', 'bot_owners', $string2);
+                SaveData($GLOBALS['configFile'], 'OWNER', 'bot_owners', $string2);
 
                 /* update variable with new owners */
-                $cfg = new IniParser($GLOBALS['config_file']);
+                $cfg = new IniParser($GLOBALS['configFile']);
                 $GLOBALS['CONFIG_OWNERS'] = $cfg->get("OWNER", "bot_owners");
 
                 /* send info to user */
-                BOT_RESPONSE('Host: \''.$GLOBALS['args'].'\' removed from owners.');
+                response("Host: '{$GLOBALS['args']}' removed from owners.");
 
                 /* & to CLI */
-                CLI_MSG('[PLUGIN: remowner] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                        $GLOBALS['channel'].' | removed host: '.$GLOBALS['args'], '1');
+                CLI_MSG("[PLUGIN: remowner] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | removed host: {$GLOBALS['args']}", '1');
             } else {
-                     BOT_RESPONSE('No such host in my list.');
+                     response('No such host in my list.');
             }
         } else {
-                 BOT_RESPONSE('Bad input, try: nick!ident@hostname');
+                 response('Bad input, try: nick!ident@hostname');
         }
     }
 }

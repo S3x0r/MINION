@@ -20,17 +20,16 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Shows http status: '.$GLOBALS['CONFIG_CMD_PREFIX'].'webstatus <number>';
+    $plugin_description = "Shows http status: {$GLOBALS['CONFIG_CMD_PREFIX']}webstatus <number>";
     $plugin_command = 'webstatus';
 
 function plugin_webstatus()
 {
     if (OnEmptyArg('webstatus <number>')) {
     } else {
-             BOT_RESPONSE(httpstatus($GLOBALS['args']));
+             response(httpstatus($GLOBALS['args']));
 
-             CLI_MSG('[PLUGIN: webstatus] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                     $GLOBALS['channel'], '1');
+             CLI_MSG("[PLUGIN: webstatus] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
     }
 }
 

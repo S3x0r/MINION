@@ -17,50 +17,24 @@
 PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
                            Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '1.0.7');
+    define('VER', '1.0.8');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());
     define('PLUGIN_HASH', 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c');
-    define('COLOR', '6');
-    set_error_handler('ErrorHandler');
+	define('CORECOUNT', '6'); // How many core commands
     error_reporting(-1);
-//---------------------------------------------------------------------------------------------------------
-function ErrorHandler($errno, $errstr, $errfile, $errline)
-{
-    if (!(error_reporting() & $errno)) {
-        return false;
-    }
-
-    switch ($errno) {
-        case E_USER_ERROR:
-            CLI_MSG("[ERROR]: [$errno] $errstr", '1');
-            CLI_MSG("Fatal error on line {$errline} in file {$errfile}, PHP ".PHP_VERSION." (".PHP_OS.")", '1');
-            CLI_MSG('Aborting..', '1');
-            exit(1);
-            break;
-
-        case E_USER_WARNING:
-            CLI_MSG("[WARNING]: [$errno] $errstr", '1');
-            break;
-
-        case E_USER_NOTICE:
-            CLI_MSG("[NOTICE]: [$errno] $errstr", '1');
-            break;
-
-        default:
-             CLI_MSG("Error: $errstr", '1');
-            break;
-    }
-
-    /* Don't execute PHP internal error handler */
-    return true;
-}
 //---------------------------------------------------------------------------------------------------------
 function SetDefaultData()
 {
     /* if variable empty in config load default one */
-    if (empty($GLOBALS['CONFIG_PORT']) or !is_numeric($GLOBALS['CONFIG_PORT'])) {
+    if (empty($GLOBALS['CONFIG_NICKNAME'])) {
+		$GLOBALS['CONFIG_NICKNAME'] = 'minion';
+	}
+	if (empty($GLOBALS['CONFIG_SERVER'])) {
+		$GLOBALS['CONFIG_SERVER'] = 'irc.dal.net';
+	}
+	if (empty($GLOBALS['CONFIG_PORT']) or !is_numeric($GLOBALS['CONFIG_PORT'])) {
         $GLOBALS['CONFIG_PORT'] = '6667';
     }
     if (empty($GLOBALS['CONFIG_TRY_CONNECT']) or !is_numeric($GLOBALS['CONFIG_TRY_CONNECT'])) {

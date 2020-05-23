@@ -20,20 +20,17 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Joins channel: '.$GLOBALS['CONFIG_CMD_PREFIX'].'join <#channel>';
+    $plugin_description = "Joins channel: {$GLOBALS['CONFIG_CMD_PREFIX']}join <#channel>";
     $plugin_command = 'join';
 
 function plugin_join()
 {
     if (OnEmptyArg('join <#channel>')) {
-    } else {
-        if (!in_array($GLOBALS['args'], $GLOBALS['BOT_CHANNELS'])) {
-            JOIN_CHAN($GLOBALS['args']);
+    } else if (!in_array(strtolower($GLOBALS['args']), $GLOBALS['BOT_CHANNELS'])) {
+               joinChannel($GLOBALS['args']);
 
-            CLI_MSG('[PLUGIN: join] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                    $GLOBALS['channel'].' | joined: '.$GLOBALS['args'], '1');
-        } else {
-                 BOT_RESPONSE('...');
-        }
-    }
+               CLI_MSG("[PLUGIN: join] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | joined: {$GLOBALS['args']}", '1');
+	} else {
+             response('...');
+	}
 }

@@ -20,46 +20,40 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Adds host to autoop list in config file: '
-    .$GLOBALS['CONFIG_CMD_PREFIX'].'autoop <nick!ident@host>';
+    $plugin_description = "Adds host to autoop list in config file: {$GLOBALS['CONFIG_CMD_PREFIX']}autoop <nick!ident@host>";
     $plugin_command = 'autoop';
 
 function plugin_autoop()
 {
-    $nick_ex = explode('!', trim($GLOBALS['args']));
+    $nick = explode('!', trim($GLOBALS['args']));
 
     if (OnEmptyArg('autoop <nick!ident@hostname>')) {
-    } elseif ($nick_ex[0] != $GLOBALS['BOT_NICKNAME']) {
+    } elseif ($nick[0] != $GLOBALS['BOT_NICKNAME']) {
         if (preg_match('/^(.+?)!(.+?)@(.+?)$/', $GLOBALS['args'], $host)) {
-            LoadData($GLOBALS['config_file'], 'OWNER', 'auto_op_list');
+            LoadData($GLOBALS['configFile'], 'OWNER', 'auto_op_list');
 
             if (strpos($GLOBALS['LOADED'], $GLOBALS['args']) !== false) {
-                BOT_RESPONSE('I already have this host.');
+                response('I already have this host.');
             } else {
-                     $auto_list   = $GLOBALS['LOADED'];
-                     $new         = $host[0];
-
-                empty($auto_list) ? $new_list = $new : $new_list = $auto_list.', '.$new;
+                empty($GLOBALS['LOADED']) ? $new_list = $host[0] : $new_list = "{$GLOBALS['LOADED']}, {$host[0]}";
  
-                     SaveData($GLOBALS['config_file'], 'OWNER', 'auto_op_list', $new_list);
+                     SaveData($GLOBALS['configFile'], 'OWNER', 'auto_op_list', $new_list);
 
                      /* update variable with new owners */
-                     $cfg = new IniParser($GLOBALS['config_file']);
+                     $cfg = new IniParser($GLOBALS['configFile']);
                      $GLOBALS['CONFIG_AUTO_OP_LIST'] = $cfg->get("OWNER", "auto_op_list");
 
                      /* Inform nick about it */
-                     fputs($GLOBALS['socket'], 'PRIVMSG '.$nick_ex[0].
-                           " :From now you are on my auto op list, enjoy.\n");
+                     responsePriv('From now you are on my auto op list, enjoy.');
 
-                     BOT_RESPONSE('Host: \''.$host[0].'\' added to auto op list.');
+                     response("Host: '{$host[0]}' added to auto op list.");
 
-                     CLI_MSG('[PLUGIN: autoop] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                             $GLOBALS['channel'].' | host added: '.$GLOBALS['args'], '1');
+                     CLI_MSG("[PLUGIN: autoop] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | host added: {$GLOBALS['args']}", '1');
             }
         } else {
-                 BOT_RESPONSE('Bad input, try: nick!ident@hostname');
+                 response('Bad input, try: nick!ident@hostname');
         }
     } else {
-             BOT_RESPONSE('I cannot add myself to auto op list, im already OP MASTER :)');
+             response('I cannot add myself to auto op list, im already OP MASTER :)');
     }
 }

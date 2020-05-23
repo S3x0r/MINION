@@ -20,16 +20,15 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Shows youtube video title from link: '.$GLOBALS['CONFIG_CMD_PREFIX'].'youtube <link>';
+    $plugin_description = "Shows youtube video title from link: {$GLOBALS['CONFIG_CMD_PREFIX']}youtube <link>";
     $plugin_command = 'youtube';
 
 function plugin_youtube()
 {
     if (OnEmptyArg('youtube <link>')) {
     } else {
-             $site = $GLOBALS['args'];
-        if (@file_get_contents($site)) {
-            $content = @file_get_contents($site);
+        if (@file_get_contents($GLOBALS['args'])) {
+            $content = @file_get_contents($GLOBALS['args']);
             $search = '<meta name="twitter:title" content="';
             $searchb = '<meta name="twitter:description" content="';
  
@@ -39,10 +38,9 @@ function plugin_youtube()
             $piecesb = explode($searchb, $content);
             $pieceb = explode('">', $piecesb[1]);
 
-            BOT_RESPONSE('Youtube Title: '.htmlspecialchars_decode($piece[0]));
+            response('Youtube Title: '.htmlspecialchars_decode($piece[0]));
 
-            CLI_MSG('[PLUGIN: youtube] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                    $GLOBALS['channel'], '1');
+            CLI_MSG("[PLUGIN: youtube] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
         }
     }
 }

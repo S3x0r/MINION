@@ -24,12 +24,12 @@ function WebEntry()
 WEB_VERSION         = ".VER."
 WEB_START_TIME      = ".START_TIME."
 WEB_PHP_VERSION     = ".PHP_VER."
-WEB_BOT_CONFIG_FILE = ".$GLOBALS['config_file'];
+WEB_BOT_CONFIG_FILE = ".$GLOBALS['configFile'];
     
     /* save some variables to web.ini */
-    SaveToFile('panel\web.ini', $data, 'w');
+    SaveToFile('src\panel\web.ini', $data, 'w');
 
-    $file = $GLOBALS['config_file'];
+    $file = $GLOBALS['configFile'];
     $cfg = new IniParser($file);
     $GLOBALS['CONFIG_WEB_LOGIN'] = $cfg->get('PANEL', 'web_login');
     $GLOBALS['CONFIG_WEB_PASSWORD'] = $cfg->get('PANEL', 'web_password');
@@ -38,9 +38,9 @@ WEB_BOT_CONFIG_FILE = ".$GLOBALS['config_file'];
     $string = random_str('16');
 
     /* save data to panel config */
-    SaveData('panel\web.ini', 'PANEL', 'web_login', $GLOBALS['CONFIG_WEB_LOGIN']);
-    SaveData('panel\web.ini', 'PANEL', 'web_password', $GLOBALS['CONFIG_WEB_PASSWORD']);
-    SaveData('panel\web.ini', 'PANEL', 'web_salt', $string);
+    SaveData('src\panel\web.ini', 'PANEL', 'web_login', $GLOBALS['CONFIG_WEB_LOGIN']);
+    SaveData('src\panel\web.ini', 'PANEL', 'web_password', $GLOBALS['CONFIG_WEB_PASSWORD']);
+    SaveData('src\panel\web.ini', 'PANEL', 'web_salt', $string);
 }
 //---------------------------------------------------------------------------------------------------------
 function WebSave($v1, $v2)

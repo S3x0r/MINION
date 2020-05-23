@@ -21,11 +21,12 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 
 define('N', PHP_EOL);
 
-if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-    chdir('../');
-} else {
-         chdir('src/');
-         $GLOBALS['OS'] = 'Linux';
+if (dirname($_SERVER['PHP_SELF']) == '../..') {
+    chdir('../../');
+}
+
+if (strtoupper(substr(PHP_OS, 0, 3)) != 'WIN') {
+    $GLOBALS['OS'] = 'Linux';
 }
     
 $files = ['cli.php',
@@ -45,8 +46,8 @@ $files = ['cli.php',
            ];
 
 foreach ($files as $file) {
-    if (is_file($file)) {
-        require_once($file);
+    if (is_file("src/{$file}")) {
+        require_once("src/{$file}");
     } else {
 		     echo N;
              echo "  ERROR: I need a file '{$file}' to work!".N.N,
@@ -58,20 +59,17 @@ foreach ($files as $file) {
     }
 }
 //---------------------------------------------------------------------------------------------------------
-    /* Load startup needed variables */
-    StartupConfig();
-
-    /* Check if cli arguments */
+    /* Check if we got cli args */
     CheckCliArgs();
     
-    /* wcli extension */
-    wcliStart();
-
-    /* Logo & info :) */
-    Logo();
- 
-    /* Check if there is new version on server */
-    CheckUpdateInfo();
-   
     /* Load config */
-    LoadConfig('../CONFIG.INI');
+    LoadConfig();
+
+	/* logging init */
+    Logs();
+
+	/* Load plugins */
+	LoadPlugins();
+
+    /* Time to connect */
+    Connect();

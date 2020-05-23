@@ -20,7 +20,7 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Checking for updates: '.$GLOBALS['CONFIG_CMD_PREFIX'].'checkupdate';
+    $plugin_description = "Checking for updates: {$GLOBALS['CONFIG_CMD_PREFIX']}checkupdate";
     $plugin_command = 'checkupdate';
 //------------------------------------------------------------------------------------------------
 function plugin_checkupdate()
@@ -31,16 +31,15 @@ function plugin_checkupdate()
 
         $CheckVersion = file_get_contents($addr);
 
-        CLI_MSG('[PLUGIN: checkupdate] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                $GLOBALS['channel'], '1');
+        CLI_MSG("[PLUGIN: checkupdate] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
 
         if (!empty($CheckVersion)) {
             checkVersion();
         } else {
-                 BOT_RESPONSE('Cannot connect to update server, try next time.');
+                 response('Cannot connect to update server, try next time.');
         }
     } else {
-             BOT_RESPONSE('I cannot use this plugin, i need php_openssl extension to work!');
+             response('I cannot use this plugin, i need php_openssl extension to work!');
     }
 }
 //------------------------------------------------------------------------------------------------
@@ -51,10 +50,10 @@ function checkVersion()
     $version = explode("\n", $CheckVersion);
 
     if ($version[0] > VER) {
-        BOT_RESPONSE('New version available!');
-        BOT_RESPONSE('My version: '.VER.', version on server: '.$version[0].'');
-        BOT_RESPONSE('To update me use '.$GLOBALS['CONFIG_CMD_PREFIX'].'update');
+        response('New version available!');
+        response("My version: ".VER.", version on server: {$version[0]} ");
+        response("To update BOT, use {$GLOBALS['CONFIG_CMD_PREFIX']}update");
     } else {
-              BOT_RESPONSE('No new update, you have the latest version.');
+              response('No new update, you have the latest version.');
     }
 }

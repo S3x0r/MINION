@@ -339,7 +339,7 @@ function set_bans() /* set ban from config list */
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function BOT_RESPONSE($msg)
+function response($msg)
 {
     switch ($GLOBALS['CONFIG_BOT_RESPONSE']) {
         case 'channel':
@@ -359,13 +359,13 @@ function BOT_RESPONSE($msg)
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function USER_MSG($msg)
+function privateMSG($msg)
 {
     fputs($GLOBALS['socket'], "PRIVMSG {$GLOBALS['USER']} :$msg\n");
     usleep($GLOBALS['CONFIG_PRIVATE_DELAY'] * 1000000);
 }
 //---------------------------------------------------------------------------------------------------------
-function JOIN_CHAN($channel)
+function joinChannel($channel)
 {
     fputs($GLOBALS['socket'], "JOIN {$channel}\n");
 }

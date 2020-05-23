@@ -20,23 +20,21 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Changing string to choosed algorithm: '.
-    $GLOBALS['CONFIG_CMD_PREFIX'].'hash help to list algorithms';
+    $plugin_description = "Changing string to choosed algorithm: {$GLOBALS['CONFIG_CMD_PREFIX']}hash help to list algorithms";
     $plugin_command = 'hash';
 
 function plugin_hash()
 {
     if (OnEmptyArg('hash help to get algorithms list')) {
     } elseif ($GLOBALS['args'] == 'help') {
-              BOT_RESPONSE('Usage: '.$GLOBALS['CONFIG_CMD_PREFIX'].'hash <algorithm> <string>');
-              BOT_RESPONSE('Valid algos: ' . implode(' ', hash_algos()));
+              response("Usage: {$GLOBALS['CONFIG_CMD_PREFIX']}hash <algorithm> <string>");
+              response('Valid algos: '.implode(' ', hash_algos()));
     } else {
         if (hash($GLOBALS['piece1'], $GLOBALS['piece2'])) {
-            BOT_RESPONSE($GLOBALS['piece1'].': ' . hash($GLOBALS['piece1'], $GLOBALS['piece2']));
+            response("{$GLOBALS['piece1']}: ".hash($GLOBALS['piece1'], $GLOBALS['piece2']));
         } else {
-                 BOT_RESPONSE('Unknown hashing algorithm.');
+                 response('Unknown hashing algorithm.');
         }
-                    CLI_MSG('[PLUGIN: hash] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                    $GLOBALS['channel'].' | string: '.$GLOBALS['args'], '1');
+                    CLI_MSG("[PLUGIN: hash] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | string: {$GLOBALS['args']}", '1');
     }
 }

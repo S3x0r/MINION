@@ -18,57 +18,16 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
                            Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
 //---------------------------------------------------------------------------------------------------------
 
-function StartupConfig()
+function LoadConfig($state = '')
 {
-    /* load some startup needed variables */
-    if (is_file('../CONFIG.INI')) {
-        $config_file = '../CONFIG.INI';
-        $cfg = new IniParser($config_file);
+    /* when there is no config from arg */
+    if (!isset($GLOBALS['configFile'])) {
+		$GLOBALS['configFile'] = 'CONFIG.INI';
+	}
 
-        $GLOBALS['CONFIG_SHOW_LOGO']    = $cfg->get('PROGRAM', 'show_logo');
-        $GLOBALS['silent_mode']         = $cfg->get('PROGRAM', 'silent_mode');
-        $GLOBALS['CONFIG_CHECK_UPDATE'] = $cfg->get('PROGRAM', 'check_update');
-
-        if (!in_array($GLOBALS['CONFIG_SHOW_LOGO'], ['yes', 'no'], true)) {
-            $GLOBALS['CONFIG_SHOW_LOGO'] = 'yes';
-        }
-        if (!in_array($GLOBALS['silent_mode'], ['yes', 'no'], true)) {
-            $GLOBALS['silent_mode'] = 'no';
-        }
-        if (!in_array($GLOBALS['CONFIG_CHECK_UPDATE'], ['yes', 'no'], true)) {
-            $GLOBALS['CONFIG_CHECK_UPDATE'] = 'no';
-        }
-    } else {
-             $GLOBALS['CONFIG_SHOW_LOGO']    = 'yes';
-             $GLOBALS['silent_mode']         = 'no';
-             $GLOBALS['CONFIG_CHECK_UPDATE'] = 'no';
-    }
-}
-//---------------------------------------------------------------------------------------------------------
-function LoadConfig($filename)
-{
-    global $cfg;
-    global $config_file;
-
-    /* check if config is loaded from -c switch */
-    if (isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == '-c') {
-        if (isset($_SERVER['argv'][2]) && is_file($_SERVER['argv'][2])) {
-            $config_file = $_SERVER['argv'][2];
-        } elseif (isset($_SERVER['argv'][2]) && !is_file($_SERVER['argv'][2])) {
-                   echo '  [ERROR] Config file does not exist, wrong path?'.N.N;
-                   WinSleep(6);
-                   exit;
-        } elseif (isset($_SERVER['argv'][1]) && empty($_SERVER['argv'][2])) {
-                   echo '  [ERROR] You need to specify config file! I need some data :)'.N.N;
-                   WinSleep(6);
-                   exit;
-        }
-    } else {
-              $config_file = $filename;
-    }
-
-    if (is_file($config_file)) {
-        $cfg = new IniParser($config_file);
+    /* if we got config file */
+    if (is_file($GLOBALS['configFile'])) {
+        $cfg = new IniParser($GLOBALS['configFile']);
 
         /* load configuration to variables */
 
@@ -77,15 +36,16 @@ function LoadConfig($filename)
         $GLOBALS['CONFIG_NAME']           = $cfg->get('BOT', 'name');
         $GLOBALS['CONFIG_IDENT']          = $cfg->get('BOT', 'ident');
         /* SERVER */
-        /* if -o switch server */
-        if (empty($_SERVER['argv'][2])) {
+        
+		if (!isset($GLOBALS['CUSTOM_SERVER_AND_PORT'])) {
             $GLOBALS['CONFIG_SERVER']     = $cfg->get('SERVER', 'server');
-        }
-        /* if -o switch port */
-        if (empty($_SERVER['argv'][3])) {
+		}
+        
+        if (!isset($GLOBALS['CUSTOM_SERVER_AND_PORT'])) {
             $GLOBALS['CONFIG_PORT']       = $cfg->get('SERVER', 'port');
-        }
-        $GLOBALS['CONFIG_SERVER_PASSWD']  = $cfg->get('SERVER', 'server_password');
+		}
+
+		$GLOBALS['CONFIG_SERVER_PASSWD']  = $cfg->get('SERVER', 'server_password');
         $GLOBALS['CONFIG_TRY_CONNECT']    = $cfg->get('SERVER', 'try_connect');
         $GLOBALS['CONFIG_CONNECT_DELAY']  = $cfg->get('SERVER', 'connect_delay');
         /* OWNER */
@@ -139,22 +99,22 @@ function LoadConfig($filename)
         /* DEBUG */
         $GLOBALS['CONFIG_SHOW_RAW']       = $cfg->get('DEBUG', 'show_raw');
 
-        /* check if we have enough data to connect */
-        if (empty($GLOBALS['CONFIG_NICKNAME'])) {
-            CLI_MSG('[ERROR] I need nickname! No nickname in config file, Exiting.');
-            WinSleep(6);
-            exit;
-        }
-        if (empty($GLOBALS['CONFIG_SERVER'])) {
-            CLI_MSG('[ERROR] I dont know where to connect! No server in config file, Exiting.');
-            WinSleep(6);
-            exit;
-        }
-
         /* Set default data */
         SetDefaultData();
-       
-        /* if default BOT owner(s) password, prompt to change it! */
+
+        if (!isset($GLOBALS['defaultPwdChanged'])) {
+    		/* Logo & info :) */
+            Logo();
+ 
+            /* Check if there is new version on server */
+            CheckUpdateInfo();
+
+			if ($state == 'default') {
+	         	CLI_MSG('Config file missing! Creating default config: CONFIG.INI'.N);
+	        }
+		}
+
+		/* if default BOT owner(s) password, prompt to change it! */
         if ($GLOBALS['CONFIG_OWNER_PASSWD'] == '47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed') {
             /* play sound */
             PlaySound('error_conn.mp3');
@@ -163,65 +123,59 @@ function LoadConfig($filename)
             CLI_MSG('Default BOT owner(s) password detected!');
             CLI_MSG('For security please change it (password can not contain spaces)');
 
-            /* 'New Password:' */
-            $new_pwd = getPasswd('['.@date('H:i:s').'] New Password: ');
+            /* Set new password */
+            $newPassword = getPasswd('['.@date('H:i:s').'] New Password: ');
 
-            while (strlen($new_pwd) < 6) {
-                echo N.'['.@date('H:i:s').'] Password too short, password must be at least 6 characters long'.N;
-                unset($new_pwd);
-                $new_pwd = getPasswd('['.@date('H:i:s').'] New Password: ');
+            /* when password to short */
+            while (strlen($newPassword) < 8) {
+                echo N.'['.@date('H:i:s').'] Password too short, password must be at least 8 characters long'.N;
+                unset($newPassword);
+                $newPassword = getPasswd('['.@date('H:i:s').'] New Password: ');
             }
 
             /* join spaces in password */
-            $new_pwd = str_replace(' ', '', $new_pwd);
+            $newPassword = str_replace(' ', '', $newPassword);
 
             /* hash pwd */
-            $hashed = hash('sha256', $new_pwd);
+            $hashed = hash('sha256', $newPassword);
 
             /* save pwd to file */
-            SaveData($config_file, 'OWNER', 'owner_password', $hashed);
+            SaveData($GLOBALS['configFile'], 'OWNER', 'owner_password', $hashed);
 
             /* remove pwd checking vars */
-            unset($new_pwd);
+            unset($newPassword);
             unset($hashed);
 
             /* Set first time change variable */
-            $GLOBALS['pwd_changed'] = '1';
+            $GLOBALS['defaultPwdChanged'] = 'yes';
             
 			echo N;
-            CLI_MSG('Password changed');
+            CLI_MSG('Password changed!');
           
-            /* load config again */
-            LoadConfig($config_file);
+            /* update owner(s) password */
+			$cfg = new IniParser($GLOBALS['configFile']);
+            $GLOBALS['CONFIG_OWNER_PASSWD'] = $cfg->get('OWNER', 'owner_password');
         }
 
         /* from what file config loaded */
-        CLI_MSG("Configuration Loaded from: {$config_file}");
-        Line(COLOR);
-     
-        /* logging init */
-        if ($GLOBALS['CONFIG_LOGGING'] == 'yes') {
-            Logs();
-        }
-        
-        /* if all ok load plugins */
-        LoadPlugins();
+        CLI_MSG("Configuration Loaded from: {$GLOBALS['configFile']}");
+        Line();
     } else {
-             /* set default logging */
-             $GLOBALS['CONFIG_LOGGING'] = 'yes';
- 
-             CLI_MSG('Configuration file missing!');
-             CLI_MSG('Creating default config: CONFIG.INI '.N);
+             /* set default data */
+			 $GLOBALS['CONFIG_SHOW_LOGO']    = 'yes';
+             $GLOBALS['silent_mode']         = 'no';
+             $GLOBALS['CONFIG_CHECK_UPDATE'] = 'no';
+             $GLOBALS['CONFIG_LOGGING']      = 'yes';
 
-             /* create default config if missing */
-             CreateDefaultConfig('../CONFIG.INI');
+			 /* create default config if missing */
+             CreateDefaultConfig('CONFIG.INI');
     }
 }
 //---------------------------------------------------------------------------------------------------------
 function CreateDefaultConfig($filename)
 {
     /* default config */
-    $default_config = ';<?php exit; ?>
+    $defaultConfigData = ';<?php exit; ?>
 
 [BOT]
 
@@ -237,7 +191,7 @@ ident            = \'minion\'
 [SERVER]
 
 ; server where to connect
-server           = \'minionki.com.pl\'
+server           = \'irc.dal.net\'
 
 ; server port
 port             = \'6667\'
@@ -378,32 +332,19 @@ play_sounds      = \'yes\'
 show_raw         = \'no\'';
 
     /* Save default config to file if no config */
-    SaveToFile($filename, $default_config, 'w');
+    SaveToFile($filename, $defaultConfigData, 'w');
 
     /* remove variable */
-    unset($default_config);
+    unset($defaultConfigData);
 
     if (is_file($filename)) {
         /* Load config again */
-        LoadConfig($filename);
+        LoadConfig('default');
     } else { /* read only file system? */
              CLI_MSG('[ERROR]: Cannot make default config! Exiting');
              WinSleep(6);
              exit;
     }
-}
-//---------------------------------------------------------------------------------------------------------
-function SaveData($v1, $v2, $v3, $v4)
-{
-    $cfg = new IniParser($v1);
-    $cfg->setValue("$v2", "$v3", "$v4");
-    $cfg->save();
-}
-//---------------------------------------------------------------------------------------------------------
-function LoadData($config_file, $section, $config)
-{
-    $cfg = new IniParser($config_file);
-    $GLOBALS['LOADED'] = $cfg->get("$section", "$config");
 }
 //---------------------------------------------------------------------------------------------------------
 /* configuration file parser */

@@ -20,7 +20,7 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Searchs wikipedia: '.$GLOBALS['CONFIG_CMD_PREFIX'].'wikipedia <lang> <string>';
+    $plugin_description = "Searchs wikipedia: {$GLOBALS['CONFIG_CMD_PREFIX']}wikipedia <lang> <string>";
     $plugin_command = 'wikipedia';
 
 function plugin_wikipedia()
@@ -28,10 +28,9 @@ function plugin_wikipedia()
     if (OnEmptyArg('wikipedia <lang> <string>')) {
     } else {
         if (extension_loaded('openssl')) {
-            $query = $GLOBALS['piece2'].' '.$GLOBALS['piece3'].' '.$GLOBALS['piece4'];
+            $query = "{$GLOBALS['piece2']} {$GLOBALS['piece3']} {$GLOBALS['piece4']}"; //TODO: make it whole msg
             
-            $json  = @file_get_contents('http://'.$GLOBALS['piece1'].
-            '.wikipedia.org/w/api.php?action=opensearch&list=search&search='.urlencode($query));
+            $json  = @file_get_contents("http://{$GLOBALS['piece1']}.wikipedia.org/w/api.php?action=opensearch&list=search&search=".urlencode($query));
             
             if (!empty($json)) {
                 $json  = json_decode($json);
@@ -41,16 +40,15 @@ function plugin_wikipedia()
                         $resultTitle = $json[1][$i];
                         $resultUrl   = $json[3][$i];
 
-                        BOT_RESPONSE($resultTitle.' - '.$resultUrl);
+                        response("{$resultTitle} - {$resultUrl}");
                     }
                 }
-                CLI_MSG('[PLUGIN: wikipedia] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                        $GLOBALS['channel'].' | find: '.$query, '1');
+                CLI_MSG("[PLUGIN: wikipedia] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | find: {$query}", '1');
             } else {
-                     BOT_RESPONSE('No such language.');
+                     response('No such language.');
             }
         } else {
-                 BOT_RESPONSE('I cannot use this plugin, i need php_openssl extension to work!');
+                 response('I cannot use this plugin, i need php_openssl extension to work!');
         }
     }
 }

@@ -105,7 +105,7 @@ You can change prefix in config file.
 |                  | Loads given plugin to BOT                | !plugin load <plugin>             |  OWNER       | All |
 |                  | Move plugin from one group to another    | !plugin move <plugin> <from> <to> |  OWNER       | All |
 |                  | Unloads plugin from BOT                  | !plugin unload <plugin>           |  OWNER       | All |
-|    ping          | Ping given host/ip                       | !ping <host/ip>                   |  ALL         | WIN |
+|    ping          | Ping given host/ip                       | !ping <host/ip>                   |  OWNER/ADMIN | WIN |
 |    quit          | Shutdown BOT                             | !quit                             |  OWNER       | All |
 |    raw           | Sends raw string to server               | !raw <string> <2> <3> <4>         |  OWNER       | All |
 |    remadmin      | Removes admin from config file           | !remadmin <nick!ident@host>       |  OWNER       | All |
@@ -147,7 +147,6 @@ You can change prefix in config file.
 |    unban         | Unban specified user/hostmask            | !unban <nick!ident@host>          |  OWNER/ADMIN | All |
 |    unpause       | Restore BOT from !pause mode             | !unpause                          |  OWNER       | All |
 |    voice         | BOT gives voice                          | !voice <nick>                     |  OWNER/ADMIN | All |
-|    weather       | Shows actual weather                     | !weather <city/place>             |  ALL         | All |
 |    webstatus     | Shows http status info from given number | !webstatus <number>               |  ALL         | All |
 |    webtitle      | Shows webpage titile                     | !webtitle <web address>           |  ALL         | All |
 |    wikipedia     | Search wikipedia                         | !wikipedia <lang> <string>        |  ALL         | All |

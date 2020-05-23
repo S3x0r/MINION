@@ -20,25 +20,25 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Shows BOT owners: '.$GLOBALS['CONFIG_CMD_PREFIX'].'listowners';
+    $plugin_description = "Shows BOT owners: {$GLOBALS['CONFIG_CMD_PREFIX']}listowners";
     $plugin_command = 'listowners';
 
 function plugin_listowners()
 {
-    LoadData($GLOBALS['config_file'], 'OWNER', 'bot_owners');
+    LoadData($GLOBALS['configFile'], 'OWNER', 'bot_owners');
 
     if (empty($GLOBALS['LOADED'])) {
-        BOT_RESPONSE('Empty owner(s) list.');
+        response('Empty owner(s) list.');
     } else {
-             $pieces = explode(", ", $GLOBALS['LOADED']);
+             $owners = explode(", ", $GLOBALS['LOADED']);
  
-             BOT_RESPONSE('My Owner(s) Host(s):');
+             response('My Owner(s) Host(s):');
 
-        for ($i=0; $i<count($pieces); $i++) {
-             BOT_RESPONSE($pieces[$i]);
+        for ($i=0; $i<count($owners); $i++) {
+             response($owners[$i]);
         }
+		     response('End.');
     }
 
-    CLI_MSG('[PLUGIN: listowners] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-            $GLOBALS['channel'], '1');
+    CLI_MSG("[PLUGIN: listowners] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
 }

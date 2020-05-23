@@ -20,17 +20,17 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Shows info: '.$GLOBALS['CONFIG_CMD_PREFIX'].'info';
+    $plugin_description = "Shows info: {$GLOBALS['CONFIG_CMD_PREFIX']}info";
     $plugin_command = 'info';
 
 function plugin_info()
 {
-    BOT_RESPONSE('MINION version '.VER);
-    BOT_RESPONSE('Author: S3x0r, contact: olisek@gmail.com');
+    response('MINION version '.VER);
+    response('Author: S3x0r');
 
     if (!empty($GLOBALS['CONFIG_BOT_ADMIN'])) {
-        BOT_RESPONSE('Bot Admin: '.$GLOBALS['CONFIG_BOT_ADMIN']);
+        response("Bot Admin: {$GLOBALS['CONFIG_BOT_ADMIN']}");
     }
 
-    CLI_MSG('[PLUGIN: info] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.$GLOBALS['channel'], '1');
+    CLI_MSG("[PLUGIN: info] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
 }

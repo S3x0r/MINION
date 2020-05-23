@@ -20,17 +20,18 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Sends raw string to server: '.$GLOBALS['CONFIG_CMD_PREFIX'].'raw <string>';
+    $plugin_description = "Sends raw string to server: {$GLOBALS['CONFIG_CMD_PREFIX']}raw <string>";
     $plugin_command = 'raw';
 
 function plugin_raw()
 {
     if (OnEmptyArg('raw <string>')) {
     } else {
-             $msg = $GLOBALS['piece1'].' '.$GLOBALS['piece2'].' '.$GLOBALS['piece3'].' '.$GLOBALS['piece4'].PHP_EOL;
+             $msg = "{$GLOBALS['piece1']} {$GLOBALS['piece2']} {$GLOBALS['piece3']} {$GLOBALS['piece4']}".PHP_EOL;
              fputs($GLOBALS['socket'], $msg);
 
-             CLI_MSG('[PLUGIN: raw] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                     $GLOBALS['channel'].' | raw: '.$msg, '1');
+             CLI_MSG("[PLUGIN: raw] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | raw: {$msg}", '1');
     }
 }
+
+// TODO: whole message

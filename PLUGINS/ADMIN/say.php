@@ -20,7 +20,7 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Say specified text to channel: '.$GLOBALS['CONFIG_CMD_PREFIX'].'say <text>';
+    $plugin_description = "Say specified text to channel: {$GLOBALS['CONFIG_CMD_PREFIX']}say <text>";
     $plugin_command = 'say';
 
 function plugin_say()
@@ -28,12 +28,13 @@ function plugin_say()
     try {
         if (OnEmptyArg('say <text>')) {
         } else {
-                 fputs($GLOBALS['socket'], 'PRIVMSG '.$GLOBALS['channel'].' '.msg_without_command().PHP_EOL);
+                 fputs($GLOBALS['socket'], "PRIVMSG {$GLOBALS['channel']} ".msg_without_command().PHP_EOL);
 
-                 CLI_MSG('[PLUGIN: say] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                 $GLOBALS['channel'], '1');
+                 CLI_MSG("[PLUGIN: say] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
         }
     } catch (Exception $e) {
                              CLI_MSG('[ERROR]: Function: '.__FUNCTION__.' failed', '1');
     }
 }
+
+// TODO: if privmsg fucked

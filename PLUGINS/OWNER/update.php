@@ -20,7 +20,7 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Updates the BOT if new version is available: '.$GLOBALS['CONFIG_CMD_PREFIX'].'update';
+    $plugin_description = "Updates the BOT if new version is available: {$GLOBALS['CONFIG_CMD_PREFIX']}update";
     $plugin_command = 'update';
 
 //------------------------------------------------------------------------------------------------
@@ -29,10 +29,9 @@ function plugin_update()
     if (extension_loaded('openssl')) {
         v_connect();
 
-        CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                $GLOBALS['channel'], '1');
+        CLI_MSG("[PLUGIN: update] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
     } else {
-             BOT_RESPONSE('I cannot use this plugin, i need php_openssl extension to work!');
+             response('I cannot use this plugin, i need php_openssl extension to work!');
     }
 }
 //------------------------------------------------------------------------------------------------
@@ -46,7 +45,7 @@ function v_connect()
     if (!empty($GLOBALS['CheckVersion'])) {
         v_checkVersion();
     } else {
-              BOT_RESPONSE('Cannot connect to update server, try next time.');
+              response('Cannot connect to update server, try next time.');
               CLI_MSG('[BOT] Cannot connect to update server', '1');
     }
 }
@@ -57,20 +56,20 @@ function v_checkVersion()
     $version = explode("\n", $GLOBALS['CheckVersion']);
 
     if ($version[0] > VER) {
-        BOT_RESPONSE('My version: '.VER.', version on server: '.$version[0].'');
+        response('My version: '.VER.', version on server: '.$version[0].'');
 
         CLI_MSG('[BOT] New bot update on server: '.$version[0], '1');
         
         v_tryDownload();
     } else {
-              BOT_RESPONSE('No new update, you have the latest version.');
+              response('No new update, you have the latest version.');
               CLI_MSG('[BOT] There is no new update', '1');
     }
 }
 //------------------------------------------------------------------------------------------------
 function v_tryDownload()
 {
-    BOT_RESPONSE('Downloading update...');
+    response('Downloading update...');
 
     CLI_MSG('[BOT] Downloading update...', '1');
 
@@ -78,13 +77,13 @@ function v_tryDownload()
     $dlHandler = fopen('update.zip', 'w');
       
     if (!fwrite($dlHandler, $newUpdate)) {
-        BOT_RESPONSE('Could not save new update, operation aborted');
+        response('Could not save new update, operation aborted');
 
         CLI_MSG('[BOT] Could not save new update, operation aborted', '1');
     }
 
     fclose($dlHandler);
-    BOT_RESPONSE('Update Downloaded');
+    response('Update Downloaded');
     CLI_MSG('[BOT] Update Downloaded', '1');
     
     v_extract();
@@ -122,7 +121,7 @@ function delete_files($target)
 //------------------------------------------------------------------------------------------------
 function v_extract()
 {
-    BOT_RESPONSE('Extracting update');
+    response('Extracting update');
     CLI_MSG('[BOT] Extracting update', '1');
 
     /* Extracting update */
@@ -131,7 +130,7 @@ function v_extract()
         $zip->extractTo('.');
         $zip->close();
   
-        BOT_RESPONSE('Extracted.');
+        response('Extracted.');
         CLI_MSG('[BOT] Extracted.', '1');
 
         unlink('MINION-master/.gitattributes');
@@ -160,7 +159,7 @@ function v_extract()
         $GLOBALS['CONFIG_OWNERS']         = $cfg->get("OWNER", "bot_owners");
         $GLOBALS['CONFIG_OWNER_PASSWD']   = $cfg->get("OWNER", "owner_password");
         $GLOBALS['CONFIG_ADMIN_LIST']     = $cfg->get("ADMIN", "admin_list");
-        $GLOBALS['CONFIG_BOT_RESPONSE']   = $cfg->get("RESPONSE", "bot_response");
+        $GLOBALS['CONFIG_BOT_RESPONSE']   = $cfg->get("RESPONSE", "response");
         $GLOBALS['CONFIG_AUTO_OP']        = $cfg->get("AUTOMATIC", "auto_op");
         $GLOBALS['CONFIG_AUTO_REJOIN']    = $cfg->get("AUTOMATIC", "auto_rejoin");
         $GLOBALS['CONFIG_KEEPCHAN_MODES'] = $cfg->get("AUTOMATIC", "keep_chan_modes");
@@ -203,7 +202,7 @@ function v_extract()
         SaveData($new_cf, 'OWNER', 'bot_owners', $GLOBALS['CONFIG_OWNERS']);
         SaveData($new_cf, 'OWNER', 'owner_password', $GLOBALS['CONFIG_OWNER_PASSWD']);
         SaveData($new_cf, 'ADMIN', 'admin_list', $GLOBALS['CONFIG_ADMIN_LIST']);
-        SaveData($new_cf, 'RESPONSE', 'bot_response', $GLOBALS['CONFIG_BOT_RESPONSE']);
+        SaveData($new_cf, 'RESPONSE', 'response', $GLOBALS['CONFIG_BOT_RESPONSE']);
         SaveData($new_cf, 'AUTOMATIC', 'auto_op', $GLOBALS['CONFIG_AUTO_OP']);
         SaveData($new_cf, 'AUTOMATIC', 'auto_rejoin', $GLOBALS['CONFIG_AUTO_REJOIN']);
         SaveData($new_cf, 'AUTOMATIC', 'keep_chan_modes', $GLOBALS['CONFIG_KEEPCHAN_MODES']);
@@ -251,7 +250,7 @@ function v_extract()
         }
         exit;
     } else {
-              BOT_RESPONSE('Failed to extract, aborting.');
+              response('Failed to extract, aborting.');
               CLI_MSG('[BOT] Failed to extract update, aborting!', '1');
     }
 }

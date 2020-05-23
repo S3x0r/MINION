@@ -20,7 +20,7 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Shows webpage titile: '.$GLOBALS['CONFIG_CMD_PREFIX'].'webtitle <web address>';
+    $plugin_description = "Shows webpage titile: {$GLOBALS['CONFIG_CMD_PREFIX']}webtitle <web address>";
     $plugin_command = 'webtitle';
 
 function plugin_webtitle()
@@ -34,17 +34,16 @@ function plugin_webtitle()
                     if (strlen($matches[1]) == 256) {
                         $matches[1].='...';
                     }
-                    BOT_RESPONSE('Title: '.
+                    response('Title: '.
                     str_replace("\n", '', str_replace("\r", '', html_entity_decode($matches[1], ENT_QUOTES, 'utf-8'))));
 
-                    CLI_MSG('[PLUGIN: webtitle] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                            $GLOBALS['channel'], '1');
+                    CLI_MSG("[PLUGIN: webtitle] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
                 }
             } elseif (empty($file)) {
-                      BOT_RESPONSE('No title or cannot resolve website.');
+                      response('No title or cannot resolve website.');
             }
         } else {
-                 BOT_RESPONSE('I cannot use this plugin, i need php_openssl extension to work!');
+                 response('I cannot use this plugin, i need php_openssl extension to work!');
         }
     }
 }

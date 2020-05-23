@@ -20,23 +20,19 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Changes nickname: '.$GLOBALS['CONFIG_CMD_PREFIX'].'newnick <new_nick>';
+    $plugin_description = "Changes nickname: {$GLOBALS['CONFIG_CMD_PREFIX']}newnick <new_nick>";
     $plugin_command = 'newnick';
 
 function plugin_newnick()
 {
-    if (OnEmptyArg('newnick <new_nick>')) {
-    } else {
-        if ($GLOBALS['args'] != $GLOBALS['BOT_NICKNAME']) {
-            fputs($GLOBALS['socket'], 'NICK '.$GLOBALS['args'].PHP_EOL);
+    if (OnEmptyArg('newnick <new nick>')) {
+    } else if ($GLOBALS['args'] != $GLOBALS['BOT_NICKNAME']) {
+               fputs($GLOBALS['socket'], "NICK {$GLOBALS['args']}".PHP_EOL);
 
-            /* wcli extension */
-            wcliExt();
- 
-            CLI_MSG('[PLUGIN: newnick] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                    $GLOBALS['channel'].' | new nick: '.$GLOBALS['args'], '1');
-        } else {
-                 BOT_RESPONSE('...');
-        }
-    }
+               CLI_MSG("[PLUGIN: newnick] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | new nick: {$GLOBALS['args']}", '1');
+	} else {
+             response('...');
+	}
 }
+
+//TODO: changing bot nick = disaster

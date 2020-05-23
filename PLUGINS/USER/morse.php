@@ -20,14 +20,14 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Converts to morse code: '.$GLOBALS['CONFIG_CMD_PREFIX'].'morse <text>';
+    $plugin_description = "Converts to morse code: {$GLOBALS['CONFIG_CMD_PREFIX']}morse <text>";
     $plugin_command = 'morse';
 
 function plugin_morse()
 {
     if (OnEmptyArg('morse <text>')) {
     } else {
-              $morse_code = array('a'  =>  '.-', 'b'  =>  '-...', 'c'  =>  '-.-.', 'd'  =>  '-..', 'e'  =>  '.',
+              $morseCode = array('a'  =>  '.-', 'b'  =>  '-...', 'c'  =>  '-.-.', 'd'  =>  '-..', 'e'  =>  '.',
                                   'f'  =>  '..-.', 'g'  =>  '--.', 'h'  =>  '....', 'i'  =>  '..', 'j'  =>  '.---',
                                   'k'  =>  '-.-', 'l'  =>  '.-..', 'm'  =>  '--', 'n'  =>  '-.', 'o'  =>  '---',
                                   'p'  =>  '.--.', 'q'  =>  '--.-', 'r'  =>  '.-.', 's'  =>  '...', 't'  =>  '-',
@@ -44,13 +44,12 @@ function plugin_morse()
         $final = null;
         for ($pos = 0; $pos < $len; $pos++) {
              $care = $string[$pos];
-            if (array_key_exists($care, $morse_code)) {
-                $final .= $morse_code[$care]." ";
+            if (array_key_exists($care, $morseCode)) {
+                $final .= $morseCode[$care]." ";
             }
         }
-        BOT_RESPONSE('Converted to morse: "'.rtrim($final).'"');
+        response('Morse: '.rtrim($final));
 
-        CLI_MSG('[PLUGIN: morse] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                $GLOBALS['channel'], '1');
+        CLI_MSG("[PLUGIN: morse] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
     }
 }

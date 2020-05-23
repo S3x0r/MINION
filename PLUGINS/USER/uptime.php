@@ -20,21 +20,19 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Shows BOT uptime: '.$GLOBALS['CONFIG_CMD_PREFIX'].'uptime';
+    $plugin_description = "Shows BOT uptime: {$GLOBALS['CONFIG_CMD_PREFIX']}uptime";
     $plugin_command = 'uptime';
 
 function plugin_uptime()
 {
-    $time = uptime_parse(microtime(true) - START_TIME);
+    $uptimeDate = uptimeCount(microtime(true) - START_TIME);
 
-    BOT_RESPONSE('I\'ve been running since ('.date('d.m.Y, H:i:s', START_TIME).
-                  ') and been running for '.$time);
+    response("I've been running since (".date('d.m.Y, H:i:s', START_TIME).") and been running for {$uptimeDate}");
  
-    CLI_MSG('[PLUGIN: uptime] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-            $GLOBALS['channel'], '1');
+    CLI_MSG("[PLUGIN: uptime] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
 }
 
-function uptime_parse($seconds)
+function uptimeCount($seconds)
 {
     $weeks = (floor($seconds / (60 * 60) / 24)) / 7;
     $days = (floor($seconds / (60 * 60) / 24)) % 7;

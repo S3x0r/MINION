@@ -20,22 +20,21 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Shutdown BOT: '.$GLOBALS['CONFIG_CMD_PREFIX'].'quit';
+    $plugin_description = "Shutdown BOT: {$GLOBALS['CONFIG_CMD_PREFIX']}quit";
     $plugin_command = 'quit';
 
 function plugin_quit()
 {
     /* give op before restart */
     if (BotOpped() == true) {
-        fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['USER'].PHP_EOL);
+        fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} +o {$GLOBALS['USER']}".PHP_EOL);
     }
 
-    BOT_RESPONSE('Bye!');
+    response('Bye!');
     
     fputs($GLOBALS['socket'], "QUIT :http://github.com/S3x0r/MINION\n");
 
-    CLI_MSG('[PLUGIN: quit] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-            $GLOBALS['channel'], '1');
+    CLI_MSG("[PLUGIN: quit] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
     CLI_MSG('Terminating BOT.', '1');
     CLI_MSG('------------------LOG ENDED: '.date('d.m.Y | H:i:s')."------------------\r\n", '1');
 

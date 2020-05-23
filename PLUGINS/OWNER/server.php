@@ -20,7 +20,7 @@ PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = 'Connect to specified server: '.$GLOBALS['CONFIG_CMD_PREFIX'].'server <server ip>';
+    $plugin_description = "Connect to specified server: {$GLOBALS['CONFIG_CMD_PREFIX']}server <server ip>";
     $plugin_command = 'server';
 
 function plugin_server()
@@ -30,21 +30,23 @@ function plugin_server()
         if (!empty($GLOBALS['args']) && !empty($GLOBALS['piece2']) && is_numeric($GLOBALS['piece2'])) {
             $GLOBALS['disconnected'] = 'yes';
             fputs($GLOBALS['socket'], "QUIT :Changing server...\n");
-            CLI_MSG('[BOT] Changing server to: '.$GLOBALS['piece1'].':'.$GLOBALS['piece2'], '1');
+            CLI_MSG("[BOT] Changing server to: {$GLOBALS['piece1']}:{$GLOBALS['piece2']}", '1');
 
             if (empty($GLOBALS['OS'])) {
-                system('cd php & php.exe ../../BOT.php -o '.$GLOBALS['piece1'].' '.$GLOBALS['piece2']);
+                system('cd php & php.exe BOT.php -o '.$GLOBALS['piece1'].' '.$GLOBALS['piece2']);
             }
 
             if (!empty($GLOBALS['OS'])) {
-                system('php ../BOT.php -o '.$GLOBALS['piece1'].' '.$GLOBALS['piece2']);
+                system('php BOT.php -o '.$GLOBALS['piece1'].' '.$GLOBALS['piece2']);
             }
         } elseif (empty($GLOBALS['args'])) {
-                  BOT_RESPONSE('You need to specify server address.');
+                  response('You need to specify server address.');
         } elseif (empty($GLOBALS['piece2'])) {
-                  BOT_RESPONSE('You need to specify server port.');
+                  response('You need to specify server port.');
         } elseif (!is_numeric($GLOBALS['piece2'])) {
-                  BOT_RESPONSE('Wrong server port.');
+                  response('Wrong server port.');
         }
     }
 }
+
+//TODO: not working

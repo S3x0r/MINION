@@ -25,7 +25,7 @@ function CheckCliArgs()
                 echo N.'  Bot cli commands usage: BOT.php [option]'.N.N,
                      '  -c <config_file> loads config'.N, /* config file */
                      '  -h this help'.N, /* help */
-                     '  -o connect to specified server: eg: BOT.php irc.dal.net 6667'.N, /* server */
+                     '  -o connect to specified server: eg: BOT.php -o irc.dal.net 6667'.N, /* server */
                      '  -p <password> hash password to SHA256'.N, /* hash */
                      '  -s silent mode (no output from bot)'.N, /* silent mode */
                      '  -u check if there is new bot version'.N, /* update */
@@ -33,9 +33,24 @@ function CheckCliArgs()
                 exit;
                 break;
 
+            case '-c': /* check if config is loaded from -c switch */
+			    if (!empty($_SERVER['argv'][2]) && is_file(getcwd()."\\".$_SERVER['argv'][2])) {
+                    $GLOBALS['configFile'] = getcwd()."\\".$_SERVER['argv'][2];
+                } elseif (!empty($_SERVER['argv'][2]) && !is_file(getcwd()."\\".$_SERVER['argv'][2])) {
+                          echo '  [ERROR] Config file does not exist, wrong path?'.N.N;
+                          WinSleep(6);
+                          exit;
+                } elseif (empty($_SERVER['argv'][2])) {
+                          echo '  [ERROR] You need to specify config file! I need some data :)'.N.N;
+                          WinSleep(6);
+                          exit;
+                }
+				break;
+
             case '-o': /* server connect: eg: irc.example.net 6667 */
                 if (!empty($_SERVER['argv'][2]) && !empty($_SERVER['argv'][3]) && is_numeric($_SERVER['argv'][3])) {
-                    $GLOBALS['CONFIG_SERVER'] = $_SERVER['argv'][2];
+                    $GLOBALS['CUSTOM_SERVER_AND_PORT'] = 'yes';
+					$GLOBALS['CONFIG_SERVER'] = $_SERVER['argv'][2];
                     $GLOBALS['CONFIG_PORT'] = $_SERVER['argv'][3];
                 } elseif (empty($_SERVER['argv'][2])) {
                           echo N.' ERROR: You need to specify server address, Exiting.';
@@ -57,8 +72,8 @@ function CheckCliArgs()
                 echo N.' Password: ';
                 $STDIN = fopen('php://stdin', 'r');
                 $pwd = str_replace(' ', '', fread($STDIN, 30));
-                while (strlen($pwd) < 8) {
-                       echo ' Password too short, password must be at least 6 characters long'.N;
+                while (strlen($pwd) < 10) {
+                       echo ' Password too short, password must be at least 8 characters long'.N;
                        echo ' Password: ';
                        unset($pwd);
                        $pwd = fread($STDIN, 30);
@@ -71,8 +86,8 @@ function CheckCliArgs()
 
                 $answer = trim(fgets($STDIN));
                 if ($answer == 'yes' xor $answer == 'y') {
-                    if (is_file('../CONFIG.INI')) {
-                        SaveData('../CONFIG.INI', 'OWNER', 'owner_password', $hash);
+                    if (is_file('CONFIG.INI')) {
+                        SaveData('CONFIG.INI', 'OWNER', 'owner_password', $hash);
                         echo N.' Password saved to config file, Exiting.';
                         WinSleep(3);
                         exit;
@@ -87,9 +102,6 @@ function CheckCliArgs()
             case '-s': /* silent mode */
                 $GLOBALS['silent_cli'] = 'yes';
                 $GLOBALS['silent_mode'] = 'yes';
-                if (extension_loaded('wcli')) {
-                    wcli_minimize();
-                }
                 break;
 
             case '-v': /* show version */
@@ -130,27 +142,6 @@ function CheckCliArgs()
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function wcliStart()
-{
-    if (!IsSilent()) {
-        if (extension_loaded('wcli')) {
-            wcli_set_console_title('MINION '.VER);
-            wcli_hide_cursor();
-        }
-    }
-}
-//---------------------------------------------------------------------------------------------------------
-function wcliExt()
-{
-    if (!IsSilent()) {
-        if (extension_loaded('wcli')) {
-            wcli_set_console_title('MINION '.VER.' (server: '.$GLOBALS['CONFIG_SERVER'].':'
-            .$GLOBALS['CONFIG_PORT'].' | nickname: '.$GLOBALS['BOT_NICKNAME'].' | channel: '
-            .$GLOBALS['CONFIG_CNANNEL'].')');
-        }
-    }
-}
-//---------------------------------------------------------------------------------------------------------
 function CLI_MSG($message, $save = 0)
 {
     if (!IsSilent()) {
@@ -159,6 +150,7 @@ function CLI_MSG($message, $save = 0)
         if (isset($GLOBALS['CONFIG_LOGGING']) && $GLOBALS['CONFIG_LOGGING'] == 'yes' && $save == '1') {
             SaveToFile($GLOBALS['logFile'], $line, 'a');
         }
+
         echo $line;
     }
 }
