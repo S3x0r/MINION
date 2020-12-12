@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,8 +14,10 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+//---------------------------------------------------------------------------------------------------------
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
 function CoreCmd_Seen()
@@ -28,9 +30,7 @@ function CoreCmd_Seen()
         } elseif ($GLOBALS['args'] == $GLOBALS['USER']) {
                   response('Look at mirror!');
         } elseif ($GLOBALS['args'] == 'owner') {
-            if (!empty($GLOBALS['CONFIG_BOT_ADMIN'])) {
-                response("My Owner: {$GLOBALS['CONFIG_BOT_ADMIN']}");
-            }
+            !empty($GLOBALS['CONFIG_BOT_ADMIN']) ? response("My Owner: {$GLOBALS['CONFIG_BOT_ADMIN']}") : false;
         } else {
                  /* revert from illegal chars file */
                  $bad   = [chr(0x5c), '/', ':', '*', '?', '"', '<', '>', '|'];
@@ -47,12 +47,8 @@ function CoreCmd_Seen()
 //---------------------------------------------------------------------------------------------------------
 function SeenSave()
 {
-    if (!is_dir('DATA')) {
-        mkdir('DATA');
-        if (!is_dir('DATA/SEEN')) {
-            mkdir('DATA/SEEN');
-        }
-    }
+    !is_dir('DATA')      ? @mkdir('DATA')      : false;
+    !is_dir('DATA/SEEN') ? @mkdir('DATA/SEEN') : false;
     
     $seenDataDir = 'DATA/SEEN/';
 
@@ -66,7 +62,7 @@ function SeenSave()
     $GLOBALS['USER'] = str_replace($bad, $good, $GLOBALS['USER']);
 
     is_file($seenDataDir.$GLOBALS['USER']) ?
-        file_put_contents($seenDataDir.$GLOBALS['USER'], $data) : file_put_contents($seenDataDir.$GLOBALS['USER'], $data);
+        @file_put_contents($seenDataDir.$GLOBALS['USER'], $data) : @file_put_contents($seenDataDir.$GLOBALS['USER'], $data);
 }
 //---------------------------------------------------------------------------------------------------------
 function CoreCmd_Pause()
@@ -74,7 +70,7 @@ function CoreCmd_Pause()
     response('Pausing all activity');
   
     /* hah :) */
-    $GLOBALS['stop'] = '1';
+    $GLOBALS['stop'] = true;
 
     CLI_MSG("[PLUGIN: pause] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
     CLI_MSG('[BOT] Im in Pause mode', '1');
@@ -151,9 +147,7 @@ function CoreCmd_Load()
     if (empty($GLOBALS['args'])) {
         response("Usage {$GLOBALS['CONFIG_CMD_PREFIX']}load <plugin_name>");
     } else {
-        if (!empty($GLOBALS['piece1'])) {
-            LoadPlugin($GLOBALS['piece1']);
-        }
+        !empty($GLOBALS['piece1']) ? LoadPlugin($GLOBALS['piece1']) : false;
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -162,9 +156,7 @@ function CoreCmd_Unload()
     if (empty($GLOBALS['args'])) {
         response("Usage {$GLOBALS['CONFIG_CMD_PREFIX']}unload <plugin_name>");
     } else {
-        if (!empty($GLOBALS['piece1'])) {
-            UnloadPlugin($GLOBALS['piece1']);
-        }
+        !empty($GLOBALS['piece1']) ? UnloadPlugin($GLOBALS['piece1']) : false;
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -205,11 +197,11 @@ function CoreCmd_RegisterToBot()
                     response('From now you are on my owner(s) list, enjoy.');
 
                     response("Core Commands: {$GLOBALS['CONFIG_CMD_PREFIX']}load ".
-					             "{$GLOBALS['CONFIG_CMD_PREFIX']}panel ".
-					             "{$GLOBALS['CONFIG_CMD_PREFIX']}pause ".
-					             "{$GLOBALS['CONFIG_CMD_PREFIX']}seen ".
-					             "{$GLOBALS['CONFIG_CMD_PREFIX']}unload ".
-					             "{$GLOBALS['CONFIG_CMD_PREFIX']}unpause");
+                                 "{$GLOBALS['CONFIG_CMD_PREFIX']}panel ".
+                                 "{$GLOBALS['CONFIG_CMD_PREFIX']}pause ".
+                                 "{$GLOBALS['CONFIG_CMD_PREFIX']}seen ".
+                                 "{$GLOBALS['CONFIG_CMD_PREFIX']}unload ".
+                                 "{$GLOBALS['CONFIG_CMD_PREFIX']}unpause");
 
                     response('Owner Commands: '.implode(' ', $GLOBALS['OWNER_PLUGINS']));
                     response('Admin Commands: '.implode(' ', $GLOBALS['ADMIN_PLUGINS']));
@@ -219,7 +211,9 @@ function CoreCmd_RegisterToBot()
                     !empty($GLOBALS['CONFIG_BOT_ADMIN']) ? response("Bot Admin: {$GLOBALS['CONFIG_BOT_ADMIN']}") : false;
 
                     /* give op */
-                    BotOpped() == true ? fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} +o {$GLOBALS['USER']}".N) : false;
+                    if (BotOpped() == true) {
+                        fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} +o {$GLOBALS['USER']}\n");
+                    }
 
                     /* update variable with new owners */
                     $cfg = new IniParser($GLOBALS['configFile']);

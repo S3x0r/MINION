@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,22 +14,22 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+//---------------------------------------------------------------------------------------------------------
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
 function LoadConfig($state = '')
 {
     /* when there is no config from arg */
-    if (!isset($GLOBALS['configFile'])) {
-		$GLOBALS['configFile'] = 'CONFIG.INI';
-	}
+    !isset($GLOBALS['configFile']) ? $GLOBALS['configFile'] = 'CONFIG.INI' : false;
 
     /* if we got config file */
     if (is_file($GLOBALS['configFile'])) {
         $cfg = new IniParser($GLOBALS['configFile']);
 
-        /* load configuration to variables */
+        /* load configuration */
 
         /* BOT */
         $GLOBALS['CONFIG_NICKNAME']       = $cfg->get('BOT', 'nickname');
@@ -37,15 +37,10 @@ function LoadConfig($state = '')
         $GLOBALS['CONFIG_IDENT']          = $cfg->get('BOT', 'ident');
         /* SERVER */
         
-		if (!isset($GLOBALS['CUSTOM_SERVER_AND_PORT'])) {
-            $GLOBALS['CONFIG_SERVER']     = $cfg->get('SERVER', 'server');
-		}
+        !isset($GLOBALS['CUSTOM_SERVER_AND_PORT']) ? $GLOBALS['CONFIG_SERVER'] = $cfg->get('SERVER', 'server') : false;
+        !isset($GLOBALS['CUSTOM_SERVER_AND_PORT']) ? $GLOBALS['CONFIG_PORT'] = $cfg->get('SERVER', 'port') : false;
         
-        if (!isset($GLOBALS['CUSTOM_SERVER_AND_PORT'])) {
-            $GLOBALS['CONFIG_PORT']       = $cfg->get('SERVER', 'port');
-		}
-
-		$GLOBALS['CONFIG_SERVER_PASSWD']  = $cfg->get('SERVER', 'server_password');
+        $GLOBALS['CONFIG_SERVER_PASSWD']  = $cfg->get('SERVER', 'server_password');
         $GLOBALS['CONFIG_TRY_CONNECT']    = $cfg->get('SERVER', 'try_connect');
         $GLOBALS['CONFIG_CONNECT_DELAY']  = $cfg->get('SERVER', 'connect_delay');
         /* OWNER */
@@ -91,9 +86,8 @@ function LoadConfig($state = '')
         /* PROGRAM */
         $GLOBALS['CONFIG_SHOW_LOGO']      = $cfg->get('PROGRAM', 'show_logo');
         /* if switch used */
-        if (empty($GLOBALS['silent_cli'])) {
-            $GLOBALS['silent_mode']       = $cfg->get('PROGRAM', 'silent_mode');
-        }
+        empty($GLOBALS['silent_cli']) ? $GLOBALS['silent_mode'] = $cfg->get('PROGRAM', 'silent_mode') : false;
+
         $GLOBALS['CONFIG_CHECK_UPDATE']   = $cfg->get('PROGRAM', 'check_update');
         $GLOBALS['CONFIG_PLAY_SOUNDS']    = $cfg->get('PROGRAM', 'play_sounds');
         /* DEBUG */
@@ -103,18 +97,16 @@ function LoadConfig($state = '')
         SetDefaultData();
 
         if (!isset($GLOBALS['defaultPwdChanged'])) {
-    		/* Logo & info :) */
+            /* Logo & info :) */
             Logo();
  
             /* Check if there is new version on server */
             CheckUpdateInfo();
 
-			if ($state == 'default') {
-	         	CLI_MSG('Config file missing! Creating default config: CONFIG.INI'.N);
-	        }
-		}
+            ($state == 'default') ? CLI_MSG('Config file missing! Creating default config: CONFIG.INI'.N) : false;
+        }
 
-		/* if default BOT owner(s) password, prompt to change it! */
+        /* if default BOT owner(s) password, prompt to change it! */
         if ($GLOBALS['CONFIG_OWNER_PASSWD'] == '47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed') {
             /* play sound */
             PlaySound('error_conn.mp3');
@@ -149,11 +141,11 @@ function LoadConfig($state = '')
             /* Set first time change variable */
             $GLOBALS['defaultPwdChanged'] = 'yes';
             
-			echo N;
+            echo N;
             CLI_MSG('Password changed!');
           
             /* update owner(s) password */
-			$cfg = new IniParser($GLOBALS['configFile']);
+            $cfg = new IniParser($GLOBALS['configFile']);
             $GLOBALS['CONFIG_OWNER_PASSWD'] = $cfg->get('OWNER', 'owner_password');
         }
 
@@ -162,12 +154,12 @@ function LoadConfig($state = '')
         Line();
     } else {
              /* set default data */
-			 $GLOBALS['CONFIG_SHOW_LOGO']    = 'yes';
+             $GLOBALS['CONFIG_SHOW_LOGO']    = 'yes';
              $GLOBALS['silent_mode']         = 'no';
              $GLOBALS['CONFIG_CHECK_UPDATE'] = 'no';
              $GLOBALS['CONFIG_LOGGING']      = 'yes';
 
-			 /* create default config if missing */
+             /* create default config if missing */
              CreateDefaultConfig('CONFIG.INI');
     }
 }
@@ -341,7 +333,7 @@ show_raw         = \'no\'';
         /* Load config again */
         LoadConfig('default');
     } else { /* read only file system? */
-             CLI_MSG('[ERROR]: Cannot make default config! Exiting');
+             CLI_MSG('[ERROR]: Cannot make default config! Read-Only filesystem? Exiting.');
              WinSleep(6);
              exit;
     }
@@ -356,7 +348,7 @@ class IniParser
     public function __construct($file)
     {
         $this->iniFilename = $file;
-        if ($this->iniParsedArray = parse_ini_file($file, true)) {
+        if ($this->iniParsedArray = @parse_ini_file($file, true)) {
             return true;
         } else {
             return false;

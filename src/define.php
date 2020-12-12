@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,27 +14,33 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '1.0.8');
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
+//---------------------------------------------------------------------------------------------------------
+    define('VER', '1.0.9');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());
     define('PLUGIN_HASH', 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c');
-	define('CORECOUNT', '6'); // How many core commands
+    define('CORECOUNT', '6'); // How many core commands we got
     error_reporting(-1);
 //---------------------------------------------------------------------------------------------------------
 function SetDefaultData()
 {
     /* if variable empty in config load default one */
-    if (empty($GLOBALS['CONFIG_NICKNAME'])) {
-		$GLOBALS['CONFIG_NICKNAME'] = 'minion';
-	}
-	if (empty($GLOBALS['CONFIG_SERVER'])) {
-		$GLOBALS['CONFIG_SERVER'] = 'irc.dal.net';
-	}
-	if (empty($GLOBALS['CONFIG_PORT']) or !is_numeric($GLOBALS['CONFIG_PORT'])) {
+    empty($GLOBALS['CONFIG_NICKNAME'])      ? $GLOBALS['CONFIG_NICKNAME']      = 'minion'                                                                   : false;
+    empty($GLOBALS['CONFIG_SERVER'])        ? $GLOBALS['CONFIG_SERVER']        = 'irc.dal.net'                                                              : false;
+    empty($GLOBALS['CONFIG_OWNERS_PASSWD']) ? $GLOBALS['CONFIG_OWNERS_PASSWD'] = '47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed'         : false;
+    empty($GLOBALS['CONFIG_BOT_RESPONSE'])  ? $GLOBALS['CONFIG_BOT_RESPONSE']  = 'notice'                                                                   : false;
+    empty($GLOBALS['CONFIG_WEB_LOGIN'])     ? $GLOBALS['CONFIG_WEB_LOGIN']     = 'changeme'                                                                 : false;
+    empty($GLOBALS['CONFIG_WEB_PASSWORD'])  ? $GLOBALS['CONFIG_WEB_PASSWORD']  = 'changeme'                                                                 : false;
+    empty($GLOBALS['CONFIG_TIMEZONE'])      ? $GLOBALS['CONFIG_TIMEZONE']      = 'Europe/Warsaw'                                                            : false;
+    empty($GLOBALS['CONFIG_FETCH_SERVER'])  ? $GLOBALS['CONFIG_FETCH_SERVER']  = 'https://raw.githubusercontent.com/S3x0r/minion_repository_plugins/master' : false;
+    empty($GLOBALS['CONFIG_CMD_PREFIX'])    ? $GLOBALS['CONFIG_CMD_PREFIX']    = '!'                                                                        : false;
+
+    if (empty($GLOBALS['CONFIG_PORT']) or !is_numeric($GLOBALS['CONFIG_PORT'])) {
         $GLOBALS['CONFIG_PORT'] = '6667';
     }
     if (empty($GLOBALS['CONFIG_TRY_CONNECT']) or !is_numeric($GLOBALS['CONFIG_TRY_CONNECT'])) {
@@ -42,12 +48,6 @@ function SetDefaultData()
     }
     if (empty($GLOBALS['CONFIG_CONNECT_DELAY']) or !is_numeric($GLOBALS['CONFIG_CONNECT_DELAY'])) {
         $GLOBALS['CONFIG_CONNECT_DELAY'] = '6';
-    }
-    if (empty($GLOBALS['CONFIG_OWNERS_PASSWD'])) {
-        $GLOBALS['CONFIG_OWNERS_PASSWD'] = '47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed';
-    }
-    if (empty($GLOBALS['CONFIG_BOT_RESPONSE'])) {
-        $GLOBALS['CONFIG_BOT_RESPONSE'] = 'notice';
     }
     if (!in_array($GLOBALS['CONFIG_AUTO_OP'], ['yes', 'no'], true)) {
         $GLOBALS['CONFIG_AUTO_OP'] = 'yes';
@@ -60,9 +60,6 @@ function SetDefaultData()
     }
     if (!in_array($GLOBALS['CONFIG_AUTO_JOIN'], ['yes', 'no'], true)) {
         $GLOBALS['CONFIG_AUTO_JOIN'] = 'yes';
-    }
-    if (empty($GLOBALS['CONFIG_CMD_PREFIX'])) {
-        $GLOBALS['CONFIG_CMD_PREFIX'] = '!';
     }
     if (!in_array($GLOBALS['CONFIG_CTCP_RESPONSE'], ['yes', 'no'], true)) {
         $GLOBALS['CONFIG_CTCP_RESPONSE'] = 'yes';
@@ -81,18 +78,6 @@ function SetDefaultData()
     }
     if (!in_array($GLOBALS['CONFIG_LOGGING'], ['yes', 'no'], true)) {
         $GLOBALS['CONFIG_LOGGING'] = 'yes';
-    }
-    if (empty($GLOBALS['CONFIG_WEB_LOGIN'])) {
-        $GLOBALS['CONFIG_WEB_LOGIN'] = 'changeme';
-    }
-    if (empty($GLOBALS['CONFIG_WEB_PASSWORD'])) {
-        $GLOBALS['CONFIG_WEB_PASSWORD'] = 'changeme';
-    }
-    if (empty($GLOBALS['CONFIG_TIMEZONE'])) {
-        $GLOBALS['CONFIG_TIMEZONE'] = 'Europe/Warsaw';
-    }
-    if (empty($GLOBALS['CONFIG_FETCH_SERVER'])) {
-        $GLOBALS['CONFIG_FETCH_SERVER'] = 'https://raw.githubusercontent.com/S3x0r/minion_repository_plugins/master';
     }
     if (!in_array($GLOBALS['silent_mode'], ['yes', 'no'], true)) {
         $GLOBALS['silent_mode'] = 'no';

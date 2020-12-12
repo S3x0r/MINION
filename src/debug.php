@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,9 +14,12 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
 //---------------------------------------------------------------------------------------------------------
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
+//---------------------------------------------------------------------------------------------------------
+
 function DEBUG($where)
 {
   if (isset($where)) {
@@ -85,8 +88,8 @@ function DEBUG($where)
               echo '[DEBUG] USER_HOST: ---'.N;
     }
     if (isset($GLOBALS['CHANNEL_MODES'])) {
-        echo '[DEBUG] CHANNEL_MODES: '.$GLOBALS['CHANNEL_MODES'].N.N;
+        echo '[DEBUG] CHANNEL_MODES: '.$GLOBALS['CHANNEL_MODES'].NN;
     } else {
-              echo '[DEBUG] CHANNEL_MODES: ---'.N.N;
+              echo '[DEBUG] CHANNEL_MODES: ---'.NN;
     }
 }

@@ -39,7 +39,7 @@ function v_connect()
 {
     $GLOBALS['v_addr']   = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
     $GLOBALS['CheckVersion'] = file_get_contents($GLOBALS['v_addr']);
-    $GLOBALS['newdir']   = '../../minion'.$GLOBALS['CheckVersion'];
+    $GLOBALS['newdir']   = "../minion{$GLOBALS['CheckVersion']}";
     $GLOBALS['v_source'] = 'http://github.com/S3x0r/MINION/archive/master.zip';
 
     if (!empty($GLOBALS['CheckVersion'])) {
@@ -145,7 +145,7 @@ function v_extract()
         delete_files('MINION-master/');
 
         //read config and put to new version conf
-        $cfg = new IniParser($GLOBALS['config_file']);
+        $cfg = new IniParser($GLOBALS['configFile']);
         $GLOBALS['CONFIG_NICKNAME']       = $cfg->get("BOT", "nickname");
         $GLOBALS['CONFIG_NAME']           = $cfg->get("BOT", "name");
         $GLOBALS['CONFIG_IDENT']          = $cfg->get("BOT", "ident");
@@ -229,12 +229,18 @@ function v_extract()
         SaveData($new_cf, 'PROGRAM', 'play_sounds', $GLOBALS['CONFIG_PLAY_SOUNDS']);
         SaveData($new_cf, 'DEBUG', 'show_raw', $GLOBALS['CONFIG_SHOW_RAW']);
 
-        //copy CONFIG from old ver
-        copy($GLOBALS['config_file'], $GLOBALS['newdir'].'/OLD_CONFIG.INI');
+        // copy CONFIG from older version
+        copy($GLOBALS['configFile'], $GLOBALS['newdir'].'/OLD_CONFIG.INI');
+
+        // copy DATA folder
+		recurse_copy('DATA', $GLOBALS['newdir'].'/DATA');
+
+		// copy LOGS folder
+		recurse_copy('LOGS', $GLOBALS['newdir'].'/LOGS');
 
         /* give op */
         if (BotOpped() == true) {
-            fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].' +o '.$GLOBALS['USER'].PHP_EOL);
+            fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} +o {$GLOBALS['USER']}".PHP_EOL);
         }
 
         // reconnect to run new version

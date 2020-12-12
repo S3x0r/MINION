@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,8 +14,10 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+//---------------------------------------------------------------------------------------------------------
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
 function SaveData($v1, $v2, $v3, $v4)
@@ -78,7 +80,7 @@ function BotOpped()
     if (isset($GLOBALS['BOT_OPPED'])) {
         return true;
     } else {
-              return false;
+             return false;
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -112,7 +114,7 @@ function TotalLines()
     return array_sum(CountLines());
 }
 //---------------------------------------------------------------------------------------------------------
-function random_str($length)
+function randomString($length)
 {
     $seed = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $str = '';
@@ -155,8 +157,6 @@ function HasAdmin($mask) //TODO: wtf
     $pieces = explode(", ", $admins_c);
 
     if ($mask == null) {
-    }
-    if ($mask == null) {
         return false;
     }
     foreach ($pieces as $piece) {
@@ -173,8 +173,6 @@ function HasOwner($mask) //TODO: wtf
     $pieces = explode(", ", $owners_c);
 
     if ($mask == null) {
-    }
-    if ($mask == null) {
         return false;
     }
     foreach ($pieces as $piece) {
@@ -185,13 +183,13 @@ function HasOwner($mask) //TODO: wtf
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function SaveToFile($file, $data, $f3)
+function SaveToFile($file, $data, $method)
 {
-    $f=fopen($file, $f3);
-    flock($f, 2);
-    fwrite($f, $data);
-    flock($f, 3);
-    fclose($f);
+    $file = @fopen($file, $method);
+    @flock($file, 2);
+    @fwrite($file, $data);
+    @flock($file, 3);
+    @fclose($file);
 }
 //---------------------------------------------------------------------------------------------------------
 function IsSilent()
@@ -217,27 +215,31 @@ function PlaySound($sound)
 //---------------------------------------------------------------------------------------------------------
 function kill($program)
 {
-    $pattern = '~('.$program.')\.exe~i';
-    $tasks = array();
-    exec("tasklist 2>NUL", $tasks);
+    if (!isset($GLOBALS['OS'])) {
+        $pattern = '~('.$program.')\.exe~i';
+        $tasks = array();
+        exec("tasklist 2>NUL", $tasks);
 
-    foreach ($tasks as $task_line) {
-        if (preg_match($pattern, $task_line, $out)) {
-            exec("taskkill /F /IM ".$out[1].".exe 2>NUL");
-            return true;
+        foreach ($tasks as $task_line) {
+            if (preg_match($pattern, $task_line, $out)) {
+                exec("taskkill /F /IM ".$out[1].".exe 2>NUL");
+                return true;
+            }
         }
     }
 }
 //---------------------------------------------------------------------------------------------------------
 function isRunned($program)
 {
-    $pattern = '~('.$program.')\.exe~i';
-    $tasks = array();
-    exec("tasklist 2>NUL", $tasks);
+    if (!isset($GLOBALS['OS'])) {
+        $pattern = '~('.$program.')\.exe~i';
+        $tasks = array();
+        exec("tasklist 2>NUL", $tasks);
 
-    foreach ($tasks as $task_line) {
-        if (preg_match($pattern, $task_line, $out)) {
-            return true;
+        foreach ($tasks as $task_line) {
+            if (preg_match($pattern, $task_line, $out)) {
+                return true;
+            }
         }
     }
 }
@@ -265,7 +267,7 @@ function getPasswd($string = '')
             $psw = `src\php\hide.exe`;
         } else {
                  echo N;
-				 echo '  ERROR: I need \'hide.exe\' file to run!'.N.N,
+                 echo '  ERROR: I need \'hide.exe\' file to run!'.N.N,
                       '  You can download missing files from:'.N,
                       '  https://github.com/S3x0r/MINION/releases'.N.N,
                       '  Terminating program after 10 seconds.'.N.N.'  ';
@@ -282,23 +284,16 @@ function getPasswd($string = '')
 //---------------------------------------------------------------------------------------------------------
 function Statistics()
 {
-    /* don't need to handle errors here, bot is connected so we have internet,
-       if collecting statistics server not working then do nothing... */
+    $ipAddress    = 'http://minionki.com.pl/bot/ip.php';
+    $statsAddress = 'http://minionki.com.pl/bot/stats.php?';
 
-    $ip_addr = 'http://minionki.com.pl/bot/ip.php';
-    $stats_addr = 'http://minionki.com.pl/bot/stats.php?';
-
-    $ip = @file_get_contents($ip_addr);
+    $ip = @file_get_contents($ipAddress);
     
-    /* identify bot session by hashed ip, computer name, bot nickname, name and ident */
-    $bot_stamp = md5($ip.$_SERVER['COMPUTERNAME'].$GLOBALS['BOT_NICKNAME'].$GLOBALS['CONFIG_NAME'].
-                     $GLOBALS['CONFIG_IDENT'].$GLOBALS['CONFIG_SERVER'].VER);
+    /* identify bot session by hashed ip, operating system, bot nickname, name and ident */
+    $botID = hash('sha256', $ip.php_uname().$GLOBALS['BOT_NICKNAME'].$GLOBALS['CONFIG_NAME'].
+                  $GLOBALS['CONFIG_IDENT'].$GLOBALS['CONFIG_SERVER'].VER);
 
-    /* statistic data is only: nickname, server address, bot version */
-    $data = "stamp={$bot_stamp}&nick={$GLOBALS['BOT_NICKNAME']}&server={$GLOBALS['CONFIG_SERVER']}&ver={VER}";
-
-    /* touch crafted link :) */
-    @file($stats_addr.$data);
+    @file($statsAddress."stamp={$botID}&nick={$GLOBALS['BOT_NICKNAME']}&server={$GLOBALS['CONFIG_SERVER']}&ver={VER}");
 }
 //---------------------------------------------------------------------------------------------------------
 function WinSleep($time)

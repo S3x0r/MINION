@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,38 +14,41 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
 //---------------------------------------------------------------------------------------------------------
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
+//---------------------------------------------------------------------------------------------------------
+
 function CheckCliArgs()
 {
     if (isset($_SERVER['argv'][1])) {
         switch ($_SERVER['argv'][1]) {
             case '-h': /* show help */
-                echo N.'  Bot cli commands usage: BOT.php [option]'.N.N,
+                echo N.'  Bot cli commands usage: BOT.php [option]'.NN,
                      '  -c <config_file> loads config'.N, /* config file */
                      '  -h this help'.N, /* help */
                      '  -o connect to specified server: eg: BOT.php -o irc.dal.net 6667'.N, /* server */
                      '  -p <password> hash password to SHA256'.N, /* hash */
                      '  -s silent mode (no output from bot)'.N, /* silent mode */
                      '  -u check if there is new bot version'.N, /* update */
-                     '  -v prints bot version'.N.N; /* version */
+                     '  -v prints bot version'.NN; /* version */
                 exit;
                 break;
 
             case '-c': /* check if config is loaded from -c switch */
-			    if (!empty($_SERVER['argv'][2]) && is_file(getcwd()."\\".$_SERVER['argv'][2])) {
+                if (!empty($_SERVER['argv'][2]) && is_file(getcwd()."\\".$_SERVER['argv'][2])) {
                     $GLOBALS['configFile'] = getcwd()."\\".$_SERVER['argv'][2];
                 } elseif (!empty($_SERVER['argv'][2]) && !is_file(getcwd()."\\".$_SERVER['argv'][2])) {
-                          echo '  [ERROR] Config file does not exist, wrong path?'.N.N;
+                          echo '  [ERROR] Config file does not exist, wrong path?'.NN;
                           WinSleep(6);
                           exit;
                 } elseif (empty($_SERVER['argv'][2])) {
-                          echo '  [ERROR] You need to specify config file! I need some data :)'.N.N;
+                          echo '  [ERROR] You need to specify config file! I need some data :)'.NN;
                           WinSleep(6);
                           exit;
                 }
-				break;
+                break;
 
             case '-o': /* server connect: eg: irc.example.net 6667 */
                 if (!empty($_SERVER['argv'][2]) && !empty($_SERVER['argv'][3]) && is_numeric($_SERVER['argv'][3])) {
@@ -67,8 +70,8 @@ function CheckCliArgs()
                 }
                 break;
 
-            case '-p': /* encrypt password => sha256 */
-                echo N.' I will encrypt your password to SHA256'.N;
+            case '-p': /* hash password => sha256 */
+                echo N.' I will hash your password to SHA256'.N;
                 echo N.' Password: ';
                 $STDIN = fopen('php://stdin', 'r');
                 $pwd = str_replace(' ', '', fread($STDIN, 30));
@@ -119,22 +122,22 @@ function CheckCliArgs()
                             echo N.' New version available!'.N;
                             echo N.' My version: '.VER;
                             echo N.' Version on server: '.$version[0].N;
-                            echo N.' To update BOT msg to bot by typing: !update'.N.N;
+                            echo N.' To update BOT msg to bot by typing: !update'.NN;
                             WinSleep(10);
                             exit;
                         } else {
                                  echo N.' I am checking if there is a newer version of MINION Bot...'.N;
-                                 echo N.' No new update, you have the latest version.'.N.N;
+                                 echo N.' No new update, you have the latest version.'.NN;
                                  WinSleep(4);
                                  exit;
                         }
                     } else {
-                             echo N.' Cannot connect to update server, try next time.'.N.N;
+                             echo N.' Cannot connect to update server, try next time.'.NN;
                              WinSleep(4);
                              exit;
                     }
                 } else {
-                         echo N.' I cannot check for update. I need php_openssl extension to work!'.N.N;
+                         echo N.' I cannot check for update. I need php_openssl extension to work!'.NN;
                          WinSleep(4);
                          exit;
                 }

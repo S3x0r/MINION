@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,15 +14,16 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+//---------------------------------------------------------------------------------------------------------
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
 function Logo()
 {
-    if (!IsSilent()) {
-		if ($GLOBALS['CONFIG_SHOW_LOGO'] == 'yes') {
-            echo "
+    if (!IsSilent() && $GLOBALS['CONFIG_SHOW_LOGO'] == 'yes') {
+        echo "
     B@B@B@B@@@B@B@B@B@B@B@B@@@B@B@B@B@B@@@@@@@B@B@B@B@B@@@B@B
     @B@BGB@B@B@B@B@@@B@@@B@B@B@@@B@B@B@B@B@@@B@B@B@@@B@@@@@B@
     B@B@  :@Bi:@B@B@B@@@B@BGS522s22SXMB@B@B@B@B@B@B@B@@@B@B@B
@@ -57,26 +58,25 @@ function Logo()
         echo N.'                 - MINION '.VER.' | Author: S3x0r -'.N;
         echo '    ---------------------------------------------------------'.N;
              
-        /* os variable */
-        empty($GLOBALS['OS']) ? $system = 'Windows' : $system = 'Linux';
+        /* os var */
+        !isset($GLOBALS['OS']) ? $system = 'Windows' : $system = 'Linux';
 
         /* check if we have needed extensions */
         if (extension_loaded('curl') && extension_loaded('openssl')) {
             echo '                   All needed extensions loaded'.N;
         }
-		
-		if (!extension_loaded('curl')) {
+
+        if (!extension_loaded('curl')) {
             echo "       Extension 'curl' missing, some plugins will not work".N;
         }
-		
-		if (!extension_loaded('openssl')) {
+
+        if (!extension_loaded('openssl')) {
             echo "     Extension 'openssl' missing, some plugins will not work".N;
         }
 
         echo '                    PHP Ver: '.PHP_VER.', OS: '.$system.N;
         echo '    ---------------------------------------------------------'.N;
-        echo '                   Total Lines of code: '.TotalLines().' :)'.N.N.N;
-		}
+        echo '                   Total Lines of code: '.TotalLines().' :)'.NN.N;
 	}
 }
 //---------------------------------------------------------------------------------------------------------

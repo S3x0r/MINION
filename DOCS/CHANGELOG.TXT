@@ -1,4 +1,9 @@
 
+   v1.0.9 changes (12.12.2020):
+   - fixed some errors in Linux os
+   - little code cleanup
+   - read-only check
+
    v1.0.8 changes (23.05.2020):
    - fixed path bugs, you can run bot now from diffrent php loc
    - fixed '-c' argument, config can be now loaded from diffrent loc

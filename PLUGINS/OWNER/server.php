@@ -32,13 +32,8 @@ function plugin_server()
             fputs($GLOBALS['socket'], "QUIT :Changing server...\n");
             CLI_MSG("[BOT] Changing server to: {$GLOBALS['piece1']}:{$GLOBALS['piece2']}", '1');
 
-            if (empty($GLOBALS['OS'])) {
-                system('cd php & php.exe BOT.php -o '.$GLOBALS['piece1'].' '.$GLOBALS['piece2']);
-            }
+            !isset($GLOBALS['OS']) ? system('cd php & php.exe BOT.php -o '.$GLOBALS['piece1'].' '.$GLOBALS['piece2']) : system('php BOT.php -o '.$GLOBALS['piece1'].' '.$GLOBALS['piece2']);
 
-            if (!empty($GLOBALS['OS'])) {
-                system('php BOT.php -o '.$GLOBALS['piece1'].' '.$GLOBALS['piece2']);
-            }
         } elseif (empty($GLOBALS['args'])) {
                   response('You need to specify server address.');
         } elseif (empty($GLOBALS['piece2'])) {
