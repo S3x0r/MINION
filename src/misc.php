@@ -44,15 +44,15 @@ function CheckUpdateInfo()
             if (!empty($CheckVersion)) {
                 $version = explode("\n", $CheckVersion);
                 if ($version[0] > VER) {
-                    echo "             >>>> New version available! ($version[0]) <<<<".N.N.N;
+                    echo "             >>>> New version available! ($version[0]) <<<<".NN.N;
                 } else {
-                         echo "       >>>> No new update, you have the latest version <<<<".N.N.N;
+                         echo "       >>>> No new update, you have the latest version <<<<".NN.N;
                 }
             } else {
-                     echo "            >>>> Cannot connect to update server <<<<".N.N.N;
+                     echo "            >>>> Cannot connect to update server <<<<".NN.N;
             }
         } else {
-                 echo "   ! I cannot check update, i need: php_openssl extension to work !".N.N.N;
+                 echo "   ! I cannot check update, i need: php_openssl extension to work!".NN.N;
         }
     }
 }
@@ -124,7 +124,7 @@ function randomString($length)
     return $str;
 }
 //---------------------------------------------------------------------------------------------------------
-function parse_ex3($position) //TODO: wtf is that?
+function inputFromLine($position)
 {
     $a = $GLOBALS['ex'];
     $current = '';
@@ -134,8 +134,10 @@ function parse_ex3($position) //TODO: wtf is that?
            $current .= $a[$index].' ';
            $index++;
     }
-    $b = preg_replace('/^:/', '', $current, 1);
-    return $b;
+    $string = preg_replace('/^:/', '', $current, 1);
+    $string = substr($string, 0, -1);
+
+    return $string;
 }
 //---------------------------------------------------------------------------------------------------------
 function msg_without_command() //TODO: wtf?
@@ -305,6 +307,15 @@ function WinSleep($time)
 //---------------------------------------------------------------------------------------------------------
 function responsePriv($message)
 {
-	$nick = explode('!', trim($GLOBALS['args']));
+    $nick = explode('!', trim($GLOBALS['args']));
     fputs($GLOBALS['socket'], "PRIVMSG {$nick[0]} :{$message}\n");
+}
+//---------------------------------------------------------------------------------------------------------
+function removeIllegalCharsFromNickname($nickname)
+{
+    /* illegal chars for file */
+    $bad  = [chr(0x5c), '/', ':', '*', '?', '"', '<', '>', '|'];
+    $good = ["@[1]", "@[2]", "@[3]", "@[4]", "@[5]", "@[6]", "@[7]", "@[8]", "@[9]"];
+    
+    return str_replace($bad, $good, $nickname);
 }

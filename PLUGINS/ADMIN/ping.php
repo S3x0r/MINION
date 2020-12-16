@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -15,27 +15,27 @@
  */
 
 //---------------------------------------------------------------------------------------------------------
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-    $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
+    $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = "Pings host/ip: {$GLOBALS['CONFIG_CMD_PREFIX']}ping <host/ip>";
-    $plugin_command = 'ping';
+    $plugin_command     = 'ping';
 
 function plugin_ping()
 {
     try {
         if (OnEmptyArg('ping <host/ip>')) {
-        } else {
-            if (!isset($GLOBALS['OS'])) {
-                $ip = gethostbyname($GLOBALS['args']);
+        } elseif (!isset($GLOBALS['OS'])) {
+                  $ip = gethostbyname($GLOBALS['args']);
 
-                if ((!preg_match('/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/', $ip)) and
-                   (($ip == $GLOBALS['args']) or ($ip === false))) {
-                     response("Unknown host/ip: '{$GLOBALS['args']}'");
-                } else {
-                         $ping = ping($ip);
+                  if ((!preg_match('/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/', $ip)) and
+                     (($ip == $GLOBALS['args']) or ($ip === false))) {
+                       response("Unknown host/ip: '{$GLOBALS['args']}'");
+                  } else {
+                           $ping = ping($ip);
                     if ($ping) {
                         $ping[0] = $GLOBALS['USER'].': '.$ping[0];
                         foreach ($ping as $thisline) {
@@ -43,12 +43,12 @@ function plugin_ping()
                         }
                     }
                 }
-                CLI_MSG("[PLUGIN: ping] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | address: {$GLOBALS['args']}", '1');
             } else {
                      response('This plugin works on windows only at this time.');
             }
+        CLI_MSG("[PLUGIN: ping] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
         }
-    } catch (Exception $e) {
+        catch (Exception $e) {
              CLI_MSG('[ERROR] Exception: '.__FUNCTION__.' '.$e. '1');
     }
 }
@@ -66,5 +66,3 @@ function ping($hostname)
              CLI_MSG('[ERROR] Exception: '.__FUNCTION__.' '.$e, '1');
     }
 }
-
-//TODO: do not ping own host/ip

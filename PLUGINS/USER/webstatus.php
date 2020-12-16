@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -15,27 +15,28 @@
  */
 
 //---------------------------------------------------------------------------------------------------------
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-    $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Shows http status: {$GLOBALS['CONFIG_CMD_PREFIX']}webstatus <number>";
-    $plugin_command = 'webstatus';
+    $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
+    $plugin_description = "Shows http status: {$GLOBALS['CONFIG_CMD_PREFIX']}webstatus <code>";
+    $plugin_command     = 'webstatus';
 
 function plugin_webstatus()
 {
-    if (OnEmptyArg('webstatus <number>')) {
+    if (OnEmptyArg('webstatus <code>')) {
     } else {
              response(httpstatus($GLOBALS['args']));
-
-             CLI_MSG("[PLUGIN: webstatus] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
     }
+
+    CLI_MSG("[PLUGIN: webstatus] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
 }
 
 function httpstatus($args)
 {
-    $codes = array(
+    $codes = [
     "100" => "Continue (1xx Informational)",
     "101" => "Switching Protocols (1xx Informational)",
     "102" => "Processing (1xx Informational, WebDAV, RFC 2518)",
@@ -121,15 +122,13 @@ function httpstatus($args)
     "525" => "SSL Handshake Failed (5xx Server Error, Unofficial, CloudFlare)",
     "526" => "Invalid SSL Certificate (5xx Server Error, Unofficial, CloudFlare)",
     "530" => "Site is frozen (5xx Server Error, Unofficial, Pantheon)"
-    );
+    ];
 
     if ((int)$args < 100 || (int)$args > 599) {
         return 'This is not a valid HTTP status code';
+    } elseif (array_key_exists((int)$args, $codes)) {
+              return (int)$args.' means: '.$codes[(int)$args];
     } else {
-        if (array_key_exists((int)$args, $codes)) {
-            return (int)$args.' means: '.$codes[(int)$args];
-        } else {
             return 'This HTTP status code is not in use';
         }
-    }
 }

@@ -1,4 +1,21 @@
 
+   v1.1.0 changes (16.12.2020):
+   - Plugin: bash - removed
+   - Plugin: gethost - moved to ADMIN
+   - Plugin: hash - we can now hash whole text, no error when unknown algo
+   - Plugin: md5 - code simplified
+   - Plugin: note - fixed bug with empty note, note filename changed to <nick>-<hostname>.txt
+   - Plugin: ripe - moved to ADMIN
+   - Plugin: uptime -  moved to ADMIN
+   - Plugin: wikipedia - changed name to 'wiki', we can now search by whole text
+   - Plugin: youtube - removed
+   - Plugin: ban - prevention against bot/owner/admin ban
+   - Plugin: deop - prevention against owner/admin deop
+   - Plugin: devoice - prevention against bot/owner/admin devoice
+   - Plugin: kick - prevention against owner/admin kick
+   - some cli messages changed
+   - little code cleanup
+
    v1.0.9 changes (12.12.2020):
    - fixed some errors in Linux os
    - little code cleanup

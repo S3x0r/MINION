@@ -37,8 +37,8 @@ function CoreCmd_Seen()
                  $good  = ["@[1]", "@[2]", "@[3]", "@[4]", "@[5]", "@[6]", "@[7]", "@[8]", "@[9]"];
                  $GLOBALS['args'] = str_replace($bad, $good, $GLOBALS['args']);
 
-            is_file("DATA/SEEN/{$GLOBALS['args']}") ?
-                response(file_get_contents("DATA/SEEN/{$GLOBALS['args']}")) : response('No such user in my database.');
+            is_file(DATADIR."/SEEN/{$GLOBALS['args']}") ?
+                response(file_get_contents(DATADIR."/SEEN/{$GLOBALS['args']}")) : response('No such user in my database.');
             
         }
         CLI_MSG("[PLUGIN: seen] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
@@ -47,10 +47,9 @@ function CoreCmd_Seen()
 //---------------------------------------------------------------------------------------------------------
 function SeenSave()
 {
-    !is_dir('DATA')      ? @mkdir('DATA')      : false;
-    !is_dir('DATA/SEEN') ? @mkdir('DATA/SEEN') : false;
+    !is_dir(DATADIR.'/SEEN') ? @mkdir(DATADIR.'/SEEN') : false;
     
-    $seenDataDir = 'DATA/SEEN/';
+    $seenDataDir = DATADIR.'/SEEN/';
 
     substr($GLOBALS['channel'], 0, 1) != '#' ? $chan = $GLOBALS['CONFIG_CNANNEL'] : $chan = $GLOBALS['channel'];
 

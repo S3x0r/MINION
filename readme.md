@@ -66,12 +66,11 @@ You can change prefix in config file.
 |    addowner      | Adds owner host to config file           | !addowner <nick!ident@host>       |  OWNER       | All |
 |    autoop        | Adds host to auto op list in config file | !autoop <nick!ident@host>         |  OWNER/ADMIN | All |
 |    ban           | Ban specified hostname                   | !ban <nick!ident@host>            |  OWNER/ADMIN | All |
-|    bash          | Shows quotes from bash.org               | !bash                             |  ALL         | All |
 |    cham          | Shows random text from file              | !cham <nick>                      |  OWNER/ADMIN | All |
 |    checkupdate   | Checking for updates                     | !checkupdate                      |  OWNER       | All |
 |    deop          | Deops someone                            | !deop <nick>                      |  OWNER/ADMIN | All |
 |    devoice       | Devoice someone                          | !devoice <nick>                   |  OWNER/ADMIN | All |
-|    gethost       | Ip address to hostname                   | !gethost <ip>                     |  ALL         | All |
+|    gethost       | Ip address to hostname                   | !gethost <ip>                     |  OWNER/ADMIN | All |
 |    fetch         | Plugins repository list / get            | !fetch list                       |  OWNER       | All |
 |                  | Downloads plugins from repository        | !fetch get <plugin> <permissions> |  OWNER       | All |
 |    hash          | Changing string to choosed algorithm     | !hash <algo> <string>             |  ALL         | All |
@@ -111,7 +110,7 @@ You can change prefix in config file.
 |    remadmin      | Removes admin from config file           | !remadmin <nick!ident@host>       |  OWNER       | All |
 |    remowner      | Removes owner host from config file      | !remowner <nick!ident@host>       |  OWNER       | All |
 |    restart       | Restarts BOT                             | !restart                          |  OWNER       | All |
-|    ripe          | Checks ip address and show results       | !ripe <ip address>                |  ALL         | All |
+|    ripe          | Checks ip address and show results       | !ripe <ip address>                |  OWNER/ADMIN | All |
 |    save          | Saving to config file                    | !save                             |  OWNER       | All |
 |                  | Saving auto join value in config         | !save auto_join <string>          |  OWNER       | All |
 |                  | Saving auto op value in config           | !save auto_op <string>            |  OWNER       | All |
@@ -143,13 +142,13 @@ You can change prefix in config file.
 |    topic         | Changes topic on channel                 | !topic <string>                   |  OWNER/ADMIN | All |
 |    unload        | Unloads plugin from BOT                  | !unload <plugin>                  |  OWNER       | All |
 |    update        | Updates BOT if new version is available  | !update                           |  OWNER       | All |
-|    uptime        | Shows BOT uptime                         | !uptime                           |  ALL         | All |
+|    uptime        | Shows BOT uptime                         | !uptime                           |  OWNER/ADMIN | All |
 |    unban         | Unban specified user/hostmask            | !unban <nick!ident@host>          |  OWNER/ADMIN | All |
 |    unpause       | Restore BOT from !pause mode             | !unpause                          |  OWNER       | All |
 |    voice         | BOT gives voice                          | !voice <nick>                     |  OWNER/ADMIN | All |
-|    webstatus     | Shows http status info from given number | !webstatus <number>               |  ALL         | All |
+|    webstatus     | Shows http status info from given number | !webstatus <code>                 |  ALL         | All |
 |    webtitle      | Shows webpage titile                     | !webtitle <web address>           |  ALL         | All |
-|    wikipedia     | Search wikipedia                         | !wikipedia <lang> <string>        |  ALL         | All |
+|    wiki          | Search wikipedia                         | !wiki <lang> <string>             |  ALL         | All |
 |    winamp        | Controls winamp                          | !winamp                           |  OWNER       | WIN |
 |                  | Next song                                | !winamp next                      |  OWNER       | WIN |
 |                  | Pause song                               | !winamp pause                     |  OWNER       | WIN |
@@ -157,4 +156,3 @@ You can change prefix in config file.
 |                  | Previous song                            | !winamp prev                      |  OWNER       | WIN |
 |                  | Stop song                                | !winamp stop                      |  OWNER       | WIN |
 |                  | Shows song title                         | !winamp title                     |  OWNER       | WIN |
-|    youtube       | Shows youtube video title from link      | !youtube <link>                   |  ALL         | All |

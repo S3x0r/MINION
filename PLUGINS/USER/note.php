@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -15,22 +15,26 @@
  */
 
 //---------------------------------------------------------------------------------------------------------
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = "Adds a note: {$GLOBALS['CONFIG_CMD_PREFIX']}note help to list commands";
     $plugin_command = 'note';
 
+/* TODO:
+   - fix noteFilename pos
+   - add note show <id>
+   - if no writable system disable plugin
+*/
+
 function plugin_note()
 {
     if (OnEmptyArg('note <help> to list commands')) {
     } else {
-        if (!is_dir('DATA')) {
-            mkdir('DATA');
-        }
-        $GLOBALS['ident'] = "DATA/{$GLOBALS['host']}.txt"; // nie tu
+        $notesFilename = DATADIR."/".removeIllegalCharsFromNickname($GLOBALS['USER'])."-".$GLOBALS['host'].".txt";
     
         switch ($GLOBALS['args']) {
             case 'help':
@@ -43,8 +47,8 @@ function plugin_note()
                 break;
 
             case 'list':
-                if (is_file($GLOBALS['ident'])) {
-                    $currentNotes = fopen($GLOBALS['ident'], "r");
+                if (is_file($notesFilename)) {
+                    $currentNotes = fopen($notesFilename, "r");
                     response('Your Notes:');
                     $count = 1;
                     while (!feof($currentNotes)) {
@@ -57,8 +61,8 @@ function plugin_note()
                 break;
 
             case 'clear':
-                if (is_file($GLOBALS['ident'])) {
-                    unlink($GLOBALS['ident']);
+                if (is_file($notesFilename)) {
+                    unlink($notesFilename);
                     response('Notes Deleted.');
                 } else {
                          response('What to delete? You have no notes yet.');
@@ -69,17 +73,17 @@ function plugin_note()
             case 'add':
                 if (!empty($GLOBALS['piece2'])) {
                     /* if file is empty */
-                    if (is_file($GLOBALS['ident']) && filesize($GLOBALS['ident']) == 0) {
-                        $note = parse_ex3('5');
+                    if (is_file($notesFilename) && filesize($notesFilename) == 0) {
+                        $note = inputFromLine('5');
                       /* if there is no file */
-                    } elseif (!is_file($GLOBALS['ident'])) {
-                              $note = parse_ex3('5');
+                    } elseif (!is_file($notesFilename)) {
+                              $note = inputFromLine('5');
                       /* if file exists and not empty */
-                    } elseif (is_file($GLOBALS['ident']) && filesize($GLOBALS['ident']) != 0) {
-                              $note = "\n".parse_ex3('5');
+                    } elseif (is_file($notesFilename) && filesize($notesFilename) != 0) {
+                              $note = "\n".inputFromLine('5');
                     }
 
-                    $makeNote = fopen($GLOBALS['ident'], "a+");
+                    $makeNote = fopen($notesFilename, "a+");
                     fwrite($makeNote, $note);
                     fclose($makeNote);
                     response('Note added.');
@@ -89,21 +93,29 @@ function plugin_note()
                 break;
 
             case 'del':
-                if (is_file($GLOBALS['ident'])) {
+                if (is_file($notesFilename)) {
                     $writeNotes = '';
-                    $notes = file($GLOBALS['ident'], FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+                    $notes = file($notesFilename, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
                     $i = $GLOBALS['piece2'];
 
                     if (is_numeric((int)$i) && $i > 0) {
                         $j = $i-1;
                         unset($notes[$j]);
 
-                        $newNotes = fopen($GLOBALS['ident'], "w+");
+                        $saveNotes = fopen($notesFilename, "w+");
                         foreach ($notes as $value) {
-                            $writeNotes = $value."\n";
-                            fwrite($newNotes, $writeNotes);
+                                 $writeNotes = $value."\n";
+                                 fwrite($saveNotes, $writeNotes);
                         }
-                        fclose($newNotes);
+                        
+                        $stat = fstat($saveNotes);
+
+                        if ($stat['size'] == 0) {
+                            unlink($notesFilename);
+                        } else {
+                                 ftruncate($saveNotes, $stat['size']-1);
+                                 fclose($saveNotes);
+                        }
 
                         response('Note Deleted.');
                     } else {
@@ -114,6 +126,6 @@ function plugin_note()
                 }
                 break;
         }
-        CLI_MSG("[PLUGIN: note] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
     }
+    CLI_MSG("[PLUGIN: note] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
 }

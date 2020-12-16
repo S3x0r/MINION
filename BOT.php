@@ -59,7 +59,7 @@ foreach ($botCoreFiles as $botCoreFile) {
                   '  You can download missing files from:'.N,
                   '  https://github.com/S3x0r/MINION/releases'.NN,
                   '  Terminating program after 10 seconds.'.NN;
-             WinSleep(10);
+             !isset($GLOBALS['os']) ? sleep(10) : false;
              exit;
     }
 }
@@ -69,6 +69,9 @@ if (!is_writable('BOT.php')) {
     echo "\n Bot has no permissions to save files, Check your permissions! Exiting.";
     WinSleep(7);
     exit;
+} else {
+         !is_dir(LOGSDIR) ? mkdir(LOGSDIR) : false;
+         !is_dir(DATADIR) ? mkdir(DATADIR) : false;
 }
 //---------------------------------------------------------------------------------------------------------
     /* Check if we got cli args */
@@ -77,8 +80,8 @@ if (!is_writable('BOT.php')) {
     /* Load config */
     LoadConfig();
 
-    /* logging init */
-    Logs();
+    /* Logging init */
+    LogsInit();
 
     /* Load plugins */
     LoadPlugins();

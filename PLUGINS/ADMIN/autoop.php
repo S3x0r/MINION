@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -15,13 +15,14 @@
  */
 
 //---------------------------------------------------------------------------------------------------------
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-    $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
+    $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = "Adds host to autoop list in config file: {$GLOBALS['CONFIG_CMD_PREFIX']}autoop <nick!ident@host>";
-    $plugin_command = 'autoop';
+    $plugin_command     = 'autoop';
 
 function plugin_autoop()
 {
@@ -47,8 +48,6 @@ function plugin_autoop()
                      responsePriv('From now you are on my auto op list, enjoy.');
 
                      response("Host: '{$host[0]}' added to auto op list.");
-
-                     CLI_MSG("[PLUGIN: autoop] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | host added: {$GLOBALS['args']}", '1');
             }
         } else {
                  response('Bad input, try: nick!ident@hostname');
@@ -56,4 +55,5 @@ function plugin_autoop()
     } else {
              response('I cannot add myself to auto op list, im already OP MASTER :)');
     }
+    CLI_MSG("[PLUGIN: autoop] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
 }

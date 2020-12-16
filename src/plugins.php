@@ -24,7 +24,7 @@ function LoadPlugins()
 {
     $CountedOwner = count(glob("PLUGINS/OWNER/*.php", GLOB_BRACE));
     $CountedAdmin = count(glob("PLUGINS/ADMIN/*.php", GLOB_BRACE));
-	$CountedUser  = count(glob("PLUGINS/USER/*.php", GLOB_BRACE));
+    $CountedUser  = count(glob("PLUGINS/USER/*.php", GLOB_BRACE));
   
     $GLOBALS['OWNER_PLUGINS'] = null;
     $GLOBALS['ADMIN_PLUGINS'] = null;
@@ -49,16 +49,17 @@ function LoadPlugins()
 
     foreach (glob('PLUGINS/OWNER/*.php') as $pluginName) {
          /* simple verify plugin */
-		if (preg_match("~\b".PLUGIN_HASH."\b~", file_get_contents($pluginName))) {
+         if (preg_match("~\b".PLUGIN_HASH."\b~", file_get_contents($pluginName))) {
             include_once($pluginName);
             $GLOBALS['OWNER_PLUGINS'] .= "{$GLOBALS['CONFIG_CMD_PREFIX']}{$plugin_command} ";
             $pluginName = basename($pluginName, '.php');
             cli("[{$pluginName}] -- {$plugin_description}".N);
         } else {
-                 echo "[ERROR] Not compatible plugin: $pluginName".N;
+                 $pluginName = basename($pluginName, '.php');
+                 echo "[ERROR: {$pluginName}] - Incompatible plugin!".N;
         }
     }
-	echo (count(glob("PLUGINS/OWNER/*.php")) === 0) ? '(no plugins)'.N : false;
+    echo (count(glob("PLUGINS/OWNER/*.php")) === 0) ? '(no plugins)'.N : false;
     Line();
 //---------------------------------------------------------------------------------------------------------
     /* ADMIN PLUGINS */
@@ -73,10 +74,11 @@ function LoadPlugins()
             $pluginName = basename($pluginName, '.php');
             cli("[{$pluginName}] -- {$plugin_description}".N);
         } else {
-                 echo "[ERROR] Not compatible plugin: $pluginName".N;
+                 $pluginName = basename($pluginName, '.php');
+                 echo "[ERROR: {$pluginName}] - Incompatible plugin!".N;
         }
     }
-	echo (count(glob("PLUGINS/ADMIN/*.php")) === 0) ? '(no plugins)'.N : false;
+    echo (count(glob("PLUGINS/ADMIN/*.php")) === 0) ? '(no plugins)'.N : false;
     Line();
 //---------------------------------------------------------------------------------------------------------
     /* USER PLUGINS */
@@ -91,7 +93,8 @@ function LoadPlugins()
             $pluginName = basename($pluginName, '.php');
             cli("[{$pluginName}] -- {$plugin_description}".N);
         } else {
-                 echo "[ERROR] Not compatible plugin: $pluginName".N;
+                 $pluginName = basename($pluginName, '.php');
+                 echo "[ERROR: {$pluginName}] - Incompatible plugin!".N;
         }
     }
 
@@ -125,8 +128,7 @@ function UnloadPlugin($plugin)
                 unset($GLOBALS['OWNER_PLUGINS'][$key]);
                 //TODO: rename function
                 if (!in_array($withPrefix, $GLOBALS['OWNER_PLUGINS'])) {
-                    CLI_MSG("[Plugin]: '{$withoutPrefix}' unloaded by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) |
-					         chan: {$GLOBALS['channel']}", '1');
+                    CLI_MSG("[Plugin]: '{$withoutPrefix}' unloaded by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel:  {$GLOBALS['channel']}", '1');
                     response("Plugin: '{$withoutPrefix}' unloaded.");
                 }
             }

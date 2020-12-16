@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -15,34 +15,35 @@
  */
  
 //---------------------------------------------------------------------------------------------------------
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-    $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
+    $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = "Shows BOT uptime: {$GLOBALS['CONFIG_CMD_PREFIX']}uptime";
-    $plugin_command = 'uptime';
+    $plugin_command     = 'uptime';
 
 function plugin_uptime()
 {
-    $uptimeDate = uptimeCount(microtime(true) - START_TIME);
+    $uptimeTime = uptimeCount(microtime(true) - START_TIME);
 
-    response("I've been running since (".date('d.m.Y, H:i:s', START_TIME).") and been running for {$uptimeDate}");
+    response("I've been running since (".date('d.m.Y, H:i:s', START_TIME).") and been running for {$uptimeTime}");
  
-    CLI_MSG("[PLUGIN: uptime] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
+    CLI_MSG("[PLUGIN: uptime] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
 }
 
-function uptimeCount($seconds)
+function uptimeCount($s)
 {
-    $weeks = (floor($seconds / (60 * 60) / 24)) / 7;
-    $days = (floor($seconds / (60 * 60) / 24)) % 7;
-    $hours = (floor($seconds / (60 * 60))) % 24;
+    $weeks = (floor($s / (60 * 60) / 24)) / 7;
+    $days = (floor($s / (60 * 60) / 24)) % 7;
+    $hours = (floor($s / (60 * 60))) % 24;
 
-    $divisor_for_minutes = $seconds % (60 * 60);
+    $divisor_for_minutes = $s % (60 * 60);
     $minutes = floor($divisor_for_minutes / 60);
 
     $divisor_for_seconds = $divisor_for_minutes % 60;
-    $seconds = ceil($divisor_for_seconds);
+    $s = ceil($divisor_for_seconds);
 
     $result = '';
     
@@ -54,8 +55,8 @@ function uptimeCount($seconds)
     $hours > 1 ? $result .= 's' : false;
     !empty($minutes) && $minutes > 0 ? $result .= ' '.$minutes.' minute' : false;
     $minutes > 1 ? $result .= 's' : false;
-    !empty($seconds) && $seconds > 0 ? $result .= ' '.$seconds.' second' : false;
-    $seconds > 1 ? $result .= 's' : false;
+    !empty($s) && $s > 0 ? $result .= ' '.$s.' second' : false;
+    $s > 1 ? $result .= 's' : false;
 
     return trim($result);
 }

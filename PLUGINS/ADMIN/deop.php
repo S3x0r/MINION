@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -15,24 +15,21 @@
  */
 
 //---------------------------------------------------------------------------------------------------------
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-    $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
+    $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = "Deops someone: {$GLOBALS['CONFIG_CMD_PREFIX']}deop <nick>";
-    $plugin_command = 'deop';
+    $plugin_command     = 'deop';
 
 function plugin_deop()
 {
     if (OnEmptyArg('deop <nick>')) {
-    } else if (BotOpped() == true) {
-		       if ($GLOBALS['args'] != $GLOBALS['BOT_NICKNAME']) {
-                   fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} -o {$GLOBALS['args']}".PHP_EOL);
+    } elseif (BotOpped() == true && $GLOBALS['args'] != $GLOBALS['BOT_NICKNAME'] && $GLOBALS['args'] != $GLOBALS['USER']) {
+              fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} -o {$GLOBALS['args']}".PHP_EOL);
+    }
 
-                   CLI_MSG("[PLUGIN: deop] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | deoped user: {$GLOBALS['args']}", '1');
-			   } else {
-				        response('...');
-			   }
-	}
+    CLI_MSG("[PLUGIN: deop] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
 }

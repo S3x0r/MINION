@@ -141,14 +141,14 @@ function on_kick()
 function on_topic()
 {
     /* topic change */
-    CLI_MSG("* {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) ({$GLOBALS['channel']}) sets topic: ".parse_ex3('3'), '1');
+    CLI_MSG("* {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) ({$GLOBALS['channel']}) sets topic: ".inputFromLine('3'), '1');
 }
 //---------------------------------------------------------------------------------------------------------
 function on_privmsg()
 {
     if ($GLOBALS['ex'][2] == $GLOBALS['BOT_NICKNAME'] && isset($GLOBALS['ex'][3]) && $GLOBALS['ex'][3] == ':register') {
     } else {
-             CLI_MSG("[{$GLOBALS['channel']}] <{$GLOBALS['USER']}> ".parse_ex3('3'), '1');
+             CLI_MSG("[{$GLOBALS['channel']}] <{$GLOBALS['USER']}> ".inputFromLine('3'), '1');
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -219,7 +219,7 @@ function on_nick()
 //---------------------------------------------------------------------------------------------------------
 function on_quit()
 {
-    isset($GLOBALS['ex'][2]) ? $quit = trim(parse_ex3(3)) : $quit = '';
+    isset($GLOBALS['ex'][2]) ? $quit = inputFromLine(3) : $quit = '';
    
     CLI_MSG("* {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) Quit ({$quit})", '1');
 
@@ -264,7 +264,7 @@ function on_324() /* channel modes */
 //---------------------------------------------------------------------------------------------------------
 function on_332() /* topic */
 {
-    CLI_MSG('Topic on: '.parse_ex3('3'), '1');
+    CLI_MSG('Topic on: '.inputFromLine('3'), '1');
 }
 //---------------------------------------------------------------------------------------------------------
 function on_353() /* on channel join inf */

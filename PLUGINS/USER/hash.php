@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -15,26 +15,30 @@
  */
 
 //---------------------------------------------------------------------------------------------------------
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-    $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
+    $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = "Changing string to choosed algorithm: {$GLOBALS['CONFIG_CMD_PREFIX']}hash help to list algorithms";
-    $plugin_command = 'hash';
+    $plugin_command     = 'hash';
+
+/*
+TODO: msg limit cut
+*/
 
 function plugin_hash()
 {
     if (OnEmptyArg('hash help to get algorithms list')) {
     } elseif ($GLOBALS['args'] == 'help') {
               response("Usage: {$GLOBALS['CONFIG_CMD_PREFIX']}hash <algorithm> <string>");
-              response('Valid algos: '.implode(' ', hash_algos()));
+              response('Algos: '.implode(' ', hash_algos()));
+    } elseif (in_array($GLOBALS['piece1'], hash_algos())) {
+              response("{$GLOBALS['piece1']}: ".hash($GLOBALS['piece1'], inputFromLine(5)));
     } else {
-        if (hash($GLOBALS['piece1'], $GLOBALS['piece2'])) {
-            response("{$GLOBALS['piece1']}: ".hash($GLOBALS['piece1'], $GLOBALS['piece2']));
-        } else {
-                 response('Unknown hashing algorithm.');
-        }
-                    CLI_MSG("[PLUGIN: hash] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | string: {$GLOBALS['args']}", '1');
+              response('Unknown hashing algorithm.');
     }
+  
+    CLI_MSG("[PLUGIN: hash] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
 }

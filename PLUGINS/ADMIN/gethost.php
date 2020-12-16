@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -15,25 +15,36 @@
  */
 
 //---------------------------------------------------------------------------------------------------------
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-    $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
+    $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = "Ip address to hostname change: {$GLOBALS['CONFIG_CMD_PREFIX']}gethost <ip>";
-    $plugin_command = 'gethost';
+    $plugin_command     = 'gethost';
+
+/*
+  TODO:
+  - if box hostname 
+*/
 
 function plugin_gethost()
 {
     if (OnEmptyArg('gethost <ip>')) {
     } else {
              $host = @gethostbyaddr(trim($GLOBALS['args']));
-        if (!empty($host) && $host != $GLOBALS['args'] && $GLOBALS['args'] != '127.0.0.1' && $GLOBALS['args'] != '0.0.0.0') {
+        if (!empty($host) &&
+            $host != $GLOBALS['args'] &&
+            substr($GLOBALS['args'], 0, 3) != '127' &&
+            substr($GLOBALS['args'], 0, 3) != '192' &&
+            substr($GLOBALS['args'], 0, 1) != '0') {
+
             response("hostname: $host");
         } elseif ($host == $GLOBALS['args']) {
                   response("Cannot resolve {$GLOBALS['args']}");
         } elseif (empty($host)) {
-                  response('Address is not a valid IPv4 or IPv6 address');
+                  response('Address is not a valid IPv4/IPv6 address');
         }
 
         CLI_MSG("[PLUGIN: gethost] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | {$host}/{$GLOBALS['args']}", '1');

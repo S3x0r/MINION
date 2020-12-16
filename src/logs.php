@@ -20,20 +20,12 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-function Logs()
+function LogsInit()
 {
-    if (!isSilent() && $GLOBALS['CONFIG_LOGGING'] == 'yes') {
-        global $logFile;
-
-        !is_dir('LOGS') ? @mkdir('LOGS') : false;
-
-        /* + computer name to prevent fetch file from panel server */
-        !empty($_SERVER['COMPUTERNAME']) ? $a = $_SERVER['COMPUTERNAME'] : $a = gethostname();
-
-        $logFile = "LOGS/".date('Y.m.d').",{$a}.txt";
+    if (!isSilent() && $GLOBALS['CONFIG_LOGGING'] == 'yes' && is_dir(LOGSDIR)) {
 
         $data = "-------------------------LOG CREATED: ".date('d.m.Y | H:i:s')."-------------------------\r\n";
 
-        SaveToFile($logFile, $data, 'a');
+        SaveToFile($GLOBALS['logFileName'], $data, 'a');
     }
 }

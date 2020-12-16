@@ -233,10 +233,10 @@ function v_extract()
         copy($GLOBALS['configFile'], $GLOBALS['newdir'].'/OLD_CONFIG.INI');
 
         // copy DATA folder
-		recurse_copy('DATA', $GLOBALS['newdir'].'/DATA');
+        recurse_copy(DATADIR, $GLOBALS['newdir'].'/'.DATADIR);
 
-		// copy LOGS folder
-		recurse_copy('LOGS', $GLOBALS['newdir'].'/LOGS');
+        // copy LOGS folder
+        recurse_copy(LOGSDIR, $GLOBALS['newdir'].'/'.LOGSDIR);
 
         /* give op */
         if (BotOpped() == true) {

@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -15,31 +15,32 @@
  */
 
 //---------------------------------------------------------------------------------------------------------
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-    $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
+    $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = "Converts to morse code: {$GLOBALS['CONFIG_CMD_PREFIX']}morse <text>";
-    $plugin_command = 'morse';
+    $plugin_command     = 'morse';
 
 function plugin_morse()
 {
     if (OnEmptyArg('morse <text>')) {
     } else {
               $morseCode = array('a'  =>  '.-', 'b'  =>  '-...', 'c'  =>  '-.-.', 'd'  =>  '-..', 'e'  =>  '.',
-                                  'f'  =>  '..-.', 'g'  =>  '--.', 'h'  =>  '....', 'i'  =>  '..', 'j'  =>  '.---',
-                                  'k'  =>  '-.-', 'l'  =>  '.-..', 'm'  =>  '--', 'n'  =>  '-.', 'o'  =>  '---',
-                                  'p'  =>  '.--.', 'q'  =>  '--.-', 'r'  =>  '.-.', 's'  =>  '...', 't'  =>  '-',
-                                  'u'  =>  '..-', 'v'  =>  '...-', 'w'  =>  '.--', 'x'  =>  '-..-',
-                                  'y'  =>  '-.--', 'z'  =>  '--..', '0'  =>  '-----', '1'  =>  '.----',
-                                  '2'  =>  '..---', '3'  =>  '...--', '4'  =>  '....-', '5'  =>  '.....',
-                                  '6'  =>  '-....', '7'  =>  '--...', '8'  =>  '---..', '9'  =>  '----.',
-                                  '.'  =>  '.-.-.-', ','  =>  '--..--', '?'  =>  '..--..', '\''  =>  '.----.',
-                                  '!'  =>  '-.-.--', '/'  =>  '-..-.', '-'  =>  '-....-', '"'  =>  '.-..-.',
-                                  '('  =>  '-.--.-', ')'  =>  '-.--.-', ' '  =>  '/',);
+                                 'f'  =>  '..-.', 'g'  =>  '--.', 'h'  =>  '....', 'i'  =>  '..', 'j'  =>  '.---',
+                                 'k'  =>  '-.-', 'l'  =>  '.-..', 'm'  =>  '--', 'n'  =>  '-.', 'o'  =>  '---',
+                                 'p'  =>  '.--.', 'q'  =>  '--.-', 'r'  =>  '.-.', 's'  =>  '...', 't'  =>  '-',
+                                 'u'  =>  '..-', 'v'  =>  '...-', 'w'  =>  '.--', 'x'  =>  '-..-',
+                                 'y'  =>  '-.--', 'z'  =>  '--..', '0'  =>  '-----', '1'  =>  '.----',
+                                 '2'  =>  '..---', '3'  =>  '...--', '4'  =>  '....-', '5'  =>  '.....',
+                                 '6'  =>  '-....', '7'  =>  '--...', '8'  =>  '---..', '9'  =>  '----.',
+                                 '.'  =>  '.-.-.-', ','  =>  '--..--', '?'  =>  '..--..', '\''  =>  '.----.',
+                                 '!'  =>  '-.-.--', '/'  =>  '-..-.', '-'  =>  '-....-', '"'  =>  '.-..-.',
+                                 '('  =>  '-.--.-', ')'  =>  '-.--.-', ' '  =>  '/',);
 
-        $string = strtolower(parse_ex3('4'));
+        $string = strtolower(inputFromLine('4'));
         $len = strlen($string);
         $final = null;
         for ($pos = 0; $pos < $len; $pos++) {
@@ -48,8 +49,7 @@ function plugin_morse()
                 $final .= $morseCode[$care]." ";
             }
         }
-        response('Morse: '.rtrim($final));
-
-        CLI_MSG("[PLUGIN: morse] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
+        response($final);
     }
+    CLI_MSG("[PLUGIN: morse] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
 }

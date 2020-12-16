@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -15,16 +15,19 @@
  */
 
 //---------------------------------------------------------------------------------------------------------
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-    $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
+    $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = "Shows random text from file: {$GLOBALS['CONFIG_CMD_PREFIX']}cham <nick>";
-    $plugin_command = 'cham';
+    $plugin_command     = 'cham';
 
 /*
     For use this plugin you must add file to $file var in main bot directory
+    TODO:
+    - simplify
 
 */
 
@@ -42,16 +45,15 @@ function plugin_cham()
 
                 shuffle($texts);
                 $text = $texts[$count++];
-
                 $who = trim($GLOBALS['args']);
 
                 response("{$who}: {$text}");
-
-                CLI_MSG("[PLUGIN: cham] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | to: {$who}", '1');
             } else {
                      response('no file specified to use plugin');
+                     unset($file);
             }
         }
+        CLI_MSG("[PLUGIN: cham] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
     } catch (Exception $e) {
                              CLI_MSG('[ERROR]: Function: '.__FUNCTION__.' failed', '1');
     }

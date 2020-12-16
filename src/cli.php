@@ -151,7 +151,7 @@ function CLI_MSG($message, $save = 0)
         $line = "[".@date('H:i:s')."] {$message}".N;
 
         if (isset($GLOBALS['CONFIG_LOGGING']) && $GLOBALS['CONFIG_LOGGING'] == 'yes' && $save == '1') {
-            SaveToFile($GLOBALS['logFile'], $line, 'a');
+            SaveToFile($GLOBALS['logFileName'], $line, 'a');
         }
 
         echo $line;
