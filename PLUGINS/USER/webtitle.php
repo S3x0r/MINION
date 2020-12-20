@@ -44,5 +44,5 @@ function plugin_webtitle()
                    response('I cannot use this plugin, i need php_openssl extension to work!');
           }
 
-    CLI_MSG("[PLUGIN: webtitle] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
+    cliLog("[PLUGIN: webtitle] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

@@ -1,4 +1,14 @@
 
+   v1.1.1 changes (20.12.2020):
+   - Plugin: leave - fixed bug with channels in capital letters
+   - some messages was present in silent mode, fixed
+   - cli messages changed: [bot], [server], [channel], etc
+   - own input in show_raw mode
+   - file name changed from 'encrypt_password.bat' to 'hash password.bat'
+   - file name changed from 'update_check.bat' to 'update check.bat'
+   - DOCS/Cli Arguments.txt updated
+   - many small changes/core
+
    v1.1.0 changes (16.12.2020):
    - Plugin: bash - removed
    - Plugin: gethost - moved to ADMIN

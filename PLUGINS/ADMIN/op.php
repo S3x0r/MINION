@@ -28,8 +28,8 @@ function plugin_op()
 {
     if (OnEmptyArg('op <nick>')) {
     } elseif (BotOpped() == true) {
-             fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} +o {$GLOBALS['args']}".PHP_EOL);
+             toServer("MODE ".getBotChannel()." +o {$GLOBALS['args']}");
     }
 
-    CLI_MSG("[PLUGIN: op] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
+    cliLog("[PLUGIN: op] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

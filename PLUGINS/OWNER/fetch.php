@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -15,13 +15,14 @@
  */
 
 //---------------------------------------------------------------------------------------------------------
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-    $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
+    $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = "Downloads plugins from repository: {$GLOBALS['CONFIG_CMD_PREFIX']}fetch for help";
-    $plugin_command = 'fetch';
+    $plugin_command     = 'fetch';
 
 function plugin_fetch()
 {
@@ -70,8 +71,6 @@ function plugin_fetch()
                                     LoadPlugin($GLOBALS['piece2']);
 
                                     response('Plugin added.');
-
-                                    CLI_MSG("[PLUGIN: fetch] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']} | chan: {$GLOBALS['channel']} | plugin: '{$GLOBALS['piece2']}' {$GLOBALS['piece3']}", '1');
                                 } else {
                                          response('No such plugin in repository.');
                                 }
@@ -90,4 +89,6 @@ function plugin_fetch()
                  response('I cannot use this plugin, i need php_openssl extension to work!');
         }
     }
+
+    cliLog("[PLUGIN: fetch] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

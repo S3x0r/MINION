@@ -26,43 +26,36 @@
 
 function plugin_ping()
 {
-    try {
-        if (OnEmptyArg('ping <host/ip>')) {
-        } elseif (!isset($GLOBALS['OS'])) {
-                  $ip = gethostbyname($GLOBALS['args']);
+    if (OnEmptyArg('ping <host/ip>')) {
+    } elseif (!isset($GLOBALS['OS'])) {
+              $ip = gethostbyname($GLOBALS['args']);
 
-                  if ((!preg_match('/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/', $ip)) and
-                     (($ip == $GLOBALS['args']) or ($ip === false))) {
-                       response("Unknown host/ip: '{$GLOBALS['args']}'");
-                  } else {
-                           $ping = ping($ip);
-                    if ($ping) {
-                        $ping[0] = $GLOBALS['USER'].': '.$ping[0];
-                        foreach ($ping as $thisline) {
-                                 response($thisline);
-                        }
+              if ((!preg_match('/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/', $ip)) and
+                 (($ip == $GLOBALS['args']) or ($ip === false))) {
+                   response("Unknown host/ip: '{$GLOBALS['args']}'");
+              } else {
+                       $ping = ping($ip);
+                if ($ping) {
+                    $ping[0] = $GLOBALS['USER'].': '.$ping[0];
+                    foreach ($ping as $thisline) {
+                             response($thisline);
                     }
                 }
-            } else {
-                     response('This plugin works on windows only at this time.');
             }
-        CLI_MSG("[PLUGIN: ping] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
+        } else {
+                 response('This plugin works on windows only at this time.');
         }
-        catch (Exception $e) {
-             CLI_MSG('[ERROR] Exception: '.__FUNCTION__.' '.$e. '1');
-    }
+
+    cliLog("[PLUGIN: ping] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }
 
 function ping($hostname)
 {
-    try {
-           exec('ping '.escapeshellarg($hostname), $list);
-        if (isset($list[4])) {
-            return(array($list[2], $list[3], $list[4]));
-        } else {
-                  return(array($list[2], $list[3]));
-        }
-    } catch (Exception $e) {
-             CLI_MSG('[ERROR] Exception: '.__FUNCTION__.' '.$e, '1');
+    exec('ping '.escapeshellarg($hostname), $list);
+    
+    if (isset($list[4])) {
+        return([$list[2], $list[3], $list[4]]);
+    } else {
+             return([$list[2], $list[3]]);
     }
 }

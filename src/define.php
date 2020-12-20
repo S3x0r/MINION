@@ -19,16 +19,21 @@
   exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '1.1.0');
+    define('VER', '1.1.1');
 //---------------------------------------------------------------------------------------------------------
     define('START_TIME', time());
     define('PHP_VER', phpversion());
     define('PLUGIN_HASH', 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c');
-    define('CORECOUNT', '6'); // How many core commands we got
+    
+    /* core commands count */
+    define('CORECOUNT', '6');
     
     /* directory names */
     define('LOGSDIR', 'LOGS');
     define('DATADIR', 'DATA');
+
+    /* check version url */
+    define('VERSION_URL', 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT');
 
     /* logs filename */
     !empty($_SERVER['COMPUTERNAME']) ? $computerNameORhostname = $_SERVER['COMPUTERNAME'] : $computerNameORhostname = gethostname();

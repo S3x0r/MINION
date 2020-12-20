@@ -28,8 +28,8 @@ function plugin_voice()
 {
     if (OnEmptyArg('voice <nick>')) {
     } else if (BotOpped() == true) {
-               fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} +v {$GLOBALS['args']}".PHP_EOL);
+               toServer("MODE ".getBotChannel()." +v {$GLOBALS['args']}");
     }
-   
-    CLI_MSG("[PLUGIN: voice] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
+
+    cliLog("[PLUGIN: voice] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

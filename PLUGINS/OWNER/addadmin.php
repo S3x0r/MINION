@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -15,20 +15,21 @@
  */
 
 //---------------------------------------------------------------------------------------------------------
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-    $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
+    $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = "Add host to admin list in config: {$GLOBALS['CONFIG_CMD_PREFIX']}addadmin <nick!ident@host>";
-    $plugin_command = 'addadmin';
+    $plugin_command     = 'addadmin';
 
 function plugin_addadmin()
 {
-    $nick_ex = explode('!', trim($GLOBALS['args']));
+    $nick = explode('!', trim($GLOBALS['args']));
 
     if (OnEmptyArg('addadmin <nick!ident@hostname>')) {
-    } elseif ($nick_ex[0] != $GLOBALS['BOT_NICKNAME']) {
+    } elseif ($nick[0] != getBotNickname()) {
         if (preg_match('/^(.+?)!(.+?)@(.+?)$/', $GLOBALS['args'], $host)) {
             LoadData($GLOBALS['configFile'], 'ADMIN', 'admin_list');
  
@@ -44,19 +45,19 @@ function plugin_addadmin()
                 $GLOBALS['CONFIG_ADMIN_LIST'] = $cfg->get("ADMIN", "admin_list");
 
                 /* inform user about adding */
-                fputs($GLOBALS['socket'], "PRIVMSG {$nick_ex[0]} :From now you are on my ADMIN(S) list, enjoy.\n");
-                fputs($GLOBALS['socket'], "PRIVMSG {$nick_ex[0]} :Core Commands: {$GLOBALS['CONFIG_CMD_PREFIX']}seen\n");
-                fputs($GLOBALS['socket'], "PRIVMSG {$nick_ex[0]} :Admin Commands: ".implode(' ', $GLOBALS['ADMIN_PLUGINS'])."\n");
-                fputs($GLOBALS['socket'], "PRIVMSG {$nick_ex[0]} :User Commands: ".implode(' ', $GLOBALS['USER_PLUGINS'])."\n");
+                toServer("PRIVMSG {$nick[0]} :From now you are on my ADMIN(S) list, enjoy.");
+                toServer("PRIVMSG {$nick[0]} :Core Commands: {$GLOBALS['CONFIG_CMD_PREFIX']}seen");
+                toServer("PRIVMSG {$nick[0]} :Admin Commands: ".implode(' ', $GLOBALS['ADMIN_PLUGINS']));
+                toServer("PRIVMSG {$nick[0]} :User Commands: ".implode(' ', $GLOBALS['USER_PLUGINS']));
 
                 response("Host: '{$host[0]}' added to admin list.");
-            
-                CLI_MSG("[PLUGIN: addadmin] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | admin added: {$host[0]}", '1');
             }
         } else {
                  response('Bad input, try: nick!ident@hostname');
         }
     } else {
-             response('I cannot add myself to admins, im already master :)');
+             response("I'm already a master!");
     }
+
+    cliLog("[PLUGIN: addadmin] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

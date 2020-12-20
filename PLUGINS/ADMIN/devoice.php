@@ -27,9 +27,9 @@
 function plugin_devoice()
 {
     if (OnEmptyArg('devoice <nick>')) {
-    } elseif (BotOpped() == true && $GLOBALS['args'] != $GLOBALS['BOT_NICKNAME'] && $GLOBALS['args'] != $GLOBALS['USER']) {
-              fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} -v {$GLOBALS['args']}".PHP_EOL);
+    } elseif (BotOpped() == true && $GLOBALS['args'] != getBotNickname() && $GLOBALS['args'] != $GLOBALS['USER']) {
+              toServer("MODE ".getBotChannel()." -v {$GLOBALS['args']}");
     }
    
-    CLI_MSG("[PLUGIN: devoice] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
+    cliLog("[PLUGIN: devoice] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

@@ -46,7 +46,7 @@ function plugin_gethost()
         } elseif (empty($host)) {
                   response('Address is not a valid IPv4/IPv6 address');
         }
-
-        CLI_MSG("[PLUGIN: gethost] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | {$host}/{$GLOBALS['args']}", '1');
     }
+
+    cliLog("[PLUGIN: gethost] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

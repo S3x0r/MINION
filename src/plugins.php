@@ -32,19 +32,19 @@ function LoadPlugins()
 
 //---------------------------------------------------------------------------------------------------------
     /* CORE PLUGINS */
-    cli('>>> Core Commands ('.CORECOUNT.') <<<'.N);
+    cli('>>> Core Commands ('.CORECOUNT.') <<<');
     Line();
-    cli('[load] -- Loads specified plugins to BOT: !load <plugin>'.N);
-    cli('[panel] -- Starts web admin panel for BOT: !panel help'.N);
-    cli('[pause] -- Pause all BOT activity: !pause'.N);
-    cli('[seen] -- Check specified user when was last seen on channel: !seen <nickname>'.N);
-    cli('[unload] -- Unloads specified plugin from BOT: !unload <plugin>'.N);
-    cli('[unpause] -- Restore BOT from pause mode: !unpause'.N);
+    cli('[load] -- Loads specified plugins to BOT: !load <plugin>');
+    cli('[panel] -- Starts web admin panel for BOT: !panel help');
+    cli('[pause] -- Pause all BOT activity: !pause');
+    cli('[seen] -- Check specified user when was last seen on channel: !seen <nickname>');
+    cli('[unload] -- Unloads specified plugin from BOT: !unload <plugin>');
+    cli('[unpause] -- Restore BOT from pause mode: !unpause');
 
     Line();
 //---------------------------------------------------------------------------------------------------------
     /* OWNER PLUGINS */
-    cli(">>> Owner Plugins ({$CountedOwner}) <<<".N);
+    cli(">>> Owner Plugins ({$CountedOwner}) <<<");
     Line();
 
     foreach (glob('PLUGINS/OWNER/*.php') as $pluginName) {
@@ -53,17 +53,17 @@ function LoadPlugins()
             include_once($pluginName);
             $GLOBALS['OWNER_PLUGINS'] .= "{$GLOBALS['CONFIG_CMD_PREFIX']}{$plugin_command} ";
             $pluginName = basename($pluginName, '.php');
-            cli("[{$pluginName}] -- {$plugin_description}".N);
+            cli("[{$pluginName}] -- {$plugin_description}");
         } else {
                  $pluginName = basename($pluginName, '.php');
-                 echo "[ERROR: {$pluginName}] - Incompatible plugin!".N;
+                 cli("[ERROR: {$pluginName}] - Incompatible plugin!");
         }
     }
-    echo (count(glob("PLUGINS/OWNER/*.php")) === 0) ? '(no plugins)'.N : false;
+    (count(glob("PLUGINS/OWNER/*.php")) === 0) ? cli("(no plugins)") : false;
     Line();
 //---------------------------------------------------------------------------------------------------------
     /* ADMIN PLUGINS */
-    cli(">>> Admin Plugins ({$CountedAdmin}) <<<".N);
+    cli(">>> Admin Plugins ({$CountedAdmin}) <<<");
     Line();
 
     foreach (glob('PLUGINS/ADMIN/*.php') as $pluginName) {
@@ -72,17 +72,17 @@ function LoadPlugins()
             include_once($pluginName);
             $GLOBALS['ADMIN_PLUGINS'] .= "{$GLOBALS['CONFIG_CMD_PREFIX']}{$plugin_command} ";
             $pluginName = basename($pluginName, '.php');
-            cli("[{$pluginName}] -- {$plugin_description}".N);
+            cli("[{$pluginName}] -- {$plugin_description}");
         } else {
                  $pluginName = basename($pluginName, '.php');
-                 echo "[ERROR: {$pluginName}] - Incompatible plugin!".N;
+                 cli("[ERROR: {$pluginName}] - Incompatible plugin!");
         }
     }
-    echo (count(glob("PLUGINS/ADMIN/*.php")) === 0) ? '(no plugins)'.N : false;
+    (count(glob("PLUGINS/ADMIN/*.php")) === 0) ? cli("(no plugins)") : false;
     Line();
 //---------------------------------------------------------------------------------------------------------
     /* USER PLUGINS */
-    cli(">>> User Plugins ({$CountedUser}) <<<".N);
+    cli(">>> User Plugins ({$CountedUser}) <<<");
     Line();
 
     foreach (glob('PLUGINS/USER/*.php') as $pluginName) {
@@ -91,18 +91,18 @@ function LoadPlugins()
             include_once($pluginName);
             $GLOBALS['USER_PLUGINS'] .= "{$GLOBALS['CONFIG_CMD_PREFIX']}{$plugin_command} ";
             $pluginName = basename($pluginName, '.php');
-            cli("[{$pluginName}] -- {$plugin_description}".N);
+            cli("[{$pluginName}] -- {$plugin_description}");
         } else {
                  $pluginName = basename($pluginName, '.php');
-                 echo "[ERROR: {$pluginName}] - Incompatible plugin!".N;
+                 cli("[ERROR: {$pluginName}] - Incompatible plugin!");
         }
     }
 
-    echo (count(glob("PLUGINS/USER/*.php")) === 0) ? '(no plugins)'.N : false;
+    (count(glob("PLUGINS/USER/*.php")) === 0) ? cli("(no plugins)") : false;
 
     $allCounted = CORECOUNT+$CountedOwner+$CountedAdmin+$CountedUser;
     
-    cli("----------------------------------------------------------Total: ({$allCounted})---------".N);
+    cli("----------------------------------------------------------Total: ({$allCounted})---------");
     unset($allCounted);
 
 //---------------------------------------------------------------------------------------------------------
@@ -128,7 +128,7 @@ function UnloadPlugin($plugin)
                 unset($GLOBALS['OWNER_PLUGINS'][$key]);
                 //TODO: rename function
                 if (!in_array($withPrefix, $GLOBALS['OWNER_PLUGINS'])) {
-                    CLI_MSG("[Plugin]: '{$withoutPrefix}' unloaded by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel:  {$GLOBALS['channel']}", '1');
+                    cliLog("[Plugin]: '{$withoutPrefix}' unloaded by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
                     response("Plugin: '{$withoutPrefix}' unloaded.");
                 }
             }
@@ -137,8 +137,7 @@ function UnloadPlugin($plugin)
                 unset($GLOBALS['ADMIN_PLUGINS'][$key]);
                 //TODO: rename function
                 if (!in_array($withPrefix, $GLOBALS['ADMIN_PLUGINS'])) {
-                    CLI_MSG("[Plugin]: '{$withoutPrefix}' unloaded by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) |
-					         chan: {$GLOBALS['channel']}", '1');
+                    cliLog("[Plugin]: '{$withoutPrefix}' unloaded by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
                     response("Plugin: '{$withoutPrefix}' unloaded.");
                 }
             }
@@ -147,17 +146,16 @@ function UnloadPlugin($plugin)
                 unset($GLOBALS['USER_PLUGINS'][$key]);
                 //TODO: rename function
                 if (!in_array($withPrefix, $GLOBALS['USER_PLUGINS'])) {
-                    CLI_MSG("[Plugin]: '{$withoutPrefix}' unloaded by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) |
-					        chan: {$GLOBALS['channel']}", '1');
+                    cliLog("[Plugin]: '{$withoutPrefix}' unloaded by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
                     response("Plugin: '{$withoutPrefix}' unloaded.");
                 }
             }
         } else {
-                  CLI_MSG("[PLUGIN]: No such plugin to unload: '{$GLOBALS['piece1']}' by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan:  {$GLOBALS['channel']}", '1');
+                  cliLog("[PLUGIN]: No such plugin to unload: '{$GLOBALS['piece1']}' by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
                   response('No such plugin to unload');
         }
     } catch (Exception $e) {
-                              CLI_MSG('[ERROR]: Function: '.__FUNCTION__.' failed', '1');
+                              cliLog('[ERROR]: Function: '.__FUNCTION__.' failed');
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -184,8 +182,7 @@ function LoadPlugin($plugin)
  
                 /* bot responses */
                 response("Plugin: '{$withoutPrefix}' loaded.");
-                CLI_MSG("[PLUGIN]: Plugin Loaded: '{$withoutPrefix}', by: {$GLOBALS['USER']}
-				        ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
+                cliLog("[PLUGIN]: Plugin Loaded: '{$withoutPrefix}', by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
             } elseif (is_file("PLUGINS/ADMIN/{$withoutPrefix}.php")) {
                 /* include that file */
                 include_once("PLUGINS/ADMIN/{$withoutPrefix}.php");
@@ -195,8 +192,7 @@ function LoadPlugin($plugin)
 
                 /* bot responses */
                 response("Plugin: '{$withoutPrefix}' loaded.");
-                CLI_MSG("[PLUGIN]: Plugin Loaded: '{$withoutPrefix}', by: {$GLOBALS['USER']}
-				        ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
+                cliLog("[PLUGIN]: Plugin Loaded: '{$withoutPrefix}', by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
             } elseif (is_file("PLUGINS/USER/{$withoutPrefix}.php")) {
                 /* include that file */
                 include_once("PLUGINS/USER/{$withoutPrefix}.php");
@@ -206,13 +202,12 @@ function LoadPlugin($plugin)
 
                 /* bot responses */
                 response("Plugin: '{$withoutPrefix}' loaded.");
-                CLI_MSG("[PLUGIN]: Plugin Loaded: '{$withoutPrefix}', by: {$GLOBALS['USER']}
-				        ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
+                cliLog("[PLUGIN]: Plugin Loaded: '{$withoutPrefix}', by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
             } else {
                      response('No such plugin to load.');
             }
         }
     } catch (Exception $e) {
-                             CLI_MSG('[ERROR]: Function: '.__FUNCTION__.' failed', '1');
+                             cliLog('[ERROR]: Function: '.__FUNCTION__.' failed');
     }
 }

@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -15,25 +15,26 @@
  */
 
 //---------------------------------------------------------------------------------------------------------
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-    $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
+    $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = "Connect to specified server: {$GLOBALS['CONFIG_CMD_PREFIX']}server <server ip>";
-    $plugin_command = 'server';
+    $plugin_command     = 'server';
 
 function plugin_server()
 {
     if (OnEmptyArg('server <server port>')) {
-    } else {
-        if (!empty($GLOBALS['args']) && !empty($GLOBALS['piece2']) && is_numeric($GLOBALS['piece2'])) {
-            $GLOBALS['disconnected'] = 'yes';
-            fputs($GLOBALS['socket'], "QUIT :Changing server...\n");
-            CLI_MSG("[BOT] Changing server to: {$GLOBALS['piece1']}:{$GLOBALS['piece2']}", '1');
+    } elseif (!empty($GLOBALS['args']) && !empty($GLOBALS['piece2']) && is_numeric($GLOBALS['piece2'])) {
+              $GLOBALS['disconnected'] = 'yes';
+              
+              cliLog("[bot] Changing server to: {$GLOBALS['piece1']}:{$GLOBALS['piece2']}");
 
-            !isset($GLOBALS['OS']) ? system('cd php & php.exe BOT.php -o '.$GLOBALS['piece1'].' '.$GLOBALS['piece2']) : system('php BOT.php -o '.$GLOBALS['piece1'].' '.$GLOBALS['piece2']);
-
+              toServer("QUIT :Changing server...");
+  
+              !isset($GLOBALS['OS']) ? system('cd src & cd php & php.exe ../../BOT.php -o '.$GLOBALS['piece1'].' '.$GLOBALS['piece2']) : system('php  BOT.php -o '.$GLOBALS['piece1'].' '.$GLOBALS['piece2']);
         } elseif (empty($GLOBALS['args'])) {
                   response('You need to specify server address.');
         } elseif (empty($GLOBALS['piece2'])) {
@@ -41,7 +42,6 @@ function plugin_server()
         } elseif (!is_numeric($GLOBALS['piece2'])) {
                   response('Wrong server port.');
         }
-    }
-}
 
-//TODO: not working
+    cliLog("[PLUGIN: server] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
+}

@@ -3,10 +3,10 @@
 
  Bot cli commands usage: BOT.php [argument]
 
- -c <config_file> loads config
- -h this help
- -o connect to specified server: eg: BOT.php irc.dal.net 6667
- -p <password> hash password to SHA256
- -s silent mode (no output from bot)
- -u check if there is new bot version on server
- -v prints bot version
+ -c <config_file>   # loads config
+ -h                 # this help
+ -o <server> <port> # connect to specified server: eg: BOT.php irc.dal.net 6667
+ -p <password>      # hash password to SHA256
+ -s                 # silent mode (no output from bot)
+ -u                 # check if there is new bot version on server
+ -v                 # prints bot version

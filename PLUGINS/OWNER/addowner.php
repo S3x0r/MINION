@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -15,20 +15,21 @@
  */
 
 //---------------------------------------------------------------------------------------------------------
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-    $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
+    $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = "Add owner host to config: {$GLOBALS['CONFIG_CMD_PREFIX']}addowner <nick!ident@hostname>";
-    $plugin_command = 'addowner';
+    $plugin_command     = 'addowner';
 
 function plugin_addowner()
 {
     $nick_ex = explode('!', trim($GLOBALS['args']));
 
     if (OnEmptyArg('addowner <nick!ident@hostname>')) {
-    } elseif ($nick_ex[0] != $GLOBALS['BOT_NICKNAME']) {
+    } elseif ($nick_ex[0] != getBotNickname()) {
         if (preg_match('/^(.+?)!(.+?)@(.+?)$/', $GLOBALS['args'], $host)) {
             LoadData($GLOBALS['configFile'], 'OWNER', 'bot_owners');
  
@@ -53,22 +54,20 @@ function plugin_addowner()
                 $GLOBALS['CONFIG_AUTO_OP_LIST'] = $cfg->get('OWNER', 'auto_op_list');
 
                 /* inform user about it */
-                fputs($GLOBALS['socket'], "PRIVMSG {$nick_ex[0]} :From now you are on my owner(s)/auto op(s) lists, enjoy.\n");
+                toServer("PRIVMSG {$nick_ex[0]} :From now you are on my owner(s)/auto op(s) lists, enjoy.");
 
-                fputs($GLOBALS['socket'], "PRIVMSG {$nick_ex[0]} :Core Commands: ".
-                      $GLOBALS['CONFIG_CMD_PREFIX']."load ".
-                      $GLOBALS['CONFIG_CMD_PREFIX']."panel ".
-                      $GLOBALS['CONFIG_CMD_PREFIX']."pause ".
-                      $GLOBALS['CONFIG_CMD_PREFIX']."seen ".
-                      $GLOBALS['CONFIG_CMD_PREFIX']."unload ".
-                      $GLOBALS['CONFIG_CMD_PREFIX']."unpause\n");
+                toServer("PRIVMSG {$nick_ex[0]} :Core Commands: ".
+                         $GLOBALS['CONFIG_CMD_PREFIX']."load ".
+                         $GLOBALS['CONFIG_CMD_PREFIX']."panel ".
+                         $GLOBALS['CONFIG_CMD_PREFIX']."pause ".
+                         $GLOBALS['CONFIG_CMD_PREFIX']."seen ".
+                         $GLOBALS['CONFIG_CMD_PREFIX']."unload ".
+                         $GLOBALS['CONFIG_CMD_PREFIX']."unpause");
 
-                fputs($GLOBALS['socket'], "PRIVMSG {$nick_ex[0]} :Owner Commands: ".implode(' ', $GLOBALS['OWNER_PLUGINS'])."\n");
-                fputs($GLOBALS['socket'], "PRIVMSG {$nick_ex[0]} :User Commands: ".implode(' ', $GLOBALS['USER_PLUGINS'])."\n");
+                toServer("PRIVMSG {$nick_ex[0]} :Owner Commands: ".implode(' ', $GLOBALS['OWNER_PLUGINS']));
+                toServer("PRIVMSG {$nick_ex[0]} :User Commands: ".implode(' ', $GLOBALS['USER_PLUGINS']));
 
                 response("Host: '{$host[0]}' added to owner list.");
-
-                CLI_MSG("[PLUGIN: addowner] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | owner host: {$host[0]}", '1');
             }
         } else {
                  response('Bad input, try: nick!ident@hostname');
@@ -76,4 +75,6 @@ function plugin_addowner()
     } else {
              response('I cannot add myself to owners, im already master :)');
     }
+
+    cliLog("[PLUGIN: addowner] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

@@ -27,9 +27,9 @@
 function plugin_deop()
 {
     if (OnEmptyArg('deop <nick>')) {
-    } elseif (BotOpped() == true && $GLOBALS['args'] != $GLOBALS['BOT_NICKNAME'] && $GLOBALS['args'] != $GLOBALS['USER']) {
-              fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} -o {$GLOBALS['args']}".PHP_EOL);
+    } elseif (BotOpped() == true && $GLOBALS['args'] != getBotNickname() && $GLOBALS['args'] != $GLOBALS['USER']) {
+              toServer("MODE ".getBotChannel()." -o {$GLOBALS['args']}");
     }
 
-    CLI_MSG("[PLUGIN: deop] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
+    cliLog("[PLUGIN: deop] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

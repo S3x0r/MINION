@@ -58,7 +58,6 @@ if (isset($_COOKIE['xs']) && $_COOKIE['xs'] == hash('sha512', $password.$salt)) 
  echo '<h4>'.$GLOBALS['CONFIG_BOT_ADMIN'].'</h4></h3><br>';
  echo '<h3>Bot owners:<br>';
  echo '<h4>'.$GLOBALS['CONFIG_OWNERS'].'</h4></h3><br>';
- echo '<h3>Channel(s):<br>'.$GLOBALS['WEB_BOT_CHANNELS'].'</h3><br>';
 
 ?>
       </div>

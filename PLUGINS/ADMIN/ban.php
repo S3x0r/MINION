@@ -31,12 +31,12 @@ function plugin_ban()
            $nickToBan = explode('!', trim($GLOBALS['args']));
            $nickToBan = $nickToBan[0];
 
-           if ($nickToBan != $GLOBALS['BOT_NICKNAME'] && $nickToBan != $GLOBALS['USER']) {
-               fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} +b {$GLOBALS['args']}".PHP_EOL);
+           if ($nickToBan != getBotNickname() && $nickToBan != $GLOBALS['USER']) {
+               toServer("MODE ".getBotChannel()." +b {$GLOBALS['args']}");
            }
 
            unset($nickToBan);
     }
 
-    CLI_MSG("[PLUGIN: ban] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
+    cliLog("[PLUGIN: ban] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

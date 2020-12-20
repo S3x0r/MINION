@@ -22,43 +22,43 @@
 
 function DEBUG($where)
 {
-  if (isset($where)) {
+    if (isset($where)) {
         echo N.N."[DEBUG] WHERE: $where".N;
     } else {
               echo N.N.'[DEBUG] ---'.N;
     }
-    if (isset($GLOBALS['ex'][0])) {
-        echo '[DEBUG] EX0: '.$GLOBALS['ex'][0].N;
+    if (isset($GLOBALS['rawDataArray'][0])) {
+        echo '[DEBUG] EX0: '.$GLOBALS['rawDataArray'][0].N;
     } else {
               echo '[DEBUG] EX0: ---'.N;
     }
-    if (isset($GLOBALS['ex'][1])) {
-        echo '[DEBUG] EX1: '.$GLOBALS['ex'][1].N;
+    if (isset($GLOBALS['rawDataArray'][1])) {
+        echo '[DEBUG] EX1: '.$GLOBALS['rawDataArray'][1].N;
     } else {
               echo '[DEBUG] EX1: ---'.N;
     }
-    if (isset($GLOBALS['ex'][2])) {
-        echo '[DEBUG] EX2: '.$GLOBALS['ex'][2].N;
+    if (isset($GLOBALS['rawDataArray'][2])) {
+        echo '[DEBUG] EX2: '.$GLOBALS['rawDataArray'][2].N;
     } else {
               echo '[DEBUG] EX2: ---'.N;
     }
-    if (isset($GLOBALS['ex'][3])) {
-        echo '[DEBUG] EX3: '.$GLOBALS['ex'][3].N;
+    if (isset($GLOBALS['rawDataArray'][3])) {
+        echo '[DEBUG] EX3: '.$GLOBALS['rawDataArray'][3].N;
     } else {
               echo '[DEBUG] EX3: ---'.N;
     }
-    if (isset($GLOBALS['ex'][4])) {
-        echo '[DEBUG] EX4: '.$GLOBALS['ex'][4].N;
+    if (isset($GLOBALS['rawDataArray'][4])) {
+        echo '[DEBUG] EX4: '.$GLOBALS['rawDataArray'][4].N;
     } else {
               echo '[DEBUG] EX4: ---'.N;
     }
-    if (isset($GLOBALS['ex'][5])) {
-        echo '[DEBUG] EX5: '.$GLOBALS['ex'][5].N;
+    if (isset($GLOBALS['rawDataArray'][5])) {
+        echo '[DEBUG] EX5: '.$GLOBALS['rawDataArray'][5].N;
     } else {
               echo '[DEBUG] EX5: ---'.N;
     }
-    if (isset($GLOBALS['ex'][6])) {
-        echo '[DEBUG] EX6: '.$GLOBALS['ex'][6].N;
+    if (isset($GLOBALS['rawDataArray'][6])) {
+        echo '[DEBUG] EX6: '.$GLOBALS['rawDataArray'][6].N;
     } else {
               echo '[DEBUG] EX6: ---'.N;
     }

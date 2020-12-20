@@ -20,9 +20,9 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-    $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
+    $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = "Changing string to MD5: {$GLOBALS['CONFIG_CMD_PREFIX']}md5 <string>";
-    $plugin_command = 'md5';
+    $plugin_command     = 'md5';
 
 function plugin_md5()
 {
@@ -31,5 +31,5 @@ function plugin_md5()
              response(md5(inputFromLine(4)));
     }
   
-    CLI_MSG("[PLUGIN: md5] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
+    cliLog("[PLUGIN: md5] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

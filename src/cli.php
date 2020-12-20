@@ -26,13 +26,13 @@ function CheckCliArgs()
         switch ($_SERVER['argv'][1]) {
             case '-h': /* show help */
                 echo N.'  Bot cli commands usage: BOT.php [option]'.NN,
-                     '  -c <config_file> loads config'.N, /* config file */
-                     '  -h this help'.N, /* help */
-                     '  -o connect to specified server: eg: BOT.php -o irc.dal.net 6667'.N, /* server */
-                     '  -p <password> hash password to SHA256'.N, /* hash */
-                     '  -s silent mode (no output from bot)'.N, /* silent mode */
-                     '  -u check if there is new bot version'.N, /* update */
-                     '  -v prints bot version'.NN; /* version */
+                     '  -c <config_file>   # loads config'.N, /* config file */
+                     '  -h                 # this help'.N, /* help */
+                     '  -o <server> <port> # connect to specified server: eg: BOT.php -o irc.dal.net 6667'.N, /* server */
+                     '  -p <password>      # hash password to SHA256'.N, /* hash */
+                     '  -s                 # silent mode (no output from bot)'.N, /* silent mode */
+                     '  -u                 # check if there is new bot version'.N, /* update */
+                     '  -v                 # prints bot version'.NN; /* version */
                 exit;
                 break;
 
@@ -53,7 +53,7 @@ function CheckCliArgs()
             case '-o': /* server connect: eg: irc.example.net 6667 */
                 if (!empty($_SERVER['argv'][2]) && !empty($_SERVER['argv'][3]) && is_numeric($_SERVER['argv'][3])) {
                     $GLOBALS['CUSTOM_SERVER_AND_PORT'] = 'yes';
-					$GLOBALS['CONFIG_SERVER'] = $_SERVER['argv'][2];
+                    $GLOBALS['CONFIG_SERVER'] = $_SERVER['argv'][2];
                     $GLOBALS['CONFIG_PORT'] = $_SERVER['argv'][3];
                 } elseif (empty($_SERVER['argv'][2])) {
                           echo N.' ERROR: You need to specify server address, Exiting.';
@@ -82,7 +82,7 @@ function CheckCliArgs()
                        $pwd = fread($STDIN, 30);
                 }
                 $hash = hash('sha256', rtrim($pwd, "\n\r"));
-                echo N." Hashed: {$hash}".N.N;
+                echo N." Hashed password: {$hash}".N.N;
 
                 echo N.' Save password to Config file? (yes/no)'.N;
                 echo ' > ';
@@ -114,14 +114,13 @@ function CheckCliArgs()
 
             case '-u': /* update check */
                 if (extension_loaded('openssl')) {
-                    $addr = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
-                    $CheckVersion = @file_get_contents($addr);
-                    if (!empty($CheckVersion)) {
-                        $version = explode("\n", $CheckVersion);
-                        if ($version[0] > VER) {
+                    $file = @file_get_contents(VERSION_URL);
+                    if (!empty($file)) {
+                        $serverVersion = explode("\n", $file);
+                        if ($serverVersion[0] > VER) {
                             echo N.' New version available!'.N;
                             echo N.' My version: '.VER;
-                            echo N.' Version on server: '.$version[0].N;
+                            echo N.' Version on server: '.$serverVersion[0].N;
                             echo N.' To update BOT msg to bot by typing: !update'.NN;
                             WinSleep(10);
                             exit;
@@ -145,15 +144,16 @@ function CheckCliArgs()
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function CLI_MSG($message, $save = 0)
+function Line()
 {
     if (!IsSilent()) {
-        $line = "[".@date('H:i:s')."] {$message}".N;
-
-        if (isset($GLOBALS['CONFIG_LOGGING']) && $GLOBALS['CONFIG_LOGGING'] == 'yes' && $save == '1') {
-            SaveToFile($GLOBALS['logFileName'], $line, 'a');
-        }
-
-        echo $line;
+        echo '------------------------------------------------------------------------------'.N;
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function cli($data)
+{
+    if (!IsSilent()) {
+        echo $data.N;
     }
 }

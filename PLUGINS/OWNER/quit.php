@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -15,28 +15,29 @@
  */
 
 //---------------------------------------------------------------------------------------------------------
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-    $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
+    $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = "Shutdown BOT: {$GLOBALS['CONFIG_CMD_PREFIX']}quit";
-    $plugin_command = 'quit';
+    $plugin_command     = 'quit';
 
 function plugin_quit()
 {
     /* give op before restart */
     if (BotOpped() == true) {
-        fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} +o {$GLOBALS['USER']}".PHP_EOL);
+        toServer("MODE ".getBotChannel()." +o {$GLOBALS['USER']}");
     }
 
     response('Bye!');
     
-    fputs($GLOBALS['socket'], "QUIT :http://github.com/S3x0r/MINION\n");
+    toServer("QUIT :http://github.com/S3x0r/MINION");
 
-    CLI_MSG("[PLUGIN: quit] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
-    CLI_MSG('Terminating BOT.', '1');
-    CLI_MSG('------------------LOG ENDED: '.date('d.m.Y | H:i:s')."------------------\r\n", '1');
+    cliLog("[PLUGIN: quit] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
+    cliLog('Terminating BOT.');
+    cliLog('------------------LOG ENDED: '.date('d.m.Y | H:i:s')."------------------\r\n");
 
     exit;
 }

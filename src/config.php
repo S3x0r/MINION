@@ -35,8 +35,8 @@ function LoadConfig($state = '')
         $GLOBALS['CONFIG_NICKNAME']       = $cfg->get('BOT', 'nickname');
         $GLOBALS['CONFIG_NAME']           = $cfg->get('BOT', 'name');
         $GLOBALS['CONFIG_IDENT']          = $cfg->get('BOT', 'ident');
+
         /* SERVER */
-        
         !isset($GLOBALS['CUSTOM_SERVER_AND_PORT']) ? $GLOBALS['CONFIG_SERVER'] = $cfg->get('SERVER', 'server') : false;
         !isset($GLOBALS['CUSTOM_SERVER_AND_PORT']) ? $GLOBALS['CONFIG_PORT'] = $cfg->get('SERVER', 'port') : false;
         
@@ -103,7 +103,7 @@ function LoadConfig($state = '')
             /* Check if there is new version on server */
             CheckUpdateInfo();
 
-            ($state == 'default') ? CLI_MSG('Config file missing! Creating default config: CONFIG.INI'.N) : false;
+            ($state == 'default') ? cliLog('[bot] Config file missing! Creating default config: CONFIG.INI'.N) : false;
         }
 
         /* if default BOT owner(s) password, prompt to change it! */
@@ -112,8 +112,8 @@ function LoadConfig($state = '')
             PlaySound('error_conn.mp3');
 
             /* show info about it */
-            CLI_MSG('Default BOT owner(s) password detected!');
-            CLI_MSG('For security please change it (password can not contain spaces)');
+            cliLog('[bot] Default BOT owner(s) password detected!');
+            cliLog('[bot] For security please change it (password can not contain spaces)');
 
             /* Set new password */
             $newPassword = getPasswd('['.@date('H:i:s').'] New Password: ');
@@ -142,7 +142,7 @@ function LoadConfig($state = '')
             $GLOBALS['defaultPwdChanged'] = 'yes';
             
             echo N;
-            CLI_MSG('Password changed!');
+            cliLog('[bot] Password changed!');
           
             /* update owner(s) password */
             $cfg = new IniParser($GLOBALS['configFile']);
@@ -150,7 +150,7 @@ function LoadConfig($state = '')
         }
 
         /* from what file config loaded */
-        CLI_MSG("Configuration Loaded from: {$GLOBALS['configFile']}");
+        cliLog("[bot] Configuration Loaded from: {$GLOBALS['configFile']}");
         Line();
     } else {
              /* set default data */
@@ -333,7 +333,7 @@ show_raw         = \'no\'';
         /* Load config again */
         LoadConfig('default');
     } else { /* read only file system? */
-             CLI_MSG('[ERROR]: Cannot make default config! Read-Only filesystem? Exiting.');
+             cliLog('[bot]: Error! Cannot make default config! Read-Only filesystem? Exiting.');
              WinSleep(6);
              exit;
     }

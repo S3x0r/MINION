@@ -28,8 +28,8 @@ function plugin_unban()
 {
     if (OnEmptyArg('unban <nick!ident@host>')) {
     } else if (BotOpped() == true) {
-               fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} -b {$GLOBALS['args']}".PHP_EOL);
+               toServer("MODE ".getBotChannel()." -b {$GLOBALS['args']}");
     }
    
-    CLI_MSG("[PLUGIN: unban] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
+    cliLog("[PLUGIN: unban] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

@@ -22,20 +22,25 @@
 
 function Connect()
 {
-    CLI_MSG("Connecting to: {$GLOBALS['CONFIG_SERVER']}, port: {$GLOBALS['CONFIG_PORT']}\n", '1');
+    /* check if panel is not closed */
+    if (isRunned('serv')) {
+        kill('serv') ? cliLog('[bot] Detected Panel still running, Terminating.') : false;
+    }
+
+    cliLog("[bot] Connecting to: {$GLOBALS['CONFIG_SERVER']}, port: {$GLOBALS['CONFIG_PORT']}\n");
 
     $i = 0;
 
     while ($i++ <= $GLOBALS['CONFIG_TRY_CONNECT']) {
            $GLOBALS['socket'] = @fsockopen($GLOBALS['CONFIG_SERVER'], $GLOBALS['CONFIG_PORT']);
         if ($GLOBALS['socket'] == false) {
-            CLI_MSG("Cannot connect to: {$GLOBALS['CONFIG_SERVER']}:{$GLOBALS['CONFIG_PORT']}, trying again ({$i}/{$GLOBALS['CONFIG_TRY_CONNECT']})...", '1');
+            cliLog("[bot] Cannot connect to: {$GLOBALS['CONFIG_SERVER']}:{$GLOBALS['CONFIG_PORT']}, trying again ({$i}/{$GLOBALS['CONFIG_TRY_CONNECT']})...");
             PlaySound('error_conn.mp3');
-			usleep($GLOBALS['CONFIG_CONNECT_DELAY'] * 1000000); // reconnect delay
+            usleep($GLOBALS['CONFIG_CONNECT_DELAY'] * 1000000); // reconnect delay
             if ($i == $GLOBALS['CONFIG_TRY_CONNECT']) {
-                CLI_MSG('Unable to connect to server, exiting program.', '1');
+                cliLog('[bot] Unable to connect to server, exiting program.');
                 PlaySound('error_conn.mp3');
-				exit;
+                exit;
             }
         } else {
                  Identify();
@@ -45,15 +50,13 @@ function Connect()
 //---------------------------------------------------------------------------------------------------------
 function Identify()
 {
-    /* send PASSWORD / NICK / USER to server */
-
     if (!empty($GLOBALS['CONFIG_SERVER_PASSWD'])) {
-        fputs($GLOBALS['socket'], "PASS {$GLOBALS['CONFIG_SERVER_PASSWD']}\n");
+        toServer("PASS {$GLOBALS['CONFIG_SERVER_PASSWD']}");
     }
 
-    fputs($GLOBALS['socket'], "NICK {$GLOBALS['CONFIG_NICKNAME']}\n");
+    toServer("NICK {$GLOBALS['CONFIG_NICKNAME']}");
 
-    fputs($GLOBALS['socket'], "USER {$GLOBALS['CONFIG_IDENT']} 8 * :{$GLOBALS['CONFIG_NAME']}\n");
+    toServer("USER {$GLOBALS['CONFIG_IDENT']} 8 * :{$GLOBALS['CONFIG_NAME']}");
 
     SocketLoop();
 }
@@ -70,23 +73,18 @@ function SocketLoop()
     global $piece2;
     global $piece3;
     global $piece4;
-    global $ex;
+    global $rawDataArray;
     global $rawcmd;
     global $mask;
-    global $srv_msg;
-
-    global $BOT_CHANNELS;
     global $BOT_NICKNAME;
-    global $channel;
     global $I_USE_RND_NICKNAME;
 //---------------------------------------------------------------------------------------------------------
     /* set initial */
-    $USER_IDENT = null;
-    $host  = null;
-    $BOT_NICKNAME = $GLOBALS['CONFIG_NICKNAME'];
-    $channel = $GLOBALS['CONFIG_CNANNEL'];
+    $USER_IDENT         = null;
+    $host               = null;
+    $BOT_NICKNAME       = null;
+    $mask               = null;
     $I_USE_RND_NICKNAME = null;
-    $BOT_CHANNELS = array();
 
     /* save data for web panel */
     WebEntry();
@@ -94,85 +92,73 @@ function SocketLoop()
     /* main socket loop */
     while (1) {
         while (!feof($GLOBALS['socket'])) {
-            /* timers */
+
+            /* start timers */
             empty($GLOBALS['stop']) ? StartTimers() : false;
 
-            $mask = null;
-
-            /* get data */
-            $data = fgets($GLOBALS['socket'], 1024);
+            /* get raw data */
+            $rawData = fgets($GLOBALS['socket'], 1024);
 //---------------------------------------------------------------------------------------------------------
             if ($GLOBALS['CONFIG_SHOW_RAW'] == 'yes') {
                 if (!IsSilent()) {
-                    echo $data;
+                    echo $rawData;
                 }
             }
 //---------------------------------------------------------------------------------------------------------
-            /* put data to array */
-            $ex = explode(' ', trim($data));
-
-            /* get channel from ex[2] */
-            isset($ex[2]) ? $channel = str_replace(':#', '#', $ex[2]) : false;
-
+            /* put raw data to array */
+            $rawDataArray = explode(' ', trim($rawData));
 //---------------------------------------------------------------------------------------------------------
             /* PING PONG game */
-            if (isset($ex[0]) && $ex[0] == 'PING') {
+            if (isset($rawDataArray[0]) && $rawDataArray[0] == 'PING') {
                 on_server_ping();
             }
 //---------------------------------------------------------------------------------------------------------
-            /* parse vars from ex[0] */
-            if (preg_match('/^:(.*)\!(.*)\@(.*)$/', $ex[0], $source)) {
+            /* parse vars from rawDataArray[0] */
+            if (preg_match('/^:(.*)\!(.*)\@(.*)$/', $rawDataArray[0], $source)) {
                 $USER        = $source[1];
                 $USER_IDENT  = $source[2];
                 $host        = $source[3];
                 $USER_HOST   = $USER_IDENT.'@'.$host;
-            } else {
-                    /* put server to var and remove ':' */
-                    $server = str_replace(':', '', $ex[0]);
             }
 //---------------------------------------------------------------------------------------------------------
             /* ON JOIN */
-            isset($ex[1]) && $ex[1] == 'JOIN' ? on_join() : false;
+            isset($rawDataArray[1]) && $rawDataArray[1] == 'JOIN' ? on_join() : false;
 
             /* ON PART */
-            isset($ex[1]) && $ex[1] == 'PART' ? on_part() : false;
+            isset($rawDataArray[1]) && $rawDataArray[1] == 'PART' ? on_part() : false;
 
             /* ON KICK */
-            isset($ex[1]) && $ex[1] == 'KICK' ? on_kick() : false;
+            isset($rawDataArray[1]) && $rawDataArray[1] == 'KICK' ? on_kick() : false;
 
             /* ON TOPIC */
-            isset($ex[1]) && $ex[1] == 'TOPIC' ? on_topic() : false;
+            isset($rawDataArray[1]) && $rawDataArray[1] == 'TOPIC' ? on_TOPIC() : false;
 
             /* ON PRIVMSG */
-            isset($ex[1]) && $ex[1] == 'PRIVMSG' ? on_privmsg() : false;
-
-            /* ON MODE */
-            isset($ex[1]) && $ex[1] == 'MODE' ? on_mode() : false;
+            isset($rawDataArray[1]) && $rawDataArray[1] == 'PRIVMSG' ? on_privmsg() : false;
 
             /* ON NICK */
-            isset($ex[1]) && $ex[1] == 'NICK' ? on_nick() : false;
+            isset($rawDataArray[1]) && $rawDataArray[1] == 'NICK' ? on_nick() : false;
 
             /* ON QUIT */
-            isset($ex[1]) && $ex[1] == 'QUIT' ? on_quit() : false;
+            isset($rawDataArray[1]) && $rawDataArray[1] == 'QUIT' ? on_quit() : false;
 
+            /* ON MODE */
+            isset($rawDataArray[1]) && $rawDataArray[1] == 'MODE' ? on_mode() : false;
 //---------------------------------------------------------------------------------------------------------
-            if (count($ex) < 4) {
+            if (count($rawDataArray) < 4) {
                 continue;
             }
-
-            $rawcmd = explode(':', $ex[3]);
+//---------------------------------------------------------------------------------------------------------
+            isset($rawDataArray[3]) ? $rawcmd = explode(':', $rawDataArray[3]) : false;
 
             /* Case sensitive */
             isset($rawcmd[1]) ? $rawcmd[1] = strtolower($rawcmd[1]) : false;
 
-            $args = null; for ($i=4; $i < count($ex); $i++) {
-                $args .= $ex[$i].'';
+            $args = null; for ($i=4; $i < count($rawDataArray); $i++) {
+                $args .= $rawDataArray[$i].'';
             }
-            $args1 = null; for ($i=4; $i < count($ex); $i++) {
-                $args1 .= $ex[$i].' ';
-            }
-            $srv_msg = null; for ($i=3; $i < count($ex); $i++) {
-                $srv_msg .= str_replace(':', '', $ex[$i]).' ';
+            $args1 = null; for ($i=4; $i < count($rawDataArray); $i++) {
+                $args1 .= $rawDataArray[$i].' ';
             }
 
             isset($USER) ? $mask = $USER.'!'.$USER_IDENT.'@'.$host : false;
@@ -184,8 +170,8 @@ function SocketLoop()
             isset($pieces[2]) ? $piece3 = $pieces[2] : $piece3 = '';
             isset($pieces[3]) ? $piece4 = $pieces[3] : $piece4 = '';
 //---------------------------------------------------------------------------------------------------------
-            if (isset($ex[1])) {
-                switch ($ex[1]) {
+            if (isset($rawDataArray[1])) {
+                switch ($rawDataArray[1]) {
                     case '001': /* server welcome message */
                         on_001();
                         break;
@@ -197,6 +183,9 @@ function SocketLoop()
                         break;
                     case '303': /* ison */
                         on_303();
+                        break;
+                    case '331': /* topic */
+                        on_331();
                         break;
                     case '332': /* topic */
                         on_332();
@@ -218,6 +207,9 @@ function SocketLoop()
                         break;
                     case '353': /* on channel join inf */
                         on_353();
+                        break;
+                    case '366': /* on end names list */
+                        on_366();
                         break;
                     case '471': /* if +limit on channel */
                         on_471();
@@ -270,7 +262,7 @@ function SocketLoop()
 
                 /* Core command: "register 'password'" */
                 if (isset($rawcmd[1]) && $rawcmd[1] == 'register') {
-                    if ($GLOBALS['ex'][2] == $GLOBALS['BOT_NICKNAME']) {
+                    if ($rawDataArray[2] == getBotNickname()) {
                         CoreCmd_RegisterToBot();
                     }
                 }
@@ -303,40 +295,8 @@ function SocketLoop()
         }
         /* if disconected */
         if (empty($GLOBALS['disconnected'])) {
-            CLI_MSG("Cannot connect to: {$GLOBALS['CONFIG_SERVER']}:{$GLOBALS['CONFIG_PORT']}, trying again...", '1');
+            cliLog("[bot] Cannot connect to: {$GLOBALS['CONFIG_SERVER']}:{$GLOBALS['CONFIG_PORT']}, trying again...");
             Connect();
-        }
-    }
-}
-//---------------------------------------------------------------------------------------------------------
-function set_channel_modes()
-{
-    if ($GLOBALS['CONFIG_KEEPCHAN_MODES'] == 'yes') {
-        fputs($GLOBALS['socket'], 'MODE '.$GLOBALS['channel'].N);
-    
-        if (BotOpped() == true) {
-            if (isset($GLOBALS['CHANNEL_MODES']) && $GLOBALS['CHANNEL_MODES'] != $GLOBALS['CONFIG_CHANNEL_MODES']) {
-                sleep(1);
-                fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} -{$GLOBALS['CHANNEL_MODES']}\n");
-                sleep(1);
-                fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} +{$GLOBALS['CONFIG_CHANNEL_MODES']}\n");
-            }
-            if (empty($GLOBALS['CHANNEL_MODES'])) {
-                if (!empty($GLOBALS['CONFIG_CHANNEL_MODES'])) {
-                    sleep(1);
-                    fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} +{$GLOBALS['CONFIG_CHANNEL_MODES']}\n");
-                }
-            }
-        }
-    }
-}
-//---------------------------------------------------------------------------------------------------------
-function set_bans() /* set ban from config list */
-{
-    if (!empty($GLOBALS['CONFIG_BAN_LIST'])) {
-        $ban_list = explode(', ', $GLOBALS['CONFIG_BAN_LIST']);
-        foreach ($ban_list as $ban_address) {
-            fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} +b {$ban_address}\n");
         }
     }
 }
@@ -345,29 +305,82 @@ function response($msg)
 {
     switch ($GLOBALS['CONFIG_BOT_RESPONSE']) {
         case 'channel':
-            fputs($GLOBALS['socket'], "PRIVMSG {$GLOBALS['channel']} :$msg\n");
+            toServer("PRIVMSG ".getBotChannel()." :$msg");
             usleep($GLOBALS['CONFIG_CHANNEL_DELAY'] * 1000000);
             break;
 
         case 'notice':
-            fputs($GLOBALS['socket'], "NOTICE {$GLOBALS['USER']} :$msg\n");
+            toServer("NOTICE {$GLOBALS['USER']} :$msg");
             usleep($GLOBALS['CONFIG_NOTICE_DELAY'] * 1000000);
             break;
 
         case 'priv':
-            fputs($GLOBALS['socket'], "PRIVMSG {$GLOBALS['USER']} :$msg\n");
+            toServer("PRIVMSG {$GLOBALS['USER']} :$msg");
             usleep($GLOBALS['CONFIG_PRIVATE_DELAY'] * 1000000);
             break;
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function privateMSG($msg)
+function privateMsg($message)
 {
-    fputs($GLOBALS['socket'], "PRIVMSG {$GLOBALS['USER']} :$msg\n");
+    toServer("PRIVMSG {$GLOBALS['USER']} :$msg");
     usleep($GLOBALS['CONFIG_PRIVATE_DELAY'] * 1000000);
 }
 //---------------------------------------------------------------------------------------------------------
 function joinChannel($channel)
 {
-    fputs($GLOBALS['socket'], "JOIN {$channel}\n");
+    toServer("JOIN {$channel}");
+}
+//---------------------------------------------------------------------------------------------------------
+function toServer($data)
+{   
+    if ($GLOBALS['CONFIG_SHOW_RAW'] == 'yes' && !IsSilent()) {
+        echo $data.N;
+    }
+
+    fputs($GLOBALS['socket'], "{$data}\n");
+}
+//---------------------------------------------------------------------------------------------------------
+function msgFromServer()
+{
+    $msg = null;
+    
+    for ($i=3; $i < count($GLOBALS['rawDataArray']); $i++) {
+         $msg .= str_replace(':', '', $GLOBALS['rawDataArray'][$i]).' ';
+    }
+
+    return $msg;
+}
+//---------------------------------------------------------------------------------------------------------
+function getBotNickname()
+{
+    if (isset($GLOBALS['BOT_NICKNAME']) && !empty($GLOBALS['BOT_NICKNAME'])) {
+        return $GLOBALS['BOT_NICKNAME'];
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function setBotNickname($nickname)
+{
+    $GLOBALS['BOT_NICKNAME'] = $nickname;
+}
+//---------------------------------------------------------------------------------------------------------
+function getBotModes()
+{
+    if (isset($GLOBALS['BOT_MODES']) && !empty($GLOBALS['BOT_MODES'])) {
+        return $GLOBALS['BOT_MODES'];
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function getServerName()
+{
+    if (isset($GLOBALS['serverName']) && !empty($GLOBALS['serverName'])) {
+        return $GLOBALS['serverName'];
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function getBotChannel()
+{
+    if (isset($GLOBALS['BOT_CHANNEL']) && !empty($GLOBALS['BOT_CHANNEL'])) {
+        return $GLOBALS['BOT_CHANNEL'];
+    }
 }

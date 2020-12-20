@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -15,30 +15,30 @@
  */
 
 //---------------------------------------------------------------------------------------------------------
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-    $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
+    $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = "Updates the BOT if new version is available: {$GLOBALS['CONFIG_CMD_PREFIX']}update";
-    $plugin_command = 'update';
+    $plugin_command     = 'update';
 
 //------------------------------------------------------------------------------------------------
 function plugin_update()
 {
     if (extension_loaded('openssl')) {
         v_connect();
-
-        CLI_MSG("[PLUGIN: update] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
     } else {
              response('I cannot use this plugin, i need php_openssl extension to work!');
     }
+
+    cliLog("[PLUGIN: update] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }
 //------------------------------------------------------------------------------------------------
 function v_connect()
 {
-    $GLOBALS['v_addr']   = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
-    $GLOBALS['CheckVersion'] = file_get_contents($GLOBALS['v_addr']);
+    $GLOBALS['CheckVersion'] = file_get_contents(VERSION_URL);
     $GLOBALS['newdir']   = "../minion{$GLOBALS['CheckVersion']}";
     $GLOBALS['v_source'] = 'http://github.com/S3x0r/MINION/archive/master.zip';
 
@@ -46,7 +46,7 @@ function v_connect()
         v_checkVersion();
     } else {
               response('Cannot connect to update server, try next time.');
-              CLI_MSG('[BOT] Cannot connect to update server', '1');
+              cliLog('[bot] Cannot connect to update server');
     }
 }
 //------------------------------------------------------------------------------------------------
@@ -58,12 +58,12 @@ function v_checkVersion()
     if ($version[0] > VER) {
         response('My version: '.VER.', version on server: '.$version[0].'');
 
-        CLI_MSG('[BOT] New bot update on server: '.$version[0], '1');
+        cliLog('[bot] New bot update on server: '.$version[0]);
         
         v_tryDownload();
     } else {
               response('No new update, you have the latest version.');
-              CLI_MSG('[BOT] There is no new update', '1');
+              cliLog('[bot] There is no new update');
     }
 }
 //------------------------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ function v_tryDownload()
 {
     response('Downloading update...');
 
-    CLI_MSG('[BOT] Downloading update...', '1');
+    cliLog('[bot] Downloading update...');
 
     $newUpdate = file_get_contents($GLOBALS['v_source']);
     $dlHandler = fopen('update.zip', 'w');
@@ -79,12 +79,12 @@ function v_tryDownload()
     if (!fwrite($dlHandler, $newUpdate)) {
         response('Could not save new update, operation aborted');
 
-        CLI_MSG('[BOT] Could not save new update, operation aborted', '1');
+        cliLog('[bot] Could not save new update, operation aborted');
     }
 
     fclose($dlHandler);
     response('Update Downloaded');
-    CLI_MSG('[BOT] Update Downloaded', '1');
+    cliLog('[bot] Update Downloaded');
     
     v_extract();
 }
@@ -122,7 +122,7 @@ function delete_files($target)
 function v_extract()
 {
     response('Extracting update');
-    CLI_MSG('[BOT] Extracting update', '1');
+    cliLog('[bot] Extracting update');
 
     /* Extracting update */
     $zip = new ZipArchive;
@@ -131,7 +131,7 @@ function v_extract()
         $zip->close();
   
         response('Extracted.');
-        CLI_MSG('[BOT] Extracted.', '1');
+        cliLog('[bot] Extracted.');
 
         unlink('MINION-master/.gitattributes');
 
@@ -240,12 +240,12 @@ function v_extract()
 
         /* give op */
         if (BotOpped() == true) {
-            fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} +o {$GLOBALS['USER']}".PHP_EOL);
+            toServer("MODE ".getBotChannel()." +o {$GLOBALS['USER']}");
         }
 
         // reconnect to run new version
-        fputs($GLOBALS['socket'], "QUIT :Installing update...\n");
-        CLI_MSG('[BOT] Restarting bot to new version...', '1');
+        toServer("QUIT :Installing update...");
+        cliLog('[bot] Restarting bot to new version...');
    
         // if windows
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
@@ -257,6 +257,6 @@ function v_extract()
         exit;
     } else {
               response('Failed to extract, aborting.');
-              CLI_MSG('[BOT] Failed to extract update, aborting!', '1');
+              cliLog('[bot] Failed to extract update, aborting!');
     }
 }

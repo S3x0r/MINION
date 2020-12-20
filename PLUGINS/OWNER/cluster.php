@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -15,13 +15,14 @@
  */
 
 //---------------------------------------------------------------------------------------------------------
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-    $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
+    $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = "Clustering plugin: {$GLOBALS['CONFIG_CMD_PREFIX']}cluster help to list commands";
-    $plugin_command = 'cluster';
+    $plugin_command     = 'cluster';
 
 function plugin_cluster()
 {
@@ -32,17 +33,16 @@ function plugin_cluster()
                   response('Cluster commands:');
                   response('cluster help       - Shows this help');
                   response("cluster shutdown   - Bot shutdowns computer: {$GLOBALS['CONFIG_CMD_PREFIX']}".
-                      "cluster shutdown <bot_nickname>");
+                           "cluster shutdown <bot_nickname>");
                   response("cluster shutdown * - Bot shutdowns all bots computers: {$GLOBALS['CONFIG_CMD_PREFIX']}".
-                      "cluster shutdown *");
+                           "cluster shutdown *");
                 break;
         }
         /* me */
-        if ($GLOBALS['piece1'] == 'shutdown' && $GLOBALS['piece2'] == $GLOBALS['BOT_NICKNAME']) {
+        if ($GLOBALS['piece1'] == 'shutdown' && $GLOBALS['piece2'] == getBotNickname()) {
             response('Shutting down machine...');
-            
-            CLI_MSG("[PLUGIN: cluster] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
-            CLI_MSG('SHUTTING DOWN COMPUTER!', '1');
+
+            cliLog('SHUTTING DOWN COMPUTER!');
             
             exec('shutdown -s -t 0');
         }
@@ -50,10 +50,11 @@ function plugin_cluster()
         if ($GLOBALS['piece1'] == 'shutdown' && $GLOBALS['piece2'] == '*') {
             response('Shutting down machine...');
 
-            CLI_MSG("[PLUGIN: cluster] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
-            CLI_MSG('SHUTTING DOWN COMPUTER!', '1');
+            cliLog('SHUTTING DOWN COMPUTER!');
             
             exec('shutdown -s -t 0');
         }
     }
+
+    cliLog("[PLUGIN: cluster] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

@@ -23,9 +23,23 @@
 function LogsInit()
 {
     if (!isSilent() && $GLOBALS['CONFIG_LOGGING'] == 'yes' && is_dir(LOGSDIR)) {
+        $GLOBALS['log'] = true;
 
         $data = "-------------------------LOG CREATED: ".date('d.m.Y | H:i:s')."-------------------------\r\n";
 
         SaveToFile($GLOBALS['logFileName'], $data, 'a');
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function cliLog($data)
+{
+    if (!IsSilent()) {
+        $line = "[".@date('H:i:s')."] {$data}".N;
+
+        if (isset($GLOBALS['CONFIG_LOGGING']) && $GLOBALS['CONFIG_LOGGING'] == 'yes' && isset($GLOBALS['log'])) {
+            SaveToFile($GLOBALS['logFileName'], $line, 'a');
+        }
+
+        echo $line;
     }
 }

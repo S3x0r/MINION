@@ -31,7 +31,7 @@ function plugin_webstatus()
              response(httpstatus($GLOBALS['args']));
     }
 
-    CLI_MSG("[PLUGIN: webstatus] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
+    cliLog("[PLUGIN: webstatus] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }
 
 function httpstatus($args)

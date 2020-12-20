@@ -24,53 +24,53 @@ function CTCP()
 {
     switch ($GLOBALS['rawcmd'][1]) {
         case 'version':
-            fputs($GLOBALS['socket'], "NOTICE {$GLOBALS['USER']} :VERSION {$GLOBALS['CONFIG_CTCP_VERSION']}".N);
+            toServer("NOTICE {$GLOBALS['USER']} :VERSION {$GLOBALS['CONFIG_CTCP_VERSION']}");
 
-            CLI_MSG("[CTCP REQUEST] VERSION by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})", '1');
+            cliLog("[bot] ctcp VERSION by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})");
             PlaySound('ctcp.mp3');
             break;
 
         case 'clientinfo':
-            fputs($GLOBALS['socket'], "NOTICE {$GLOBALS['USER']} :CLIENTINFO {$GLOBALS['CONFIG_CTCP_VERSION']}".N);
+            toServer("NOTICE {$GLOBALS['USER']} :CLIENTINFO {$GLOBALS['CONFIG_CTCP_VERSION']}");
 
-            CLI_MSG("[CTCP REQUEST] CLIENTINFO by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})", '1');
+            cliLog("[bot] ctcp CLIENTINFO by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})");
             PlaySound('ctcp.mp3');
             break;
 
         case 'source':
-            fputs($GLOBALS['socket'], "NOTICE {$GLOBALS['USER']} :SOURCE http://github.com/S3x0r/MINION".N);
+            toServer("NOTICE {$GLOBALS['USER']} :SOURCE http://github.com/S3x0r/MINION");
 
-            CLI_MSG("[CTCP REQUEST] SOURCE by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})", '1');
+            cliLog("[bot] ctcp SOURCE by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})");
             PlaySound('ctcp.mp3');
             break;
 
         case 'userinfo':
-            fputs($GLOBALS['socket'], "NOTICE {$GLOBALS['USER']} :USERINFO Powered by Minions!".N);
+            toServer("NOTICE {$GLOBALS['USER']} :USERINFO Powered by Minions!");
 
-            CLI_MSG("[CTCP REQUEST] USERINFO by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})", '1');
+            cliLog("[bot] ctcp USERINFO by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})");
             PlaySound('ctcp.mp3');
             break;
 
         case 'finger':
-            fputs($GLOBALS['socket'], "NOTICE {$GLOBALS['USER']} :FINGER {$GLOBALS['CONFIG_CTCP_FINGER']}".N);
+            toServer("NOTICE {$GLOBALS['USER']} :FINGER {$GLOBALS['CONFIG_CTCP_FINGER']}");
 
-            CLI_MSG("[CTCP REQUEST] FINGER by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})", '1');
+            cliLog("[bot] ctcp FINGER by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})");
             PlaySound('ctcp.mp3');
             break;
 
         case 'ping':
             $a = str_replace(' ', '', $GLOBALS['args']);
-            fputs($GLOBALS['socket'], "NOTICE {$GLOBALS['USER']} :PING {$a}".N);
+            toServer("NOTICE {$GLOBALS['USER']} :PING {$a}");
 
-            CLI_MSG("[CTCP REQUEST] PING by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})", '1');
+            cliLog("[bot] ctcp PING by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})");
             PlaySound('ctcp.mp3');
             break;
 
         case 'time':
             $a = date("F j, Y, g:i a");
-            fputs($GLOBALS['socket'], "NOTICE {$GLOBALS['USER']} :TIME {$a}".N);
+            toServer("NOTICE {$GLOBALS['USER']} :TIME {$a}");
 
-            CLI_MSG("[CTCP REQUEST] TIME by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})", '1');
+            cliLog("[bot] ctcp TIME by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})");
             PlaySound('ctcp.mp3');
             break;
     }

@@ -31,12 +31,11 @@ function plugin_ripe()
                if ($GLOBALS['args'] == '127.0.0.1' or $GLOBALS['args'] == '0.0.0.0') {
                } else {
                         response(ripeCheckAddress($GLOBALS['args']));
-
                }
         } else {
                  response('I cannot use this plugin, i need php_openssl extension to work!');
         }
-    CLI_MSG("[PLUGIN: ripe] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
+    cliLog("[PLUGIN: ripe] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }
 
 function ripeCheckAddress($args)

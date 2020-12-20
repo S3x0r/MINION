@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -15,13 +15,14 @@
  */
 
 //---------------------------------------------------------------------------------------------------------
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-    $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
+    $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = "Plugins manipulation: {$GLOBALS['CONFIG_CMD_PREFIX']}plugin help to list commands";
-    $plugin_command = 'plugin';
+    $plugin_command     = 'plugin';
 
 function plugin_plugin()
 {
@@ -50,20 +51,14 @@ function plugin_plugin()
                         unlink("PLUGINS/USER/{$GLOBALS['piece2']}.php");
 
                         response("Plugin: {$GLOBALS['piece2']} removed from: USER group.");
-
-                        CLI_MSG("[PLUGIN: plugin] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | deleted: {$GLOBALS['piece2']}", '1');
                     } elseif (is_file("PLUGINS/OWNER/{$GLOBALS['piece2']}.php")) {
                               unlink("PLUGINS/OWNER/{$GLOBALS['piece2']}.php");
 
                               response("Plugin: {$GLOBALS['piece2']} removed from OWNER group.");
-
-                              CLI_MSG("[PLUGIN: plugin] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | deleted: {$GLOBALS['piece2']}", '1');
                     } elseif (is_file("PLUGINS/ADMIN/{$GLOBALS['piece2']}.php")) {
                               unlink("PLUGINS/ADMIN/{$GLOBALS['piece2']}.php");
 
                               response("Plugin: {$GLOBALS['piece2']} removed from: ADMIN group.");
-
-                              CLI_MSG("[PLUGIN: plugin] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | deleted: {$GLOBALS['piece2']}", '1');
                     }
                 } else {
                          response('No such plugin.');
@@ -91,8 +86,6 @@ function plugin_plugin()
                                     );
 
                                     response("Plugin: {$GLOBALS['piece2']} moved to '{$GLOBALS['piece4']}' group.");
-
-                                    CLI_MSG("[PLUGIN: plugin] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | moved: {$GLOBALS['piece2']}", '1');
                                 } elseif (!is_file("PLUGINS/{$GLOBALS['piece3']}/{$GLOBALS['piece2']}.php")) {
                                           response("No such plugin in '{$GLOBALS['piece3']}' group!");
                                 }
@@ -106,7 +99,7 @@ function plugin_plugin()
                              response('use: <plugin_name> <from> <to>');
                     }
                 } else {
-                         BOT_RESPONE('Cannot find PLUGINS directory, deleted?');
+                         response('Cannot find PLUGINS directory, deleted?');
                 }
                 break;
 //---------------------------------------------------------------------------------------------------------
@@ -124,4 +117,5 @@ function plugin_plugin()
 //---------------------------------------------------------------------------------------------------------
         }
     }
+    cliLog("[PLUGIN: plugin] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

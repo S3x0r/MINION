@@ -47,5 +47,5 @@ function plugin_wiki()
         } else {
                  response('I cannot use this plugin, i need php_openssl extension to work!');
         }
-    CLI_MSG("[PLUGIN: wiki] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
+    cliLog("[PLUGIN: wiki] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

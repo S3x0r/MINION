@@ -51,5 +51,5 @@ function plugin_morse()
         }
         response($final);
     }
-    CLI_MSG("[PLUGIN: morse] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
+    cliLog("[PLUGIN: morse] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

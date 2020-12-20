@@ -25,7 +25,7 @@
     $plugin_command     = 'hash';
 
 /*
-TODO: msg limit cut
+TODO: server message limit cut, send in parts
 */
 
 function plugin_hash()
@@ -40,5 +40,5 @@ function plugin_hash()
               response('Unknown hashing algorithm.');
     }
   
-    CLI_MSG("[PLUGIN: hash] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
+    cliLog("[PLUGIN: hash] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

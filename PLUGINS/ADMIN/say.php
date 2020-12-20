@@ -26,14 +26,10 @@
 
 function plugin_say()
 {
-    try {
-        if (OnEmptyArg('say <text>')) {
-        } else {
-                 fputs($GLOBALS['socket'], "PRIVMSG {$GLOBALS['channel']} ".inputFromLine('4').PHP_EOL);
-        }
-
-        CLI_MSG("[PLUGIN: say] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
-    } catch (Exception $e) {
-                             CLI_MSG('[ERROR]: Function: '.__FUNCTION__.' failed', '1');
+    if (OnEmptyArg('say <text>')) {
+    } else {
+             toServer("PRIVMSG ".getBotChannel()." ".inputFromLine('4'));
     }
+
+    cliLog("[PLUGIN: say] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

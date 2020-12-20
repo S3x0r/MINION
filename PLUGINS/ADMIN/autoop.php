@@ -29,7 +29,7 @@ function plugin_autoop()
     $nick = explode('!', trim($GLOBALS['args']));
 
     if (OnEmptyArg('autoop <nick!ident@hostname>')) {
-    } elseif ($nick[0] != $GLOBALS['BOT_NICKNAME']) {
+    } elseif ($nick[0] != getBotNickname()) {
         if (preg_match('/^(.+?)!(.+?)@(.+?)$/', $GLOBALS['args'], $host)) {
             LoadData($GLOBALS['configFile'], 'OWNER', 'auto_op_list');
 
@@ -45,7 +45,7 @@ function plugin_autoop()
                      $GLOBALS['CONFIG_AUTO_OP_LIST'] = $cfg->get("OWNER", "auto_op_list");
 
                      /* Inform nick about it */
-                     responsePriv('From now you are on my auto op list, enjoy.');
+                     privateMsg('From now you are on my auto op list, enjoy.');
 
                      response("Host: '{$host[0]}' added to auto op list.");
             }
@@ -55,5 +55,5 @@ function plugin_autoop()
     } else {
              response('I cannot add myself to auto op list, im already OP MASTER :)');
     }
-    CLI_MSG("[PLUGIN: autoop] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
+    cliLog("[PLUGIN: autoop] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

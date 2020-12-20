@@ -20,14 +20,15 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-    $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
+    $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = "Adds a note: {$GLOBALS['CONFIG_CMD_PREFIX']}note help to list commands";
-    $plugin_command = 'note';
+    $plugin_command     = 'note';
 
 /* TODO:
-   - fix noteFilename pos
+   - fix noteFilename position?
    - add note show <id>
-   - if no writable system disable plugin
+   - if no writable =disable plugin
+   - note del - possible to clear higher number =fix
 */
 
 function plugin_note()
@@ -127,5 +128,5 @@ function plugin_note()
                 break;
         }
     }
-    CLI_MSG("[PLUGIN: note] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
+    cliLog("[PLUGIN: note] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

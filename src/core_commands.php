@@ -25,7 +25,7 @@ function CoreCmd_Seen()
     if (OnEmptyArg('seen <nickname> to check specified user when was last seen on channel')) {
     } else { /* prevent directory traversal */
              $GLOBALS['args'] = str_replace('..', '', str_replace('/', '', $GLOBALS['args']));
-        if ($GLOBALS['args'] == $GLOBALS['BOT_NICKNAME']) {
+        if ($GLOBALS['args'] == getBotNickname()) {
             response('Yes im here! :)');
         } elseif ($GLOBALS['args'] == $GLOBALS['USER']) {
                   response('Look at mirror!');
@@ -33,15 +33,14 @@ function CoreCmd_Seen()
             !empty($GLOBALS['CONFIG_BOT_ADMIN']) ? response("My Owner: {$GLOBALS['CONFIG_BOT_ADMIN']}") : false;
         } else {
                  /* revert from illegal chars file */
-                 $bad   = [chr(0x5c), '/', ':', '*', '?', '"', '<', '>', '|'];
-                 $good  = ["@[1]", "@[2]", "@[3]", "@[4]", "@[5]", "@[6]", "@[7]", "@[8]", "@[9]"];
-                 $GLOBALS['args'] = str_replace($bad, $good, $GLOBALS['args']);
+                 $GLOBALS['args'] = removeIllegalCharsFromNickname($GLOBALS['args']);
 
             is_file(DATADIR."/SEEN/{$GLOBALS['args']}") ?
                 response(file_get_contents(DATADIR."/SEEN/{$GLOBALS['args']}")) : response('No such user in my database.');
             
         }
-        CLI_MSG("[PLUGIN: seen] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
+
+        cliLog("[PLUGIN: seen] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -51,14 +50,12 @@ function SeenSave()
     
     $seenDataDir = DATADIR.'/SEEN/';
 
-    substr($GLOBALS['channel'], 0, 1) != '#' ? $chan = $GLOBALS['CONFIG_CNANNEL'] : $chan = $GLOBALS['channel'];
+    substr(getBotChannel(), 0, 1) != '#' ? $chan = $GLOBALS['CONFIG_CNANNEL'] : $chan = getBotChannel();
 
     $data = "Last seen user: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) On channel: {$chan}, Date: ".date("d.m.Y").", Time: ".date("H:i:s");
 
     /* illegal chars for file */
-    $bad  = [chr(0x5c), '/', ':', '*', '?', '"', '<', '>', '|'];
-    $good = ["@[1]", "@[2]", "@[3]", "@[4]", "@[5]", "@[6]", "@[7]", "@[8]", "@[9]"];
-    $GLOBALS['USER'] = str_replace($bad, $good, $GLOBALS['USER']);
+    $GLOBALS['USER'] = removeIllegalCharsFromNickname($GLOBALS['USER']);
 
     is_file($seenDataDir.$GLOBALS['USER']) ?
         @file_put_contents($seenDataDir.$GLOBALS['USER'], $data) : @file_put_contents($seenDataDir.$GLOBALS['USER'], $data);
@@ -71,8 +68,8 @@ function CoreCmd_Pause()
     /* hah :) */
     $GLOBALS['stop'] = true;
 
-    CLI_MSG("[PLUGIN: pause] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
-    CLI_MSG('[BOT] Im in Pause mode', '1');
+    cliLog("[PLUGIN: pause] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
+    cliLog('[bot] Im in Pause mode');
 }
 //---------------------------------------------------------------------------------------------------------
 function CoreCmd_Unpause()
@@ -80,8 +77,8 @@ function CoreCmd_Unpause()
     if (isset($GLOBALS['stop'])) {
         unset($GLOBALS['stop']);
         response('Back to life!');
-        CLI_MSG("[PLUGIN: unpause] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
-        CLI_MSG('[BOT] Unpaused', '1');
+        cliLog("[PLUGIN: unpause] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
+        cliLog('[bot] Unpaused');
     } else {
              response('First i need to be paused, then i can unpause myself :p');
              response('Use !pause first');
@@ -111,8 +108,7 @@ function CoreCmd_Panel()
                                 $port.' --no-https --hide-window';
                                 popen($command, 'r');
                                 response('Runned.');
-                                CLI_MSG("[PLUGIN: panel] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | port: {$port}", '1');
-                                CLI_MSG("[PANEL] Panel Runned at port: {$port}", '1');
+                                cliLog("[PANEL] Panel Runned at port: {$port}");
                             } else {
                                      response('Cannot find web server, missing?');
                             }
@@ -130,8 +126,7 @@ function CoreCmd_Panel()
                 if (!isset($GLOBALS['OS'])) {
                     if (kill('serv')) {
                         response('Panel Closed');
-                        CLI_MSG("[PLUGIN: panel] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']} | STOP", '1');
-                        CLI_MSG('[PANEL] Panel Closed', '1');
+                        cliLog('[PANEL] Panel Closed');
                     } else {
                          response('Panel Not runned stupid!');
                     }
@@ -139,6 +134,8 @@ function CoreCmd_Panel()
                 break;
         }
     }
+
+    cliLog("[PLUGIN: panel] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }
 //---------------------------------------------------------------------------------------------------------
 function CoreCmd_Load()
@@ -171,7 +168,7 @@ function CoreCmd_RegisterToBot()
                 if ($hashed == $GLOBALS['CONFIG_OWNER_PASSWD']) {
                     LoadData($GLOBALS['configFile'], 'OWNER', 'bot_owners');
             
-                    CLI_MSG("[BOT] Successful registration as owner from: {$GLOBALS['USER']} ({$GLOBALS['mask']})", '1');
+                    cliLog("[bot] Successful registration as owner from: {$GLOBALS['USER']} ({$GLOBALS['mask']})");
 
                     $new = trim($GLOBALS['mask']);
 
@@ -189,8 +186,8 @@ function CoreCmd_RegisterToBot()
                     SaveData($GLOBALS['configFile'], 'OWNER', 'auto_op_list', $newList);
           
                     /* cli msg */
-                    CLI_MSG("[BOT] New owner added: {$GLOBALS['USER']} ({$GLOBALS['mask']})", '1');
-                    CLI_MSG("[BOT] New auto op added: {$GLOBALS['USER']} ({$GLOBALS['mask']})", '1');
+                    cliLog("[bot] New Owner added: {$GLOBALS['USER']} ({$GLOBALS['mask']})");
+                    cliLog("[bot] New Auto Op added: {$GLOBALS['USER']} ({$GLOBALS['mask']})");
 
                     /* send information to user about commands */
                     response('From now you are on my owner(s) list, enjoy.');
@@ -211,7 +208,7 @@ function CoreCmd_RegisterToBot()
 
                     /* give op */
                     if (BotOpped() == true) {
-                        fputs($GLOBALS['socket'], "MODE {$GLOBALS['channel']} +o {$GLOBALS['USER']}\n");
+                        toServer("MODE ".getBotChannel()." +o {$GLOBALS['USER']}");
                     }
 
                     /* update variable with new owners */
@@ -225,6 +222,6 @@ function CoreCmd_RegisterToBot()
             }
         }
     } catch (Exception $e) {
-                             CLI_MSG('[ERROR]: Function: '.__FUNCTION__.' failed', '1');
+                             cliLog('[ERROR]: Function: '.__FUNCTION__.' failed');
     }
 }

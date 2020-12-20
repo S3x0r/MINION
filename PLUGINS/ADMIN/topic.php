@@ -28,8 +28,8 @@ function plugin_topic()
 {
     if (OnEmptyArg('topic <new_topic>')) {
     } else {
-            fputs($GLOBALS['socket'], "TOPIC {$GLOBALS['channel']} ".msg_without_command().PHP_EOL);
+            toServer("TOPIC ".getBotChannel()." ".msg_without_command());
     }
     
-    CLI_MSG("[PLUGIN: topic] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
+    cliLog("[PLUGIN: topic] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

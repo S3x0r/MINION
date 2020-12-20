@@ -34,6 +34,7 @@ strtoupper(substr(PHP_OS, 0, 3)) != 'WIN' ? $GLOBALS['OS'] = 'Linux' : false;
 /* hide prompt */
 echo "\e[?25l";
 
+/* needed files */
 $botCoreFiles = ['cli.php',
                  'misc.php',
                  'config.php',
@@ -50,6 +51,7 @@ $botCoreFiles = ['cli.php',
                  'ctcp.php'
                 ];
 
+/* check if we got all files */
 foreach ($botCoreFiles as $botCoreFile) {
     if (is_file("src/{$botCoreFile}")) {
         require_once("src/{$botCoreFile}");

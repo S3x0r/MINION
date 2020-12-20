@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -15,13 +15,35 @@
  */
 
 //---------------------------------------------------------------------------------------------------------
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-    $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
+    $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = "Saving to config file: {$GLOBALS['CONFIG_CMD_PREFIX']}save help to list commands";
-    $plugin_command = 'save';
+    $plugin_command     = 'save';
+
+/* TODO:
+  missing:
+server_password
+bot_admin
+admin_list
+keep_chan_modes
+keep_nick
+channel_modes
+channel_key
+ban_list
+channel_delay
+private_delay
+notice_delay
+web_login
+web_password
+show_logo
+silent_mode
+check_update
+play_sounds
+*/
 
 function plugin_save()
 {
@@ -29,7 +51,7 @@ function plugin_save()
     } else {
         switch ($GLOBALS['args']) {
             case 'help':
-                 response('Save commands:');
+                 response('save commands:');
                  response('save auto_join      - Saving auto join on channel when connected: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save auto_join <yes/no>');
                  response('save auto_op        - Saving auto op when join channel: '
@@ -76,6 +98,7 @@ function plugin_save()
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save time_zone <eg. Europe/Warsaw>');
                  response('save try_connect    - Saving how many times try connect to server: '
                  .$GLOBALS['CONFIG_CMD_PREFIX'].'save try_connect <value>');
+                 response('End.');
                 break;
         }
         switch ($GLOBALS['piece1']) {
@@ -87,9 +110,6 @@ function plugin_save()
                  $GLOBALS['CONFIG_AUTO_JOIN'] = $cfg->get("CHANNEL", "auto_join");
  
                  response('Auto_join Saved.');
-
-                 CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                         $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'auto_op':
@@ -100,9 +120,6 @@ function plugin_save()
                  $GLOBALS['CONFIG_AUTO_OP'] = $cfg->get("AUTOMATIC", "auto_op");
  
                  response('Auto_op Saved.');
-
-                 CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                         $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
  
             case 'auto_op_list':
@@ -113,9 +130,6 @@ function plugin_save()
                  $GLOBALS['CONFIG_AUTO_OP_LIST'] = $cfg->get("OWNER", "auto_op_list");
  
                  response('Auto_op_list Saved.');
-
-                 CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                         $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'auto_rejoin':
@@ -126,9 +140,6 @@ function plugin_save()
                  $GLOBALS['CONFIG_AUTO_REJOIN'] = $cfg->get("AUTOMATIC", "auto_rejoin");
  
                  response('Auto_rejoin Saved.');
-
-                 CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                         $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'bot_owners':
@@ -139,9 +150,6 @@ function plugin_save()
                  $GLOBALS['CONFIG_OWNERS'] = $cfg->get("OWNER", "bot_owners");
  
                  response('Bot_owners Saved.');
-
-                 CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                         $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'response':
@@ -152,9 +160,6 @@ function plugin_save()
                  $GLOBALS['CONFIG_BOT_RESPONSE'] = $cfg->get("RESPONSE", "response");
  
                  response('response Saved.');
-
-                 CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                         $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
   
             case 'channel':
@@ -165,9 +170,6 @@ function plugin_save()
                  $GLOBALS['CONFIG_CNANNEL'] = $cfg->get("CHANNEL", "channel");
  
                  response('Channel Saved.');
-
-                 CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                         $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'command_prefix':
@@ -182,9 +184,6 @@ function plugin_save()
                  $GLOBALS['CONFIG_CMD_PREFIX'] = $cfg->get("COMMAND", "command_prefix");
 
                  response('Command_prefix Saved.');
-
-                 CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                         $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'connect_delay':
@@ -195,9 +194,6 @@ function plugin_save()
                  $GLOBALS['CONFIG_CONNECT_DELAY'] = $cfg->get("SERVER", "connect_delay");
  
                  response('Connect_delay Saved.');
-
-                 CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                         $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'ctcp_finger':
@@ -208,9 +204,6 @@ function plugin_save()
                  $GLOBALS['CONFIG_CTCP_FINGER'] = $cfg->get("CTCP", "ctcp_finger");
  
                  response('Ctcp_finger Saved.');
-
-                 CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                         $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'ctcp_response':
@@ -221,9 +214,6 @@ function plugin_save()
                  $GLOBALS['CONFIG_CTCP_RESPONSE'] = $cfg->get("CTCP", "ctcp_response");
  
                  response('Ctcp_response Saved.');
-
-                 CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                         $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'ctcp_version':
@@ -234,9 +224,6 @@ function plugin_save()
                  $GLOBALS['CONFIG_CTCP_VERSION'] = $cfg->get("CTCP", "ctcp_version");
  
                  response('Ctcp_version Saved.');
-
-                 CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                         $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'fetch_server':
@@ -247,9 +234,6 @@ function plugin_save()
                  $GLOBALS['CONFIG_FETCH_SERVER'] = $cfg->get("FETCH", "fetch_server");
  
                  response('Server Saved.');
-
-                 CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                         $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'ident':
@@ -260,9 +244,6 @@ function plugin_save()
                  $GLOBALS['CONFIG_IDENT'] = $cfg->get("BOT", "ident");
  
                  response('Ident Saved.');
-
-                 CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                         $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'logging':
@@ -273,9 +254,6 @@ function plugin_save()
                  $GLOBALS['CONFIG_LOGGING'] = $cfg->get("LOGS", "logging");
  
                  response('Logging Saved.');
-
-                 CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                         $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'name':
@@ -286,9 +264,6 @@ function plugin_save()
                  $GLOBALS['CONFIG_NAME'] = $cfg->get("BOT", "name");
  
                  response('Name Saved.');
-
-                 CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                         $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'nick':
@@ -299,9 +274,6 @@ function plugin_save()
                  $GLOBALS['CONFIG_NICKNAME'] = $cfg->get("BOT", "nickname");
  
                  response('Nick Saved.');
-
-                 CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                         $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'owner_password':
@@ -312,9 +284,6 @@ function plugin_save()
                  $GLOBALS['CONFIG_OWNER_PASSWD'] = $cfg->get("OWNER", "owner_password");
  
                  response('Owner_password Saved.');
-
-                 CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                         $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'port':
@@ -325,9 +294,6 @@ function plugin_save()
                  $GLOBALS['CONFIG_PORT'] = $cfg->get("SERVER", "port");
  
                  response('Port Saved.');
-
-                 CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                         $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'show_raw':
@@ -338,9 +304,6 @@ function plugin_save()
                  $GLOBALS['CONFIG_SHOW_RAW'] = $cfg->get("DEBUG", "show_raw");
  
                  response('Show_raw Saved.');
-
-                 CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                         $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'server':
@@ -351,9 +314,6 @@ function plugin_save()
                  $GLOBALS['CONFIG_SERVER'] = $cfg->get("SERVER", "server");
  
                  response('Server Saved.');
-
-                 CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                         $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'time_zone':
@@ -364,9 +324,6 @@ function plugin_save()
                  $GLOBALS['CONFIG_TIMEZONE'] = $cfg->get("TIME", "time_zone");
  
                  response('Time_zone Saved.');
-
-                 CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                         $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
 
             case 'try_connect':
@@ -377,12 +334,8 @@ function plugin_save()
                  $GLOBALS['CONFIG_TRY_CONNECT'] = $cfg->get("SERVER", "try_connect");
  
                  response('Try_connect Saved.');
-
-                 CLI_MSG('[PLUGIN: save] by: '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') | chan: '.
-                         $GLOBALS['channel'].' | new value: '.$GLOBALS['piece2'], '1');
                 break;
         }
     }
+    cliLog("[PLUGIN: save] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }
-
-//TODO: check some input

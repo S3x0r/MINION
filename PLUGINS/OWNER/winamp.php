@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2018, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -15,28 +15,27 @@
  */
 
 //---------------------------------------------------------------------------------------------------------
-PHP_SAPI !== 'cli' ? exit('<h2>This script can\'t be run from a web browser. Use terminal to run it<br>
-                           Visit https://github.com/S3x0r/MINION/ website for more instructions.</h2>') : false;
+ !in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) ?
+  exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
+       'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-    $VERIFY = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
+    $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
     $plugin_description = "Controls winamp: {$GLOBALS['CONFIG_CMD_PREFIX']}winamp <help>";
-    $plugin_command = 'winamp';
+    $plugin_command     = 'winamp';
 
 /*
    NEED TO CONFIGURE!
    Specify winamp CLAmp.exe program location
-   eg. 'C:\Dokumenty\programy\Winamp\CLAmp.exe'
+   eg. 'C:\programs\Winamp\CLAmp.exe'
 */
     $GLOBALS['winamp_loc'] = '';
 //---
 
-
 function plugin_winamp()
 {
     if (OnEmptyArg('winamp <help> to list commands')) {
-    } else {
-        if (!empty($GLOBALS['winamp_loc'])) {
+    } elseif (!empty($GLOBALS['winamp_loc'])) {
             switch ($GLOBALS['args']) {
                 case 'help':
                      response('Winamp commands:');
@@ -73,9 +72,7 @@ function plugin_winamp()
         } else {
                  response('CLAmp not specified!');
         }
-
-        CLI_MSG("[PLUGIN: winamp] by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) | chan: {$GLOBALS['channel']}", '1');
-    }
+    cliLog("[PLUGIN: winamp] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }
 
 function sendTitle($target)

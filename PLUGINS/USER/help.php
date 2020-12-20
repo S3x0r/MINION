@@ -24,6 +24,10 @@
     $plugin_description = "Shows BOT commands: {$GLOBALS['CONFIG_CMD_PREFIX']}help";
     $plugin_command     = 'help';
 
+/* TODO: -move plugin to core commands
+         -if plugin(s) dir empty do not show "commands" txt 
+*/
+
 function plugin_help()
 {
     /* if OWNER use help */
@@ -56,5 +60,5 @@ function plugin_help()
         !empty($GLOBALS['CONFIG_BOT_ADMIN']) ? response("Bot Admin: {$GLOBALS['CONFIG_BOT_ADMIN']}") : false;
     }
 
-    CLI_MSG("[PLUGIN: help] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
+    cliLog("[PLUGIN: help] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

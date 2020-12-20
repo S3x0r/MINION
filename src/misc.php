@@ -38,13 +38,12 @@ function CheckUpdateInfo()
     /* check if new version on server */
     if ($GLOBALS['CONFIG_CHECK_UPDATE'] == 'yes' && !IsSilent()) {
         if (extension_loaded('openssl')) {
-            $url = 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT';
-            $CheckVersion = @file_get_contents($url);
+            $file = @file_get_contents(VERSION_URL);
         
-            if (!empty($CheckVersion)) {
-                $version = explode("\n", $CheckVersion);
-                if ($version[0] > VER) {
-                    echo "             >>>> New version available! ($version[0]) <<<<".NN.N;
+            if (!empty($file)) {
+                $serverVersion = explode("\n", $file);
+                if ($serverVersion[0] > VER) {
+                    echo "             >>>> New version available! ($serverVersion[0]) <<<<".NN.N;
                 } else {
                          echo "       >>>> No new update, you have the latest version <<<<".NN.N;
                 }
@@ -58,16 +57,16 @@ function CheckUpdateInfo()
 }
 //---------------------------------------------------------------------------------------------------------
 /* update users (OWNER,USER) array */
-function UpdatePrefix($user, $new_prefix)
+function UpdatePrefix($user, $newPrefix)
 {
-    $GLOBALS[$user.'_PLUGINS'] = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], $new_prefix, $GLOBALS[$user.'_PLUGINS']);
+    $GLOBALS[$user.'_PLUGINS'] = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], $newPrefix, $GLOBALS[$user.'_PLUGINS']);
 }
 //---------------------------------------------------------------------------------------------------------
 /* if first arg after !plugin <arg> is empty */
-function OnEmptyArg($info)
+function OnEmptyArg($information)
 {
     if (empty($GLOBALS['args'])) {
-        response("Usage: {$GLOBALS['CONFIG_CMD_PREFIX']}{$info}");
+        response("Usage: {$GLOBALS['CONFIG_CMD_PREFIX']}{$information}");
         return true;
     } else {
               return false;
@@ -79,15 +78,9 @@ function BotOpped()
 {
     if (isset($GLOBALS['BOT_OPPED'])) {
         return true;
-    } else {
+    } else { 
              return false;
     }
-}
-//---------------------------------------------------------------------------------------------------------
-/* sends bot channels array */
-function GetBotChannels()
-{
-    return $GLOBALS['BOT_CHANNELS'];
 }
 //---------------------------------------------------------------------------------------------------------
 function CountLines($exts = ['php'])
@@ -126,7 +119,7 @@ function randomString($length)
 //---------------------------------------------------------------------------------------------------------
 function inputFromLine($position)
 {
-    $a = $GLOBALS['ex'];
+    $a = $GLOBALS['rawDataArray'];
     $current = '';
     $index = $position;
     
@@ -140,11 +133,11 @@ function inputFromLine($position)
     return $string;
 }
 //---------------------------------------------------------------------------------------------------------
-function msg_without_command() //TODO: wtf?
+function msg_without_command()
 {
     $input = null;
-    for ($i=3; $i <= (count($GLOBALS['ex'])); $i++) {
-         $input .= $GLOBALS['ex'][$i]." ";
+    for ($i=3; $i <= (count($GLOBALS['rawDataArray'])); $i++) {
+         $input .= $GLOBALS['rawDataArray'][$i]." ";
     }
 
     $in = rtrim($input);
@@ -246,20 +239,6 @@ function isRunned($program)
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function Line()
-{
-    if (!IsSilent()) {
-        echo '------------------------------------------------------------------------------'.N;
-    }
-}
-//---------------------------------------------------------------------------------------------------------
-function cli($data)
-{
-    if (!IsSilent()) {
-        echo $data;
-    }
-}
-//---------------------------------------------------------------------------------------------------------
 function getPasswd($string = '')
 {
     echo $string;
@@ -292,23 +271,15 @@ function Statistics()
     $ip = @file_get_contents($ipAddress);
     
     /* identify bot session by hashed ip, operating system, bot nickname, name and ident */
-    $botID = hash('sha256', $ip.php_uname().$GLOBALS['BOT_NICKNAME'].$GLOBALS['CONFIG_NAME'].
+    $botID = hash('sha256', $ip.php_uname().getBotNickname().$GLOBALS['CONFIG_NAME'].
                   $GLOBALS['CONFIG_IDENT'].$GLOBALS['CONFIG_SERVER'].VER);
 
-    @file($statsAddress."stamp={$botID}&nick={$GLOBALS['BOT_NICKNAME']}&server={$GLOBALS['CONFIG_SERVER']}&ver={VER}");
+    @file($statsAddress."stamp={$botID}&nick=".getBotNickname()."&server={$GLOBALS['CONFIG_SERVER']}&ver={VER}");
 }
 //---------------------------------------------------------------------------------------------------------
 function WinSleep($time)
 {
-    if (!isset($GLOBALS['OS'])) {
-        sleep($time);
-    }
-}
-//---------------------------------------------------------------------------------------------------------
-function responsePriv($message)
-{
-    $nick = explode('!', trim($GLOBALS['args']));
-    fputs($GLOBALS['socket'], "PRIVMSG {$nick[0]} :{$message}\n");
+    !isset($GLOBALS['OS']) ? sleep($time) : false;
 }
 //---------------------------------------------------------------------------------------------------------
 function removeIllegalCharsFromNickname($nickname)

@@ -51,7 +51,7 @@ function GetDataFromBotConfig()
         /* PROGRAM */
         $GLOBALS['CONFIG_SHOW_LOGO']      = $cfg->get("PROGRAM", "show_logo");
     if (empty($GLOBALS['silent_cli'])) {
-        $GLOBALS['silent_mode']       = $cfg->get("PROGRAM", "silent_mode");
+        $GLOBALS['silent_mode']           = $cfg->get("PROGRAM", "silent_mode");
     }
         $GLOBALS['CONFIG_CHECK_UPDATE']   = $cfg->get("PROGRAM", "check_update");
         /* DEBUG */
@@ -64,7 +64,6 @@ function GetAllData()
     $GLOBALS['WEB_VERSION']      = $cfg->get("MAIN", "WEB_VERSION");
     $GLOBALS['WEB_PHP_VERSION']  = $cfg->get("MAIN", "WEB_PHP_VERSION");
     $GLOBALS['WEB_START_TIME']   = $cfg->get("MAIN", "WEB_START_TIME");
-    $GLOBALS['WEB_BOT_CHANNELS'] = $cfg->get("MAIN", "WEB_BOT_CHANNELS");
 }
 //-------------------------------------------------------------------------------------------------------
 function uptime_parse($seconds)

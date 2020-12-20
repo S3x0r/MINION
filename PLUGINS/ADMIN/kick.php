@@ -27,9 +27,9 @@
 function plugin_kick()
 {
     if (OnEmptyArg('kick <#channel> <who>')) {
-    } elseif (BotOpped() == true && $GLOBALS['piece2'] != $GLOBALS['BOT_NICKNAME'] && $GLOBALS['piece2'] != $GLOBALS['USER']) {
-              fputs($GLOBALS['socket'], "KICK {$GLOBALS['piece1']} :{$GLOBALS['piece2']}".PHP_EOL);
+    } elseif (BotOpped() == true && $GLOBALS['piece2'] != getBotNickname() && $GLOBALS['piece2'] != $GLOBALS['USER']) {
+              toServer("KICK {$GLOBALS['piece1']} :{$GLOBALS['piece2']}");
     }
 
-    CLI_MSG("[PLUGIN: kick] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: {$GLOBALS['channel']}", '1');
+    cliLog("[PLUGIN: kick] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }
