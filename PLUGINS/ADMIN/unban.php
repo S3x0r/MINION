@@ -30,6 +30,4 @@ function plugin_unban()
     } else if (BotOpped() == true) {
                toServer("MODE ".getBotChannel()." -b {$GLOBALS['args']}");
     }
-   
-    cliLog("[PLUGIN: unban] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

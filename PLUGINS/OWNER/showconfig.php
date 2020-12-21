@@ -98,6 +98,4 @@ function plugin_showconfig()
     response('Show RAW        : '.$GLOBALS['CONFIG_SHOW_RAW'].'');
     
     response('End.');
-
-    cliLog("[PLUGIN: showconfig] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

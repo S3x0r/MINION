@@ -55,5 +55,4 @@ function plugin_autoop()
     } else {
              response('I cannot add myself to auto op list, im already OP MASTER :)');
     }
-    cliLog("[PLUGIN: autoop] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

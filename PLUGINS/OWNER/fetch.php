@@ -89,6 +89,4 @@ function plugin_fetch()
                  response('I cannot use this plugin, i need php_openssl extension to work!');
         }
     }
-
-    cliLog("[PLUGIN: fetch] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

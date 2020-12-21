@@ -75,6 +75,4 @@ function plugin_addowner()
     } else {
              response('I cannot add myself to owners, im already master :)');
     }
-
-    cliLog("[PLUGIN: addowner] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

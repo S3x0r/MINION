@@ -40,6 +40,4 @@ function plugin_listowners()
         }
              response('End.');
     }
-
-    cliLog("[PLUGIN: listowners] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

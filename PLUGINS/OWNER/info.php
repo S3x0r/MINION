@@ -30,6 +30,4 @@ function plugin_info()
     response('Author: S3x0r');
 
     !empty($GLOBALS['CONFIG_BOT_ADMIN']) ? response("Bot Admin: {$GLOBALS['CONFIG_BOT_ADMIN']}") : false;
-
-    cliLog("[PLUGIN: info] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

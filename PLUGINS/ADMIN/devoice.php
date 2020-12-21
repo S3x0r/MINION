@@ -30,6 +30,4 @@ function plugin_devoice()
     } elseif (BotOpped() == true && $GLOBALS['args'] != getBotNickname() && $GLOBALS['args'] != $GLOBALS['USER']) {
               toServer("MODE ".getBotChannel()." -v {$GLOBALS['args']}");
     }
-   
-    cliLog("[PLUGIN: devoice] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

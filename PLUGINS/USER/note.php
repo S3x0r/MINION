@@ -128,5 +128,4 @@ function plugin_note()
                 break;
         }
     }
-    cliLog("[PLUGIN: note] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

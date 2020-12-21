@@ -30,6 +30,4 @@ function plugin_deop()
     } elseif (BotOpped() == true && $GLOBALS['args'] != getBotNickname() && $GLOBALS['args'] != $GLOBALS['USER']) {
               toServer("MODE ".getBotChannel()." -o {$GLOBALS['args']}");
     }
-
-    cliLog("[PLUGIN: deop] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

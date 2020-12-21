@@ -45,8 +45,6 @@ function plugin_ping()
         } else {
                  response('This plugin works on windows only at this time.');
         }
-
-    cliLog("[PLUGIN: ping] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }
 
 function ping($hostname)

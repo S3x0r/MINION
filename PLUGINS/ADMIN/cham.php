@@ -53,7 +53,6 @@ function plugin_cham()
                      unset($file);
             }
         }
-        cliLog("[PLUGIN: cham] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
     } catch (Exception $e) {
                              cliLog('[ERROR]: Function: '.__FUNCTION__.' failed');
     }

@@ -29,8 +29,6 @@ function plugin_memusage()
     $memory = byte_convert(memory_get_usage());
 
     response("I'm using {$memory} of RAM to run currently");
-
-    cliLog("[PLUGIN: memusage] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }
 
 function byte_convert($bytes)

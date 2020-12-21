@@ -39,8 +39,6 @@ function plugin_checkupdate()
     } else {
              response('I cannot use this plugin, i need php_openssl extension to work!');
     }
-
-    cliLog("[PLUGIN: checkupdate] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }
 //------------------------------------------------------------------------------------------------
 function checkVersion()

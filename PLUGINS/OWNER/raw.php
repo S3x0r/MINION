@@ -34,6 +34,4 @@ function plugin_raw()
 
              toServer($msg);
     }
-
-    cliLog("[PLUGIN: raw] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

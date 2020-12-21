@@ -30,6 +30,4 @@ function plugin_topic()
     } else {
             toServer("TOPIC ".getBotChannel()." ".msg_without_command());
     }
-    
-    cliLog("[PLUGIN: topic] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

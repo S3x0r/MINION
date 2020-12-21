@@ -99,10 +99,8 @@ function SocketLoop()
             /* get raw data */
             $rawData = fgets($GLOBALS['socket'], 1024);
 //---------------------------------------------------------------------------------------------------------
-            if ($GLOBALS['CONFIG_SHOW_RAW'] == 'yes') {
-                if (!IsSilent()) {
-                    echo $rawData;
-                }
+            if ($GLOBALS['CONFIG_SHOW_RAW'] == 'yes' && !IsSilent()) {
+                echo $rawData;
             }
 //---------------------------------------------------------------------------------------------------------
             /* put raw data to array */
@@ -226,63 +224,71 @@ function SocketLoop()
                 }
             }
 //---------------------------------------------------------------------------------------------------------
-            /* CTCP */
-            if (empty($GLOBALS['stop'])) {
-                if ($GLOBALS['CONFIG_CTCP_RESPONSE'] == 'yes' && isset($rawcmd[1])) {
-                    CTCP();
-                }
+            /* response to CTCP request */
+            if (empty($GLOBALS['stop']) && $GLOBALS['CONFIG_CTCP_RESPONSE'] == 'yes' && isset($rawcmd[1][0]) && $rawcmd[1][0] == '') {
+                CTCP();
+            }
+//---------------------------------------------------------------------------------------------------------
+            if (isset($rawcmd[1][0]) && $rawcmd[1][0] == $GLOBALS['CONFIG_CMD_PREFIX']) {
+                $pluginRequest = true;
+                $pluginName = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
+            } else {
+                     $pluginRequest = false;
+                     unset($pluginName);
             }
 
-            /* Core command: 'Unpause' Needs to be outside stop :) */
-            if (isset($rawcmd[1]) && HasOwner($mask) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'unpause') {
+//---------------------------------------------------------------------------------------------------------
+            /* response to core command: 'Unpause' */
+            if (HasOwner($mask) && isset($rawcmd[1]) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'unpause') {
                 CoreCmd_Unpause();
             }
 //---------------------------------------------------------------------------------------------------------
-            if (empty($GLOBALS['stop'])) {
+            /* response to core plugins */
+            if (empty($GLOBALS['stop']) && $pluginRequest == true) {
                 /* Core command: 'Panel' */
-                if (isset($rawcmd[1]) && HasOwner($mask) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'panel') {
+                if (HasOwner($mask) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'panel') {
                     CoreCmd_Panel();
                 }
                 /* Core command: 'Load' */
-                if (isset($rawcmd[1]) && HasOwner($mask) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'load') {
+                if (HasOwner($mask) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'load') {
                     CoreCmd_Load();
                 }
                 /* Core command: 'Unload' */
-                if (isset($rawcmd[1]) && HasOwner($mask) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'unload') {
+                if (HasOwner($mask) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'unload') {
                     CoreCmd_Unload();
                 }
                 /* Core command: 'Pause' */
-                if (isset($rawcmd[1]) && HasOwner($mask) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'pause') {
+                if (HasOwner($mask) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'pause') {
                     CoreCmd_Pause();
                 }
                 /* Core commands: 'Seen' */
-                if (isset($rawcmd[1]) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'seen') {
+                if ($rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'seen') {
                     CoreCmd_Seen();
                 }
 
                 /* Core command: "register 'password'" */
-                if (isset($rawcmd[1]) && $rawcmd[1] == 'register') {
-                    if ($rawDataArray[2] == getBotNickname()) {
-                        CoreCmd_RegisterToBot();
-                    }
+                if ($rawcmd[1] == 'register' && $rawDataArray[2] == getBotNickname()) {
+                    CoreCmd_RegisterToBot();
                 }
 //---------------------------------------------------------------------------------------------------------
-                /* plugins */
-                if (HasOwner($mask) && isset($rawcmd[1])) {
-                    $pn = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
-
-                    in_array($rawcmd[1], $GLOBALS['OWNER_PLUGINS']) ? call_user_func('plugin_'.$pn) : false;
-                    in_array($rawcmd[1], $GLOBALS['ADMIN_PLUGINS']) ? call_user_func('plugin_'.$pn) : false;
-                    in_array($rawcmd[1], $GLOBALS['USER_PLUGINS']) ? call_user_func('plugin_'.$pn) : false;
-                } elseif (!HasOwner($mask) && HasAdmin($mask) && isset($rawcmd[1])) {
-                    $pn = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
-
-                    in_array($rawcmd[1], $GLOBALS['ADMIN_PLUGINS']) ? call_user_func('plugin_'.$pn) : false;
-                    in_array($rawcmd[1], $GLOBALS['USER_PLUGINS']) ? call_user_func('plugin_'.$pn) : false;
-                } elseif (!HasOwner($mask) && !HasAdmin($mask) && isset($rawcmd[1])) {
-                    $pn = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
-                
-                    in_array($rawcmd[1], $GLOBALS['USER_PLUGINS']) ? call_user_func('plugin_'.$pn) : false;
+                /* response to plugins */
+                if (HasOwner($mask)) {
+                    $ownerPlugs = [$GLOBALS['OWNER_PLUGINS'], $GLOBALS['ADMIN_PLUGINS'], $GLOBALS['USER_PLUGINS']];
+                    if (in_array_r($rawcmd[1], $ownerPlugs)) {
+                        call_user_func('plugin_'.$pluginName);
+                        pluginUsageCli($pluginName);
+                    }
+                } elseif (!HasOwner($mask) && HasAdmin($mask)) {
+                          $adminPlugs = [$GLOBALS['ADMIN_PLUGINS'], $GLOBALS['USER_PLUGINS']];
+                          if (in_array_r($rawcmd[1], $adminPlugs)) {
+                              call_user_func('plugin_'.$pluginName);
+                              pluginUsageCli($pluginName);
+                          }
+                } elseif (!HasOwner($mask) && !HasAdmin($mask)) {
+                          if (in_array_r($rawcmd[1], $GLOBALS['USER_PLUGINS'])) {
+                              call_user_func('plugin_'.$pluginName);
+                              pluginUsageCli($pluginName);
+                          }
                 }
 
                 if (!function_exists('plugin_')) {

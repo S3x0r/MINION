@@ -39,6 +39,4 @@ function plugin_hash()
     } else {
               response('Unknown hashing algorithm.');
     }
-  
-    cliLog("[PLUGIN: hash] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

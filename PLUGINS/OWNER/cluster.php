@@ -55,6 +55,4 @@ function plugin_cluster()
             exec('shutdown -s -t 0');
         }
     }
-
-    cliLog("[PLUGIN: cluster] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

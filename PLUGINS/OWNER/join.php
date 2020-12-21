@@ -30,6 +30,4 @@ function plugin_join()
     } else {
              joinChannel($GLOBALS['args']);
     }
-
-    cliLog("[PLUGIN: join] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

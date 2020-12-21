@@ -30,6 +30,4 @@ function plugin_voice()
     } else if (BotOpped() == true) {
                toServer("MODE ".getBotChannel()." +v {$GLOBALS['args']}");
     }
-
-    cliLog("[PLUGIN: voice] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

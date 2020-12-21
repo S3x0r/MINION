@@ -59,6 +59,4 @@ function plugin_remowner()
                  response('Bad input, try: nick!ident@hostname');
         }
     }
-
-    cliLog("[PLUGIN: remowner] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

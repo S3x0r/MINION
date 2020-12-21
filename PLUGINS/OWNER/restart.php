@@ -39,7 +39,6 @@ function plugin_restart()
     toServer("QUIT :Restarting...");
 
     /* send cli messages */
-    cliLog("[PLUGIN: restart] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
     cliLog('Restarting BOT...');
   
     /* execute batch script */

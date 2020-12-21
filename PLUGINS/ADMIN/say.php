@@ -30,6 +30,4 @@ function plugin_say()
     } else {
              toServer("PRIVMSG ".getBotChannel()." ".inputFromLine('4'));
     }
-
-    cliLog("[PLUGIN: say] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

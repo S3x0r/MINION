@@ -35,7 +35,6 @@ function plugin_quit()
     
     toServer("QUIT :http://github.com/S3x0r/MINION");
 
-    cliLog("[PLUGIN: quit] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
     cliLog('Terminating BOT.');
     cliLog('------------------LOG ENDED: '.date('d.m.Y | H:i:s')."------------------\r\n");
 

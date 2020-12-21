@@ -30,6 +30,4 @@ function plugin_md5()
     } else {
              response(md5(inputFromLine(4)));
     }
-  
-    cliLog("[PLUGIN: md5] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

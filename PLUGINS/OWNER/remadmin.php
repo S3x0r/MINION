@@ -60,6 +60,4 @@ function plugin_remadmin()
                  response('Bad input, try: nick!ident@hostname');
         }
     }
-
-    cliLog("[PLUGIN: remadmin] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

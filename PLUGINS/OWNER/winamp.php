@@ -72,7 +72,6 @@ function plugin_winamp()
         } else {
                  response('CLAmp not specified!');
         }
-    cliLog("[PLUGIN: winamp] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }
 
 function sendTitle($target)

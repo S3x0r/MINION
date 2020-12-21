@@ -58,6 +58,4 @@ function plugin_addadmin()
     } else {
              response("I'm already a master!");
     }
-
-    cliLog("[PLUGIN: addadmin] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

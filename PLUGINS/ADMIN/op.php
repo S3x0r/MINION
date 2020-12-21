@@ -30,6 +30,4 @@ function plugin_op()
     } elseif (BotOpped() == true) {
              toServer("MODE ".getBotChannel()." +o {$GLOBALS['args']}");
     }
-
-    cliLog("[PLUGIN: op] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

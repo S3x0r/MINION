@@ -37,6 +37,4 @@ function plugin_ban()
 
            unset($nickToBan);
     }
-
-    cliLog("[PLUGIN: ban] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

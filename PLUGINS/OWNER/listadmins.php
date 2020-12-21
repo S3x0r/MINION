@@ -40,6 +40,4 @@ function plugin_listadmins()
         }
              response('End.');
     }
-
-    cliLog("[PLUGIN: listadmins] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

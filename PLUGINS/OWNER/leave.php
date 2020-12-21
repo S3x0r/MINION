@@ -30,6 +30,4 @@ function plugin_leave()
     } else {
              toServer("PART {$GLOBALS['args']}");
     }
-
-    cliLog("[PLUGIN: leave] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

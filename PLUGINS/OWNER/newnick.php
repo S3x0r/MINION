@@ -30,6 +30,4 @@ function plugin_newnick()
     } elseif ($GLOBALS['args'] != getBotNickname()) {
               toServer("NICK {$GLOBALS['args']}");
     }
-
-    cliLog("[PLUGIN: newnick] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

@@ -117,5 +117,4 @@ function plugin_plugin()
 //---------------------------------------------------------------------------------------------------------
         }
     }
-    cliLog("[PLUGIN: plugin] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

@@ -29,8 +29,6 @@ function plugin_uptime()
     $uptimeTime = uptimeCount(microtime(true) - START_TIME);
 
     response("I've been running since (".date('d.m.Y, H:i:s', START_TIME).") and been running for {$uptimeTime}");
- 
-    cliLog("[PLUGIN: uptime] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }
 
 function uptimeCount($s)

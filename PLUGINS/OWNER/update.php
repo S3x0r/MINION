@@ -32,8 +32,6 @@ function plugin_update()
     } else {
              response('I cannot use this plugin, i need php_openssl extension to work!');
     }
-
-    cliLog("[PLUGIN: update] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }
 //------------------------------------------------------------------------------------------------
 function v_connect()

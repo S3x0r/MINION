@@ -42,6 +42,4 @@ function plugin_server()
         } elseif (!is_numeric($GLOBALS['piece2'])) {
                   response('Wrong server port.');
         }
-
-    cliLog("[PLUGIN: server] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

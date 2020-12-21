@@ -337,5 +337,4 @@ function plugin_save()
                 break;
         }
     }
-    cliLog("[PLUGIN: save] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

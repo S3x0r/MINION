@@ -30,6 +30,4 @@ function plugin_kick()
     } elseif (BotOpped() == true && $GLOBALS['piece2'] != getBotNickname() && $GLOBALS['piece2'] != $GLOBALS['USER']) {
               toServer("KICK {$GLOBALS['piece1']} :{$GLOBALS['piece2']}");
     }
-
-    cliLog("[PLUGIN: kick] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }

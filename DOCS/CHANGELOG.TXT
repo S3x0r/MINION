@@ -1,4 +1,9 @@
 
+   v1.1.2 changes (21.12.2020):
+   - plugin usage info moved from plugins files to misc.php
+   - little code cleanup in socket.php
+   - improved requests checks
+
    v1.1.1 changes (20.12.2020):
    - Plugin: leave - fixed bug with channels in capital letters
    - some messages was present in silent mode, fixed
