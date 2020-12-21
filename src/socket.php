@@ -238,6 +238,11 @@ function SocketLoop()
             }
 
 //---------------------------------------------------------------------------------------------------------
+            /* Core command: "register 'password'" */
+            if (empty($GLOBALS['stop']) && isset($rawcmd[1]) && $rawcmd[1] == 'register' && $rawDataArray[2] == getBotNickname()) {
+                CoreCmd_RegisterToBot();
+            }
+
             /* response to core command: 'Unpause' */
             if (HasOwner($mask) && isset($rawcmd[1]) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'unpause') {
                 CoreCmd_Unpause();
@@ -264,11 +269,6 @@ function SocketLoop()
                 /* Core commands: 'Seen' */
                 if ($rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'seen') {
                     CoreCmd_Seen();
-                }
-
-                /* Core command: "register 'password'" */
-                if ($rawcmd[1] == 'register' && $rawDataArray[2] == getBotNickname()) {
-                    CoreCmd_RegisterToBot();
                 }
 //---------------------------------------------------------------------------------------------------------
                 /* response to plugins */

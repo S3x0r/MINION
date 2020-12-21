@@ -1,4 +1,7 @@
 
+   v1.1.3 changes (21.12.2020):
+   - registration to bot bug fixed
+
    v1.1.2 changes (21.12.2020):
    - plugin usage info moved from plugins files to misc.php
    - little code cleanup in socket.php
