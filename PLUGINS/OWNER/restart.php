@@ -24,10 +24,6 @@
     $plugin_description = "Restarts Bot: {$GLOBALS['CONFIG_CMD_PREFIX']}restart";
     $plugin_command     = 'restart';
 
-/* TODO:
-   - escape from parent process
-*/
-
 function plugin_restart()
 {
     /* give op before restart */
@@ -41,8 +37,12 @@ function plugin_restart()
     /* send cli messages */
     cliLog('Restarting BOT...');
   
-    /* execute batch script */
-    !isset($GLOBALS['OS']) ? system('START_BOT.BAT') : system('php -f BOT.php');
+    if (!isset($GLOBALS['OS'])) {
+        chdir('src/php');
+        runProgram('start php.exe ../../BOT.php');
+    } else {
+             runProgram('php -f BOT.php');
+    }
 
     exit;
 }

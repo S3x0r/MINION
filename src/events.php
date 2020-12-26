@@ -126,6 +126,19 @@ function on_mode() /* on MODE event */
 //---------------------------------------------------------------------------------------------------------
 function on_join()
 {
+    /* if bot joined */
+    if ($GLOBALS['USER'] == getBotNickname()) {
+        /* 1. set channel from 353 */
+        $GLOBALS['BOT_CHANNEL'] = str_replace(':', '', $GLOBALS['rawDataArray'][2]);
+        
+        cliLog("[bot] Joined channel: ".getBotChannel());
+
+        /* 1.check channel modes for cli message */
+        toServer("MODE ".getBotChannel());
+
+        /* FIX: save data for web panel */
+    }
+
     /* if user joined channel */
     if ($GLOBALS['USER'] != getBotNickname()) {
         cliLog("[".getBotChannel()."] * {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) has joined");
@@ -156,23 +169,11 @@ function on_join()
 //---------------------------------------------------------------------------------------------------------
 function on_353() /* on channel join info */
 {
-    /* when we got confirmation that bot joined channel */
-    if (isset($GLOBALS['rawDataArray'][2]) && $GLOBALS['rawDataArray'][2] == getBotNickname()) {
-        /* 1. set channel from 353 */
-        $GLOBALS['BOT_CHANNEL'] = $GLOBALS['rawDataArray'][4]; /* FIX: we can set channel name faster after JOIN event */
-        
-        cliLog("[bot] Joined channel: ".getBotChannel());
-        
-        /* FIX: save data for web panel */
-
-        /* if bot got op */
-        if (isset($GLOBALS['rawDataArray'][5]) && $GLOBALS['rawDataArray'][5] == ':@'.getBotNickname()) {
-            /* on bot opped event */
-            on_bot_opped();
-        }
-   
-        /* check channel modes */
-        toServer("MODE ".getBotChannel());
+    $nick = str_replace(':', '', $GLOBALS['rawDataArray'][5]);
+  
+    /* if bot opped */
+    if ($nick == '@'.getBotNickname()) {
+        on_bot_opped();
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -393,22 +394,16 @@ function setChannelModesAndBans()
     }
 
     /* set channel modes from config */
-    if ($GLOBALS['CONFIG_KEEPCHAN_MODES'] == 'yes') {
-        toServer('MODE '.getBotChannel());
-    
-        if (BotOpped() == true) {
-            if (isset($GLOBALS['CHANNEL_MODES']) && $GLOBALS['CHANNEL_MODES'] != $GLOBALS['CONFIG_CHANNEL_MODES']) {
-                sleep(1);
-                toServer("MODE ".getBotChannel()." -{$GLOBALS['CHANNEL_MODES']}");
-                sleep(1);
-                toServer("MODE ".getBotChannel()." +{$GLOBALS['CONFIG_CHANNEL_MODES']}");
-            }
-            if (empty($GLOBALS['CHANNEL_MODES'])) {
-                if (!empty($GLOBALS['CONFIG_CHANNEL_MODES'])) {
-                    sleep(1);
-                    toServer("MODE ".getBotChannel()." +{$GLOBALS['CONFIG_CHANNEL_MODES']}");
-                }
-            }
+    if ($GLOBALS['CONFIG_KEEPCHAN_MODES'] == 'yes' && BotOpped() == true) { //FIX: keep modes
+        if (isset($GLOBALS['CHANNEL_MODES']) && $GLOBALS['CHANNEL_MODES'] != $GLOBALS['CONFIG_CHANNEL_MODES']) {
+            sleep(1);
+            toServer("MODE ".getBotChannel()." -{$GLOBALS['CHANNEL_MODES']}");
+            sleep(1);
+            toServer("MODE ".getBotChannel()." +{$GLOBALS['CONFIG_CHANNEL_MODES']}");
+        }
+        if (empty($GLOBALS['CHANNEL_MODES']) && !empty($GLOBALS['CONFIG_CHANNEL_MODES'])) {
+            sleep(1);
+            toServer("MODE ".getBotChannel()." +{$GLOBALS['CONFIG_CHANNEL_MODES']}");
         }
     }
 }

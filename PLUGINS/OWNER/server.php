@@ -34,7 +34,15 @@ function plugin_server()
 
               toServer("QUIT :Changing server...");
   
-              !isset($GLOBALS['OS']) ? system('cd src & cd php & php.exe ../../BOT.php -o '.$GLOBALS['piece1'].' '.$GLOBALS['piece2']) : system('php  BOT.php -o '.$GLOBALS['piece1'].' '.$GLOBALS['piece2']);
+              if (!isset($GLOBALS['OS'])) {
+                  chdir('src/php');
+                  runProgram('start php.exe ../../BOT.php -o '.$GLOBALS['piece1'].' '.$GLOBALS['piece2']);
+                  exit;
+              } else {
+                       runProgram('php BOT.php -o '.$GLOBALS['piece1'].' '.$GLOBALS['piece2']);
+                       exit;
+              }
+
         } elseif (empty($GLOBALS['args'])) {
                   response('You need to specify server address.');
         } elseif (empty($GLOBALS['piece2'])) {

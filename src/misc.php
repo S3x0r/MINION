@@ -305,3 +305,14 @@ function pluginUsageCli($pluginName)
 {
     cliLog("[PLUGIN: {$pluginName}] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }
+//---------------------------------------------------------------------------------------------------------
+function runProgram($command)
+{
+    $descriptorspec = array(
+          0 => array("pipe", "r"),
+          1 => array("pipe", "w"),
+          2 => array("pipe", "w")
+    );
+
+    $process = proc_open($command, $descriptorspec, $pipes);
+}
