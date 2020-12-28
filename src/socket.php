@@ -106,10 +106,8 @@ function SocketLoop()
             /* put raw data to array */
             $rawDataArray = explode(' ', trim($rawData));
 //---------------------------------------------------------------------------------------------------------
-            /* PING PONG game */
-            if (isset($rawDataArray[0]) && $rawDataArray[0] == 'PING') {
-                on_server_ping();
-            }
+            /* if ping -> response */
+            (isset($rawDataArray[0]) && $rawDataArray[0] == 'PING') ? on_server_ping() : false;
 //---------------------------------------------------------------------------------------------------------
             /* parse vars from rawDataArray[0] */
             if (preg_match('/^:(.*)\!(.*)\@(.*)$/', $rawDataArray[0], $source)) {
@@ -119,29 +117,8 @@ function SocketLoop()
                 $USER_HOST   = $USER_IDENT.'@'.$host;
             }
 //---------------------------------------------------------------------------------------------------------
-            /* ON JOIN */
-            isset($rawDataArray[1]) && $rawDataArray[1] == 'JOIN' ? on_join() : false;
-
-            /* ON PART */
-            isset($rawDataArray[1]) && $rawDataArray[1] == 'PART' ? on_part() : false;
-
-            /* ON KICK */
-            isset($rawDataArray[1]) && $rawDataArray[1] == 'KICK' ? on_kick() : false;
-
-            /* ON TOPIC */
-            isset($rawDataArray[1]) && $rawDataArray[1] == 'TOPIC' ? on_TOPIC() : false;
-
-            /* ON PRIVMSG */
-            isset($rawDataArray[1]) && $rawDataArray[1] == 'PRIVMSG' ? on_privmsg() : false;
-
-            /* ON NICK */
-            isset($rawDataArray[1]) && $rawDataArray[1] == 'NICK' ? on_nick() : false;
-
-            /* ON QUIT */
-            isset($rawDataArray[1]) && $rawDataArray[1] == 'QUIT' ? on_quit() : false;
-
-            /* ON MODE */
-            isset($rawDataArray[1]) && $rawDataArray[1] == 'MODE' ? on_mode() : false;
+            /* if operation (JOIN,PART,etc) -> response */
+            if_OPERATION();
 //---------------------------------------------------------------------------------------------------------
             if (count($rawDataArray) < 4) {
                 continue;
@@ -168,135 +145,14 @@ function SocketLoop()
             isset($pieces[2]) ? $piece3 = $pieces[2] : $piece3 = '';
             isset($pieces[3]) ? $piece4 = $pieces[3] : $piece4 = '';
 //---------------------------------------------------------------------------------------------------------
-            if (isset($rawDataArray[1])) {
-                switch ($rawDataArray[1]) {
-                    case '001': /* server welcome message */
-                        on_001();
-                        break;
-                    case '002': /* host, version server */
-                        on_002();
-                        break;
-                    case '003': /* server creation time */
-                        on_003();
-                        break;
-                    case '303': /* ison */
-                        on_303();
-                        break;
-                    case '331': /* topic */
-                        on_331();
-                        break;
-                    case '332': /* topic */
-                        on_332();
-                        break;
-                    case '433': /* if nick already exists */
-                        on_432();
-                        break;
-                    case '432': /* if nick reserved */
-                        on_432();
-                        break;
-                    case '422': /* join if no motd */
-                        on_376();
-                        break;
-                    case '376': /* join after motd */
-                        on_376();
-                        break;
-                    case '324': /* channel modes */
-                        on_324();
-                        break;
-                    case '353': /* on channel join inf */
-                        on_353();
-                        break;
-                    case '366': /* on end names list */
-                        on_366();
-                        break;
-                    case '471': /* if +limit on channel */
-                        on_471();
-                        break;
-                    case '473': /* if +invite on channel */
-                        on_473();
-                        break;
-                    case '474': /* if bot +banned on channel */
-                        on_474();
-                        break;
-                    case '475': /* if +key on channel */
-                        on_475();
-                        break;
-                }
-            }
-//---------------------------------------------------------------------------------------------------------
-            /* response to CTCP request */
-            if (empty($GLOBALS['stop']) && $GLOBALS['CONFIG_CTCP_RESPONSE'] == 'yes' && isset($rawcmd[1][0]) && $rawcmd[1][0] == '') {
-                CTCP();
-            }
-//---------------------------------------------------------------------------------------------------------
-            if (isset($rawcmd[1][0]) && $rawcmd[1][0] == $GLOBALS['CONFIG_CMD_PREFIX']) {
-                $pluginRequest = true;
-                $pluginName = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
-            } else {
-                     $pluginRequest = false;
-                     unset($pluginName);
-            }
+            /* if reply (001,002,etc) -> response */
+            if_REPLY();
 
-//---------------------------------------------------------------------------------------------------------
-            /* Core command: "register 'password'" */
-            if (empty($GLOBALS['stop']) && isset($rawcmd[1]) && $rawcmd[1] == 'register' && $rawDataArray[2] == getBotNickname()) {
-                CoreCmd_RegisterToBot();
-            }
+            /* if CTCP request -> response */
+            if_CTCP();
 
-            /* response to core command: 'Unpause' */
-            if (HasOwner($mask) && isset($rawcmd[1]) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'unpause') {
-                CoreCmd_Unpause();
-            }
-//---------------------------------------------------------------------------------------------------------
-            /* response to core plugins */
-            if (empty($GLOBALS['stop']) && $pluginRequest == true) {
-                /* Core command: 'Panel' */
-                if (HasOwner($mask) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'panel') {
-                    CoreCmd_Panel();
-                }
-                /* Core command: 'Load' */
-                if (HasOwner($mask) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'load') {
-                    CoreCmd_Load();
-                }
-                /* Core command: 'Unload' */
-                if (HasOwner($mask) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'unload') {
-                    CoreCmd_Unload();
-                }
-                /* Core command: 'Pause' */
-                if (HasOwner($mask) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'pause') {
-                    CoreCmd_Pause();
-                }
-                /* Core commands: 'Seen' */
-                if ($rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'seen') {
-                    CoreCmd_Seen();
-                }
-//---------------------------------------------------------------------------------------------------------
-                /* response to plugins */
-                if (HasOwner($mask)) {
-                    $ownerPlugs = [$GLOBALS['OWNER_PLUGINS'], $GLOBALS['ADMIN_PLUGINS'], $GLOBALS['USER_PLUGINS']];
-                    if (in_array_r($rawcmd[1], $ownerPlugs)) {
-                        call_user_func('plugin_'.$pluginName);
-                        pluginUsageCli($pluginName);
-                    }
-                } elseif (!HasOwner($mask) && HasAdmin($mask)) {
-                          $adminPlugs = [$GLOBALS['ADMIN_PLUGINS'], $GLOBALS['USER_PLUGINS']];
-                          if (in_array_r($rawcmd[1], $adminPlugs)) {
-                              call_user_func('plugin_'.$pluginName);
-                              pluginUsageCli($pluginName);
-                          }
-                } elseif (!HasOwner($mask) && !HasAdmin($mask)) {
-                          if (in_array_r($rawcmd[1], $GLOBALS['USER_PLUGINS'])) {
-                              call_user_func('plugin_'.$pluginName);
-                              pluginUsageCli($pluginName);
-                          }
-                }
-
-                if (!function_exists('plugin_')) {
-                    function plugin_()
-                    {
-                    }
-                }
-            }
+            /* if plugin request -> response */
+            if_PLUGIN();
 //---------------------------------------------------------------------------------------------------------
         }
         /* if disconected */
@@ -389,4 +245,18 @@ function getBotChannel()
     if (isset($GLOBALS['BOT_CHANNEL']) && !empty($GLOBALS['BOT_CHANNEL'])) {
         return $GLOBALS['BOT_CHANNEL'];
     }
+}
+//---------------------------------------------------------------------------------------------------------
+function setBotChannel($channel)
+{
+    global $botChannel;
+
+    $botChannel = $channel;
+}
+//---------------------------------------------------------------------------------------------------------
+function setServerName($name)
+{
+    global $serverName;
+
+    $serverName = $name;
 }

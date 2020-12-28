@@ -20,7 +20,16 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-function CTCP()
+function if_CTCP()
+{
+    global $rawcmd;
+
+    if (empty($GLOBALS['stop']) && $GLOBALS['CONFIG_CTCP_RESPONSE'] == 'yes' && isset($rawcmd[1][0]) && $rawcmd[1][0] == '') {
+        on_CTCP();
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function on_CTCP()
 {
     switch ($GLOBALS['rawcmd'][1]) {
         case 'version':
@@ -59,16 +68,14 @@ function CTCP()
             break;
 
         case 'ping':
-            $a = str_replace(' ', '', $GLOBALS['args']);
-            toServer("NOTICE {$GLOBALS['USER']} :PING {$a}");
+            toServer("NOTICE {$GLOBALS['USER']} :PING ".str_replace(' ', '', $GLOBALS['args']));
 
             cliLog("[bot] ctcp PING by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})");
             PlaySound('ctcp.mp3');
             break;
 
         case 'time':
-            $a = date("F j, Y, g:i a");
-            toServer("NOTICE {$GLOBALS['USER']} :TIME {$a}");
+            toServer("NOTICE {$GLOBALS['USER']} :TIME ".date("F j, Y, g:i a"));
 
             cliLog("[bot] ctcp TIME by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})");
             PlaySound('ctcp.mp3');

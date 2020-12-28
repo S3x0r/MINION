@@ -20,6 +20,48 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
+function if_PLUGIN()
+{
+    global $rawcmd;
+    global $rawDataArray;
+    global $mask;
+    
+    /* Unpause -OWNER- core command */
+    (HasOwner($mask) && isset($rawcmd[1]) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'unpause') ? plugin_Unpause() : false;
+    
+    if (empty($GLOBALS['stop'])) {
+        /* register to bot - core command */
+        (isset($rawcmd[1]) && $rawcmd[1] == 'register' && $rawDataArray[2] == getBotNickname()) ? CoreCmd_RegisterToBot() : false;
+ //---------------------------------------------------------------------------------------------------------
+        /* response to plugins requests */
+        if (isset($rawcmd[1][0]) && $rawcmd[1][0] == $GLOBALS['CONFIG_CMD_PREFIX']) {
+            $pluginReq = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
+            $p = $GLOBALS['CONFIG_CMD_PREFIX'];
+
+            /* OWNER */
+            if (HasOwner($mask) && in_array_r($rawcmd[1], [$p.'seen', $p.'panel', $p.'load', $p.'unload', $p.'pause',
+                $GLOBALS['OWNER_PLUGINS'], $GLOBALS['ADMIN_PLUGINS'], $GLOBALS['USER_PLUGINS']])) {
+                call_user_func('plugin_'.$pluginReq);
+                pluginUsageCli($pluginReq);
+            /* ADMIN */
+            } elseif (!HasOwner($mask) && HasAdmin($mask) && in_array_r($rawcmd[1], [$p.'seen', $GLOBALS['ADMIN_PLUGINS'], $GLOBALS['USER_PLUGINS']])) {
+                      call_user_func('plugin_'.$pluginReq);
+                      pluginUsageCli($pluginReq);
+            /* USER */
+            } elseif (!HasOwner($mask) && !HasAdmin($mask) && in_array_r($rawcmd[1], [$p.'seen', $GLOBALS['USER_PLUGINS']])) {
+                      call_user_func('plugin_'.$pluginReq);
+                      pluginUsageCli($pluginReq);
+            }
+    
+            if (!function_exists('plugin_')) {
+                function plugin_()
+                {
+                }
+            }
+       }
+    }
+}
+//---------------------------------------------------------------------------------------------------------
 function LoadPlugins()
 {
     $CountedOwner = count(glob("PLUGINS/OWNER/*.php", GLOB_BRACE));

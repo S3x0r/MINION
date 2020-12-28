@@ -1,4 +1,7 @@
-   
+
+   v1.1.5 changes (28.12.2020):
+   - code cleanup
+
    v1.1.4 changes (26.12.2020):
    - Plugin: restart - now escapes from parent process
    - Plugin: server - now escapes from parent process

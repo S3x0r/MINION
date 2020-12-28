@@ -20,6 +20,24 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
+function if_REPLY()
+{
+    global $rawDataArray;
+
+    if (isset($rawDataArray[1]) && is_numeric($rawDataArray[1])) {
+        function_exists('on_'.$rawDataArray[1]) ? call_user_func('on_'.$rawDataArray[1]) : false;
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function if_OPERATION()
+{
+    global $rawDataArray;
+
+    if (isset($rawDataArray[1]) && in_array($rawDataArray[1], ['JOIN', 'PART', 'KICK', 'TOPIC', 'PRIVMSG', 'NICK', 'QUIT', 'MODE'])) {
+        function_exists('on_'.$rawDataArray[1]) ? call_user_func('on_'.$rawDataArray[1]) : false;
+    }
+}
+//---------------------------------------------------------------------------------------------------------
 function on_server_ping()
 {
     /* send PONG */
@@ -28,10 +46,8 @@ function on_server_ping()
 //---------------------------------------------------------------------------------------------------------
 function on_001() /* server message */
 {
-    /* :server.name 001 minion :Welcome to the Testnet IRC Network minion!minion@localhost */
-    
     /* 1.set server name */
-    $GLOBALS['serverName'] = $GLOBALS['rawDataArray'][0];
+    setServerName($GLOBALS['rawDataArray'][0]);
 
     /* 1.set bot nickname */
     setBotNickname($GLOBALS['rawDataArray'][2]);
@@ -273,7 +289,7 @@ function on_quit()
 //---------------------------------------------------------------------------------------------------------
 function on_TOPIC()  /* topic change */
 {
-    cliLog('['.getBotChannel().'] * '.$GLOBALS['USER'].'('.$GLOBALS['USER_HOST'].') sets topic: "'.inputFromLine('3').'"');
+    cliLog('['.getBotChannel().'] * '.$GLOBALS['USER'].' ('.$GLOBALS['USER_HOST'].') sets topic: "'.inputFromLine('3').'"');
 }
 //---------------------------------------------------------------------------------------------------------
 function on_privmsg()

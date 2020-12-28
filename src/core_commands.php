@@ -20,7 +20,7 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-function CoreCmd_Seen()
+function plugin_seen()
 {
     if (OnEmptyArg('seen <nickname> to check specified user when was last seen on channel')) {
     } else { /* prevent directory traversal */
@@ -39,8 +39,6 @@ function CoreCmd_Seen()
                 response(file_get_contents(DATADIR."/SEEN/{$GLOBALS['args']}")) : response('No such user in my database.');
             
         }
-
-        cliLog("[PLUGIN: seen] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -61,7 +59,7 @@ function SeenSave()
         @file_put_contents($seenDataDir.$GLOBALS['USER'], $data) : @file_put_contents($seenDataDir.$GLOBALS['USER'], $data);
 }
 //---------------------------------------------------------------------------------------------------------
-function CoreCmd_Pause()
+function plugin_pause()
 {
     response('Pausing all activity');
   
@@ -72,7 +70,7 @@ function CoreCmd_Pause()
     cliLog('[bot] Im in Pause mode');
 }
 //---------------------------------------------------------------------------------------------------------
-function CoreCmd_Unpause()
+function plugin_unpause()
 {
     if (isset($GLOBALS['stop'])) {
         unset($GLOBALS['stop']);
@@ -85,7 +83,7 @@ function CoreCmd_Unpause()
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function CoreCmd_Panel()
+function plugin_panel()
 {
     if (OnEmptyArg('panel <help> to list commands')) {
     } else {
@@ -138,7 +136,7 @@ function CoreCmd_Panel()
     cliLog("[PLUGIN: panel] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }
 //---------------------------------------------------------------------------------------------------------
-function CoreCmd_Load()
+function plugin_load()
 {
     if (empty($GLOBALS['args'])) {
         response("Usage {$GLOBALS['CONFIG_CMD_PREFIX']}load <plugin_name>");
@@ -147,7 +145,7 @@ function CoreCmd_Load()
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function CoreCmd_Unload()
+function plugin_unload()
 {
     if (empty($GLOBALS['args'])) {
         response("Usage {$GLOBALS['CONFIG_CMD_PREFIX']}unload <plugin_name>");
@@ -217,8 +215,8 @@ function CoreCmd_RegisterToBot()
                 }
             } else {
                      $hashed = hash('sha256', $GLOBALS['args']);
-                /* if user is already an owner */
-                $hashed == $GLOBALS['CONFIG_OWNER_PASSWD'] ? response('You are already my owner') : false;
+                     /* if user is already an owner */
+                     $hashed == $GLOBALS['CONFIG_OWNER_PASSWD'] ? response('You are already my owner') : false;
             }
         }
     } catch (Exception $e) {
