@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Checking for updates: {$GLOBALS['CONFIG_CMD_PREFIX']}checkupdate";
+    $plugin_description = "Checking for updates: {$GLOBALS['CONFIG.CMD.PREFIX']}checkupdate";
     $plugin_command     = 'checkupdate';
 //------------------------------------------------------------------------------------------------
 function plugin_checkupdate()
@@ -50,7 +50,7 @@ function checkVersion()
     if ($version[0] > VER) {
         response('New version available!');
         response("My version: ".VER.", version on server: {$version[0]} ");
-        response("To update BOT, use {$GLOBALS['CONFIG_CMD_PREFIX']}update");
+        response("To update BOT, use {$GLOBALS['CONFIG.CMD.PREFIX']}update");
     } else {
               response('No new update, you have the latest version.');
     }

@@ -1,4 +1,20 @@
 
+   v1.1.6 changes (28.12.2022):
+   - fixed reconnect delay time
+   - new option in config: 'show_own_messages_in_raw_mode'
+   - new option in config: 'show_motd' - shows server message of the day 
+   - logo.php removed
+   - 'DOCS' and 'PLUGINS' folders are now lowercase
+   - added 'start.php', 'args.php' files
+   - now in -c arg you need to provide full path to file
+   - silent mode removed
+   - logo removed
+   - new logs filename format: 'date+time-computer name'
+   - bot now shows notices from server
+   - separators in config file changed from '_' to '.'
+   - Fixed: plugin 'say' - we can now say whole message
+   - other small changes / code cleanup
+
    v1.1.5 changes (28.12.2020):
    - code cleanup
 

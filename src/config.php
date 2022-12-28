@@ -20,148 +20,90 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-function LoadConfig($state = '')
+function LoadConfig()
 {
-    /* when there is no config from arg */
-    !isset($GLOBALS['configFile']) ? $GLOBALS['configFile'] = 'CONFIG.INI' : false;
+    $cfg = new IniParser($GLOBALS['configFile']);
 
-    /* if we got config file */
-    if (is_file($GLOBALS['configFile'])) {
-        $cfg = new IniParser($GLOBALS['configFile']);
+    /* load configuration */
 
-        /* load configuration */
+    /* BOT */
+    $GLOBALS['CONFIG.NICKNAME']       = $cfg->get('BOT', 'nickname');
+    $GLOBALS['CONFIG.NAME']           = $cfg->get('BOT', 'name');
+    $GLOBALS['CONFIG.IDENT']          = $cfg->get('BOT', 'ident');
 
-        /* BOT */
-        $GLOBALS['CONFIG_NICKNAME']       = $cfg->get('BOT', 'nickname');
-        $GLOBALS['CONFIG_NAME']           = $cfg->get('BOT', 'name');
-        $GLOBALS['CONFIG_IDENT']          = $cfg->get('BOT', 'ident');
+    /* SERVER */
+    !isset($GLOBALS['CONFIG.SERVER']) ? $GLOBALS['CONFIG.SERVER'] = $cfg->get('SERVER', 'server') : false;
+    !isset($GLOBALS['CONFIG.PORT'])   ? $GLOBALS['CONFIG.PORT']   = $cfg->get('SERVER', 'port')   : false;
+    
+    $GLOBALS['CONFIG.SERVER.PASSWD']  = $cfg->get('SERVER', 'server.password');
+    $GLOBALS['CONFIG.TRY.CONNECT']    = $cfg->get('SERVER', 'try.connect');
+    $GLOBALS['CONFIG.CONNECT.DELAY']  = $cfg->get('SERVER', 'connect.delay');
+    $GLOBALS['CONFIG.SHOW.MOTD']      = $cfg->get('SERVER', 'show.motd');
 
-        /* SERVER */
-        !isset($GLOBALS['CUSTOM_SERVER_AND_PORT']) ? $GLOBALS['CONFIG_SERVER'] = $cfg->get('SERVER', 'server') : false;
-        !isset($GLOBALS['CUSTOM_SERVER_AND_PORT']) ? $GLOBALS['CONFIG_PORT'] = $cfg->get('SERVER', 'port') : false;
-        
-        $GLOBALS['CONFIG_SERVER_PASSWD']  = $cfg->get('SERVER', 'server_password');
-        $GLOBALS['CONFIG_TRY_CONNECT']    = $cfg->get('SERVER', 'try_connect');
-        $GLOBALS['CONFIG_CONNECT_DELAY']  = $cfg->get('SERVER', 'connect_delay');
-        /* OWNER */
-        $GLOBALS['CONFIG_BOT_ADMIN']      = $cfg->get('OWNER', 'bot_admin');
-        $GLOBALS['CONFIG_AUTO_OP_LIST']   = $cfg->get('OWNER', 'auto_op_list');
-        $GLOBALS['CONFIG_OWNERS']         = $cfg->get('OWNER', 'bot_owners');
-        $GLOBALS['CONFIG_OWNER_PASSWD']   = $cfg->get('OWNER', 'owner_password');
-        /* ADMIN */
-        $GLOBALS['CONFIG_ADMIN_LIST']     = $cfg->get('ADMIN', 'admin_list');
-        /* BOT RESPONSE */
-        $GLOBALS['CONFIG_BOT_RESPONSE']   = $cfg->get('RESPONSE', 'bot_response');
-        /* AUTOMATIC */
-        $GLOBALS['CONFIG_AUTO_OP']        = $cfg->get('AUTOMATIC', 'auto_op');
-        $GLOBALS['CONFIG_AUTO_REJOIN']    = $cfg->get('AUTOMATIC', 'auto_rejoin');
-        $GLOBALS['CONFIG_KEEPCHAN_MODES'] = $cfg->get('AUTOMATIC', 'keep_chan_modes');
-        $GLOBALS['CONFIG_KEEP_NICK']      = $cfg->get('AUTOMATIC', 'keep_nick');
-        /* CHANNEL */
-        $GLOBALS['CONFIG_CNANNEL']        = $cfg->get('CHANNEL', 'channel');
-        $GLOBALS['CONFIG_AUTO_JOIN']      = $cfg->get('CHANNEL', 'auto_join');
-        $GLOBALS['CONFIG_CHANNEL_MODES']  = $cfg->get('CHANNEL', 'channel_modes');
-        $GLOBALS['CONFIG_CHANNEL_KEY']    = $cfg->get('CHANNEL', 'channel_key');
-        /* BANS */
-        $GLOBALS['CONFIG_BAN_LIST']       = $cfg->get('BANS', 'ban_list');
-        /* COMMAND PREFIX */
-        $GLOBALS['CONFIG_CMD_PREFIX']     = $cfg->get('COMMAND', 'command_prefix');
-        /* CTCP */
-        $GLOBALS['CONFIG_CTCP_RESPONSE']  = $cfg->get('CTCP', 'ctcp_response');
-        $GLOBALS['CONFIG_CTCP_VERSION']   = $cfg->get('CTCP', 'ctcp_version');
-        $GLOBALS['CONFIG_CTCP_FINGER']    = $cfg->get('CTCP', 'ctcp_finger');
-        /* DELAYS */
-        $GLOBALS['CONFIG_CHANNEL_DELAY']  = $cfg->get('DELAYS', 'channel_delay');
-        $GLOBALS['CONFIG_PRIVATE_DELAY']  = $cfg->get('DELAYS', 'private_delay');
-        $GLOBALS['CONFIG_NOTICE_DELAY']   = $cfg->get('DELAYS', 'notice_delay');
-        /* LOGGING */
-        $GLOBALS['CONFIG_LOGGING']        = $cfg->get('LOGS', 'logging');
-        /* PANEL */
-        $GLOBALS['CONFIG_WEB_LOGIN']      = $cfg->get('PANEL', 'web_login');
-        $GLOBALS['CONFIG_WEB_PASSWORD']   = $cfg->get('PANEL', 'web_password');
-        /* TIMEZONE */
-        $GLOBALS['CONFIG_TIMEZONE']       = $cfg->get('TIME', 'time_zone');
-        /* FETCH */
-        $GLOBALS['CONFIG_FETCH_SERVER']   = $cfg->get('FETCH', 'fetch_server');
-        /* PROGRAM */
-        $GLOBALS['CONFIG_SHOW_LOGO']      = $cfg->get('PROGRAM', 'show_logo');
-        /* if switch used */
-        empty($GLOBALS['silent_cli']) ? $GLOBALS['silent_mode'] = $cfg->get('PROGRAM', 'silent_mode') : false;
+    /* OWNER */
+    $GLOBALS['CONFIG.BOT.ADMIN']      = $cfg->get('OWNER', 'bot.admin');
+    $GLOBALS['CONFIG.AUTO.OP.LIST']   = $cfg->get('OWNER', 'auto.op.list');
+    $GLOBALS['CONFIG.OWNERS']         = $cfg->get('OWNER', 'bot.owners');
+    $GLOBALS['CONFIG.OWNER.PASSWD']   = $cfg->get('OWNER', 'owner.password');
 
-        $GLOBALS['CONFIG_CHECK_UPDATE']   = $cfg->get('PROGRAM', 'check_update');
-        $GLOBALS['CONFIG_PLAY_SOUNDS']    = $cfg->get('PROGRAM', 'play_sounds');
-        /* DEBUG */
-        $GLOBALS['CONFIG_SHOW_RAW']       = $cfg->get('DEBUG', 'show_raw');
+    /* ADMIN */
+    $GLOBALS['CONFIG.ADMIN.LIST']     = $cfg->get('ADMIN', 'admin.list');
 
-        /* Set default data */
-        SetDefaultData();
+    /* BOT RESPONSE */
+    $GLOBALS['CONFIG.BOT.RESPONSE']   = $cfg->get('RESPONSE', 'bot.response');
 
-        if (!isset($GLOBALS['defaultPwdChanged'])) {
-            /* Logo & info :) */
-            Logo();
- 
-            /* Check if there is new version on server */
-            CheckUpdateInfo();
+    /* AUTOMATIC */
+    $GLOBALS['CONFIG.AUTO.OP']        = $cfg->get('AUTOMATIC', 'auto.op');
+    $GLOBALS['CONFIG.AUTO.REJOIN']    = $cfg->get('AUTOMATIC', 'auto.rejoin');
+    $GLOBALS['CONFIG.KEEPCHAN.MODES'] = $cfg->get('AUTOMATIC', 'keep.chan.modes');
+    $GLOBALS['CONFIG.KEEP.NICK']      = $cfg->get('AUTOMATIC', 'keep.nick');
 
-            ($state == 'default') ? cliLog('[bot] Config file missing! Creating default config: CONFIG.INI'.N) : false;
-        }
+    /* CHANNEL */
+    $GLOBALS['CONFIG.CHANNEL']        = $cfg->get('CHANNEL', 'channel');
+    $GLOBALS['CONFIG.AUTO.JOIN']      = $cfg->get('CHANNEL', 'auto.join');
+    $GLOBALS['CONFIG.CHANNEL.MODES']  = $cfg->get('CHANNEL', 'channel.modes');
+    $GLOBALS['CONFIG.CHANNEL.KEY']    = $cfg->get('CHANNEL', 'channel.key');
 
-        /* if default BOT owner(s) password, prompt to change it! */
-        if ($GLOBALS['CONFIG_OWNER_PASSWD'] == '47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed') {
-            /* play sound */
-            PlaySound('error_conn.mp3');
+    /* BANS */
+    $GLOBALS['CONFIG.BAN.LIST']       = $cfg->get('BANS', 'ban.list');
 
-            /* show info about it */
-            cliLog('[bot] Default BOT owner(s) password detected!');
-            cliLog('[bot] For security please change it (password can not contain spaces)');
+    /* COMMAND PREFIX */
+    $GLOBALS['CONFIG.CMD.PREFIX']     = $cfg->get('COMMAND', 'command.prefix');
 
-            /* Set new password */
-            $newPassword = getPasswd('['.@date('H:i:s').'] New Password: ');
+    /* CTCP */
+    $GLOBALS['CONFIG.CTCP.RESPONSE']  = $cfg->get('CTCP', 'ctcp.response');
+    $GLOBALS['CONFIG.CTCP.VERSION']   = $cfg->get('CTCP', 'ctcp.version');
+    $GLOBALS['CONFIG.CTCP.FINGER']    = $cfg->get('CTCP', 'ctcp.finger');
 
-            /* when password to short */
-            while (strlen($newPassword) < 8) {
-                echo N.'['.@date('H:i:s').'] Password too short, password must be at least 8 characters long'.N;
-                unset($newPassword);
-                $newPassword = getPasswd('['.@date('H:i:s').'] New Password: ');
-            }
+    /* DELAYS */
+    $GLOBALS['CONFIG.CHANNEL.DELAY']  = $cfg->get('DELAYS', 'channel.delay');
+    $GLOBALS['CONFIG.PRIVATE.DELAY']  = $cfg->get('DELAYS', 'private.delay');
+    $GLOBALS['CONFIG.NOTICE.DELAY']   = $cfg->get('DELAYS', 'notice.delay');
 
-            /* join spaces in password */
-            $newPassword = str_replace(' ', '', $newPassword);
+    /* LOGGING */
+    $GLOBALS['CONFIG.LOGGING']        = $cfg->get('LOGS', 'logging');
 
-            /* hash pwd */
-            $hashed = hash('sha256', $newPassword);
+    /* PANEL */
+    $GLOBALS['CONFIG.WEB.LOGIN']      = $cfg->get('PANEL', 'web.login');
+    $GLOBALS['CONFIG.WEB.PASSWORD']   = $cfg->get('PANEL', 'web.password');
 
-            /* save pwd to file */
-            SaveData($GLOBALS['configFile'], 'OWNER', 'owner_password', $hashed);
+    /* TIMEZONE */
+    $GLOBALS['CONFIG.TIMEZONE']       = $cfg->get('TIME', 'time.zone');
 
-            /* remove pwd checking vars */
-            unset($newPassword);
-            unset($hashed);
+    /* FETCH */
+    $GLOBALS['CONFIG.FETCH.SERVER']   = $cfg->get('FETCH', 'fetch.server');
 
-            /* Set first time change variable */
-            $GLOBALS['defaultPwdChanged'] = 'yes';
-            
-            echo N;
-            cliLog('[bot] Password changed!');
-          
-            /* update owner(s) password */
-            $cfg = new IniParser($GLOBALS['configFile']);
-            $GLOBALS['CONFIG_OWNER_PASSWD'] = $cfg->get('OWNER', 'owner_password');
-        }
+    /* PROGRAM */
+    $GLOBALS['CONFIG.PLAY.SOUNDS']    = $cfg->get('PROGRAM', 'play.sounds');
 
-        /* from what file config loaded */
-        cliLog("[bot] Configuration Loaded from: {$GLOBALS['configFile']}");
-        Line();
-    } else {
-             /* set default data */
-             $GLOBALS['CONFIG_SHOW_LOGO']    = 'yes';
-             $GLOBALS['silent_mode']         = 'no';
-             $GLOBALS['CONFIG_CHECK_UPDATE'] = 'no';
-             $GLOBALS['CONFIG_LOGGING']      = 'yes';
+    /* DEBUG */
+    $GLOBALS['CONFIG.SHOW.RAW']             = $cfg->get('DEBUG', 'show.raw');
+    $GLOBALS['CONFIG.OWN.MSGS.IN.RAW.MODE'] = $cfg->get('DEBUG', 'show.own.messages.in.raw.mode');
 
-             /* create default config if missing */
-             CreateDefaultConfig('CONFIG.INI');
-    }
+    /* from what file config loaded */
+    cliLog("[bot] Configuration Loaded from: {$GLOBALS['configFile']}");
+    
+    line();
 }
 //---------------------------------------------------------------------------------------------------------
 function CreateDefaultConfig($filename)
@@ -189,51 +131,54 @@ server           = \'irc.dal.net\'
 port             = \'6667\'
 
 ; if irc server have password
-server_password  = \'\'
+server.password  = \'\'
 
 ; try connect \'n\' (in seconds) times to server, if cannot then quit
-try_connect      = \'99\'
+try.connect      = \'99\'
 
 ; delay (in seconds) after new connection to server
-connect_delay    = \'6\'
+connect.delay    = \'6\'
+
+; show message of the day
+show.motd        = \'yes\'
 
 [OWNER]
 
 ; bot administrator information
-bot_admin        = \'S3x0r <user@localhost>\'
+bot.admin        = \'S3x0r <user@localhost>\'
 
 ; bot will give op\'s if this hosts join channel <nick!ident@hostname>
-auto_op_list     = \'\'
+auto.op.list     = \'\'
 
 ; BOT OWNER HOSTS <nick!ident@hostname>
-bot_owners       = \'\'
+bot.owners       = \'\'
 
 ; owner password (SHA256)
-owner_password   = \'47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed\'
+owner.password   = \'47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed\'
 
 [ADMIN]
 
 ; bot admin list <nick!ident@hostname>
-admin_list       = \'\'
+admin.list       = \'\'
 
 [RESPONSE]
 
 ; where bot should response, you can choose from: channel, notice, priv
-bot_response     = \'notice\'
+bot.response     = \'notice\'
 
 [AUTOMATIC]
 
-; bot will give op when join to channel from auto_op_list: \'yes\', \'no\'
-auto_op          = \'yes\'
+; bot will give op when join to channel from auto.op.list: \'yes\', \'no\'
+auto.op          = \'yes\'
 
 ; bot will auto rejoin channel when kicked: \'yes\', \'no\'
-auto_rejoin      = \'yes\'
+auto.rejoin      = \'yes\'
 
-; do we want to keep channel modes from channel_modes option?
-keep_chan_modes  = \'yes\'
+; do we want to keep channel modes from channel.modes option?
+keep.chan.modes  = \'yes\'
 
 ; this setting makes the bot try to get his original nickname back if its primary nickname is already in use
-keep_nick        = \'yes\'
+keep.nick        = \'yes\'
 
 [CHANNEL]
 
@@ -241,45 +186,45 @@ keep_nick        = \'yes\'
 channel          = \'#minion\'
 
 ; auto join channel when connected: \'yes\', \'no\'
-auto_join        = \'yes\'
+auto.join        = \'yes\'
 
 ; set channel modes on bot join
-channel_modes   = \'nt\'
+channel.modes   = \'nt\'
 
 ; channel key if exists
-channel_key      = \'\'
+channel.key      = \'\'
 
 [BANS]
 
 ; ban users from this list
-ban_list         = \'nick!ident@hostname, *!ident@hostname, *!*@onlyhost\'
+ban.list         = \'nick!ident@hostname, *!ident@hostname, *!*@onlyhost\'
 
 [COMMAND]
 
 ; bot commands prefix eg. !info, you can change to what you want
-command_prefix   = \'!\'
+command.prefix   = \'!\'
 
 [CTCP]
 
 ; response to ctcp requests? \'yes\', \'no\'
-ctcp_response    = \'yes\'
+ctcp.response    = \'yes\'
 
 ; ctcp version response (please do not change it:)
-ctcp_version     = \'MINION ('.VER.') powered by minions!\'
+ctcp.version     = \'MINION ('.VER.') powered by minions!\'
 
 ; ctcf finger response
-ctcp_finger      = \'MINION\'
+ctcp.finger      = \'MINION\'
 
 [DELAYS]
 
 ; bot response delay on channel (in seconds)
-channel_delay   = \'1.5\'
+channel.delay   = \'1.5\'
 
 ; bot response delay on private messages (in seconds)
-private_delay   = \'1\'
+private.delay   = \'1\'
 
 ; bot response delay on notice messages (in seconds)
-notice_delay    = \'1\'
+notice.delay    = \'1\'
 
 [LOGS]
 
@@ -289,54 +234,37 @@ logging          = \'yes\'
 [PANEL]
 
 ; web panel login
-web_login        = \'changeme\'
+web.login        = \'changeme\'
 
 ; web panel password
-web_password     = \'changeme\'
+web.password     = \'changeme\'
 
 [TIME]
 
 ; bot time zone
-time_zone        = \'Europe/Warsaw\'
+time.zone        = \'Europe/Warsaw\'
 
 [FETCH]
 
 ; bot plugin repository address
-fetch_server     = \'https://raw.githubusercontent.com/S3x0r/minion_repository_plugins/master\'
+fetch.server     = \'https://raw.githubusercontent.com/S3x0r/minion_repository_plugins/master\'
 
 [PROGRAM]
 
-; show BOT startup logo: \'yes\', \'no\'
-show_logo        = \'yes\'
-
-; no output to CLI window: \'yes\', \'no\'
-silent_mode      = \'no\'
-
-; check on program startup if new version is on server: \'yes\', \'no\'
-check_update     = \'no\'
-
 ; if we want to play sounds?: \'yes\', \'no\'
-play_sounds      = \'yes\'
+play.sounds      = \'yes\'
 
 [DEBUG]
 
 ; show raw output on CLI window
-show_raw         = \'no\'';
+show.raw         = \'no\'
+show.own.messages.in.raw.mode = \'no\'';
 
     /* Save default config to file if no config */
     SaveToFile($filename, $defaultConfigData, 'w');
 
     /* remove variable */
     unset($defaultConfigData);
-
-    if (is_file($filename)) {
-        /* Load config again */
-        LoadConfig('default');
-    } else { /* read only file system? */
-             cliLog('[bot]: Error! Cannot make default config! Read-Only filesystem? Exiting.');
-             WinSleep(6);
-             exit;
-    }
 }
 //---------------------------------------------------------------------------------------------------------
 /* configuration file parser */

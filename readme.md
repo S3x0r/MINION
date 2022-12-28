@@ -45,7 +45,7 @@ To run bot with diffrent config file: php.exe "../../BOT.php" -c some_other_conf
 Access Hierarchy:
 Owner has access to: CORE commands, ADMIN plugins & USER plugins
 Admin has access to: ADMIN plugins & USER plugins
-User has access to: User plugins
+User has access to: USER plugins
 If you want to block some plugin(s) from user's or admin's just move it from folder
 to folder, etc...
 

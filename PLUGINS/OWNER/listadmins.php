@@ -21,12 +21,12 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Shows BOT admins: {$GLOBALS['CONFIG_CMD_PREFIX']}listadmins";
+    $plugin_description = "Shows BOT admins: {$GLOBALS['CONFIG.CMD.PREFIX']}listadmins";
     $plugin_command     = 'listadmins';
 
 function plugin_listadmins()
 {
-    LoadData($GLOBALS['configFile'], 'ADMIN', 'admin_list');
+    LoadData($GLOBALS['configFile'], 'ADMIN', 'admin.list');
 
     if (empty($GLOBALS['LOADED'])) {
         response('Empty admin(s) list.');

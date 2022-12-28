@@ -20,45 +20,39 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-function Connect()
+function tryToConnect()
 {
-    /* check if panel is not closed */
-    if (isRunned('serv')) {
-        kill('serv') ? cliLog('[bot] Detected Panel still running, Terminating.') : false;
-    }
-
-    cliLog("[bot] Connecting to: {$GLOBALS['CONFIG_SERVER']}, port: {$GLOBALS['CONFIG_PORT']}\n");
-
     $i = 0;
 
-    while ($i++ <= $GLOBALS['CONFIG_TRY_CONNECT']) {
-           $GLOBALS['socket'] = @fsockopen($GLOBALS['CONFIG_SERVER'], $GLOBALS['CONFIG_PORT']);
+    while ($i++ <= $GLOBALS['CONFIG.TRY.CONNECT']) {
+           $GLOBALS['socket'] = @fsockopen($GLOBALS['CONFIG.SERVER'], $GLOBALS['CONFIG.PORT'], $GLOBALS['errno'], $GLOBALS['errstr']);
         if ($GLOBALS['socket'] == false) {
-            cliLog("[bot] Cannot connect to: {$GLOBALS['CONFIG_SERVER']}:{$GLOBALS['CONFIG_PORT']}, trying again ({$i}/{$GLOBALS['CONFIG_TRY_CONNECT']})...");
+            cliLog("[bot] Cannot connect to: {$GLOBALS['CONFIG.SERVER']}:{$GLOBALS['CONFIG.PORT']}, trying again ({$i}/{$GLOBALS['CONFIG.TRY.CONNECT']})...");
             PlaySound('error_conn.mp3');
-            usleep($GLOBALS['CONFIG_CONNECT_DELAY'] * 1000000); // reconnect delay
-            if ($i == $GLOBALS['CONFIG_TRY_CONNECT']) {
+            usleep($GLOBALS['CONFIG.CONNECT.DELAY'] * 1000000); // reconnect delay
+            if ($i == $GLOBALS['CONFIG.TRY.CONNECT']) {
                 cliLog('[bot] Unable to connect to server, exiting program.');
                 PlaySound('error_conn.mp3');
+                WinSleep(7);
                 exit;
             }
         } else {
-                 Identify();
+                 return true;
         }
     }
 }
 //---------------------------------------------------------------------------------------------------------
 function Identify()
 {
-    if (!empty($GLOBALS['CONFIG_SERVER_PASSWD'])) {
-        toServer("PASS {$GLOBALS['CONFIG_SERVER_PASSWD']}");
+    if (!empty($GLOBALS['CONFIG.SERVER.PASSWD'])) {
+        toServer("PASS {$GLOBALS['CONFIG.SERVER.PASSWD']}");
     }
 
-    toServer("NICK {$GLOBALS['CONFIG_NICKNAME']}");
+    toServer("NICK {$GLOBALS['CONFIG.NICKNAME']}");
 
-    toServer("USER {$GLOBALS['CONFIG_IDENT']} 8 * :{$GLOBALS['CONFIG_NAME']}");
+    toServer("USER {$GLOBALS['CONFIG.IDENT']} 8 * :{$GLOBALS['CONFIG.NAME']}");
 
-    SocketLoop();
+    return true;
 }
 //---------------------------------------------------------------------------------------------------------
 function SocketLoop()
@@ -99,15 +93,14 @@ function SocketLoop()
             /* get raw data */
             $rawData = fgets($GLOBALS['socket'], 1024);
 //---------------------------------------------------------------------------------------------------------
-            if ($GLOBALS['CONFIG_SHOW_RAW'] == 'yes' && !IsSilent()) {
-                echo $rawData;
-            }
+            /* if raw mode send debug data to cli */
+            cliDebug($rawData, 0);
 //---------------------------------------------------------------------------------------------------------
             /* put raw data to array */
             $rawDataArray = explode(' ', trim($rawData));
 //---------------------------------------------------------------------------------------------------------
             /* if ping -> response */
-            (isset($rawDataArray[0]) && $rawDataArray[0] == 'PING') ? on_server_ping() : false;
+            (isset($rawDataArray[0]) && $rawDataArray[0] == 'PING') ? on_PING() : false;
 //---------------------------------------------------------------------------------------------------------
             /* parse vars from rawDataArray[0] */
             if (preg_match('/^:(.*)\!(.*)\@(.*)$/', $rawDataArray[0], $source)) {
@@ -118,7 +111,7 @@ function SocketLoop()
             }
 //---------------------------------------------------------------------------------------------------------
             /* if operation (JOIN,PART,etc) -> response */
-            if_OPERATION();
+            if_WORD_RESPONSE();
 //---------------------------------------------------------------------------------------------------------
             if (count($rawDataArray) < 4) {
                 continue;
@@ -146,7 +139,7 @@ function SocketLoop()
             isset($pieces[3]) ? $piece4 = $pieces[3] : $piece4 = '';
 //---------------------------------------------------------------------------------------------------------
             /* if reply (001,002,etc) -> response */
-            if_REPLY();
+            if_NUMERIC_RESPONSE();
 
             /* if CTCP request -> response */
             if_CTCP();
@@ -157,28 +150,52 @@ function SocketLoop()
         }
         /* if disconected */
         if (empty($GLOBALS['disconnected'])) {
-            cliLog("[bot] Cannot connect to: {$GLOBALS['CONFIG_SERVER']}:{$GLOBALS['CONFIG_PORT']}, trying again...");
-            Connect();
+            cliDebug($rawData, 0);
+
+            if (preg_match("~\bToo many connections from your IP\b~", $rawData)) {
+                cliLog("[bot] Cannot connect to: {$GLOBALS['CONFIG.SERVER']}:{$GLOBALS['CONFIG.PORT']}, too many connections! Exiting.");
+
+                WinSleep(10);
+                exit;
+            }
+
+            if (preg_match("~\bSession limit exceeded\b~", $rawData)) {
+                cliLog("[bot] Cannot connect to: {$GLOBALS['CONFIG.SERVER']}:{$GLOBALS['CONFIG.PORT']}, too many connections! Exiting.");
+
+                WinSleep(10);
+                exit;
+            }
+
+            if (preg_match("~\bToo many user connections\b~", $rawData)) {
+                cliLog("[bot] Cannot connect to: {$GLOBALS['CONFIG.SERVER']}:{$GLOBALS['CONFIG.PORT']}, too many connections! Exiting.");
+
+                WinSleep(10);
+                exit;
+            }
+
+            cliLog("[bot] Cannot connect to: {$GLOBALS['CONFIG.SERVER']}:{$GLOBALS['CONFIG.PORT']}, Exiting!");
+            WinSleep(10);
+            exit;
         }
     }
 }
 //---------------------------------------------------------------------------------------------------------
 function response($msg)
 {
-    switch ($GLOBALS['CONFIG_BOT_RESPONSE']) {
+    switch ($GLOBALS['CONFIG.BOT.RESPONSE']) {
         case 'channel':
             toServer("PRIVMSG ".getBotChannel()." :$msg");
-            usleep($GLOBALS['CONFIG_CHANNEL_DELAY'] * 1000000);
+            usleep($GLOBALS['CONFIG.CHANNEL.DELAY'] * 1000000);
             break;
 
         case 'notice':
             toServer("NOTICE {$GLOBALS['USER']} :$msg");
-            usleep($GLOBALS['CONFIG_NOTICE_DELAY'] * 1000000);
+            usleep($GLOBALS['CONFIG.NOTICE.DELAY'] * 1000000);
             break;
 
         case 'priv':
             toServer("PRIVMSG {$GLOBALS['USER']} :$msg");
-            usleep($GLOBALS['CONFIG_PRIVATE_DELAY'] * 1000000);
+            usleep($GLOBALS['CONFIG.PRIVATE.DELAY'] * 1000000);
             break;
     }
 }
@@ -186,7 +203,7 @@ function response($msg)
 function privateMsg($message)
 {
     toServer("PRIVMSG {$GLOBALS['USER']} :$msg");
-    usleep($GLOBALS['CONFIG_PRIVATE_DELAY'] * 1000000);
+    usleep($GLOBALS['CONFIG.PRIVATE.DELAY'] * 1000000);
 }
 //---------------------------------------------------------------------------------------------------------
 function joinChannel($channel)
@@ -196,11 +213,10 @@ function joinChannel($channel)
 //---------------------------------------------------------------------------------------------------------
 function toServer($data)
 {   
-    if ($GLOBALS['CONFIG_SHOW_RAW'] == 'yes' && !IsSilent()) {
-        echo $data.N;
-    }
+    /* send own message to cli if raw mode */
+    cliDebug($data, 1);
 
-    fputs($GLOBALS['socket'], "{$data}\n");
+    if (@fputs($GLOBALS['socket'], "{$data}\n")) { }
 }
 //---------------------------------------------------------------------------------------------------------
 function msgFromServer()

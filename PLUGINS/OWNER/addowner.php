@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Add owner host to config: {$GLOBALS['CONFIG_CMD_PREFIX']}addowner <nick!ident@hostname>";
+    $plugin_description = "Add owner host to config: {$GLOBALS['CONFIG.CMD.PREFIX']}addowner <nick!ident@hostname>";
     $plugin_command     = 'addowner';
 
 function plugin_addowner()
@@ -31,7 +31,7 @@ function plugin_addowner()
     if (OnEmptyArg('addowner <nick!ident@hostname>')) {
     } elseif ($nick_ex[0] != getBotNickname()) {
         if (preg_match('/^(.+?)!(.+?)@(.+?)$/', $GLOBALS['args'], $host)) {
-            LoadData($GLOBALS['configFile'], 'OWNER', 'bot_owners');
+            LoadData($GLOBALS['configFile'], 'OWNER', 'bot.owners');
  
             if (strpos($GLOBALS['LOADED'], $GLOBALS['args']) !== false) {
                 response('I already have this host.');
@@ -39,31 +39,30 @@ function plugin_addowner()
                 /* add user to owner's host's */
                 empty($GLOBALS['LOADED']) ? $new_list = $host[0] : $new_list = "{$GLOBALS['LOADED']}, {$host[0]}";
 
-                SaveData($GLOBALS['configFile'], 'OWNER', 'bot_owners', $new_list);
+                SaveData($GLOBALS['configFile'], 'OWNER', 'bot.owners', $new_list);
 
                 /* add user to auto op list */
-                LoadData($GLOBALS['configFile'], 'OWNER', 'auto_op_list');
+                LoadData($GLOBALS['configFile'], 'OWNER', 'auto.op.list');
 
                 empty($GLOBALS['LOADED']) ? $new_list = $host[0] : $new_list = "{$GLOBALS['LOADED']}, {$host[0]}";
 
-                SaveData($GLOBALS['configFile'], 'OWNER', 'auto_op_list', $new_list);
+                SaveData($GLOBALS['configFile'], 'OWNER', 'auto.op.list', $new_list);
 
                 /* update variables with new owners/autoop list */
                 $cfg = new IniParser($GLOBALS['configFile']);
-                $GLOBALS['CONFIG_OWNERS']       = $cfg->get("OWNER", "bot_owners");
-                $GLOBALS['CONFIG_AUTO_OP_LIST'] = $cfg->get('OWNER', 'auto_op_list');
+                $GLOBALS['CONFIG.OWNERS']       = $cfg->get("OWNER", "bot.owners");
+                $GLOBALS['CONFIG.AUTO.OP.LIST'] = $cfg->get('OWNER', 'auto.op.list');
 
                 /* inform user about it */
                 toServer("PRIVMSG {$nick_ex[0]} :From now you are on my owner(s)/auto op(s) lists, enjoy.");
 
-                toServer("PRIVMSG {$nick_ex[0]} :Core Commands: ".
-                         $GLOBALS['CONFIG_CMD_PREFIX']."load ".
-                         $GLOBALS['CONFIG_CMD_PREFIX']."panel ".
-                         $GLOBALS['CONFIG_CMD_PREFIX']."pause ".
-                         $GLOBALS['CONFIG_CMD_PREFIX']."seen ".
-                         $GLOBALS['CONFIG_CMD_PREFIX']."unload ".
-                         $GLOBALS['CONFIG_CMD_PREFIX']."unpause");
-
+                $response = null;
+           
+                foreach ( CORECOMMANDSLIST as $coreCommand ) {
+                    $response .= $GLOBALS['CONFIG.CMD.PREFIX'].$coreCommand.' ';
+                }
+              
+                toServer("PRIVMSG {$nick_ex[0]} :Core Commands: ".$response);
                 toServer("PRIVMSG {$nick_ex[0]} :Owner Commands: ".implode(' ', $GLOBALS['OWNER_PLUGINS']));
                 toServer("PRIVMSG {$nick_ex[0]} :User Commands: ".implode(' ', $GLOBALS['USER_PLUGINS']));
 

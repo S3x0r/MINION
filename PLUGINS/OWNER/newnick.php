@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Changes nickname: {$GLOBALS['CONFIG_CMD_PREFIX']}newnick <new_nick>";
+    $plugin_description = "Changes nickname: {$GLOBALS['CONFIG.CMD.PREFIX']}newnick <new_nick>";
     $plugin_command     = 'newnick';
 
 function plugin_newnick()

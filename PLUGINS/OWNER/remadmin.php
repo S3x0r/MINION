@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Removes admin from config file: {$GLOBALS['CONFIG_CMD_PREFIX']}remadmin <nick!ident@hostname>";
+    $plugin_description = "Removes admin from config file: {$GLOBALS['CONFIG.CMD.PREFIX']}remadmin <nick!ident@hostname>";
     $plugin_command     = 'remadmin';
 
 function plugin_remadmin()
@@ -30,7 +30,7 @@ function plugin_remadmin()
     } else {
         if (preg_match('/^(.+?)!(.+?)@(.+?)$/', $GLOBALS['args'], $host)) {
             /* read owners from config */
-            LoadData($GLOBALS['configFile'], 'ADMIN', 'admin_list');
+            LoadData($GLOBALS['configFile'], 'ADMIN', 'admin.list');
             $admin_list = $GLOBALS['LOADED'];
             $array = explode(" ", str_replace(',', '', $admin_list));
 
@@ -45,11 +45,11 @@ function plugin_remadmin()
                 $string2 = str_replace(' ', ', ', $string);
 
                 /* save new list to config */
-                SaveData($GLOBALS['configFile'], 'ADMIN', 'admin_list', $string2);
+                SaveData($GLOBALS['configFile'], 'ADMIN', 'admin.list', $string2);
 
                 /* update variable with new owners */
                 $cfg = new IniParser($GLOBALS['configFile']);
-                $GLOBALS['CONFIG_ADMIN_LIST'] = $cfg->get("ADMIN", "admin_list");
+                $GLOBALS['CONFIG.ADMIN.LIST'] = $cfg->get("ADMIN", "admin.list");
 
                 /* send info to user */
                 response("Host: '{$GLOBALS['args']}' removed from admin list.");

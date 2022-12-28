@@ -7,55 +7,50 @@ function GetDataFromBotConfig()
 
     $cfg = new IniParser('../../'.$GLOBALS['WEB_BOT_CONFIG_FILE']);
         /* BOT */
-        $GLOBALS['CONFIG_NICKNAME']       = $cfg->get("BOT", "nickname");
-        $GLOBALS['CONFIG_NAME']           = $cfg->get("BOT", "name");
-        $GLOBALS['CONFIG_IDENT']          = $cfg->get("BOT", "ident");
+        $GLOBALS['CONFIG.NICKNAME']       = $cfg->get("BOT", "nickname");
+        $GLOBALS['CONFIG.NAME']           = $cfg->get("BOT", "name");
+        $GLOBALS['CONFIG.IDENT']          = $cfg->get("BOT", "ident");
         /* SERVER */
-        $GLOBALS['CONFIG_SERVER']         = $cfg->get("SERVER", "server");
-        $GLOBALS['CONFIG_PORT']           = $cfg->get("SERVER", "port");
-        $GLOBALS['CONFIG_SERVER_PASSWD']  = $cfg->get("SERVER", "server_password");
-        $GLOBALS['CONFIG_TRY_CONNECT']    = $cfg->get("SERVER", "try_connect");
-        $GLOBALS['CONFIG_CONNECT_DELAY']  = $cfg->get("SERVER", "connect_delay");
+        $GLOBALS['CONFIG.SERVER']         = $cfg->get("SERVER", "server");
+        $GLOBALS['CONFIG.PORT']           = $cfg->get("SERVER", "port");
+        $GLOBALS['CONFIG.SERVER.PASSWD']  = $cfg->get("SERVER", "server.password");
+        $GLOBALS['CONFIG.TRY.CONNECT']    = $cfg->get("SERVER", "try.connect");
+        $GLOBALS['CONFIG.CONNECT.DELAY']  = $cfg->get("SERVER", "connect.delay");
         /* OWNER */
-        $GLOBALS['CONFIG_BOT_ADMIN']      = $cfg->get("OWNER", "bot_admin");
-        $GLOBALS['CONFIG_AUTO_OP_LIST']   = $cfg->get("OWNER", "auto_op_list");
-        $GLOBALS['CONFIG_OWNERS']         = $cfg->get("OWNER", "bot_owners");
-        $GLOBALS['CONFIG_OWNER_PASSWD']   = $cfg->get("OWNER", "owner_password");
+        $GLOBALS['CONFIG.BOT.ADMIN']      = $cfg->get("OWNER", "bot.admin");
+        $GLOBALS['CONFIG.AUTO.OP.LIST']   = $cfg->get("OWNER", "auto.op.list");
+        $GLOBALS['CONFIG.OWNERS']         = $cfg->get("OWNER", "bot.owners");
+        $GLOBALS['CONFIG.OWNER.PASSWD']   = $cfg->get("OWNER", "owner.password");
         /* BOT RESPONSE */
-        $GLOBALS['CONFIG_BOT_RESPONSE']   = $cfg->get("RESPONSE", "bot_response");
+        $GLOBALS['CONFIG.BOT.RESPONSE']   = $cfg->get("RESPONSE", "bot.response");
         /* AUTOMATIC */
-        $GLOBALS['CONFIG_AUTO_OP']        = $cfg->get("AUTOMATIC", "auto_op");
-        $GLOBALS['CONFIG_AUTO_REJOIN']    = $cfg->get("AUTOMATIC", "auto_rejoin");
-        $GLOBALS['CONFIG_KEEP_NICK']      = $cfg->get("AUTOMATIC", "keep_nick");
+        $GLOBALS['CONFIG.AUTO.OP']        = $cfg->get("AUTOMATIC", "auto.op");
+        $GLOBALS['CONFIG.AUTO.REJOIN']    = $cfg->get("AUTOMATIC", "auto.rejoin");
+        $GLOBALS['CONFIG.KEEP.NICK']      = $cfg->get("AUTOMATIC", "keep.nick");
         /* CHANNEL */
-        $GLOBALS['CONFIG_CNANNEL']        = $cfg->get("CHANNEL", "channel");
-        $GLOBALS['CONFIG_AUTO_JOIN']      = $cfg->get("CHANNEL", "auto_join");
-        $GLOBALS['CONFIG_CHANNEL_MODES']  = $cfg->get("CHANNEL", "channel_modes");
-        $GLOBALS['CONFIG_CHANNEL_KEY']    = $cfg->get("CHANNEL", "channel_key");
+        $GLOBALS['CONFIG.CHANNEL']        = $cfg->get("CHANNEL", "channel");
+        $GLOBALS['CONFIG.AUTO.JOIN']      = $cfg->get("CHANNEL", "auto.join");
+        $GLOBALS['CONFIG.CHANNEL.MODES']  = $cfg->get("CHANNEL", "channel.modes");
+        $GLOBALS['CONFIG.CHANNEL.KEY']    = $cfg->get("CHANNEL", "channel.key");
         /* COMMAND PREFIX */
-        $GLOBALS['CONFIG_CMD_PREFIX']     = $cfg->get("COMMAND", "command_prefix");
+        $GLOBALS['CONFIG.CMD.PREFIX']     = $cfg->get("COMMAND", "command.prefix");
         /* CTCP */
-        $GLOBALS['CONFIG_CTCP_RESPONSE']  = $cfg->get("CTCP", "ctcp_response");
-        $GLOBALS['CONFIG_CTCP_VERSION']   = $cfg->get("CTCP", "ctcp_version");
-        $GLOBALS['CONFIG_CTCP_FINGER']    = $cfg->get("CTCP", "ctcp_finger");
+        $GLOBALS['CONFIG.CTCP.RESPONSE']  = $cfg->get("CTCP", "ctcp.response");
+        $GLOBALS['CONFIG.CTCP.VERSION']   = $cfg->get("CTCP", "ctcp.version");
+        $GLOBALS['CONFIG.CTCP.FINGER']    = $cfg->get("CTCP", "ctcp.finger");
         /* DELAYS */
-        $GLOBALS['CONFIG_CHANNEL_DELAY']  = $cfg->get("DELAYS", "channel_delay");
-        $GLOBALS['CONFIG_PRIVATE_DELAY']  = $cfg->get("DELAYS", "private_delay");
-        $GLOBALS['CONFIG_NOTICE_DELAY']   = $cfg->get("DELAYS", "notice_delay");
+        $GLOBALS['CONFIG.CHANNEL.DELAY']  = $cfg->get("DELAYS", "channel.delay");
+        $GLOBALS['CONFIG.PRIVATE.DELAY']  = $cfg->get("DELAYS", "private.delay");
+        $GLOBALS['CONFIG.NOTICE.DELAY']   = $cfg->get("DELAYS", "notice.delay");
         /* LOGGING */
-        $GLOBALS['CONFIG_LOGGING']        = $cfg->get("LOGS", "logging");
+        $GLOBALS['CONFIG.LOGGING']        = $cfg->get("LOGS", "logging");
         /* TIMEZONE */
-        $GLOBALS['CONFIG_TIMEZONE']       = $cfg->get("TIME", "time_zone");
+        $GLOBALS['CONFIG.TIMEZONE']       = $cfg->get("TIME", "time.zone");
         /* FETCH */
-        $GLOBALS['CONFIG_FETCH_SERVER']   = $cfg->get("FETCH", "fetch_server");
+        $GLOBALS['CONFIG.FETCH.SERVER']   = $cfg->get("FETCH", "fetch.server");
         /* PROGRAM */
-        $GLOBALS['CONFIG_SHOW_LOGO']      = $cfg->get("PROGRAM", "show_logo");
-    if (empty($GLOBALS['silent_cli'])) {
-        $GLOBALS['silent_mode']           = $cfg->get("PROGRAM", "silent_mode");
-    }
-        $GLOBALS['CONFIG_CHECK_UPDATE']   = $cfg->get("PROGRAM", "check_update");
         /* DEBUG */
-        $GLOBALS['CONFIG_SHOW_RAW']       = $cfg->get("DEBUG", "show_raw");
+        $GLOBALS['CONFIG.SHOW.RAW']       = $cfg->get("DEBUG", "show.raw");
 }
 //-------------------------------------------------------------------------------------------------------
 function GetAllData()
@@ -197,9 +192,9 @@ class IniParser
 function ListPlugins()
 {
         /* count plugins */
-        $count1 = count(glob("../../../PLUGINS/OWNER/*.php", GLOB_BRACE));
-        $count2 = count(glob("../../../PLUGINS/ADMIN/*.php", GLOB_BRACE));
-        $count3 = count(glob("../../../PLUGINS/USER/*.php", GLOB_BRACE));
+        $count1 = count(glob("../../../".PLUGINSDIR."/OWNER/*.php", GLOB_BRACE));
+        $count2 = count(glob("../../../".PLUGINSDIR."/ADMIN/*.php", GLOB_BRACE));
+        $count3 = count(glob("../../../".PLUGINSDIR."/USER/*.php", GLOB_BRACE));
 
         $tot = $count1+$count2+$count3+6;
         
@@ -218,7 +213,7 @@ function ListPlugins()
         /* OWNERS PLUGINS */
         echo "Owner Plugins ($count1):<br>";
 
-    foreach (glob('../../../PLUGINS/OWNER/*.php') as $plugin_name) {
+    foreach (glob('../../../'.PLUGINSDIR.'/OWNER/*.php') as $plugin_name) {
         $plugin_name = basename($plugin_name, '.php');
         echo "- $plugin_name<br>";
     }
@@ -227,7 +222,7 @@ function ListPlugins()
         /* ADMIN PLUGINS */
         echo "Admin Plugins ($count2):<br>";
 
-    foreach (glob('../../../PLUGINS/ADMIN/*.php') as $plugin_name) {
+    foreach (glob('../../../'.PLUGINSDIR.'/ADMIN/*.php') as $plugin_name) {
         $plugin_name = basename($plugin_name, '.php');
         echo "- $plugin_name<br>";
     }
@@ -236,7 +231,7 @@ function ListPlugins()
         /* USER PLUGINS */
         echo "User Plugins ($count3):<br>";
 
-    foreach (glob('../../../PLUGINS/USER/*.php') as $plugin_name) {
+    foreach (glob('../../../'.PLUGINSDIR.'/USER/*.php') as $plugin_name) {
         $plugin_name = basename($plugin_name, '.php');
         echo "- $plugin_name<br>";
     }

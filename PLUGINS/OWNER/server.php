@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Connect to specified server: {$GLOBALS['CONFIG_CMD_PREFIX']}server <server ip>";
+    $plugin_description = "Connect to specified server: {$GLOBALS['CONFIG.CMD.PREFIX']}server <server ip>";
     $plugin_command     = 'server';
 
 function plugin_server()

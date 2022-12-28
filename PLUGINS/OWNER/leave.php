@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Leave channel: {$GLOBALS['CONFIG_CMD_PREFIX']}leave <#channel>";
+    $plugin_description = "Leave channel: {$GLOBALS['CONFIG.CMD.PREFIX']}leave <#channel>";
     $plugin_command     = 'leave';
 
 function plugin_leave()

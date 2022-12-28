@@ -108,8 +108,8 @@ function every_1_minute()
 {
     /* check if bot can change nick to original */
     if (empty($GLOBALS['stop'])) {
-        if ($GLOBALS['CONFIG_KEEP_NICK'] == 'yes' && isset($GLOBALS['I_USE_RND_NICKNAME'])) {
-            toServer("ISON :{$GLOBALS['CONFIG_NICKNAME']}");
+        if ($GLOBALS['CONFIG.KEEP.NICK'] == 'yes' && isset($GLOBALS['I_USE_RND_NICKNAME'])) {
+            toServer("ISON :{$GLOBALS['CONFIG.NICKNAME']}");
         }
     }
 }

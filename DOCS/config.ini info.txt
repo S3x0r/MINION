@@ -135,15 +135,6 @@ fetch_server     = 'https://raw.githubusercontent.com/S3x0r/minion_repository_pl
 
 [PROGRAM]
 
-; show BOT startup logo? 'yes', 'no'
-show_logo        = 'yes'
-
-; silent mode - no output to CLI window 'yes', 'no'
-silent_mode      = 'no'
-
-; check on program startup if new version is on server 'yes', 'no'
-check_update     = 'no'
-
 ; if we want to play sounds?: 'yes', 'no'
 play_sounds      = 'yes'
 

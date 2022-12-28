@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Pings host/ip: {$GLOBALS['CONFIG_CMD_PREFIX']}ping <host/ip>";
+    $plugin_description = "Pings host/ip: {$GLOBALS['CONFIG.CMD.PREFIX']}ping <host/ip>";
     $plugin_command     = 'ping';
 
 function plugin_ping()

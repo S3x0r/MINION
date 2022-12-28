@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Adds a note: {$GLOBALS['CONFIG_CMD_PREFIX']}note help to list commands";
+    $plugin_description = "Adds a note: {$GLOBALS['CONFIG.CMD.PREFIX']}note help to list commands";
     $plugin_command     = 'note';
 
 /* TODO:
@@ -40,11 +40,11 @@ function plugin_note()
         switch ($GLOBALS['args']) {
             case 'help':
                  response('Note commands:');
-                 response($GLOBALS['CONFIG_CMD_PREFIX'].'note add <note>  - Adds a note');
-                 response($GLOBALS['CONFIG_CMD_PREFIX'].'note clear       - Delete all notes');
-                 response($GLOBALS['CONFIG_CMD_PREFIX'].'note del <numer> - Delete specified note');
-                 response($GLOBALS['CONFIG_CMD_PREFIX'].'note help        - Shows help');
-                 response($GLOBALS['CONFIG_CMD_PREFIX'].'note list        - List notes');
+                 response($GLOBALS['CONFIG.CMD.PREFIX'].'note add <note>  - Adds a note');
+                 response($GLOBALS['CONFIG.CMD.PREFIX'].'note clear       - Delete all notes');
+                 response($GLOBALS['CONFIG.CMD.PREFIX'].'note del <numer> - Delete specified note');
+                 response($GLOBALS['CONFIG.CMD.PREFIX'].'note help        - Shows help');
+                 response($GLOBALS['CONFIG.CMD.PREFIX'].'note list        - List notes');
                 break;
 
             case 'list':

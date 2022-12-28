@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Checks ip address and shows results: {$GLOBALS['CONFIG_CMD_PREFIX']}ripe <ip>";
+    $plugin_description = "Checks ip address and shows results: {$GLOBALS['CONFIG.CMD.PREFIX']}ripe <ip>";
     $plugin_command     = 'ripe';
 
 function plugin_ripe()

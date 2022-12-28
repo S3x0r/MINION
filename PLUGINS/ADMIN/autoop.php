@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Adds host to autoop list in config file: {$GLOBALS['CONFIG_CMD_PREFIX']}autoop <nick!ident@host>";
+    $plugin_description = "Adds host to autoop list in config file: {$GLOBALS['CONFIG.CMD.PREFIX']}autoop <nick!ident@host>";
     $plugin_command     = 'autoop';
 
 function plugin_autoop()
@@ -31,18 +31,18 @@ function plugin_autoop()
     if (OnEmptyArg('autoop <nick!ident@hostname>')) {
     } elseif ($nick[0] != getBotNickname()) {
         if (preg_match('/^(.+?)!(.+?)@(.+?)$/', $GLOBALS['args'], $host)) {
-            LoadData($GLOBALS['configFile'], 'OWNER', 'auto_op_list');
+            LoadData($GLOBALS['configFile'], 'OWNER', 'auto.op.list');
 
             if (strpos($GLOBALS['LOADED'], $GLOBALS['args']) !== false) {
                 response('I already have this host.');
             } else {
-                empty($GLOBALS['LOADED']) ? $new_list = $host[0] : $new_list = "{$GLOBALS['LOADED']}, {$host[0]}";
+                     empty($GLOBALS['LOADED']) ? $new_list = $host[0] : $new_list = "{$GLOBALS['LOADED']}, {$host[0]}";
  
-                     SaveData($GLOBALS['configFile'], 'OWNER', 'auto_op_list', $new_list);
+                     SaveData($GLOBALS['configFile'], 'OWNER', 'auto.op.list', $new_list);
 
                      /* update variable with new owners */
                      $cfg = new IniParser($GLOBALS['configFile']);
-                     $GLOBALS['CONFIG_AUTO_OP_LIST'] = $cfg->get("OWNER", "auto_op_list");
+                     $GLOBALS['CONFIG.AUTO.OP.LIST'] = $cfg->get("OWNER", "auto.op.list");
 
                      /* Inform nick about it */
                      privateMsg('From now you are on my auto op list, enjoy.');
@@ -53,6 +53,6 @@ function plugin_autoop()
                  response('Bad input, try: nick!ident@hostname');
         }
     } else {
-             response('I cannot add myself to auto op list, im already OP MASTER :)');
+             response('I cannot add myself to auto op list, iam already OP MASTER!');
     }
 }

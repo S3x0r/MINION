@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Kicks from channel: {$GLOBALS['CONFIG_CMD_PREFIX']}kick <#channel> <who>";
+    $plugin_description = "Kicks from channel: {$GLOBALS['CONFIG.CMD.PREFIX']}kick <#channel> <who>";
     $plugin_command     = 'kick';
 
 function plugin_kick()

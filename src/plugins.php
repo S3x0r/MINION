@@ -27,16 +27,16 @@ function if_PLUGIN()
     global $mask;
     
     /* Unpause -OWNER- core command */
-    (HasOwner($mask) && isset($rawcmd[1]) && $rawcmd[1] == $GLOBALS['CONFIG_CMD_PREFIX'].'unpause') ? plugin_Unpause() : false;
+    (HasOwner($mask) && isset($rawcmd[1]) && $rawcmd[1] == $GLOBALS['CONFIG.CMD.PREFIX'].'unpause') ? plugin_Unpause() : false;
     
     if (empty($GLOBALS['stop'])) {
         /* register to bot - core command */
         (isset($rawcmd[1]) && $rawcmd[1] == 'register' && $rawDataArray[2] == getBotNickname()) ? CoreCmd_RegisterToBot() : false;
  //---------------------------------------------------------------------------------------------------------
         /* response to plugins requests */
-        if (isset($rawcmd[1][0]) && $rawcmd[1][0] == $GLOBALS['CONFIG_CMD_PREFIX']) {
-            $pluginReq = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], '', $rawcmd[1]);
-            $p = $GLOBALS['CONFIG_CMD_PREFIX'];
+        if (isset($rawcmd[1][0]) && $rawcmd[1][0] == $GLOBALS['CONFIG.CMD.PREFIX']) {
+            $pluginReq = str_replace($GLOBALS['CONFIG.CMD.PREFIX'], '', $rawcmd[1]);
+            $p = $GLOBALS['CONFIG.CMD.PREFIX'];
 
             /* OWNER */
             if (HasOwner($mask) && in_array_r($rawcmd[1], [$p.'seen', $p.'panel', $p.'load', $p.'unload', $p.'pause',
@@ -64,9 +64,9 @@ function if_PLUGIN()
 //---------------------------------------------------------------------------------------------------------
 function LoadPlugins()
 {
-    $CountedOwner = count(glob("PLUGINS/OWNER/*.php", GLOB_BRACE));
-    $CountedAdmin = count(glob("PLUGINS/ADMIN/*.php", GLOB_BRACE));
-    $CountedUser  = count(glob("PLUGINS/USER/*.php", GLOB_BRACE));
+    $CountedOwner = count(glob(PLUGINSDIR."/OWNER/*.php", GLOB_BRACE));
+    $CountedAdmin = count(glob(PLUGINSDIR."/ADMIN/*.php", GLOB_BRACE));
+    $CountedUser  = count(glob(PLUGINSDIR."/USER/*.php", GLOB_BRACE));
   
     $GLOBALS['OWNER_PLUGINS'] = null;
     $GLOBALS['ADMIN_PLUGINS'] = null;
@@ -75,7 +75,7 @@ function LoadPlugins()
 //---------------------------------------------------------------------------------------------------------
     /* CORE PLUGINS */
     cli('>>> Core Commands ('.CORECOUNT.') <<<');
-    Line();
+    line();
     cli('[load] -- Loads specified plugins to BOT: !load <plugin>');
     cli('[panel] -- Starts web admin panel for BOT: !panel help');
     cli('[pause] -- Pause all BOT activity: !pause');
@@ -83,17 +83,17 @@ function LoadPlugins()
     cli('[unload] -- Unloads specified plugin from BOT: !unload <plugin>');
     cli('[unpause] -- Restore BOT from pause mode: !unpause');
 
-    Line();
+    line();
 //---------------------------------------------------------------------------------------------------------
     /* OWNER PLUGINS */
     cli(">>> Owner Plugins ({$CountedOwner}) <<<");
-    Line();
+    line();
 
-    foreach (glob('PLUGINS/OWNER/*.php') as $pluginName) {
+    foreach (glob(PLUGINSDIR.'/OWNER/*.php') as $pluginName) {
          /* simple verify plugin */
          if (preg_match("~\b".PLUGIN_HASH."\b~", file_get_contents($pluginName))) {
             include_once($pluginName);
-            $GLOBALS['OWNER_PLUGINS'] .= "{$GLOBALS['CONFIG_CMD_PREFIX']}{$plugin_command} ";
+            $GLOBALS['OWNER_PLUGINS'] .= "{$GLOBALS['CONFIG.CMD.PREFIX']}{$plugin_command} ";
             $pluginName = basename($pluginName, '.php');
             cli("[{$pluginName}] -- {$plugin_description}");
         } else {
@@ -101,18 +101,18 @@ function LoadPlugins()
                  cli("[ERROR: {$pluginName}] - Incompatible plugin!");
         }
     }
-    (count(glob("PLUGINS/OWNER/*.php")) === 0) ? cli("(no plugins)") : false;
-    Line();
+    (count(glob(PLUGINSDIR."/OWNER/*.php")) === 0) ? cli("(no plugins)") : false;
+    line();
 //---------------------------------------------------------------------------------------------------------
     /* ADMIN PLUGINS */
     cli(">>> Admin Plugins ({$CountedAdmin}) <<<");
-    Line();
+    line();
 
-    foreach (glob('PLUGINS/ADMIN/*.php') as $pluginName) {
+    foreach (glob(PLUGINSDIR.'/ADMIN/*.php') as $pluginName) {
          /* simple verify plugin */
         if (preg_match("~\b".PLUGIN_HASH."\b~", file_get_contents($pluginName))) {
             include_once($pluginName);
-            $GLOBALS['ADMIN_PLUGINS'] .= "{$GLOBALS['CONFIG_CMD_PREFIX']}{$plugin_command} ";
+            $GLOBALS['ADMIN_PLUGINS'] .= "{$GLOBALS['CONFIG.CMD.PREFIX']}{$plugin_command} ";
             $pluginName = basename($pluginName, '.php');
             cli("[{$pluginName}] -- {$plugin_description}");
         } else {
@@ -120,18 +120,18 @@ function LoadPlugins()
                  cli("[ERROR: {$pluginName}] - Incompatible plugin!");
         }
     }
-    (count(glob("PLUGINS/ADMIN/*.php")) === 0) ? cli("(no plugins)") : false;
-    Line();
+    (count(glob(PLUGINSDIR."/ADMIN/*.php")) === 0) ? cli("(no plugins)") : false;
+    line();
 //---------------------------------------------------------------------------------------------------------
     /* USER PLUGINS */
     cli(">>> User Plugins ({$CountedUser}) <<<");
-    Line();
+    line();
 
-    foreach (glob('PLUGINS/USER/*.php') as $pluginName) {
+    foreach (glob(PLUGINSDIR.'/USER/*.php') as $pluginName) {
          /* simple verify plugin */
         if (preg_match("~\b".PLUGIN_HASH."\b~", file_get_contents($pluginName))) {
             include_once($pluginName);
-            $GLOBALS['USER_PLUGINS'] .= "{$GLOBALS['CONFIG_CMD_PREFIX']}{$plugin_command} ";
+            $GLOBALS['USER_PLUGINS'] .= "{$GLOBALS['CONFIG.CMD.PREFIX']}{$plugin_command} ";
             $pluginName = basename($pluginName, '.php');
             cli("[{$pluginName}] -- {$plugin_description}");
         } else {
@@ -140,7 +140,7 @@ function LoadPlugins()
         }
     }
 
-    (count(glob("PLUGINS/USER/*.php")) === 0) ? cli("(no plugins)") : false;
+    (count(glob(PLUGINSDIR."/USER/*.php")) === 0) ? cli("(no plugins)") : false;
 
     $allCounted = CORECOUNT+$CountedOwner+$CountedAdmin+$CountedUser;
     
@@ -161,7 +161,7 @@ function LoadPlugins()
 function UnloadPlugin($plugin)
 {
     try {
-           $withPrefix    = $GLOBALS['CONFIG_CMD_PREFIX'].$plugin;
+           $withPrefix    = $GLOBALS['CONFIG.CMD.PREFIX'].$plugin;
            $withoutPrefix = $plugin;
 
         if (in_array($withPrefix, $GLOBALS['OWNER_PLUGINS']) || in_array($withPrefix, $GLOBALS['ADMIN_PLUGINS']) ||
@@ -204,7 +204,7 @@ function UnloadPlugin($plugin)
 function LoadPlugin($plugin)
 {
     try {
-           $withPrefix    = $GLOBALS['CONFIG_CMD_PREFIX'].$plugin;
+           $withPrefix    = $GLOBALS['CONFIG.CMD.PREFIX'].$plugin;
            $withoutPrefix = $plugin;
 
         if (in_array($withPrefix, $GLOBALS['OWNER_PLUGINS']) || in_array($withPrefix, $GLOBALS['ADMIN_PLUGINS']) ||
@@ -215,9 +215,9 @@ function LoadPlugin($plugin)
         } elseif (!in_array($withPrefix, $GLOBALS['OWNER_PLUGINS']) ||
             !in_array($withPrefix, $GLOBALS['ADMIN_PLUGINS']) || !in_array($withPrefix, $GLOBALS['USER_PLUGINS'])) {
             /* if no plugin in array & file exists in dir */
-            if (is_file("PLUGINS/OWNER/{$withoutPrefix}.php")) {
+            if (is_file(PLUGINSDIR."/OWNER/{$withoutPrefix}.php")) {
                 /* include that file */
-                include_once("PLUGINS/OWNER/{$withoutPrefix}.php");
+                include_once(PLUGINSDIR."/OWNER/{$withoutPrefix}.php");
 
                 /* add prefix & plugin name to plugins array */
                 array_push($GLOBALS['OWNER_PLUGINS'], $withPrefix);
@@ -225,9 +225,9 @@ function LoadPlugin($plugin)
                 /* bot responses */
                 response("Plugin: '{$withoutPrefix}' loaded.");
                 cliLog("[PLUGIN]: Plugin Loaded: '{$withoutPrefix}', by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
-            } elseif (is_file("PLUGINS/ADMIN/{$withoutPrefix}.php")) {
+            } elseif (is_file(PLUGINSDIR."/ADMIN/{$withoutPrefix}.php")) {
                 /* include that file */
-                include_once("PLUGINS/ADMIN/{$withoutPrefix}.php");
+                include_once(PLUGINSDIR."/ADMIN/{$withoutPrefix}.php");
 
                 /* add prefix & plugin name to plugins array */
                 array_push($GLOBALS['ADMIN_PLUGINS'], $withPrefix);
@@ -235,9 +235,9 @@ function LoadPlugin($plugin)
                 /* bot responses */
                 response("Plugin: '{$withoutPrefix}' loaded.");
                 cliLog("[PLUGIN]: Plugin Loaded: '{$withoutPrefix}', by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
-            } elseif (is_file("PLUGINS/USER/{$withoutPrefix}.php")) {
+            } elseif (is_file(PLUGINSDIR."/USER/{$withoutPrefix}.php")) {
                 /* include that file */
-                include_once("PLUGINS/USER/{$withoutPrefix}.php");
+                include_once(PLUGINSDIR."/USER/{$withoutPrefix}.php");
 
                 /* add prefix & plugin name to plugins array */
                 array_push($GLOBALS['USER_PLUGINS'], $withPrefix);

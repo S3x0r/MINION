@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Shows BOT configuration: {$GLOBALS['CONFIG_CMD_PREFIX']}showconfig";
+    $plugin_description = "Shows BOT configuration: {$GLOBALS['CONFIG.CMD.PREFIX']}showconfig";
     $plugin_command     = 'showconfig';
 
 function plugin_showconfig()
@@ -29,73 +29,71 @@ function plugin_showconfig()
     response('My Config:');
 
     response('[BOT]');
-    response('Nickname        : '.$GLOBALS['CONFIG_NICKNAME'].'');
-    response('Name            : '.$GLOBALS['CONFIG_NAME'].'');
-    response('Ident           : '.$GLOBALS['CONFIG_IDENT'].'');
+    response('Nickname        : '.$GLOBALS['CONFIG.NICKNAME'].'');
+    response('Name            : '.$GLOBALS['CONFIG.NAME'].'');
+    response('Ident           : '.$GLOBALS['CONFIG.IDENT'].'');
 
     response('[Server]');
-    response('Server          : '.$GLOBALS['CONFIG_SERVER'].'');
-    response('Port            : '.$GLOBALS['CONFIG_PORT'].'');
-    response('Server Pass     : '.$GLOBALS['CONFIG_SERVER_PASSWD'].'');
-    response('Try Connect     : '.$GLOBALS['CONFIG_TRY_CONNECT'].'');
-    response('Connect Delay   : '.$GLOBALS['CONFIG_CONNECT_DELAY'].'');
+    response('Server          : '.$GLOBALS['CONFIG.SERVER'].'');
+    response('Port            : '.$GLOBALS['CONFIG.PORT'].'');
+    response('Server Pass     : '.$GLOBALS['CONFIG.SERVER.PASSWD'].'');
+    response('Try Connect     : '.$GLOBALS['CONFIG.TRY.CONNECT'].'');
+    response('Connect Delay   : '.$GLOBALS['CONFIG.CONNECT.DELAY'].'');
 
     response('[OWNER]');
-    response('Bot Admin       : '.$GLOBALS['CONFIG_BOT_ADMIN'].'');
-    response('Auto OP List    : '.$GLOBALS['CONFIG_AUTO_OP_LIST'].'');
-    response('Bot Owners      : '.$GLOBALS['CONFIG_OWNERS'].'');
+    response('Bot Admin       : '.$GLOBALS['CONFIG.BOT.ADMIN'].'');
+    response('Auto OP List    : '.$GLOBALS['CONFIG.AUTO.OP.LIST'].'');
+    response('Bot Owners      : '.$GLOBALS['CONFIG.OWNERS'].'');
 
     response('[ADMIN]');
-    response('Admin List      : '.$GLOBALS['CONFIG_ADMIN_LIST'].'');
+    response('Admin List      : '.$GLOBALS['CONFIG.ADMIN.LIST'].'');
     
     response('[RESPONSE]');
-    response('Bot Response    : '.$GLOBALS['CONFIG_BOT_RESPONSE'].'');
+    response('Bot Response    : '.$GLOBALS['CONFIG.BOT.RESPONSE'].'');
     
     response('[AUTOMATIC]');
-    response('Auto OP         : '.$GLOBALS['CONFIG_AUTO_OP'].'');
-    response('Auto Rejoin     : '.$GLOBALS['CONFIG_AUTO_REJOIN'].'');
-    response('Keep Chan Modes : '.$GLOBALS['CONFIG_KEEPCHAN_MODES'].'');
-    response('Keep Nick       : '.$GLOBALS['CONFIG_KEEP_NICK'].'');
+    response('Auto OP         : '.$GLOBALS['CONFIG.AUTO.OP'].'');
+    response('Auto Rejoin     : '.$GLOBALS['CONFIG.AUTO.REJOIN'].'');
+    response('Keep Chan Modes : '.$GLOBALS['CONFIG.KEEPCHAN.MODES'].'');
+    response('Keep Nick       : '.$GLOBALS['CONFIG.KEEP.NICK'].'');
 
     response('[CHANNEL]');
-    response('Channel         : '.$GLOBALS['CONFIG_CNANNEL'].'');
-    response('Auto Join       : '.$GLOBALS['CONFIG_AUTO_JOIN'].'');
-    response('Channel Modes   : '.$GLOBALS['CONFIG_CHANNEL_MODES'].'');
-    response('Channel Key     : '.$GLOBALS['CONFIG_CHANNEL_KEY'].'');
+    response('Channel         : '.$GLOBALS['CONFIG.CHANNEL'].'');
+    response('Auto Join       : '.$GLOBALS['CONFIG.AUTO.JOIN'].'');
+    response('Channel Modes   : '.$GLOBALS['CONFIG.CHANNEL.MODES'].'');
+    response('Channel Key     : '.$GLOBALS['CONFIG.CHANNEL.KEY'].'');
 
     response('[BANS]');
-    response('Ban List        : '.$GLOBALS['CONFIG_BAN_LIST'].'');
+    response('Ban List        : '.$GLOBALS['CONFIG.BAN.LIST'].'');
 
     response('[COMMAND]');
-    response('Command Prefix  : '.$GLOBALS['CONFIG_CMD_PREFIX'].'');
+    response('Command Prefix  : '.$GLOBALS['CONFIG.CMD.PREFIX'].'');
 
     response('[CTCP]');
-    response('CTCP Response   : '.$GLOBALS['CONFIG_CTCP_RESPONSE'].'');
-    response('CTCP Version    : '.$GLOBALS['CONFIG_CTCP_VERSION'].'');
-    response('CTCP Finger     : '.$GLOBALS['CONFIG_CTCP_FINGER'].'');
+    response('CTCP Response   : '.$GLOBALS['CONFIG.CTCP.RESPONSE'].'');
+    response('CTCP Version    : '.$GLOBALS['CONFIG.CTCP.VERSION'].'');
+    response('CTCP Finger     : '.$GLOBALS['CONFIG.CTCP.FINGER'].'');
 
     response('[DELAYS]');
-    response('Channel Delay   : '.$GLOBALS['CONFIG_CHANNEL_DELAY'].'');
-    response('Private Delay   : '.$GLOBALS['CONFIG_PRIVATE_DELAY'].'');
-    response('Notice Delay    : '.$GLOBALS['CONFIG_NOTICE_DELAY'].'');
+    response('Channel Delay   : '.$GLOBALS['CONFIG.CHANNEL.DELAY'].'');
+    response('Private Delay   : '.$GLOBALS['CONFIG.PRIVATE.DELAY'].'');
+    response('Notice Delay    : '.$GLOBALS['CONFIG.NOTICE.DELAY'].'');
 
     response('[LOGS]');
-    response('Logging         : '.$GLOBALS['CONFIG_LOGGING'].'');
+    response('Logging         : '.$GLOBALS['CONFIG.LOGGING'].'');
 
     response('[TIME]');
-    response('Time Zone       : '.$GLOBALS['CONFIG_TIMEZONE'].'');
+    response('Time Zone       : '.$GLOBALS['CONFIG.TIMEZONE'].'');
 
     response('[FETCH]');
-    response('Fetch Server    : '.$GLOBALS['CONFIG_FETCH_SERVER'].'');
+    response('Fetch Server    : '.$GLOBALS['CONFIG.FETCH.SERVER'].'');
 
     response('[PROGRAM]');
-    response('Show Logo       : '.$GLOBALS['CONFIG_SHOW_LOGO'].'');
-    response('Silent Mode     : '.$GLOBALS['silent_mode'].'');
     response('Check Update    : '.$GLOBALS['CONFIG_CHECK_UPDATE'].'');
-    response('Play Sounds     : '.$GLOBALS['CONFIG_PLAY_SOUNDS'].'');
+    response('Play Sounds     : '.$GLOBALS['CONFIG.PLAY.SOUNDS'].'');
 
     response('[DEBUG]');
-    response('Show RAW        : '.$GLOBALS['CONFIG_SHOW_RAW'].'');
+    response('Show RAW        : '.$GLOBALS['CONFIG.SHOW.RAW'].'');
     
     response('End.');
 }

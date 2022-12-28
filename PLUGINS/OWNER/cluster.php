@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Clustering plugin: {$GLOBALS['CONFIG_CMD_PREFIX']}cluster help to list commands";
+    $plugin_description = "Clustering plugin: {$GLOBALS['CONFIG.CMD.PREFIX']}cluster help to list commands";
     $plugin_command     = 'cluster';
 
 function plugin_cluster()
@@ -32,9 +32,9 @@ function plugin_cluster()
             case 'help':
                   response('Cluster commands:');
                   response('cluster help       - Shows this help');
-                  response("cluster shutdown   - Bot shutdowns computer: {$GLOBALS['CONFIG_CMD_PREFIX']}".
+                  response("cluster shutdown   - Bot shutdowns computer: {$GLOBALS['CONFIG.CMD.PREFIX']}".
                            "cluster shutdown <bot_nickname>");
-                  response("cluster shutdown * - Bot shutdowns all bots computers: {$GLOBALS['CONFIG_CMD_PREFIX']}".
+                  response("cluster shutdown * - Bot shutdowns all bots computers: {$GLOBALS['CONFIG.CMD.PREFIX']}".
                            "cluster shutdown *");
                 break;
         }

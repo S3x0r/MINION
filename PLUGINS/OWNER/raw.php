@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Sends raw string to server: {$GLOBALS['CONFIG_CMD_PREFIX']}raw <string>";
+    $plugin_description = "Sends raw string to server: {$GLOBALS['CONFIG.CMD.PREFIX']}raw <string>";
     $plugin_command     = 'raw';
 
 // TODO: whole message

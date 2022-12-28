@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Uban specified host: {$GLOBALS['CONFIG_CMD_PREFIX']}unban <nick!ident@host>";
+    $plugin_description = "Uban specified host: {$GLOBALS['CONFIG.CMD.PREFIX']}unban <nick!ident@host>";
     $plugin_command     = 'unban';
 
 function plugin_unban()

@@ -33,16 +33,16 @@ WEB_BOT_CONFIG_FILE = ".$GLOBALS['configFile'];
 
     $file = $GLOBALS['configFile'];
     $cfg = new IniParser($file);
-    $GLOBALS['CONFIG_WEB_LOGIN'] = $cfg->get('PANEL', 'web_login');
-    $GLOBALS['CONFIG_WEB_PASSWORD'] = $cfg->get('PANEL', 'web_password');
+    $GLOBALS['CONFIG.WEB.LOGIN'] = $cfg->get('PANEL', 'web.login');
+    $GLOBALS['CONFIG.WEB.PASSWORD'] = $cfg->get('PANEL', 'web.password');
     
     /* generate random string for cookie salt */
     $string = randomString('16');
 
     /* save data to panel config */
-    SaveData('src/panel/web.ini', 'PANEL', 'web_login', $GLOBALS['CONFIG_WEB_LOGIN']);
-    SaveData('src/panel/web.ini', 'PANEL', 'web_password', $GLOBALS['CONFIG_WEB_PASSWORD']);
-    SaveData('src/panel/web.ini', 'PANEL', 'web_salt', $string);
+    SaveData('src/panel/web.ini', 'PANEL', 'web.login', $GLOBALS['CONFIG.WEB.LOGIN']);
+    SaveData('src/panel/web.ini', 'PANEL', 'web.password', $GLOBALS['CONFIG.WEB.PASSWORD']);
+    SaveData('src/panel/web.ini', 'PANEL', 'web.salt', $string);
 }
 //---------------------------------------------------------------------------------------------------------
 function WebSave($v1, $v2)

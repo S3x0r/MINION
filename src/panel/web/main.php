@@ -2,9 +2,9 @@
     error_reporting(0);
     require 'api.php';
     $cfg = new IniParser('../web.ini');
-    $username = $cfg->get('PANEL', 'web_login');
-    $password = $cfg->get('PANEL', 'web_password');
-    $salt     = $cfg->get('PANEL', 'web_salt');
+    $username = $cfg->get('PANEL', 'web.login');
+    $password = $cfg->get('PANEL', 'web.password');
+    $salt     = $cfg->get('PANEL', 'web.salt');
 
 if (isset($_COOKIE['xs']) && $_COOKIE['xs'] == hash('sha512', $password.$salt)) {
 ?>
@@ -55,9 +55,9 @@ if (isset($_COOKIE['xs']) && $_COOKIE['xs'] == hash('sha512', $password.$salt)) 
  echo "<h4>Running since (".date('d.m.Y, H:i:s', $GLOBALS['WEB_START_TIME']).
       ") and been running for ".$time.'</h4></h3><br>';
  echo '<h3>Bot admin:<br>';
- echo '<h4>'.$GLOBALS['CONFIG_BOT_ADMIN'].'</h4></h3><br>';
+ echo '<h4>'.$GLOBALS['CONFIG.BOT.ADMIN'].'</h4></h3><br>';
  echo '<h3>Bot owners:<br>';
- echo '<h4>'.$GLOBALS['CONFIG_OWNERS'].'</h4></h3><br>';
+ echo '<h4>'.$GLOBALS['CONFIG.OWNERS'].'</h4></h3><br>';
 
 ?>
       </div>

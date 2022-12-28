@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Removes owner from config file: {$GLOBALS['CONFIG_CMD_PREFIX']}remowner <nick!ident@hostname>";
+    $plugin_description = "Removes owner from config file: {$GLOBALS['CONFIG.CMD.PREFIX']}remowner <nick!ident@hostname>";
     $plugin_command     = 'remowner';
 
 function plugin_remowner()
@@ -30,7 +30,7 @@ function plugin_remowner()
     } else {
         if (preg_match('/^(.+?)!(.+?)@(.+?)$/', $GLOBALS['args'], $host)) {
             /* read owners from config */
-            LoadData($GLOBALS['configFile'], 'OWNER', 'bot_owners');
+            LoadData($GLOBALS['configFile'], 'OWNER', 'bot.owners');
             $owners_list = $GLOBALS['LOADED'];
             $array = explode(" ", str_replace(',', '', $owners_list));
             $key = array_search($GLOBALS['args'], $array);
@@ -44,11 +44,11 @@ function plugin_remowner()
                 $string2 = str_replace(' ', ', ', $string);
 
                 /* save new list to config */
-                SaveData($GLOBALS['configFile'], 'OWNER', 'bot_owners', $string2);
+                SaveData($GLOBALS['configFile'], 'OWNER', 'bot.owners', $string2);
 
                 /* update variable with new owners */
                 $cfg = new IniParser($GLOBALS['configFile']);
-                $GLOBALS['CONFIG_OWNERS'] = $cfg->get("OWNER", "bot_owners");
+                $GLOBALS['CONFIG.OWNERS'] = $cfg->get("OWNER", "bot.owners");
 
                 /* send info to user */
                 response("Host: '{$GLOBALS['args']}' removed from owners.");

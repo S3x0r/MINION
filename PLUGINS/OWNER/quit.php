@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Shutdown BOT: {$GLOBALS['CONFIG_CMD_PREFIX']}quit";
+    $plugin_description = "Shutdown BOT: {$GLOBALS['CONFIG.CMD.PREFIX']}quit";
     $plugin_command     = 'quit';
 
 function plugin_quit()

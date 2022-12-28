@@ -87,9 +87,9 @@ function DEBUG($where)
     } else {
               echo '[DEBUG] USER_HOST: ---'.N;
     }
-    if (isset($GLOBALS['CHANNEL_MODES'])) {
-        echo '[DEBUG] CHANNEL_MODES: '.$GLOBALS['CHANNEL_MODES'].NN;
+    if (isset($GLOBALS['CHANNEL.MODES'])) {
+        echo '[DEBUG] CHANNEL.MODES: '.$GLOBALS['CHANNEL.MODES'].NN;
     } else {
-              echo '[DEBUG] CHANNEL_MODES: ---'.NN;
+              echo '[DEBUG] CHANNEL.MODES: ---'.NN;
     }
 }

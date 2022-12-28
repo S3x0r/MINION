@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Shows BOT commands: {$GLOBALS['CONFIG_CMD_PREFIX']}help";
+    $plugin_description = "Shows BOT commands: {$GLOBALS['CONFIG.CMD.PREFIX']}help";
     $plugin_command     = 'help';
 
 /* TODO: -move plugin to core commands
@@ -32,31 +32,32 @@ function plugin_help()
 {
     /* if OWNER use help */
     if (HasOwner($GLOBALS['mask'])) {
-        response('Core Commands: '.
-                 $GLOBALS['CONFIG_CMD_PREFIX'].'load '.
-                 $GLOBALS['CONFIG_CMD_PREFIX'].'panel '.
-                 $GLOBALS['CONFIG_CMD_PREFIX'].'pause '.
-                 $GLOBALS['CONFIG_CMD_PREFIX'].'seen '.
-                 $GLOBALS['CONFIG_CMD_PREFIX'].'unload '.
-                 $GLOBALS['CONFIG_CMD_PREFIX'].'unpause');
+        
+        $response = null;
+        
+        foreach ( CORECOMMANDSLIST as $coreCommand ) {
+            $response .= $GLOBALS['CONFIG.CMD.PREFIX'].$coreCommand.' ';
+        }
 
+        response('Core Commands: '.$response);
+        
         response('Owner Commands: '.implode(' ', $GLOBALS['OWNER_PLUGINS']));
         response('Admin Commands: '.implode(' ', $GLOBALS['ADMIN_PLUGINS']));
         response('User Commands: '.implode(' ', $GLOBALS['USER_PLUGINS']));
 
       /* if ADMIN use help */
     } elseif (!HasOwner($GLOBALS['mask']) && HasAdmin($GLOBALS['mask'])) {
-              response("Core Commands: {$GLOBALS['CONFIG_CMD_PREFIX']}seen");
+              response("Core Commands: {$GLOBALS['CONFIG.CMD.PREFIX']}seen");
               response('Admin Commands: '.implode(' ', $GLOBALS['ADMIN_PLUGINS']));
               response('User Commands: '.implode(' ', $GLOBALS['USER_PLUGINS']));
 
-        !empty($GLOBALS['CONFIG_BOT_ADMIN']) ? response("Bot Admin: {$GLOBALS['CONFIG_BOT_ADMIN']}") : false;
+        !empty($GLOBALS['CONFIG.BOT.ADMIN']) ? response("Bot Admin: {$GLOBALS['CONFIG.BOT.ADMIN']}") : false;
       
       /* if USER use help */
     } elseif (!HasOwner($GLOBALS['mask']) && !HasAdmin($GLOBALS['mask'])) {
-              response("Core Commands: {$GLOBALS['CONFIG_CMD_PREFIX']}seen");
+              response("Core Commands: {$GLOBALS['CONFIG.CMD.PREFIX']}seen");
               response('User Commands: '.implode(' ', $GLOBALS['USER_PLUGINS']));
               
-        !empty($GLOBALS['CONFIG_BOT_ADMIN']) ? response("Bot Admin: {$GLOBALS['CONFIG_BOT_ADMIN']}") : false;
+        !empty($GLOBALS['CONFIG.BOT.ADMIN']) ? response("Bot Admin: {$GLOBALS['CONFIG.BOT.ADMIN']}") : false;
     }
 }

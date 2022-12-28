@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Changing string to choosed algorithm: {$GLOBALS['CONFIG_CMD_PREFIX']}hash help to list algorithms";
+    $plugin_description = "Changing string to choosed algorithm: {$GLOBALS['CONFIG.CMD.PREFIX']}hash help to list algorithms";
     $plugin_command     = 'hash';
 
 /*
@@ -32,7 +32,7 @@ function plugin_hash()
 {
     if (OnEmptyArg('hash help to get algorithms list')) {
     } elseif ($GLOBALS['args'] == 'help') {
-              response("Usage: {$GLOBALS['CONFIG_CMD_PREFIX']}hash <algorithm> <string>");
+              response("Usage: {$GLOBALS['CONFIG.CMD.PREFIX']}hash <algorithm> <string>");
               response('Algos: '.implode(' ', hash_algos()));
     } elseif (in_array($GLOBALS['piece1'], hash_algos())) {
               response("{$GLOBALS['piece1']}: ".hash($GLOBALS['piece1'], inputFromLine(5)));

@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Shows webpage titile: {$GLOBALS['CONFIG_CMD_PREFIX']}webtitle <web address>";
+    $plugin_description = "Shows webpage titile: {$GLOBALS['CONFIG.CMD.PREFIX']}webtitle <web address>";
     $plugin_command     = 'webtitle';
 
 function plugin_webtitle()

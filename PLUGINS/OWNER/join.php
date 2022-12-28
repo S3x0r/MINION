@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Joins channel: {$GLOBALS['CONFIG_CMD_PREFIX']}join <#channel>";
+    $plugin_description = "Joins channel: {$GLOBALS['CONFIG.CMD.PREFIX']}join <#channel>";
     $plugin_command     = 'join';
 
 function plugin_join()

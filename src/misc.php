@@ -19,7 +19,42 @@
   exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
+function changeDefaultOwnerPwd()
+{
+    /* Set new password */
+    $newPassword = getPasswd('['.@date('H:i:s').'] New Password: ');
 
+    /* when password to short */
+    while (strlen($newPassword) < 8) {
+        echo N.'['.@date('H:i:s').'] Password too short, password must be at least 8 characters long'.N;
+        unset($newPassword);
+        $newPassword = getPasswd('['.@date('H:i:s').'] New Password: ');
+    }
+
+    /* join spaces in password */
+    $newPassword = str_replace(' ', '', $newPassword);
+
+    /* hash pwd */
+    $hashed = hash('sha256', $newPassword);
+
+    /* save pwd to file */
+    SaveData($GLOBALS['configFile'], 'OWNER', 'owner.password', $hashed);
+
+    /* remove pwd checking vars */
+    unset($newPassword);
+    unset($hashed);
+
+    /* Set first time change variable */
+    $GLOBALS['defaultPwdChanged'] = 'yes';
+    
+    echo N;
+    cliLog('[bot] Password changed!'.N);
+  
+    /* update owner(s) password */
+    $cfg = new IniParser($GLOBALS['configFile']);
+    $GLOBALS['CONFIG.OWNER.PASSWD'] = $cfg->get('OWNER', 'owner.password');
+}
+//---------------------------------------------------------------------------------------------------------
 function SaveData($v1, $v2, $v3, $v4)
 {
     $cfg = new IniParser($v1);
@@ -33,40 +68,17 @@ function LoadData($configFile, $section, $config)
     $GLOBALS['LOADED'] = $cfg->get("$section", "$config");
 }
 //---------------------------------------------------------------------------------------------------------
-function CheckUpdateInfo()
-{
-    /* check if new version on server */
-    if ($GLOBALS['CONFIG_CHECK_UPDATE'] == 'yes' && !IsSilent()) {
-        if (extension_loaded('openssl')) {
-            $file = @file_get_contents(VERSION_URL);
-        
-            if (!empty($file)) {
-                $serverVersion = explode("\n", $file);
-                if ($serverVersion[0] > VER) {
-                    echo "             >>>> New version available! ($serverVersion[0]) <<<<".NN.N;
-                } else {
-                         echo "       >>>> No new update, you have the latest version <<<<".NN.N;
-                }
-            } else {
-                     echo "            >>>> Cannot connect to update server <<<<".NN.N;
-            }
-        } else {
-                 echo "   ! I cannot check update, i need: php_openssl extension to work!".NN.N;
-        }
-    }
-}
-//---------------------------------------------------------------------------------------------------------
 /* update users (OWNER,USER) array */
 function UpdatePrefix($user, $newPrefix)
 {
-    $GLOBALS[$user.'_PLUGINS'] = str_replace($GLOBALS['CONFIG_CMD_PREFIX'], $newPrefix, $GLOBALS[$user.'_PLUGINS']);
+    $GLOBALS[$user.'_PLUGINS'] = str_replace($GLOBALS['CONFIG.CMD.PREFIX'], $newPrefix, $GLOBALS[$user.'_PLUGINS']);
 }
 //---------------------------------------------------------------------------------------------------------
 /* if first arg after !plugin <arg> is empty */
 function OnEmptyArg($information)
 {
     if (empty($GLOBALS['args'])) {
-        response("Usage: {$GLOBALS['CONFIG_CMD_PREFIX']}{$information}");
+        response("Usage: {$GLOBALS['CONFIG.CMD.PREFIX']}{$information}");
         return true;
     } else {
               return false;
@@ -148,7 +160,7 @@ function msg_without_command()
 //---------------------------------------------------------------------------------------------------------
 function HasAdmin($mask) //TODO: wtf
 {
-    $admins_c = $GLOBALS['CONFIG_ADMIN_LIST'];
+    $admins_c = $GLOBALS['CONFIG.ADMIN.LIST'];
     $pieces = explode(", ", $admins_c);
 
     if ($mask == null) {
@@ -164,7 +176,7 @@ function HasAdmin($mask) //TODO: wtf
 //---------------------------------------------------------------------------------------------------------
 function HasOwner($mask) //TODO: wtf
 {
-    $owners_c = $GLOBALS['CONFIG_OWNERS'];
+    $owners_c = $GLOBALS['CONFIG.OWNERS'];
     $pieces = explode(", ", $owners_c);
 
     if ($mask == null) {
@@ -187,18 +199,9 @@ function SaveToFile($file, $data, $method)
     @fclose($file);
 }
 //---------------------------------------------------------------------------------------------------------
-function IsSilent()
-{
-    if ($GLOBALS['silent_mode'] == 'no' or empty($GLOBALS['silent_mode'])) {
-        return false;
-    } else {
-             return true;
-    }
-}
-//---------------------------------------------------------------------------------------------------------
 function PlaySound($sound)
 {
-    if (!IsSilent() && $GLOBALS['CONFIG_PLAY_SOUNDS'] == 'yes' && !isset($GLOBALS['OS'])) {
+    if ($GLOBALS['CONFIG.PLAY.SOUNDS'] == 'yes' && !isset($GLOBALS['OS'])) {
         if (is_file('src/php/play.exe') && is_file('src/sounds/'.$sound)) {
             $command = 'start /b src/php/play.exe src/sounds/'.$sound;
             pclose(popen($command, 'r'));
@@ -260,6 +263,7 @@ function getPasswd($string = '')
              $psw = fgets(STDIN);
              system('stty echo');
     }
+
     return rtrim($psw, N);
 }
 //---------------------------------------------------------------------------------------------------------
@@ -271,10 +275,10 @@ function Statistics()
     $ip = @file_get_contents($ipAddress);
     
     /* identify bot session by hashed ip, operating system, bot nickname, name and ident */
-    $botID = hash('sha256', $ip.php_uname().getBotNickname().$GLOBALS['CONFIG_NAME'].
-                  $GLOBALS['CONFIG_IDENT'].$GLOBALS['CONFIG_SERVER'].VER);
+    $botID = hash('sha256', $ip.php_uname().getBotNickname().$GLOBALS['CONFIG.NAME'].
+                  $GLOBALS['CONFIG.IDENT'].$GLOBALS['CONFIG.SERVER'].VER);
 
-    @file($statsAddress."stamp={$botID}&nick=".getBotNickname()."&server={$GLOBALS['CONFIG_SERVER']}&ver={VER}");
+    @file($statsAddress."stamp={$botID}&nick=".getBotNickname()."&server={$GLOBALS['CONFIG.SERVER']}&ver={VER}");
 }
 //---------------------------------------------------------------------------------------------------------
 function WinSleep($time)
@@ -299,11 +303,6 @@ function in_array_r($needle, $haystack, $strict = false) {
     }
 
     return false;
-}
-//---------------------------------------------------------------------------------------------------------
-function pluginUsageCli($pluginName)
-{
-    cliLog("[PLUGIN: {$pluginName}] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
 }
 //---------------------------------------------------------------------------------------------------------
 function runProgram($command)

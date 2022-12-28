@@ -21,14 +21,14 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Shows BOT uptime: {$GLOBALS['CONFIG_CMD_PREFIX']}uptime";
+    $plugin_description = "Shows BOT uptime: {$GLOBALS['CONFIG.CMD.PREFIX']}uptime";
     $plugin_command     = 'uptime';
 
 function plugin_uptime()
 {
-    $uptimeTime = uptimeCount(microtime(true) - START_TIME);
+    $uptime = uptimeCount(microtime(true) - START_TIME);
 
-    response("I've been running since (".date('d.m.Y, H:i:s', START_TIME).") and been running for {$uptimeTime}");
+    response("I've been running since (".date('d.m.Y, H:i:s', START_TIME).") and been running for {$uptime}");
 }
 
 function uptimeCount($s)

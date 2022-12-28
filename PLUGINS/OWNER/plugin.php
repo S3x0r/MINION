@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Plugins manipulation: {$GLOBALS['CONFIG_CMD_PREFIX']}plugin help to list commands";
+    $plugin_description = "Plugins manipulation: {$GLOBALS['CONFIG.CMD.PREFIX']}plugin help to list commands";
     $plugin_command     = 'plugin';
 
 function plugin_plugin()
@@ -33,10 +33,10 @@ function plugin_plugin()
 //---------------------------------------------------------------------------------------------------------
             case 'help':
                  response('Plugin commands:');
-                 response("plugin delete - Deletes plugin from directory: {$GLOBALS['CONFIG_CMD_PREFIX']}plugin delete <plugin_name>");
-                 response("plugin move <plugin name> <from> <to> - Move plugin from group to group: {$GLOBALS['CONFIG_CMD_PREFIX']}plugin move <plugin name> <from> <to>");
-                 response("plugin load   - Load plugin to BOT: {$GLOBALS['CONFIG_CMD_PREFIX']}plugin load <plugin_name>");
-                 response("plugin unload - Unload plugin from BOT: {$GLOBALS['CONFIG_CMD_PREFIX']}plugin unload <plugin_name>");
+                 response("plugin delete - Deletes plugin from directory: {$GLOBALS['CONFIG.CMD.PREFIX']}plugin delete <plugin_name>");
+                 response("plugin move <plugin name> <from> <to> - Move plugin from group to group: {$GLOBALS['CONFIG.CMD.PREFIX']}plugin move <plugin name> <from> <to>");
+                 response("plugin load   - Load plugin to BOT: {$GLOBALS['CONFIG.CMD.PREFIX']}plugin load <plugin_name>");
+                 response("plugin unload - Unload plugin from BOT: {$GLOBALS['CONFIG.CMD.PREFIX']}plugin unload <plugin_name>");
                 break;
 //---------------------------------------------------------------------------------------------------------
         }
@@ -44,19 +44,19 @@ function plugin_plugin()
         switch ($GLOBALS['piece1']) {
 //---------------------------------------------------------------------------------------------------------
             case 'delete':
-                if (is_file("PLUGINS/USER/{$GLOBALS['piece2']}.php") xor
-                    is_file("PLUGINS/OWNER/{$GLOBALS['piece2']}.php") xor
-                    is_file("PLUGINS/ADMIN/{$GLOBALS['piece2']}.php")) {
-                    if (is_file("PLUGINS/USER/{$GLOBALS['piece2']}.php")) {
-                        unlink("PLUGINS/USER/{$GLOBALS['piece2']}.php");
+                if (is_file(PLUGINSDIR."/USER/{$GLOBALS['piece2']}.php") xor
+                    is_file(PLUGINSDIR."/OWNER/{$GLOBALS['piece2']}.php") xor
+                    is_file(PLUGINSDIR."/ADMIN/{$GLOBALS['piece2']}.php")) {
+                    if (is_file(PLUGINSDIR."/USER/{$GLOBALS['piece2']}.php")) {
+                        unlink(PLUGINSDIR."/USER/{$GLOBALS['piece2']}.php");
 
                         response("Plugin: {$GLOBALS['piece2']} removed from: USER group.");
-                    } elseif (is_file("PLUGINS/OWNER/{$GLOBALS['piece2']}.php")) {
-                              unlink("PLUGINS/OWNER/{$GLOBALS['piece2']}.php");
+                    } elseif (is_file(PLUGINSDIR."/OWNER/{$GLOBALS['piece2']}.php")) {
+                              unlink(PLUGINSDIR."/OWNER/{$GLOBALS['piece2']}.php");
 
                               response("Plugin: {$GLOBALS['piece2']} removed from OWNER group.");
-                    } elseif (is_file("PLUGINS/ADMIN/{$GLOBALS['piece2']}.php")) {
-                              unlink("PLUGINS/ADMIN/{$GLOBALS['piece2']}.php");
+                    } elseif (is_file(PLUGINSDIR."/ADMIN/{$GLOBALS['piece2']}.php")) {
+                              unlink(PLUGINSDIR."/ADMIN/{$GLOBALS['piece2']}.php");
 
                               response("Plugin: {$GLOBALS['piece2']} removed from: ADMIN group.");
                     }
@@ -66,10 +66,10 @@ function plugin_plugin()
                 break;
 //---------------------------------------------------------------------------------------------------------
             case 'move':
-                if (is_dir('PLUGINS')) {
+                if (is_dir(PLUGINSDIR)) {
                     if (!empty($GLOBALS['piece2']) && !empty($GLOBALS['piece3']) && !empty($GLOBALS['piece4'])) {
                         /* scan directory for groups */
-                        $directory = 'PLUGINS';
+                        $directory = PLUGINSDIR;
                         $groups = array_diff(scandir($directory), array('..', '.'));
                         $GLOBALS['piece2'] = strtolower($GLOBALS['piece2']);
                         $GLOBALS['piece3'] = strtoupper($GLOBALS['piece3']);
@@ -79,14 +79,14 @@ function plugin_plugin()
                         if (in_array($GLOBALS['piece3'], $groups)) {
                             if (in_array($GLOBALS['piece4'], $groups)) {
                                 /* try to move it */
-                                if (is_file("PLUGINS/{$GLOBALS['piece3']}/{$GLOBALS['piece2']}.php")) {
+                                if (is_file(PLUGINSDIR."/{$GLOBALS['piece3']}/{$GLOBALS['piece2']}.php")) {
                                     rename(
-                                        "PLUGINS/{$GLOBALS['piece3']}/{$GLOBALS['piece2']}.php",
-                                        "PLUGINS/{$GLOBALS['piece4']}/{$GLOBALS['piece2']}.php"
+                                        PLUGINSDIR."/{$GLOBALS['piece3']}/{$GLOBALS['piece2']}.php",
+                                        PLUGINSDIR."/{$GLOBALS['piece4']}/{$GLOBALS['piece2']}.php"
                                     );
 
                                     response("Plugin: {$GLOBALS['piece2']} moved to '{$GLOBALS['piece4']}' group.");
-                                } elseif (!is_file("PLUGINS/{$GLOBALS['piece3']}/{$GLOBALS['piece2']}.php")) {
+                                } elseif (!is_file(PLUGINSDIR."/{$GLOBALS['piece3']}/{$GLOBALS['piece2']}.php")) {
                                           response("No such plugin in '{$GLOBALS['piece3']}' group!");
                                 }
                             } else {
@@ -99,7 +99,7 @@ function plugin_plugin()
                              response('use: <plugin_name> <from> <to>');
                     }
                 } else {
-                         response('Cannot find PLUGINS directory, deleted?');
+                         response('Cannot find '.PLUGINSDIR.' directory, deleted?');
                 }
                 break;
 //---------------------------------------------------------------------------------------------------------

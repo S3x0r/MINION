@@ -30,7 +30,7 @@ function plugin_seen()
         } elseif ($GLOBALS['args'] == $GLOBALS['USER']) {
                   response('Look at mirror!');
         } elseif ($GLOBALS['args'] == 'owner') {
-            !empty($GLOBALS['CONFIG_BOT_ADMIN']) ? response("My Owner: {$GLOBALS['CONFIG_BOT_ADMIN']}") : false;
+            !empty($GLOBALS['CONFIG.BOT.ADMIN']) ? response("My Owner: {$GLOBALS['CONFIG.BOT.ADMIN']}") : false;
         } else {
                  /* revert from illegal chars file */
                  $GLOBALS['args'] = removeIllegalCharsFromNickname($GLOBALS['args']);
@@ -48,7 +48,7 @@ function SeenSave()
     
     $seenDataDir = DATADIR.'/SEEN/';
 
-    substr(getBotChannel(), 0, 1) != '#' ? $chan = $GLOBALS['CONFIG_CNANNEL'] : $chan = getBotChannel();
+    substr(getBotChannel(), 0, 1) != '#' ? $chan = $GLOBALS['CONFIG.CHANNEL'] : $chan = getBotChannel();
 
     $data = "Last seen user: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}) On channel: {$chan}, Date: ".date("d.m.Y").", Time: ".date("H:i:s");
 
@@ -90,8 +90,8 @@ function plugin_panel()
         switch ($GLOBALS['args']) {
             case 'help':
                 response('Panel commands:');
-                response("start <port> - Start panel with specified port: {$GLOBALS['CONFIG_CMD_PREFIX']}panel start <eg. 3131>");
-                response("stop         - Stop panel: {$GLOBALS['CONFIG_CMD_PREFIX']}panel stop");
+                response("start <port> - Start panel with specified port: {$GLOBALS['CONFIG.CMD.PREFIX']}panel start <eg. 3131>");
+                response("stop         - Stop panel: {$GLOBALS['CONFIG.CMD.PREFIX']}panel stop");
                 break;
         }
         switch ($GLOBALS['piece1']) {
@@ -139,7 +139,7 @@ function plugin_panel()
 function plugin_load()
 {
     if (empty($GLOBALS['args'])) {
-        response("Usage {$GLOBALS['CONFIG_CMD_PREFIX']}load <plugin_name>");
+        response("Usage {$GLOBALS['CONFIG.CMD.PREFIX']}load <plugin_name>");
     } else {
         !empty($GLOBALS['piece1']) ? LoadPlugin($GLOBALS['piece1']) : false;
     }
@@ -148,7 +148,7 @@ function plugin_load()
 function plugin_unload()
 {
     if (empty($GLOBALS['args'])) {
-        response("Usage {$GLOBALS['CONFIG_CMD_PREFIX']}unload <plugin_name>");
+        response("Usage {$GLOBALS['CONFIG.CMD.PREFIX']}unload <plugin_name>");
     } else {
         !empty($GLOBALS['piece1']) ? UnloadPlugin($GLOBALS['piece1']) : false;
     }
@@ -157,14 +157,14 @@ function plugin_unload()
 function CoreCmd_RegisterToBot()
 {
     try {
-        if (empty($GLOBALS['CONFIG_OWNERS'])) {
+        if (empty($GLOBALS['CONFIG.OWNERS'])) {
             if (!HasOwner($GLOBALS['mask'])) {
                 /* hash message from user to use for comparsion */
                 $hashed = hash('sha256', $GLOBALS['args']);
         
                 /* if user password match password in config do the rest */
-                if ($hashed == $GLOBALS['CONFIG_OWNER_PASSWD']) {
-                    LoadData($GLOBALS['configFile'], 'OWNER', 'bot_owners');
+                if ($hashed == $GLOBALS['CONFIG.OWNER.PASSWD']) {
+                    LoadData($GLOBALS['configFile'], 'OWNER', 'bot.owners');
             
                     cliLog("[bot] Successful registration as owner from: {$GLOBALS['USER']} ({$GLOBALS['mask']})");
 
@@ -172,16 +172,16 @@ function CoreCmd_RegisterToBot()
 
                     empty($GLOBALS['LOADED']) ? $newList = $new : $newList = "{$GLOBALS['LOADED']}, {$new}";
 
-                    SaveData($GLOBALS['configFile'], 'OWNER', 'bot_owners', $newList);
+                    SaveData($GLOBALS['configFile'], 'OWNER', 'bot.owners', $newList);
 
                     /* Add host to auto op list */
-                    LoadData($GLOBALS['configFile'], 'OWNER', 'auto_op_list');
+                    LoadData($GLOBALS['configFile'], 'OWNER', 'auto.op.list');
 
                     $new = trim($GLOBALS['mask']);
 
                     empty($GLOBALS['LOADED']) ? $newList = $new : $newList = "{$GLOBALS['LOADED']}, {$new}";
 
-                    SaveData($GLOBALS['configFile'], 'OWNER', 'auto_op_list', $newList);
+                    SaveData($GLOBALS['configFile'], 'OWNER', 'auto.op.list', $newList);
           
                     /* cli msg */
                     cliLog("[bot] New Owner added: {$GLOBALS['USER']} ({$GLOBALS['mask']})");
@@ -190,19 +190,19 @@ function CoreCmd_RegisterToBot()
                     /* send information to user about commands */
                     response('From now you are on my owner(s) list, enjoy.');
 
-                    response("Core Commands: {$GLOBALS['CONFIG_CMD_PREFIX']}load ".
-                                 "{$GLOBALS['CONFIG_CMD_PREFIX']}panel ".
-                                 "{$GLOBALS['CONFIG_CMD_PREFIX']}pause ".
-                                 "{$GLOBALS['CONFIG_CMD_PREFIX']}seen ".
-                                 "{$GLOBALS['CONFIG_CMD_PREFIX']}unload ".
-                                 "{$GLOBALS['CONFIG_CMD_PREFIX']}unpause");
+                    response("Core Commands: {$GLOBALS['CONFIG.CMD.PREFIX']}load ".
+                                 "{$GLOBALS['CONFIG.CMD.PREFIX']}panel ".
+                                 "{$GLOBALS['CONFIG.CMD.PREFIX']}pause ".
+                                 "{$GLOBALS['CONFIG.CMD.PREFIX']}seen ".
+                                 "{$GLOBALS['CONFIG.CMD.PREFIX']}unload ".
+                                 "{$GLOBALS['CONFIG.CMD.PREFIX']}unpause");
 
                     response('Owner Commands: '.implode(' ', $GLOBALS['OWNER_PLUGINS']));
                     response('Admin Commands: '.implode(' ', $GLOBALS['ADMIN_PLUGINS']));
                     response('User Commands: '.implode(' ', $GLOBALS['USER_PLUGINS']));
 
                     /* send info who is bot admin */
-                    !empty($GLOBALS['CONFIG_BOT_ADMIN']) ? response("Bot Admin: {$GLOBALS['CONFIG_BOT_ADMIN']}") : false;
+                    !empty($GLOBALS['CONFIG.BOT.ADMIN']) ? response("Bot Admin: {$GLOBALS['CONFIG.BOT.ADMIN']}") : false;
 
                     /* give op */
                     if (BotOpped() == true) {
@@ -211,12 +211,12 @@ function CoreCmd_RegisterToBot()
 
                     /* update variable with new owners */
                     $cfg = new IniParser($GLOBALS['configFile']);
-                    $GLOBALS['CONFIG_OWNERS'] = $cfg->get("OWNER", "bot_owners");
+                    $GLOBALS['CONFIG.OWNERS'] = $cfg->get("OWNER", "bot.owners");
                 }
             } else {
                      $hashed = hash('sha256', $GLOBALS['args']);
                      /* if user is already an owner */
-                     $hashed == $GLOBALS['CONFIG_OWNER_PASSWD'] ? response('You are already my owner') : false;
+                     $hashed == $GLOBALS['CONFIG.OWNER.PASSWD'] ? response('You are already my owner') : false;
             }
         }
     } catch (Exception $e) {

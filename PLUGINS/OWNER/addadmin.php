@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Add host to admin list in config: {$GLOBALS['CONFIG_CMD_PREFIX']}addadmin <nick!ident@host>";
+    $plugin_description = "Add host to admin list in config: {$GLOBALS['CONFIG.CMD.PREFIX']}addadmin <nick!ident@host>";
     $plugin_command     = 'addadmin';
 
 function plugin_addadmin()
@@ -31,22 +31,22 @@ function plugin_addadmin()
     if (OnEmptyArg('addadmin <nick!ident@hostname>')) {
     } elseif ($nick[0] != getBotNickname()) {
         if (preg_match('/^(.+?)!(.+?)@(.+?)$/', $GLOBALS['args'], $host)) {
-            LoadData($GLOBALS['configFile'], 'ADMIN', 'admin_list');
+            LoadData($GLOBALS['configFile'], 'ADMIN', 'admin.list');
  
             if (strpos($GLOBALS['LOADED'], $GLOBALS['args']) !== false) {
                 response('I already have this host.');
             } else {
                 empty($GLOBALS['LOADED']) ? $new_list = $host[0] : $new_list = "{$GLOBALS['LOADED']}, {$host[0]}";
 
-                SaveData($GLOBALS['configFile'], 'ADMIN', 'admin_list', $new_list);
+                SaveData($GLOBALS['configFile'], 'ADMIN', 'admin.list', $new_list);
 
                 /* update variable with new owners */
                 $cfg = new IniParser($GLOBALS['configFile']);
-                $GLOBALS['CONFIG_ADMIN_LIST'] = $cfg->get("ADMIN", "admin_list");
+                $GLOBALS['CONFIG.ADMIN.LIST'] = $cfg->get("ADMIN", "admin.list");
 
                 /* inform user about adding */
                 toServer("PRIVMSG {$nick[0]} :From now you are on my ADMIN(S) list, enjoy.");
-                toServer("PRIVMSG {$nick[0]} :Core Commands: {$GLOBALS['CONFIG_CMD_PREFIX']}seen");
+                toServer("PRIVMSG {$nick[0]} :Core Commands: {$GLOBALS['CONFIG.CMD.PREFIX']}seen");
                 toServer("PRIVMSG {$nick[0]} :Admin Commands: ".implode(' ', $GLOBALS['ADMIN_PLUGINS']));
                 toServer("PRIVMSG {$nick[0]} :User Commands: ".implode(' ', $GLOBALS['USER_PLUGINS']));
 
@@ -56,6 +56,6 @@ function plugin_addadmin()
                  response('Bad input, try: nick!ident@hostname');
         }
     } else {
-             response("I'm already a master!");
+             response("Iam already a master!");
     }
 }

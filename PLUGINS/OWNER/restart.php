@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Restarts Bot: {$GLOBALS['CONFIG_CMD_PREFIX']}restart";
+    $plugin_description = "Restarts Bot: {$GLOBALS['CONFIG.CMD.PREFIX']}restart";
     $plugin_command     = 'restart';
 
 function plugin_restart()

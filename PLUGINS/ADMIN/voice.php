@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Gives voice: {$GLOBALS['CONFIG_CMD_PREFIX']}voice <nick>";
+    $plugin_description = "Gives voice: {$GLOBALS['CONFIG.CMD.PREFIX']}voice <nick>";
     $plugin_command     = 'voice';
 
 function plugin_voice()
