@@ -1,4 +1,31 @@
 
+   v1.1.7 changes (17.01.2023):
+   - From now on, you can create 1-998 permissions + normaln user (999) and 'owner' (0)
+   - The entitlement structure changed, As of now The owner directory can have any name
+     but it is important that it must be in configuration file ([USERSLEVELS]) 0
+     also name must be added in PRIVILEGES.
+     A normal user has userlevel 999 and can only see own commands
+     user levels from (1) to (998) may be assigned other privileges
+     The -lower- number has access to all -higher- level commands
+     eg. if 'owner' is (0), 'admin' (1), 'someone else' (2), 'normal user' (999)
+     'admin' can use own commands + 'someone else' commands + 'normal user' commands.
+     'someone else' can use own commands + 'normal user' commands, etc,.
+   - fixed: timezone from config was not set
+   - fixed: wrong time in log filename
+   - fixed: there was missing '<?php exit; ?>' in config file
+            when changing default password
+   - NEW PLUGIN: 'whoami' - Displays user assigned name and privilege level
+   - plugin: 'ban' - now saves ban to ban list in config
+   - new argument '-n', you can now set bot nickname from arg
+   - new logs filename format: 'date-computer name'
+   - bot prints channel user(s) on bot join
+   - added files 'core_cmnds_helpers.php', 'on_numeric.php', 'on_word.php' and changed 'core_commands' to 'core_cmnds'
+   - REMOVED PLUGINS: 'showconfig', 'save', 'addadmin', 'listadmins', 'remadmin', 'panel', 'plugin'
+     plugins will return in future.
+   - disabled for now 'fetch' plugin
+   - removed files: 'debug.php', 'web.php'
+   - code cleanup
+
    v1.1.6 changes (28.12.2022):
    - fixed reconnect delay time
    - new option in config: 'show_own_messages_in_raw_mode'

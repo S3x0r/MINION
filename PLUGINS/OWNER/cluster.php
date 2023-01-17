@@ -21,25 +21,25 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Clustering plugin: {$GLOBALS['CONFIG.CMD.PREFIX']}cluster help to list commands";
+    $plugin_description = "Clustering plugin: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."cluster help to list commands";
     $plugin_command     = 'cluster';
 
 function plugin_cluster()
 {
     if (OnEmptyArg('cluster <help> to list commands')) {
     } else {
-        switch ($GLOBALS['args']) {
+        switch (msgAsArguments()) {
             case 'help':
                   response('Cluster commands:');
                   response('cluster help       - Shows this help');
-                  response("cluster shutdown   - Bot shutdowns computer: {$GLOBALS['CONFIG.CMD.PREFIX']}".
+                  response("cluster shutdown   - Bot shutdowns computer: ".loadValueFromConfigFile('COMMAND', 'command.prefix').
                            "cluster shutdown <bot_nickname>");
-                  response("cluster shutdown * - Bot shutdowns all bots computers: {$GLOBALS['CONFIG.CMD.PREFIX']}".
+                  response("cluster shutdown * - Bot shutdowns all bots computers: ".loadValueFromConfigFile('COMMAND', 'command.prefix').
                            "cluster shutdown *");
                 break;
         }
         /* me */
-        if ($GLOBALS['piece1'] == 'shutdown' && $GLOBALS['piece2'] == getBotNickname()) {
+        if (msgPieces()[0] == 'shutdown' && msgPieces()[1] == getBotNickname()) {
             response('Shutting down machine...');
 
             cliLog('SHUTTING DOWN COMPUTER!');
@@ -47,7 +47,7 @@ function plugin_cluster()
             exec('shutdown -s -t 0');
         }
         /* all */
-        if ($GLOBALS['piece1'] == 'shutdown' && $GLOBALS['piece2'] == '*') {
+        if (msgPieces()[0] == 'shutdown' && msgPieces()[1] == '*') {
             response('Shutting down machine...');
 
             cliLog('SHUTTING DOWN COMPUTER!');

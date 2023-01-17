@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Shows how much ram is being used by bot: {$GLOBALS['CONFIG.CMD.PREFIX']}memusage";
+    $plugin_description = "Shows how much ram is being used by bot: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."memusage";
     $plugin_command     = 'memusage';
 
 function plugin_memusage()
@@ -41,5 +41,6 @@ function byte_convert($bytes)
         $exp = floor(log($bytes)/log(1024));
         $convertedVal = ($bytes/pow(1024, floor($exp)));
     }
+
     return sprintf('%.2f '.$symbol[$exp], $convertedVal);
 }

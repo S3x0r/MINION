@@ -21,14 +21,14 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Shows http status: {$GLOBALS['CONFIG.CMD.PREFIX']}webstatus <code>";
+    $plugin_description = "Shows http status: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."webstatus <code>";
     $plugin_command     = 'webstatus';
 
 function plugin_webstatus()
 {
     if (OnEmptyArg('webstatus <code>')) {
     } else {
-             response(httpstatus($GLOBALS['args']));
+             response(httpstatus(msgAsArguments()));
     }
 }
 

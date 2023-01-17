@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Adds a note: {$GLOBALS['CONFIG.CMD.PREFIX']}note help to list commands";
+    $plugin_description = "Adds a note: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."note help to list commands";
     $plugin_command     = 'note';
 
 /* TODO:
@@ -35,16 +35,16 @@ function plugin_note()
 {
     if (OnEmptyArg('note <help> to list commands')) {
     } else {
-        $notesFilename = DATADIR."/".removeIllegalCharsFromNickname($GLOBALS['USER'])."-".$GLOBALS['host'].".txt";
+        $notesFilename = DATADIR."/".removeIllegalCharsFromNickname(userPreg()[0])."-".userPreg()[2].".txt";
     
-        switch ($GLOBALS['args']) {
+        switch (msgAsArguments()) {
             case 'help':
                  response('Note commands:');
-                 response($GLOBALS['CONFIG.CMD.PREFIX'].'note add <note>  - Adds a note');
-                 response($GLOBALS['CONFIG.CMD.PREFIX'].'note clear       - Delete all notes');
-                 response($GLOBALS['CONFIG.CMD.PREFIX'].'note del <numer> - Delete specified note');
-                 response($GLOBALS['CONFIG.CMD.PREFIX'].'note help        - Shows help');
-                 response($GLOBALS['CONFIG.CMD.PREFIX'].'note list        - List notes');
+                 response(loadValueFromConfigFile('COMMAND', 'command.prefix').'note add <note>  - Adds a note');
+                 response(loadValueFromConfigFile('COMMAND', 'command.prefix').'note clear       - Delete all notes');
+                 response(loadValueFromConfigFile('COMMAND', 'command.prefix').'note del <numer> - Delete specified note');
+                 response(loadValueFromConfigFile('COMMAND', 'command.prefix').'note help        - Shows help');
+                 response(loadValueFromConfigFile('COMMAND', 'command.prefix').'note list        - List notes');
                 break;
 
             case 'list':
@@ -70,9 +70,9 @@ function plugin_note()
                 }
                 break;
         }
-        switch ($GLOBALS['piece1']) {
+        switch (msgPieces()[0]) {
             case 'add':
-                if (!empty($GLOBALS['piece2'])) {
+                if (!empty(msgPieces()[1])) {
                     /* if file is empty */
                     if (is_file($notesFilename) && filesize($notesFilename) == 0) {
                         $note = inputFromLine('5');
@@ -97,7 +97,7 @@ function plugin_note()
                 if (is_file($notesFilename)) {
                     $writeNotes = '';
                     $notes = file($notesFilename, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-                    $i = $GLOBALS['piece2'];
+                    $i = msgPieces()[1];
 
                     if (is_numeric((int)$i) && $i > 0) {
                         $j = $i-1;

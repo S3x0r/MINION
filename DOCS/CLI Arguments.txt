@@ -5,6 +5,7 @@
 
  -c <config_file>   # loads config
  -h                 # this help
+ -n                 # set bot nickname
  -o <server> <port> # connect to specified server: eg: BOT.php irc.dal.net 6667
  -p <password>      # hash password to SHA256
  -u                 # check if there is new bot version on server

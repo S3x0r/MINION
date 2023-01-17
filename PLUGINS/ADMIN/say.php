@@ -21,13 +21,13 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Say specified text to channel: {$GLOBALS['CONFIG.CMD.PREFIX']}say <text>";
+    $plugin_description = "Say specified text to channel: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."say <text>";
     $plugin_command     = 'say';
 
 function plugin_say()
 {
     if (OnEmptyArg('say <text>')) {
     } else {
-             toServer("PRIVMSG ".getBotChannel()." ".msg_without_command());
+             toServer("PRIVMSG ".getBotChannel()." ".inputFromLine(4));
     }
 }

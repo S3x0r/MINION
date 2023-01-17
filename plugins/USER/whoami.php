@@ -20,34 +20,19 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-function WebEntry()
-{
-    $data = "[MAIN]
-WEB_VERSION         = ".VER."
-WEB_START_TIME      = ".START_TIME."
-WEB_PHP_VERSION     = ".PHP_VER."
-WEB_BOT_CONFIG_FILE = ".$GLOBALS['configFile'];
-    
-    /* save some variables to web.ini */
-    SaveToFile('src/panel/web.ini', $data, 'w');
+    $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
+    $plugin_description = "Displays user assigned name and privilege level ".loadValueFromConfigFile('COMMAND', 'command.prefix')."whoami";
+    $plugin_command     = 'whoami';
 
-    $file = $GLOBALS['configFile'];
-    $cfg = new IniParser($file);
-    $GLOBALS['CONFIG.WEB.LOGIN'] = $cfg->get('PANEL', 'web.login');
-    $GLOBALS['CONFIG.WEB.PASSWORD'] = $cfg->get('PANEL', 'web.password');
-    
-    /* generate random string for cookie salt */
-    $string = randomString('16');
-
-    /* save data to panel config */
-    SaveData('src/panel/web.ini', 'PANEL', 'web.login', $GLOBALS['CONFIG.WEB.LOGIN']);
-    SaveData('src/panel/web.ini', 'PANEL', 'web.password', $GLOBALS['CONFIG.WEB.PASSWORD']);
-    SaveData('src/panel/web.ini', 'PANEL', 'web.salt', $string);
-}
-//---------------------------------------------------------------------------------------------------------
-function WebSave($v1, $v2)
+function plugin_whoami()
 {
-    $cfg = new IniParser('panel/web.ini');
-    $cfg->setValue("MAIN", "$v1", "$v2");
-    $cfg->save();
+    if (whoIsUser()[1] == 0) {
+        $resp = '(OWNER level)';
+    } else if (whoIsUser()[1] == 999) {
+               $resp = '(Normal User level)';
+    } else {
+             $resp = '(Custom level)';
+    }
+
+    response("You're: ".whoIsUser()[0]. ', lvl: '.whoIsUser()[1].' '.$resp);
 }

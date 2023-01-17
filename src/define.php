@@ -19,7 +19,7 @@
   exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '1.1.6');
+    define('VER', '1.1.7');
 //---------------------------------------------------------------------------------------------------------
     error_reporting(-1);
     
@@ -30,6 +30,7 @@
     /* directory names */
     define('LOGSDIR', 'LOGS');
     define('DATADIR', 'DATA');
+    define('SEENDIR', 'SEEN');
     define('PLUGINSDIR', 'plugins');
 
     /* config filename */
@@ -41,12 +42,12 @@
     define('DEFAULT_PWD', '47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed');
     
     /* core commands count */
-    define('CORECOMMANDSLIST', ['load', 'panel', 'pause', 'seen', 'unload', 'unpause']);
-    define('CORECOUNT', '6');
+    define('CORECOMMANDSLIST', ['load'    => 'Loads specified plugins to BOT: !load <plugin>',
+                                'pause'   => 'Pause all BOT activity: !pause',
+                                'seen'    => 'Check specified user when was last seen on channel: !seen <nickname>',
+                                'unload'  => 'Unloads specified plugin from BOT: !unload <plugin>',
+                                'unpause' => 'Restore BOT from pause mode: !unpause']);
+    define('CORECOUNT', '5');
     
     /* check version url */
     define('VERSION_URL', 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT');
-
-    /* logs filename */
-    !empty($_SERVER['COMPUTERNAME']) ? $computerNameORhostname = $_SERVER['COMPUTERNAME'] : $computerNameORhostname = gethostname();
-    $GLOBALS['logFileName'] = LOGSDIR."/".date('Y.m.d')."+".date('H_i_s').'-'.$computerNameORhostname.".txt";

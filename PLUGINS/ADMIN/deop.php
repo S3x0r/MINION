@@ -21,13 +21,13 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Deops someone: {$GLOBALS['CONFIG.CMD.PREFIX']}deop <nick>";
+    $plugin_description = "Deops someone: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."deop <nick>";
     $plugin_command     = 'deop';
 
 function plugin_deop()
 {
     if (OnEmptyArg('deop <nick>')) {
-    } elseif (BotOpped() == true && $GLOBALS['args'] != getBotNickname() && $GLOBALS['args'] != $GLOBALS['USER']) {
-              toServer("MODE ".getBotChannel()." -o {$GLOBALS['args']}");
+    } elseif (BotOpped() == true && msgAsArguments() != getBotNickname() && msgAsArguments() != userPreg()[0]) {
+              toServer("MODE ".getBotChannel()." -o ".msgAsArguments());
     }
 }

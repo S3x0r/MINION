@@ -21,14 +21,14 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Searchs wikipedia: {$GLOBALS['CONFIG.CMD.PREFIX']}wiki <lang> <string>";
+    $plugin_description = "Searchs wikipedia: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."wiki <lang> <string>";
     $plugin_command     = 'wiki';
 
 function plugin_wiki()
 {
     if (OnEmptyArg('wikipedia <lang> <string>')) {
     } elseif (extension_loaded('openssl')) {
-              $json = @file_get_contents("http://{$GLOBALS['piece1']}.wikipedia.org/w/api.php?action=opensearch&list=search&search=".urlencode(inputFromLine('5')));
+              $json = @file_get_contents("http://".msgPieces()[0].".wikipedia.org/w/api.php?action=opensearch&list=search&search=".urlencode(inputFromLine('5')));
             
               if (!empty($json)) {
                   $json = json_decode($json);

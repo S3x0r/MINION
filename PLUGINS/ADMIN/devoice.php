@@ -21,13 +21,13 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Devoice user: {$GLOBALS['CONFIG.CMD.PREFIX']}devoice <nick>";
+    $plugin_description = "Devoice user: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."devoice <nick>";
     $plugin_command     = 'devoice';
 
 function plugin_devoice()
 {
     if (OnEmptyArg('devoice <nick>')) {
-    } elseif (BotOpped() == true && $GLOBALS['args'] != getBotNickname() && $GLOBALS['args'] != $GLOBALS['USER']) {
-              toServer("MODE ".getBotChannel()." -v {$GLOBALS['args']}");
+    } elseif (BotOpped() == true && msgAsArguments() != getBotNickname() && msgAsArguments() != userPreg()[0]) {
+              toServer("MODE ".getBotChannel()." -v ".msgAsArguments());
     }
 }

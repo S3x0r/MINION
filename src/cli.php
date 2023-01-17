@@ -20,33 +20,33 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-function line()
+function cliLine()
 {
     echo '------------------------------------------------------------------------------'.N;
 }
 //---------------------------------------------------------------------------------------------------------
-function cli($data)
+function cli($data) /* no logging */
 {
     echo $data.N;
 }
 //---------------------------------------------------------------------------------------------------------
-function cliDebug($data, $mode)
+function cliDebug($data, $mode) /* debug message */
 {
-    if ($GLOBALS['CONFIG.SHOW.RAW'] == 'yes') {
+    if (loadValueFromConfigFile('DEBUG', 'show.raw') == 'yes') {
         if ($mode == 0) {
             echo "[DEBUG <-] $data";
-        } else if ($mode == 1 && $GLOBALS['CONFIG.OWN.MSGS.IN.RAW.MODE'] == 'yes') {
+        } else if ($mode == 1 && loadValueFromConfigFile('DEBUG', 'show.own.messages.in.raw.mode') == 'yes') {
                    echo "[DEBUG ->] $data".N;
         }
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function cliLog($data)
+function cliLog($data) /* log message +time */
 {
     $line = "[".@date('H:i:s')."] {$data}".N;
 
-    if (isset($GLOBALS['CONFIG.LOGGING']) && $GLOBALS['CONFIG.LOGGING'] == 'yes') {
-        SaveToFile($GLOBALS['logFileName'], $line, 'a');
+    if (loadValueFromConfigFile('LOGS', 'logging') == 'yes') {
+        SaveToFile(logFileNameFormat(), $line, 'a');
     }
 
     echo $line;
@@ -58,7 +58,7 @@ function Baner()
     echo '    ---------------------------------------------------------'.N;
          
     /* os var */
-    !isset($GLOBALS['OS']) ? $system = 'Windows' : $system = 'Linux';
+    (ifWindowsOs()) ? $system = 'Windows' : $system = 'Linux';
 
     /* check if we have needed extensions */
     if (extension_loaded('curl') && extension_loaded('openssl')) {
@@ -84,9 +84,9 @@ function CheckUpdateInfo()
         $file = @file_get_contents(VERSION_URL);
     
         if (!empty($file)) {
-            $serverVersion = explode("\n", $file);
-            if ($serverVersion[0] > VER) {
-                echo "             >>>> New version available! ($serverVersion[0]) <<<<".NN.N;
+            $version = explode("\n", $file);
+            if ($version[0] > VER) {
+                echo "             >>>> New version available! ($version[0]) <<<<".NN.N;
             } else {
                      echo "       >>>> No new update, you have the latest version <<<<".NN.N;
             }
@@ -100,5 +100,12 @@ function CheckUpdateInfo()
 //---------------------------------------------------------------------------------------------------------
 function pluginUsageCli($pluginName)
 {
-    cliLog("[PLUGIN: {$pluginName}] Used by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
+    cliLog("[PLUGIN: {$pluginName}] Used by: ".userPreg()[0]." (".userPreg()[3]."), channel: ".getBotChannel());
+}
+//---------------------------------------------------------------------------------------------------------
+function debug($data)
+{
+    if (loadValueFromConfigFile('DEBUG', 'show.debug') == 'yes') {
+        echo "[".@date('H:i:s')."] [DEBUG] {$data}".N;
+    }
 }

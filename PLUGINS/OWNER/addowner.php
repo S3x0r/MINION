@@ -21,57 +21,58 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Add owner host to config: {$GLOBALS['CONFIG.CMD.PREFIX']}addowner <nick!ident@hostname>";
+    $plugin_description = "Add owner host to config: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."addowner <nick!ident@hostname>";
     $plugin_command     = 'addowner';
 
 function plugin_addowner()
 {
-    $nick_ex = explode('!', trim($GLOBALS['args']));
+    $nick_ex = explode('!', trim(msgAsArguments()));
 
     if (OnEmptyArg('addowner <nick!ident@hostname>')) {
     } elseif ($nick_ex[0] != getBotNickname()) {
-        if (preg_match('/^(.+?)!(.+?)@(.+?)$/', $GLOBALS['args'], $host)) {
-            LoadData($GLOBALS['configFile'], 'OWNER', 'bot.owners');
- 
-            if (strpos($GLOBALS['LOADED'], $GLOBALS['args']) !== false) {
+        if (preg_match('/^(.+?)!(.+?)@(.+?)$/', msgAsArguments())) {
+            $botOwners = loadValueFromConfigFile('PRIVILEGES', getOwnerUserName());
+
+            if (strpos($botOwners, msgAsArguments()) !== false) {
                 response('I already have this host.');
             } else {
                 /* add user to owner's host's */
-                empty($GLOBALS['LOADED']) ? $new_list = $host[0] : $new_list = "{$GLOBALS['LOADED']}, {$host[0]}";
+                empty($botOwners) ? $new_list = msgAsArguments() : $new_list = "{$botOwners}, ".msgAsArguments();
 
-                SaveData($GLOBALS['configFile'], 'OWNER', 'bot.owners', $new_list);
+                SaveValueToConfigFile('PRIVILEGES', getOwnerUserName(), $new_list);
 
                 /* add user to auto op list */
-                LoadData($GLOBALS['configFile'], 'OWNER', 'auto.op.list');
+                $autoOpList = loadValueFromConfigFile('AUTOMATIC', 'auto.op.list');
 
-                empty($GLOBALS['LOADED']) ? $new_list = $host[0] : $new_list = "{$GLOBALS['LOADED']}, {$host[0]}";
+                if (strpos($autoOpList, msgAsArguments()) === false) {
+                    empty($autoOpList) ? $newAutoOpList = msgAsArguments() : $newAutoOpList = $autoOpList.', '.msgAsArguments();
 
-                SaveData($GLOBALS['configFile'], 'OWNER', 'auto.op.list', $new_list);
-
-                /* update variables with new owners/autoop list */
-                $cfg = new IniParser($GLOBALS['configFile']);
-                $GLOBALS['CONFIG.OWNERS']       = $cfg->get("OWNER", "bot.owners");
-                $GLOBALS['CONFIG.AUTO.OP.LIST'] = $cfg->get('OWNER', 'auto.op.list');
+                    SaveValueToConfigFile('AUTOMATIC', 'auto.op.list', $newAutoOpList);
+                }
 
                 /* inform user about it */
-                toServer("PRIVMSG {$nick_ex[0]} :From now you are on my owner(s)/auto op(s) lists, enjoy.");
+                privateMsgTo($nick_ex[0], "From now you are on my owner(s)/auto op(s) lists, enjoy.");
 
-                $response = null;
-           
-                foreach ( CORECOMMANDSLIST as $coreCommand ) {
-                    $response .= $GLOBALS['CONFIG.CMD.PREFIX'].$coreCommand.' ';
+                $prefix = loadValueFromConfigFile('COMMAND', 'command.prefix');
+                $plugs = null;
+            
+                foreach (CORECOMMANDSLIST as $coreCommand => $coreCmdInfo) {
+                    $plugs .= $prefix.$coreCommand.' ';
                 }
-              
-                toServer("PRIVMSG {$nick_ex[0]} :Core Commands: ".$response);
-                toServer("PRIVMSG {$nick_ex[0]} :Owner Commands: ".implode(' ', $GLOBALS['OWNER_PLUGINS']));
-                toServer("PRIVMSG {$nick_ex[0]} :User Commands: ".implode(' ', $GLOBALS['USER_PLUGINS']));
+            
+                privateMsgTo($nick_ex[0], "Core Plugins: ".$plugs);
+            
+                $allPlugins = implode(' ', $GLOBALS['ALL_PLUGINS']);
+                $allPlugins = str_replace(' ', " $prefix", $allPlugins);
+            
+                privateMsgTo($nick_ex[0], $prefix.$allPlugins);
 
-                response("Host: '{$host[0]}' added to owner list.");
+                response("Host: '".msgAsArguments()."' added to owner list.");
             }
         } else {
                  response('Bad input, try: nick!ident@hostname');
         }
     } else {
-             response('I cannot add myself to owners, im already master :)');
+             response('I cannot add myself to owners, iam already master.');
     }
 }

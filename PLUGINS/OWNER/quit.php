@@ -21,14 +21,14 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Shutdown BOT: {$GLOBALS['CONFIG.CMD.PREFIX']}quit";
+    $plugin_description = "Shutdown BOT: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."quit";
     $plugin_command     = 'quit';
 
 function plugin_quit()
 {
-    /* give op before restart */
+    /* give op before quit */
     if (BotOpped() == true) {
-        toServer("MODE ".getBotChannel()." +o {$GLOBALS['USER']}");
+        toServer("MODE ".getBotChannel()." +o ".userPreg()[0]);
     }
 
     response('Bye!');

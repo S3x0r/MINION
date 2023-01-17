@@ -21,20 +21,30 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Ban specified host: {$GLOBALS['CONFIG.CMD.PREFIX']}ban <nick!ident@host>";
+    $plugin_description = "Ban specified host: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."ban <hostname>";
     $plugin_command     = 'ban';
 
 function plugin_ban()
 {
-    if (OnEmptyArg('ban <nick!ident@host>')) {
+    if (OnEmptyArg('ban <hostname>')) {
     } elseif(BotOpped() == true) {
-           $nickToBan = explode('!', trim($GLOBALS['args']));
+           $nickToBan = explode('!', trim(msgAsArguments()));
            $nickToBan = $nickToBan[0];
 
-           if ($nickToBan != getBotNickname() && $nickToBan != $GLOBALS['USER']) {
-               toServer("MODE ".getBotChannel()." +b {$GLOBALS['args']}");
-           }
+           if ($nickToBan != getBotNickname() && $nickToBan != userPreg()[0]) {
+               /* ban host */
+               toServer("MODE ".getBotChannel()." +b ".msgAsArguments());
+               
+               /* save host to ban list */
+               $banList = loadValueFromConfigFile('BANS', 'ban.list');
 
-           unset($nickToBan);
+               if (strpos($banList, msgAsArguments()) === false) {
+                   empty($banList) ? $newList = $host[0] : $newList = "{$banList}, ".msgAsArguments();
+ 
+                   SaveValueToConfigFile('BANS', 'ban.list', $newList);
+
+                   response("Host: '".msgAsArguments()."' added to ban list.");
+               }
+           }
     }
 }

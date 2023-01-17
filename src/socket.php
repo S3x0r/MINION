@@ -24,13 +24,18 @@ function tryToConnect()
 {
     $i = 0;
 
-    while ($i++ <= $GLOBALS['CONFIG.TRY.CONNECT']) {
-           $GLOBALS['socket'] = @fsockopen($GLOBALS['CONFIG.SERVER'], $GLOBALS['CONFIG.PORT'], $GLOBALS['errno'], $GLOBALS['errstr']);
+    while ($i++ <= loadValueFromConfigFile('SERVER', 'try.connect')) {
+           $GLOBALS['socket'] = @fsockopen(loadValueFromConfigFile('SERVER', 'server'),
+                                           loadValueFromConfigFile('SERVER', 'port'),
+                                           $GLOBALS['errno'], $GLOBALS['errstr']);
         if ($GLOBALS['socket'] == false) {
-            cliLog("[bot] Cannot connect to: {$GLOBALS['CONFIG.SERVER']}:{$GLOBALS['CONFIG.PORT']}, trying again ({$i}/{$GLOBALS['CONFIG.TRY.CONNECT']})...");
+            cliLog("[bot] Cannot connect to: ".loadValueFromConfigFile('SERVER', 'server').
+                                             ":".loadValueFromConfigFile('SERVER', 'port').
+                                             ", trying again ({$i}/".
+                                             loadValueFromConfigFile('SERVER', 'try.connect').")...");
             PlaySound('error_conn.mp3');
-            usleep($GLOBALS['CONFIG.CONNECT.DELAY'] * 1000000); // reconnect delay
-            if ($i == $GLOBALS['CONFIG.TRY.CONNECT']) {
+            usleep(loadValueFromConfigFile('SERVER', 'connect.delay') * 1000000); // reconnect delay
+            if ($i == loadValueFromConfigFile('SERVER', 'try.connect')) {
                 cliLog('[bot] Unable to connect to server, exiting program.');
                 PlaySound('error_conn.mp3');
                 WinSleep(7);
@@ -44,108 +49,97 @@ function tryToConnect()
 //---------------------------------------------------------------------------------------------------------
 function Identify()
 {
-    if (!empty($GLOBALS['CONFIG.SERVER.PASSWD'])) {
-        toServer("PASS {$GLOBALS['CONFIG.SERVER.PASSWD']}");
+    if (!empty(loadValueFromConfigFile('SERVER', 'server.password'))) {
+        toServer("PASS ".loadValueFromConfigFile('SERVER', 'server.password'));
     }
 
-    toServer("NICK {$GLOBALS['CONFIG.NICKNAME']}");
+    toServer("NICK ".loadValueFromConfigFile('BOT', 'nickname'));
 
-    toServer("USER {$GLOBALS['CONFIG.IDENT']} 8 * :{$GLOBALS['CONFIG.NAME']}");
+    toServer("USER ".loadValueFromConfigFile('BOT', 'ident')." 8 * :".loadValueFromConfigFile('BOT', 'name'));
 
     return true;
 }
 //---------------------------------------------------------------------------------------------------------
 function SocketLoop()
 {
-    global $args;
-    global $args1;
-    global $USER;
-    global $USER_IDENT;
-    global $USER_HOST;
-    global $host;
-    global $piece1;
-    global $piece2;
-    global $piece3;
-    global $piece4;
-    global $rawDataArray;
+    global $rawData;
     global $rawcmd;
-    global $mask;
     global $BOT_NICKNAME;
     global $I_USE_RND_NICKNAME;
 //---------------------------------------------------------------------------------------------------------
-    /* set initial */
-    $USER_IDENT         = null;
-    $host               = null;
     $BOT_NICKNAME       = null;
-    $mask               = null;
     $I_USE_RND_NICKNAME = null;
-
-    /* save data for web panel */
-    WebEntry();
 //---------------------------------------------------------------------------------------------------------
     /* main socket loop */
     while (1) {
         while (!feof($GLOBALS['socket'])) {
 
             /* start timers */
-            empty($GLOBALS['stop']) ? StartTimers() : false;
+            !getPause() ? StartTimers() : false;
 
             /* get raw data */
             $rawData = fgets($GLOBALS['socket'], 1024);
-//---------------------------------------------------------------------------------------------------------
+
             /* if raw mode send debug data to cli */
             cliDebug($rawData, 0);
-//---------------------------------------------------------------------------------------------------------
+
             /* put raw data to array */
-            $rawDataArray = explode(' ', trim($rawData));
-//---------------------------------------------------------------------------------------------------------
+            rawDataArray();
+
             /* if ping -> response */
-            (isset($rawDataArray[0]) && $rawDataArray[0] == 'PING') ? on_PING() : false;
-//---------------------------------------------------------------------------------------------------------
-            /* parse vars from rawDataArray[0] */
-            if (preg_match('/^:(.*)\!(.*)\@(.*)$/', $rawDataArray[0], $source)) {
-                $USER        = $source[1];
-                $USER_IDENT  = $source[2];
-                $host        = $source[3];
-                $USER_HOST   = $USER_IDENT.'@'.$host;
+            if (isset(rawDataArray()[0]) && rawDataArray()[0] == 'PING') {
+                on_PING();
             }
-//---------------------------------------------------------------------------------------------------------
+
             /* if operation (JOIN,PART,etc) -> response */
-            if_WORD_RESPONSE();
-//---------------------------------------------------------------------------------------------------------
-            if (count($rawDataArray) < 4) {
+            if (isset(rawDataArray()[1]) && in_array(rawDataArray()[1], ['JOIN', 'PART', 'KICK', 'TOPIC', 'PRIVMSG',
+                                                                         'NICK', 'QUIT', 'MODE', 'NOTICE'])) {
+                function_exists('on_'.rawDataArray()[1]) ? call_user_func('on_'.rawDataArray()[1]) : false;
+            }
+
+            if (count(rawDataArray()) < 4) {
                 continue;
             }
-//---------------------------------------------------------------------------------------------------------
-            isset($rawDataArray[3]) ? $rawcmd = explode(':', $rawDataArray[3]) : false;
+
+            isset(rawDataArray()[3]) ? $rawcmd = explode(':', rawDataArray()[3]) : false;
 
             /* Case sensitive */
             isset($rawcmd[1]) ? $rawcmd[1] = strtolower($rawcmd[1]) : false;
-
-            $args = null; for ($i=4; $i < count($rawDataArray); $i++) {
-                $args .= $rawDataArray[$i].'';
-            }
-            $args1 = null; for ($i=4; $i < count($rawDataArray); $i++) {
-                $args1 .= $rawDataArray[$i].' ';
-            }
-
-            isset($USER) ? $mask = $USER.'!'.$USER_IDENT.'@'.$host : false;
-
-            $pieces = explode(" ", $args1);
-
-            isset($pieces[0]) ? $piece1 = $pieces[0] : $piece1 = '';
-            isset($pieces[1]) ? $piece2 = $pieces[1] : $piece2 = '';
-            isset($pieces[2]) ? $piece3 = $pieces[2] : $piece3 = '';
-            isset($pieces[3]) ? $piece4 = $pieces[3] : $piece4 = '';
 //---------------------------------------------------------------------------------------------------------
-            /* if reply (001,002,etc) -> response */
-            if_NUMERIC_RESPONSE();
+            /* if numeric message from server (001,002,etc) -> response */
+            if (isset(rawDataArray()[1]) && is_numeric(rawDataArray()[1])) {
+                function_exists('on_'.rawDataArray()[1]) ? call_user_func('on_'.rawDataArray()[1]) : false;
+            }
 
             /* if CTCP request -> response */
-            if_CTCP();
+            if (!getPause() && loadValueFromConfigFile('CTCP', 'ctcp.response') == 'yes' && isset($rawcmd[1][0]) && $rawcmd[1][0] == '') {
+                if_CTCP();
+            }
 
             /* if plugin request -> response */
-            if_PLUGIN();
+            if (getPause() == true) {
+                /* Command: 'unpause' -> OWNER core command: works only if paused */
+                if (isUserOwner() && isset($rawcmd[1]) && $rawcmd[1] == loadValueFromConfigFile('COMMAND', 'command.prefix').'unpause') {
+                    plugin_unpause();
+                }
+            }
+        
+            if (getPause() == false) {
+                
+                /* Command: 'register' -> register to bot from user */
+                if (isset($rawcmd[1]) && $rawcmd[1] == 'register' && rawDataArray()[2] == getBotNickname()) {
+                    plugin_register();
+                }
+        
+                /* 1. if first char == command prefix (eg. !) */
+                if (isset($rawcmd[1][0]) && $rawcmd[1][0] == loadValueFromConfigFile('COMMAND', 'command.prefix')) {
+                    ifPrivilegesExecuteCommand();
+        
+                    if (!function_exists('plugin_')) {
+                        function plugin_() { }
+                    }
+               }
+            }
 //---------------------------------------------------------------------------------------------------------
         }
         /* if disconected */
@@ -153,27 +147,27 @@ function SocketLoop()
             cliDebug($rawData, 0);
 
             if (preg_match("~\bToo many connections from your IP\b~", $rawData)) {
-                cliLog("[bot] Cannot connect to: {$GLOBALS['CONFIG.SERVER']}:{$GLOBALS['CONFIG.PORT']}, too many connections! Exiting.");
+                cliLog("[bot] Cannot connect to: ".loadValueFromConfigFile('SERVER', 'server').":".loadValueFromConfigFile('SERVER', 'port').", too many connections! Exiting.");
 
                 WinSleep(10);
                 exit;
             }
 
             if (preg_match("~\bSession limit exceeded\b~", $rawData)) {
-                cliLog("[bot] Cannot connect to: {$GLOBALS['CONFIG.SERVER']}:{$GLOBALS['CONFIG.PORT']}, too many connections! Exiting.");
+                cliLog("[bot] Cannot connect to: ".loadValueFromConfigFile('SERVER', 'server').":".loadValueFromConfigFile('SERVER', 'port').", too many connections! Exiting.");
 
                 WinSleep(10);
                 exit;
             }
 
             if (preg_match("~\bToo many user connections\b~", $rawData)) {
-                cliLog("[bot] Cannot connect to: {$GLOBALS['CONFIG.SERVER']}:{$GLOBALS['CONFIG.PORT']}, too many connections! Exiting.");
+                cliLog("[bot] Cannot connect to: ".loadValueFromConfigFile('SERVER', 'server').":".loadValueFromConfigFile('SERVER', 'port').", too many connections! Exiting.");
 
                 WinSleep(10);
                 exit;
             }
 
-            cliLog("[bot] Cannot connect to: {$GLOBALS['CONFIG.SERVER']}:{$GLOBALS['CONFIG.PORT']}, Exiting!");
+            cliLog("[bot] Cannot connect to: ".loadValueFromConfigFile('SERVER', 'server').":".loadValueFromConfigFile('SERVER', 'port').", Exiting!");
             WinSleep(10);
             exit;
         }
@@ -182,28 +176,34 @@ function SocketLoop()
 //---------------------------------------------------------------------------------------------------------
 function response($msg)
 {
-    switch ($GLOBALS['CONFIG.BOT.RESPONSE']) {
+    switch (loadValueFromConfigFile('RESPONSE', 'bot.response')) {
         case 'channel':
             toServer("PRIVMSG ".getBotChannel()." :$msg");
-            usleep($GLOBALS['CONFIG.CHANNEL.DELAY'] * 1000000);
+            usleep(loadValueFromConfigFile('DELAYS', 'channel.delay') * 1000000);
             break;
 
         case 'notice':
-            toServer("NOTICE {$GLOBALS['USER']} :$msg");
-            usleep($GLOBALS['CONFIG.NOTICE.DELAY'] * 1000000);
+            toServer("NOTICE ".userPreg()[0]." :$msg");
+            usleep(loadValueFromConfigFile('DELAYS', 'notice.delay') * 1000000);
             break;
 
         case 'priv':
-            toServer("PRIVMSG {$GLOBALS['USER']} :$msg");
-            usleep($GLOBALS['CONFIG.PRIVATE.DELAY'] * 1000000);
+            toServer("PRIVMSG ".userPreg()[0]." :$msg");
+            usleep(loadValueFromConfigFile('DELAYS', 'private.delay') * 1000000);
             break;
     }
 }
 //---------------------------------------------------------------------------------------------------------
 function privateMsg($message)
 {
-    toServer("PRIVMSG {$GLOBALS['USER']} :$msg");
-    usleep($GLOBALS['CONFIG.PRIVATE.DELAY'] * 1000000);
+    toServer("PRIVMSG ".userPreg()[0]." :{$message}");
+    usleep(loadValueFromConfigFile('DELAYS', 'private.delay') * 1000000);
+}
+//---------------------------------------------------------------------------------------------------------
+function privateMsgTo($user, $message)
+{
+    toServer("PRIVMSG {$user} :{$message}");
+    usleep(loadValueFromConfigFile('DELAYS', 'private.delay') * 1000000);
 }
 //---------------------------------------------------------------------------------------------------------
 function joinChannel($channel)
@@ -221,10 +221,12 @@ function toServer($data)
 //---------------------------------------------------------------------------------------------------------
 function msgFromServer()
 {
+    debug("msgFromServer()");
+ 
     $msg = null;
     
-    for ($i=3; $i < count($GLOBALS['rawDataArray']); $i++) {
-         $msg .= str_replace(':', '', $GLOBALS['rawDataArray'][$i]).' ';
+    for ($i=3; $i < count(rawDataArray()); $i++) {
+         $msg .= str_replace(':', '', rawDataArray()[$i]).' ';
     }
 
     return $msg;
@@ -249,6 +251,11 @@ function getBotModes()
     }
 }
 //---------------------------------------------------------------------------------------------------------
+function setBotModes($modes)
+{
+    $GLOBALS['BOT_MODES'] = $modes;
+}
+//---------------------------------------------------------------------------------------------------------
 function getServerName()
 {
     if (isset($GLOBALS['serverName']) && !empty($GLOBALS['serverName'])) {
@@ -265,9 +272,7 @@ function getBotChannel()
 //---------------------------------------------------------------------------------------------------------
 function setBotChannel($channel)
 {
-    global $botChannel;
-
-    $botChannel = $channel;
+    $GLOBALS['BOT_CHANNEL'] = $channel;
 }
 //---------------------------------------------------------------------------------------------------------
 function setServerName($name)
@@ -275,4 +280,82 @@ function setServerName($name)
     global $serverName;
 
     $serverName = $name;
+}
+//---------------------------------------------------------------------------------------------------------
+function msgAsArguments()
+{
+    $args = null;
+
+    for ($i=4; $i < count(rawDataArray()); $i++) {
+         $args .= rawDataArray()[$i].'';
+    }
+
+    return $args;
+}
+//---------------------------------------------------------------------------------------------------------
+function userPreg()
+{
+    debug("userPreg()");
+
+    if (preg_match('/^:(.*)\!(.*)\@(.*)$/', rawDataArray()[0], $source)) {
+        $USER       = $source[1];
+        $USER_IDENT = $source[2];
+        $host       = $source[3];
+        $USER_HOST  = $USER_IDENT.'@'.$host;
+
+        return [$USER, $USER_IDENT, $host, $USER_HOST];
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function userFullMask()
+{
+    debug("userFullMask()");
+
+    if (isset(userPreg()[0])) {
+        return userPreg()[0].'!'.userPreg()[1].'@'.userPreg()[2];
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function msgPieces()
+{
+    debug("msgPieces()");
+
+    $args = null;
+    for ($i=4; $i < count(rawDataArray()); $i++) {
+         $args .= rawDataArray()[$i].' ';
+    }
+
+    $pieces = explode(" ", $args);
+    
+    if (isset($pieces[0])) {
+        $piece1 = $pieces[0];
+    } else {
+             $piece1 = '';
+    }
+    
+    if (isset($pieces[1])) {
+        $piece2 = $pieces[1];
+    } else {
+             $piece2 = '';
+    }
+    
+    if (isset($pieces[2])) {
+        $piece3 = $pieces[2];
+    } else {
+             $piece3 = '';
+    }
+    if (isset($pieces[3])) {
+        $piece4 = $pieces[3];
+    } else {
+             $piece4 = '';
+    }
+
+    return [$piece1, $piece2, $piece3, $piece4];
+}
+//---------------------------------------------------------------------------------------------------------
+function rawDataArray()
+{
+    $rawDataArray = explode(' ', trim($GLOBALS['rawData']));
+
+    return $rawDataArray;
 }

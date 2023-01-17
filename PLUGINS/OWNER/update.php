@@ -21,12 +21,13 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Updates the BOT if new version is available: {$GLOBALS['CONFIG.CMD.PREFIX']}update";
+    $plugin_description = "Updates the BOT if new version is available: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."update";
     $plugin_command     = 'update';
 
 //------------------------------------------------------------------------------------------------
 function plugin_update()
 {
+    /*
     if (extension_loaded('openssl')) {
         v_connect();
     } else {
@@ -122,7 +123,6 @@ function v_extract()
     response('Extracting update');
     cliLog('[bot] Extracting update');
 
-    /* Extracting update */
     $zip = new ZipArchive;
     if ($zip->open('update.zip') === true) {
         $zip->extractTo('.');
@@ -133,96 +133,14 @@ function v_extract()
 
         unlink('MINION-master/.gitattributes');
 
-        /* copy from extracted dir to -> new dir */
         recurse_copy("MINION-master/", $GLOBALS['newdir']);
 
-        /* delete downloaded zip */
         unlink('update.zip');
 
-        /* delete extracted dir */
         delete_files('MINION-master/');
 
-        //read config and put to new version conf
-        $cfg = new IniParser($GLOBALS['configFile']);
-        $GLOBALS['CONFIG.NICKNAME']       = $cfg->get("BOT", "nickname");
-        $GLOBALS['CONFIG.NAME']           = $cfg->get("BOT", "name");
-        $GLOBALS['CONFIG.IDENT']          = $cfg->get("BOT", "ident");
-        $GLOBALS['CONFIG.SERVER']         = $cfg->get("SERVER", "server");
-        $GLOBALS['CONFIG.PORT']           = $cfg->get("SERVER", "port");
-        $GLOBALS['CONFIG.SERVER.PASSWD']  = $cfg->get("SERVER", "server.password");
-        $GLOBALS['CONFIG.TRY.CONNECT']    = $cfg->get("SERVER", "try.connect");
-        $GLOBALS['CONFIG.CONNECT.DELAY']  = $cfg->get("SERVER", "connect.delay");
-        $GLOBALS['CONFIG.BOT.ADMIN']      = $cfg->get("OWNER", "bot.admin");
-        $GLOBALS['CONFIG.AUTO.OP.LIST']   = $cfg->get("OWNER", "auto.op.list");
-        $GLOBALS['CONFIG.OWNERS']         = $cfg->get("OWNER", "bot.owners");
-        $GLOBALS['CONFIG.OWNER.PASSWD']   = $cfg->get("OWNER", "owner.password");
-        $GLOBALS['CONFIG.ADMIN.LIST']     = $cfg->get("ADMIN", "admin.list");
-        $GLOBALS['CONFIG.BOT.RESPONSE']   = $cfg->get("RESPONSE", "response");
-        $GLOBALS['CONFIG.AUTO.OP']        = $cfg->get("AUTOMATIC", "auto.op");
-        $GLOBALS['CONFIG.AUTO.REJOIN']    = $cfg->get("AUTOMATIC", "auto.rejoin");
-        $GLOBALS['CONFIG.KEEPCHAN.MODES'] = $cfg->get("AUTOMATIC", "keep.chan.modes");
-        $GLOBALS['CONFIG.KEEP.NICK']      = $cfg->get("AUTOMATIC", "keep.nick");
-        $GLOBALS['CONFIG.CHANNEL']        = $cfg->get("CHANNEL", "channel");
-        $GLOBALS['CONFIG.AUTO.JOIN']      = $cfg->get("CHANNEL", "auto.join");
-        $GLOBALS['CONFIG.CHANNEL.MODES']  = $cfg->get("CHANNEL", "channel.modes");
-        $GLOBALS['CONFIG.CHANNEL.KEY']    = $cfg->get("CHANNEL", "channel.key");
-        $GLOBALS['CONFIG.BAN.LIST']       = $cfg->get("BANS", "ban.list");
-        $GLOBALS['CONFIG.CMD.PREFIX']     = $cfg->get("COMMAND", "command.prefix");
-        $GLOBALS['CONFIG.CTCP.RESPONSE']  = $cfg->get("CTCP", "ctcp.response");
-        $GLOBALS['CONFIG.CTCP.FINGER']    = $cfg->get("CTCP", "ctcp.finger");
-        $GLOBALS['CONFIG.CHANNEL.DELAY']  = $cfg->get("DELAYS", "channel.delay");
-        $GLOBALS['CONFIG.PRIVATE.DELAY']  = $cfg->get("DELAYS", "private.delay");
-        $GLOBALS['CONFIG.NOTICE.DELAY']   = $cfg->get("DELAYS", "notice.delay");
-        $GLOBALS['CONFIG.LOGGING']        = $cfg->get("LOGS", "logging");
-        $GLOBALS['CONFIG.WEB.LOGIN']      = $cfg->get("PANEL", "web.login");
-        $GLOBALS['CONFIG.WEB.PASSWORD']   = $cfg->get("PANEL", "web.password");
-        $GLOBALS['CONFIG.TIMEZONE']       = $cfg->get("TIME", "time.zone");
-        $GLOBALS['CONFIG.FETCH.SERVER']   = $cfg->get("FETCH", "fetch.server");
-        $GLOBALS['CONFIG.PLAY.SOUNDS']    = $cfg->get("PROGRAM", "play.sounds");
-        $GLOBALS['CONFIG.SHOW.RAW']       = $cfg->get("DEBUG", "show.raw");
-
-        // save to new config
-        $new_cf = $GLOBALS['newdir'].'/CONFIG.INI';
-
-        SaveData($new_cf, 'BOT', 'nickname', $GLOBALS['CONFIG.NICKNAME']);
-        SaveData($new_cf, 'BOT', 'name', $GLOBALS['CONFIG.NAME']);
-        SaveData($new_cf, 'BOT', 'ident', $GLOBALS['CONFIG.IDENT']);
-        SaveData($new_cf, 'SERVER', 'server', $GLOBALS['CONFIG.SERVER']);
-        SaveData($new_cf, 'SERVER', 'port', $GLOBALS['CONFIG.PORT']);
-        SaveData($new_cf, 'SERVER', 'server.password', $GLOBALS['CONFIG.SERVER.PASSWD']);
-        SaveData($new_cf, 'SERVER', 'try.connect', $GLOBALS['CONFIG.TRY.CONNECT']);
-        SaveData($new_cf, 'SERVER', 'connect.delay', $GLOBALS['CONFIG.CONNECT.DELAY']);
-        SaveData($new_cf, 'OWNER', 'bot.admin', $GLOBALS['CONFIG.BOT.ADMIN']);
-        SaveData($new_cf, 'OWNER', 'auto.op.list', $GLOBALS['CONFIG.AUTO.OP.LIST']);
-        SaveData($new_cf, 'OWNER', 'bot.owners', $GLOBALS['CONFIG.OWNERS']);
-        SaveData($new_cf, 'OWNER', 'owner.password', $GLOBALS['CONFIG.OWNER.PASSWD']);
-        SaveData($new_cf, 'ADMIN', 'admin.list', $GLOBALS['CONFIG.ADMIN.LIST']);
-        SaveData($new_cf, 'RESPONSE', 'response', $GLOBALS['CONFIG.BOT.RESPONSE']);
-        SaveData($new_cf, 'AUTOMATIC', 'auto.op', $GLOBALS['CONFIG.AUTO.OP']);
-        SaveData($new_cf, 'AUTOMATIC', 'auto.rejoin', $GLOBALS['CONFIG.AUTO.REJOIN']);
-        SaveData($new_cf, 'AUTOMATIC', 'keep.chan.modes', $GLOBALS['CONFIG.KEEPCHAN.MODES']);
-        SaveData($new_cf, 'AUTOMATIC', 'keep.nick', $GLOBALS['CONFIG.KEEP.NICK']);
-        SaveData($new_cf, 'CHANNEL', 'channel', $GLOBALS['CONFIG.CHANNEL']);
-        SaveData($new_cf, 'CHANNEL', 'auto.join', $GLOBALS['CONFIG.AUTO.JOIN']);
-        SaveData($new_cf, 'CHANNEL', 'channel.modes', $GLOBALS['CONFIG.CHANNEL.MODES']);
-        SaveData($new_cf, 'CHANNEL', 'channel.key', $GLOBALS['CONFIG.CHANNEL.KEY']);
-        SaveData($new_cf, 'BANS', 'ban.list', $GLOBALS['CONFIG.BAN.LIST']);
-        SaveData($new_cf, 'COMMAND', 'command.prefix', $GLOBALS['CONFIG.CMD.PREFIX']);
-        SaveData($new_cf, 'CTCP', 'ctcp.response', $GLOBALS['CONFIG.CTCP.RESPONSE']);
-        SaveData($new_cf, 'CTCP', 'ctcp.finger', $GLOBALS['CONFIG.CTCP.FINGER']);
-        SaveData($new_cf, 'DELAYS', 'channel.delay', $GLOBALS['CONFIG.CHANNEL.DELAY']);
-        SaveData($new_cf, 'DELAYS', 'private.delay', $GLOBALS['CONFIG.PRIVATE.DELAY']);
-        SaveData($new_cf, 'DELAYS', 'notice.delay', $GLOBALS['CONFIG.NOTICE.DELAY']);
-        SaveData($new_cf, 'LOGS', 'logging', $GLOBALS['CONFIG.LOGGING']);
-        SaveData($new_cf, 'PANEL', 'web.login', $GLOBALS['CONFIG.WEB.LOGIN']);
-        SaveData($new_cf, 'PANEL', 'web.password', $GLOBALS['CONFIG.WEB.PASSWORD']);
-        SaveData($new_cf, 'TIME', 'time.zone', $GLOBALS['CONFIG.TIMEZONE']);
-        SaveData($new_cf, 'FETCH', 'fetch.server', $GLOBALS['CONFIG.FETCH.SERVER']);
-        SaveData($new_cf, 'PROGRAM', 'play.sounds', $GLOBALS['CONFIG.PLAY.SOUNDS']);
-        SaveData($new_cf, 'DEBUG', 'show.raw', $GLOBALS['CONFIG.SHOW.RAW']);
-
         // copy CONFIG from older version
-        copy($GLOBALS['configFile'], $GLOBALS['newdir'].'/OLD_CONFIG.INI');
+        copy(getConfigFileName(), $GLOBALS['newdir'].'/OLD_CONFIG.INI');
 
         // copy DATA folder
         recurse_copy(DATADIR, $GLOBALS['newdir'].'/'.DATADIR);
@@ -230,9 +148,8 @@ function v_extract()
         // copy LOGS folder
         recurse_copy(LOGSDIR, $GLOBALS['newdir'].'/'.LOGSDIR);
 
-        /* give op */
         if (BotOpped() == true) {
-            toServer("MODE ".getBotChannel()." +o {$GLOBALS['USER']}");
+            toServer("MODE ".getBotChannel()." +o ".userPreg()[0]);
         }
 
         // reconnect to run new version
@@ -251,4 +168,6 @@ function v_extract()
               response('Failed to extract, aborting.');
               cliLog('[bot] Failed to extract update, aborting!');
     }
+
+    */
 }

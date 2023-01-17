@@ -115,14 +115,6 @@ notice_delay    = '1'
 ; log CLI messages to LOGS folder? 'yes', 'no'
 logging          = 'yes'
 
-[PANEL]
-
-; web panel login (for panel plugin)
-web_login        = 'changeme'
-
-; web panel password (for panel plugin)
-web_password     = 'changeme'
-
 [TIME]
 
 ; bot time zone

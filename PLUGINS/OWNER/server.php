@@ -21,33 +21,33 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Connect to specified server: {$GLOBALS['CONFIG.CMD.PREFIX']}server <server ip>";
+    $plugin_description = "Connect to specified server: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."server <server ip>";
     $plugin_command     = 'server';
 
 function plugin_server()
 {
     if (OnEmptyArg('server <server port>')) {
-    } elseif (!empty($GLOBALS['args']) && !empty($GLOBALS['piece2']) && is_numeric($GLOBALS['piece2'])) {
+    } elseif (!empty(msgAsArguments()) && !empty(msgPieces()[1]) && is_numeric(msgPieces()[1])) {
               $GLOBALS['disconnected'] = 'yes';
               
-              cliLog("[bot] Changing server to: {$GLOBALS['piece1']}:{$GLOBALS['piece2']}");
+              cliLog("[bot] Changing server to: ".msgPieces()[0].":".msgPieces()[1]);
 
               toServer("QUIT :Changing server...");
   
-              if (!isset($GLOBALS['OS'])) {
+              if (ifWindowsOs()) {
                   chdir('src/php');
-                  runProgram('start php.exe ../../BOT.php -o '.$GLOBALS['piece1'].' '.$GLOBALS['piece2']);
+                  runProgram('start php.exe ../../BOT.php -o '.msgPieces()[0].' '.msgPieces()[1]);
                   exit;
               } else {
-                       runProgram('php BOT.php -o '.$GLOBALS['piece1'].' '.$GLOBALS['piece2']);
+                       runProgram('php BOT.php -o '.msgPieces()[0].' '.msgPieces()[1]);
                        exit;
               }
 
-        } elseif (empty($GLOBALS['args'])) {
+        } elseif (empty(msgAsArguments())) {
                   response('You need to specify server address.');
-        } elseif (empty($GLOBALS['piece2'])) {
+        } elseif (empty(msgPieces()[1])) {
                   response('You need to specify server port.');
-        } elseif (!is_numeric($GLOBALS['piece2'])) {
+        } elseif (!is_numeric(msgPieces()[1])) {
                   response('Wrong server port.');
         }
 }

@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Changing string to MD5: {$GLOBALS['CONFIG.CMD.PREFIX']}md5 <string>";
+    $plugin_description = "Changing string to MD5: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."md5 <string>";
     $plugin_command     = 'md5';
 
 function plugin_md5()

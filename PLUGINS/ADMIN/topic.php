@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Changing Topic in channel: {$GLOBALS['CONFIG.CMD.PREFIX']}topic <new_topic>";
+    $plugin_description = "Changing Topic in channel: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."topic <new_topic>";
     $plugin_command     = 'topic';
 
 function plugin_topic()

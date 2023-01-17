@@ -20,9 +20,16 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
+function logFileNameFormat()
+{
+    !empty($_SERVER['COMPUTERNAME']) ? $data = $_SERVER['COMPUTERNAME'] : $data = gethostname();
+
+    return LOGSDIR."/".date('Y.m.d')."-".$data.".txt";
+}
+//---------------------------------------------------------------------------------------------------------
 function LogsInit()
 {
     $data = "-------------------------LOG CREATED: ".date('d.m.Y | H:i:s')."-------------------------\r\n";
 
-    SaveToFile($GLOBALS['logFileName'], $data, 'a');
+    SaveToFile(logFileNameFormat(), $data, 'a');
 }

@@ -21,33 +21,31 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Adds host to autoop list in config file: {$GLOBALS['CONFIG.CMD.PREFIX']}autoop <nick!ident@host>";
+    $plugin_description = "Adds host to autoop list in config file: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."autoop <nick!ident@host>";
     $plugin_command     = 'autoop';
 
 function plugin_autoop()
 {
-    $nick = explode('!', trim($GLOBALS['args']));
+    /* get nick from hostname mask */
+    $hostNick = explode('!', trim(msgAsArguments()));
+
+    response($hostNick);
 
     if (OnEmptyArg('autoop <nick!ident@hostname>')) {
-    } elseif ($nick[0] != getBotNickname()) {
-        if (preg_match('/^(.+?)!(.+?)@(.+?)$/', $GLOBALS['args'], $host)) {
-            LoadData($GLOBALS['configFile'], 'OWNER', 'auto.op.list');
+    } elseif ($hostNick[0] != getBotNickname()) {
+        if (preg_match('/^(.+?)!(.+?)@(.+?)$/', msgAsArguments())) {
+            $autoOpList = loadValueFromConfigFile('AUTOMATIC', 'auto.op.list');
 
-            if (strpos($GLOBALS['LOADED'], $GLOBALS['args']) !== false) {
-                response('I already have this host.');
+            if (strpos($autoOpList, msgAsArguments()) !== false) {
+                response('I already have that host in my auto op list.');
             } else {
-                     empty($GLOBALS['LOADED']) ? $new_list = $host[0] : $new_list = "{$GLOBALS['LOADED']}, {$host[0]}";
+                     empty($autoOpList) ? $newList = msgAsArguments() : $newList = "{$autoOpList}, ".msgAsArguments();
  
-                     SaveData($GLOBALS['configFile'], 'OWNER', 'auto.op.list', $new_list);
+                     SaveValueToConfigFile('AUTOMATIC', 'auto.op.list', $newList);
 
-                     /* update variable with new owners */
-                     $cfg = new IniParser($GLOBALS['configFile']);
-                     $GLOBALS['CONFIG.AUTO.OP.LIST'] = $cfg->get("OWNER", "auto.op.list");
+                     privateMsgTo($hostNick[0], 'From now you are on my auto op list, enjoy.');
 
-                     /* Inform nick about it */
-                     privateMsg('From now you are on my auto op list, enjoy.');
-
-                     response("Host: '{$host[0]}' added to auto op list.");
+                     response("Host: '".msgAsArguments()."' added to auto op list.");
             }
         } else {
                  response('Bad input, try: nick!ident@hostname');

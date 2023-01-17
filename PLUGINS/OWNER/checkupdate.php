@@ -21,37 +21,28 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Checking for updates: {$GLOBALS['CONFIG.CMD.PREFIX']}checkupdate";
+    $plugin_description = "Checking for updates: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."checkupdate";
     $plugin_command     = 'checkupdate';
 //------------------------------------------------------------------------------------------------
 function plugin_checkupdate()
 {
     if (extension_loaded('openssl')) {
-        global $CheckVersion;
-
         $CheckVersion = file_get_contents(VERSION_URL);
 
         if (!empty($CheckVersion)) {
-            checkVersion();
+                $version = explode("\n", $CheckVersion);
+
+                if ($version[0] > VER) {
+                    response('New version available!');
+                    response("My version: ".VER.", version on server: {$version[0]} ");
+                    response("To update BOT, use ".loadValueFromConfigFile('COMMAND', 'command.prefix')."update");
+                } else {
+                          response('No new update, you have the latest version.');
+                }
         } else {
                  response('Cannot connect to update server, try next time.');
         }
     } else {
              response('I cannot use this plugin, i need php_openssl extension to work!');
-    }
-}
-//------------------------------------------------------------------------------------------------
-function checkVersion()
-{
-    global $CheckVersion;
-
-    $version = explode("\n", $CheckVersion);
-
-    if ($version[0] > VER) {
-        response('New version available!');
-        response("My version: ".VER.", version on server: {$version[0]} ");
-        response("To update BOT, use {$GLOBALS['CONFIG.CMD.PREFIX']}update");
-    } else {
-              response('No new update, you have the latest version.');
     }
 }

@@ -25,7 +25,14 @@
 
  /* simple os check */
  /* PHP 7.2.0 we have PHP_OS_FAMILY */
- strtoupper(substr(PHP_OS, 0, 3)) != 'WIN' ? $GLOBALS['OS'] = 'Linux' : false;
+ function ifWindowsOs()
+ {
+     if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
+         return true;
+     } else {
+              return false;
+     }
+ }
 
  /* hide prompt */
  echo "\e[?25l";
@@ -36,14 +43,15 @@
                   'cli.php',
                   'misc.php',
                   'config.php',
-                  'core_commands.php',
-                  'debug.php',
+                  'core_cmnds.php',
+                  'core_cmnds_helpers.php',
                   'events.php',
                   'logs.php',
                   'plugins.php',
                   'socket.php',
+                  'on_numeric.php',
+                  'on_word.php',
                   'timers.php',
-                  'web.php',
                   'ctcp.php',
                   'start.php'
                  ];
@@ -58,7 +66,7 @@
                    "  You can download missing files from:\n",
                    "  https://github.com/S3x0r/MINION/releases\n\n",
                    "  Terminating program after 10 seconds.\n\n";
-              !isset($GLOBALS['os']) ? sleep(10) : false;
+              (ifWindowsOs()) ? sleep(10) : false;
               exit;
      }
  }
@@ -69,5 +77,5 @@
         WinSleep(7);
         exit;
     } else {
-             Start();
+             StartBot();
     }

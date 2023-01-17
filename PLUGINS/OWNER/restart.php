@@ -21,14 +21,14 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Restarts Bot: {$GLOBALS['CONFIG.CMD.PREFIX']}restart";
+    $plugin_description = "Restarts Bot: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."restart";
     $plugin_command     = 'restart';
 
 function plugin_restart()
 {
     /* give op before restart */
     if (BotOpped() == true) {
-        toServer("MODE ".getBotChannel()." +o {$GLOBALS['USER']}");
+        toServer("MODE ".getBotChannel()." +o ".userPreg()[0]);
     }
 
     /* quit from irc server */
@@ -37,7 +37,7 @@ function plugin_restart()
     /* send cli messages */
     cliLog('Restarting BOT...');
   
-    if (!isset($GLOBALS['OS'])) {
+    if (ifWindowsOs()) {
         chdir('src/php');
         runProgram('start php.exe ../../BOT.php');
     } else {

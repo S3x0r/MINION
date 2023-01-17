@@ -25,8 +25,9 @@ function checkArgs()
     switch ($_SERVER['argv'][1]) {
         case '-h': /* show help */
             echo N.'  Bot cli commands usage: php BOT.php -[option]'.NN,
-                 '  -c <config_file>   # loads config from the specified path (eg. C:\my folder\CONFIG.INI)'.N, /* config file */
+                 '  -c <config_file>   # loads config from the specified path (eg. C:\my folder\\'.getConfigFileName().')'.N, /* config file */
                  '  -h                 # this help'.N, /* help */
+                 '  -n                 # set bot nickname'.N, /* change bot nickname */
                  '  -o <server> <port> # connect to specified server: (eg. php BOT.php -o irc.dal.net 6667)'.N, /* server */
                  '  -p                 # hash password to SHA256'.N, /* hash */
                  '  -u                 # check if there is new bot version'.N, /* update */
@@ -34,12 +35,19 @@ function checkArgs()
             exit;
             break;
 
+        case '-n': /* set nickname */
+            if (!empty($_SERVER['argv'][2])) {
+                SaveValueToConfigFile('BOT', 'nickname', $_SERVER['argv'][2]);
+            } else {
+                     echo '  [ERROR] You need to specify BOT nickname! Exiting.'.NN;
+                     exit;
+            }
+            break;
+
         case '-c': /* check if config is loaded from -c switch */
-            if (!empty($_SERVER['argv'][2]) && is_file($_SERVER['argv'][2])) {
-                $GLOBALS['configFile'] = $_SERVER['argv'][2];
-            } elseif (!empty($_SERVER['argv'][2]) && !is_file($_SERVER['argv'][2])) {
-                      echo '  [ERROR] Config file does not exist, wrong path?'.NN;
-                      exit;
+            if (!empty($_SERVER['argv'][2]) && !is_file($_SERVER['argv'][2])) {
+                echo '  [ERROR] Config file does not exist, wrong path?'.NN;
+                exit;
             } elseif (empty($_SERVER['argv'][2])) {
                       echo '  [ERROR] You need to specify config file! I need some data :)'.NN;
                       exit;
@@ -48,8 +56,8 @@ function checkArgs()
 
         case '-o': /* server connect: eg: irc.example.net 6667 */
             if (!empty($_SERVER['argv'][2]) && !empty($_SERVER['argv'][3]) && is_numeric($_SERVER['argv'][3])) {
-                $GLOBALS['CONFIG.SERVER'] = $_SERVER['argv'][2];
-                $GLOBALS['CONFIG.PORT']   = $_SERVER['argv'][3];
+                SaveValueToConfigFile('SERVER', 'server', $_SERVER['argv'][2]);
+                SaveValueToConfigFile('SERVER', 'port',   $_SERVER['argv'][3]);
             } elseif (empty($_SERVER['argv'][2])) {
                       echo N.' ERROR: You need to specify server address, Exiting.';
                       exit;
@@ -79,13 +87,13 @@ function checkArgs()
 
             $answer = trim(fgets($STDIN));
             if ($answer == 'yes' xor $answer == 'y') {
-                if (is_file('CONFIG.INI')) {
-                    SaveData('CONFIG.INI', 'OWNER', 'owner.password', hash('sha256', rtrim($pwd, "\n\r")));
+                if (is_file(getConfigFileName())) {
+                    SaveValueToConfigFile('OWNER', 'owner.password', hash('sha256', rtrim($pwd, "\n\r")));
                     echo N.' Password saved to config file, Exiting.';
                     WinSleep(6);
                     exit;
                 } else {
-                         echo N.' Cannot find CONFIG.INI file, exiting!';
+                         echo N." Cannot find '".getConfigFileName()."' file, exiting!";
                          WinSleep(5);
                          exit;
                 }
@@ -102,11 +110,11 @@ function checkArgs()
             if (extension_loaded('openssl')) {
                 $file = @file_get_contents(VERSION_URL);
                 if (!empty($file)) {
-                    $serverVersion = explode("\n", $file);
-                    if ($serverVersion[0] > VER) {
+                    $version = explode("\n", $file);
+                    if ($version[0] > VER) {
                         echo N.' New version available!'.N;
                         echo N.' My version: '.VER;
-                        echo N.' Version on server: '.$serverVersion[0].N;
+                        echo N.' Version on server: '.$version[0].N;
                         echo N.' To update BOT msg to bot by typing: !update'.NN;
                         WinSleep(10);
                         exit;

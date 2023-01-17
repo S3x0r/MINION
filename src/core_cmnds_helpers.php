@@ -20,24 +20,38 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-    $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Shows BOT admins: {$GLOBALS['CONFIG.CMD.PREFIX']}listadmins";
-    $plugin_command     = 'listadmins';
-
-function plugin_listadmins()
+function SeenSave()
 {
-    LoadData($GLOBALS['configFile'], 'ADMIN', 'admin.list');
+    !is_dir(DATADIR.'/'.SEENDIR) ? @mkdir(DATADIR.'/'.SEENDIR) : false;
+    
+    $seenDataFull = DATADIR.'/'.SEENDIR.'/';
 
-    if (empty($GLOBALS['LOADED'])) {
-        response('Empty admin(s) list.');
+    substr(getBotChannel(), 0, 1) != '#' ? $chan = loadValueFromConfigFile('CHANNEL', 'channel') : $chan = getBotChannel();
+
+    $data = "Last seen user: ".userPreg()[0]." (".userPreg()[3].") On channel: {$chan}, Date: ".date("d.m.Y").", Time: ".date("H:i:s");
+
+    /* illegal chars for file */
+    userPreg()[0] = removeIllegalCharsFromNickname(userPreg()[0]);
+
+    is_file($seenDataFull.userPreg()[0]) ?
+        @file_put_contents($seenDataFull.userPreg()[0], $data) : @file_put_contents($seenDataFull.userPreg()[0], $data);
+}
+//---------------------------------------------------------------------------------------------------------
+function setPause()
+{
+    $GLOBALS['pause'] = true;
+}
+//---------------------------------------------------------------------------------------------------------
+function unsetPause()
+{
+    unset($GLOBALS['pause']);
+}
+//---------------------------------------------------------------------------------------------------------
+function getPause()
+{
+    if (isset($GLOBALS['pause'])) {
+        return true;
     } else {
-             $admins = explode(", ", $GLOBALS['LOADED']);
-
-             response('My Admin(s) Host(s):');
-
-        for ($i=0; $i<count($admins); $i++) {
-             response($admins[$i]);
-        }
-             response('End.');
+             return false;
     }
 }

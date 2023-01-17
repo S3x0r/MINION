@@ -38,47 +38,27 @@ function changeDefaultOwnerPwd()
     $hashed = hash('sha256', $newPassword);
 
     /* save pwd to file */
-    SaveData($GLOBALS['configFile'], 'OWNER', 'owner.password', $hashed);
-
-    /* remove pwd checking vars */
-    unset($newPassword);
-    unset($hashed);
+    SaveValueToConfigFile('OWNER', 'owner.password', $hashed);
 
     /* Set first time change variable */
-    $GLOBALS['defaultPwdChanged'] = 'yes';
+    $GLOBALS['defaultPwdChanged'] = 'yes'; //- to wyjebać i zmienić na funkcje !!!
     
     echo N;
     cliLog('[bot] Password changed!'.N);
-  
-    /* update owner(s) password */
-    $cfg = new IniParser($GLOBALS['configFile']);
-    $GLOBALS['CONFIG.OWNER.PASSWD'] = $cfg->get('OWNER', 'owner.password');
 }
 //---------------------------------------------------------------------------------------------------------
-function SaveData($v1, $v2, $v3, $v4)
+function SaveValueToConfigFile($v1, $v2, $v3)
 {
-    $cfg = new IniParser($v1);
-    $cfg->setValue("$v2", "$v3", "$v4");
+    $cfg = new IniParser(getConfigFileName());
+    $cfg->setValue($v1, $v2, $v3);
     $cfg->save();
-}
-//---------------------------------------------------------------------------------------------------------
-function LoadData($configFile, $section, $config)
-{
-    $cfg = new IniParser($configFile);
-    $GLOBALS['LOADED'] = $cfg->get("$section", "$config");
-}
-//---------------------------------------------------------------------------------------------------------
-/* update users (OWNER,USER) array */
-function UpdatePrefix($user, $newPrefix)
-{
-    $GLOBALS[$user.'_PLUGINS'] = str_replace($GLOBALS['CONFIG.CMD.PREFIX'], $newPrefix, $GLOBALS[$user.'_PLUGINS']);
 }
 //---------------------------------------------------------------------------------------------------------
 /* if first arg after !plugin <arg> is empty */
 function OnEmptyArg($information)
 {
-    if (empty($GLOBALS['args'])) {
-        response("Usage: {$GLOBALS['CONFIG.CMD.PREFIX']}{$information}");
+    if (empty(msgAsArguments())) {
+        response("Usage: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."{$information}");
         return true;
     } else {
               return false;
@@ -107,6 +87,7 @@ function CountLines($exts = ['php'])
         }
            $parts = explode('.', $file->getFilename());
            $extension = end($parts);
+
         if (in_array($extension, $exts)) {
             $files[$file->getPathname()] = count(file($file->getPathname()));
         }
@@ -131,7 +112,7 @@ function randomString($length)
 //---------------------------------------------------------------------------------------------------------
 function inputFromLine($position)
 {
-    $a = $GLOBALS['rawDataArray'];
+    $a = rawDataArray();
     $current = '';
     $index = $position;
     
@@ -148,46 +129,14 @@ function inputFromLine($position)
 function msg_without_command()
 {
     $input = null;
-    for ($i=3; $i <= (count($GLOBALS['rawDataArray'])); $i++) {
-         $input .= $GLOBALS['rawDataArray'][$i]." ";
+    for ($i=3; $i <= (count(rawDataArray())); $i++) {
+         $input .= rawDataArray()[$i]." ";
     }
 
     $in = rtrim($input);
     $data = str_replace($GLOBALS['rawcmd'][1].' ', '', $in);
 
     return $data;
-}
-//---------------------------------------------------------------------------------------------------------
-function HasAdmin($mask) //TODO: wtf
-{
-    $admins_c = $GLOBALS['CONFIG.ADMIN.LIST'];
-    $pieces = explode(", ", $admins_c);
-
-    if ($mask == null) {
-        return false;
-    }
-    foreach ($pieces as $piece) {
-        if (fnmatch($piece, $mask, 16)) {
-            return true;
-            return false;
-        }
-    }
-}
-//---------------------------------------------------------------------------------------------------------
-function HasOwner($mask) //TODO: wtf
-{
-    $owners_c = $GLOBALS['CONFIG.OWNERS'];
-    $pieces = explode(", ", $owners_c);
-
-    if ($mask == null) {
-        return false;
-    }
-    foreach ($pieces as $piece) {
-        if (fnmatch($piece, $mask, 16)) {
-            return true;
-            return false;
-        }
-    }
 }
 //---------------------------------------------------------------------------------------------------------
 function SaveToFile($file, $data, $method)
@@ -201,7 +150,7 @@ function SaveToFile($file, $data, $method)
 //---------------------------------------------------------------------------------------------------------
 function PlaySound($sound)
 {
-    if ($GLOBALS['CONFIG.PLAY.SOUNDS'] == 'yes' && !isset($GLOBALS['OS'])) {
+    if (loadValueFromConfigFile('PROGRAM', 'play.sounds') == 'yes' && ifWindowsOs()) {
         if (is_file('src/php/play.exe') && is_file('src/sounds/'.$sound)) {
             $command = 'start /b src/php/play.exe src/sounds/'.$sound;
             pclose(popen($command, 'r'));
@@ -213,7 +162,7 @@ function PlaySound($sound)
 //---------------------------------------------------------------------------------------------------------
 function kill($program)
 {
-    if (!isset($GLOBALS['OS'])) {
+    if (ifWindowsOs()) {
         $pattern = '~('.$program.')\.exe~i';
         $tasks = array();
         exec("tasklist 2>NUL", $tasks);
@@ -229,7 +178,7 @@ function kill($program)
 //---------------------------------------------------------------------------------------------------------
 function isRunned($program)
 {
-    if (!isset($GLOBALS['OS'])) {
+    if (ifWindowsOs()) {
         $pattern = '~('.$program.')\.exe~i';
         $tasks = array();
         exec("tasklist 2>NUL", $tasks);
@@ -246,7 +195,7 @@ function getPasswd($string = '')
 {
     echo $string;
  
-    if (!isset($GLOBALS['OS'])) {
+    if (ifWindowsOs()) {
         if (is_file('src\php\hide.exe')) {
             $psw = `src\php\hide.exe`;
         } else {
@@ -275,15 +224,17 @@ function Statistics()
     $ip = @file_get_contents($ipAddress);
     
     /* identify bot session by hashed ip, operating system, bot nickname, name and ident */
-    $botID = hash('sha256', $ip.php_uname().getBotNickname().$GLOBALS['CONFIG.NAME'].
-                  $GLOBALS['CONFIG.IDENT'].$GLOBALS['CONFIG.SERVER'].VER);
+    $botID = hash('sha256', $ip.php_uname().getBotNickname().loadValueFromConfigFile('BOT', 'name').
+                  loadValueFromConfigFile('BOT', 'ident').loadValueFromConfigFile('SERVER', 'server').VER);
 
-    @file($statsAddress."stamp={$botID}&nick=".getBotNickname()."&server={$GLOBALS['CONFIG.SERVER']}&ver={VER}");
+    @file($statsAddress."stamp={$botID}&nick=".getBotNickname()."&server=".loadValueFromConfigFile('SERVER', 'server')."&ver={VER}");
 }
 //---------------------------------------------------------------------------------------------------------
 function WinSleep($time)
 {
-    !isset($GLOBALS['OS']) ? sleep($time) : false;
+    if (ifWindowsOs()) {
+        sleep($time);
+    }
 }
 //---------------------------------------------------------------------------------------------------------
 function removeIllegalCharsFromNickname($nickname)

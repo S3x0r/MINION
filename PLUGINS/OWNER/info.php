@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Shows info: {$GLOBALS['CONFIG.CMD.PREFIX']}info";
+    $plugin_description = "Shows info: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."info";
     $plugin_command     = 'info';
 
 function plugin_info()
@@ -29,5 +29,5 @@ function plugin_info()
     response('MINION version '.VER);
     response('Author: S3x0r');
 
-    !empty($GLOBALS['CONFIG.BOT.ADMIN']) ? response("Bot Admin: {$GLOBALS['CONFIG.BOT.ADMIN']}") : false;
+    !empty(loadValueFromConfigFile('OWNER', 'bot.admin')) ? response("Bot Admin: ".loadValueFromConfigFile('OWNER', 'bot.admin')) : false;
 }

@@ -1,8 +1,0 @@
-threads=17
-receive_timeout=10000
-content_encoding=deflate
-fcgi_processes=17
-fcgi_gateway_timeout=10000
-cronjob_timeout=3600000
-cronjob_http_timeout=3600000
-convert_cgi_filenames=latin2

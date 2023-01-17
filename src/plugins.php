@@ -20,236 +20,223 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-function if_PLUGIN()
+function LoadPlugins()
+{
+    $GLOBALS['ALL_PLUGINS'] = null;
+
+    /* CORE PLUGINS */
+    cli(">>> 'Core' Plugins (".CORECOUNT." Plugins) [lvl: 0] <<<");
+
+    cliLine();
+
+    foreach (CORECOMMANDSLIST as $corePlugin => $corePluginDescription) {
+       cli('['.$corePlugin.'] -- '.$corePluginDescription);
+    }
+
+    cliLine();
+
+    $pluginsSum = null;
+
+    foreach (usersDirectoriesToArray() as $userDirectory) {
+       $pluginsSum = $pluginsSum + countPlugins($userDirectory);
+       
+       $userLvl = getUserLevelByUserName($userDirectory);
+       
+       cli(">>> '".$userDirectory."' Plugins (".countPlugins($userDirectory)." Plugins) [lvl: ".$userLvl."] <<<");
+       
+       cliLine();
+       
+       /* add to $GLOBALS[$user.'_PLUGINS'] & include plugin */
+       loadPluginsFromEachGroupDir($userDirectory);
+       
+       cliLine();
+    }
+
+    $pluginsSum = $pluginsSum + CORECOUNT;
+
+    cli("----------------------------------------------------------Total: (".$pluginsSum.")---------");
+}
+//---------------------------------------------------------------------------------------------------------
+function countPlugins($user)
+{
+    $count = count(glob(PLUGINSDIR."/{$user}/*.php"));
+
+    if ($count == 0) {
+        return 0;
+    } else {
+             return $count;
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function loadPluginsFromEachGroupDir($user)
+{
+    $GLOBALS[$user.'_PLUGINS'] = null;
+
+    foreach (glob(PLUGINSDIR."/{$user}/*.php") as $pluginName) {
+         /* simple verify plugin */
+         if (preg_match("~\b".PLUGIN_HASH."\b~", file_get_contents($pluginName))) {
+            include_once($pluginName);
+
+            $GLOBALS[$user.'_PLUGINS'][] .= $plugin_command;
+            $GLOBALS['ALL_PLUGINS'][] .= $plugin_command;
+
+            cli('['.basename($pluginName, '.php').'] -- '.$plugin_description);
+        } else {
+                 cli('[ERROR: '.basename($pluginName, '.php').'] - Incompatible plugin!');
+        }
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function usersDirectoriesToArray() /* return directory as groups array */
+{
+    $a = null;
+
+    foreach (glob(PLUGINSDIR."/*", GLOB_ONLYDIR) as $group) {
+       $a[] .= str_replace(PLUGINSDIR.'/', '', $group);
+    }
+
+    return $a;
+}
+//---------------------------------------------------------------------------------------------------------
+function coreCommandsToArray() /* return core commands array */
+{
+    return array_keys(CORECOMMANDSLIST);
+}
+//---------------------------------------------------------------------------------------------------------
+function ifPrivilegesExecuteCommand()
 {
     global $rawcmd;
-    global $rawDataArray;
-    global $mask;
-    
-    /* Unpause -OWNER- core command */
-    (HasOwner($mask) && isset($rawcmd[1]) && $rawcmd[1] == $GLOBALS['CONFIG.CMD.PREFIX'].'unpause') ? plugin_Unpause() : false;
-    
-    if (empty($GLOBALS['stop'])) {
-        /* register to bot - core command */
-        (isset($rawcmd[1]) && $rawcmd[1] == 'register' && $rawDataArray[2] == getBotNickname()) ? CoreCmd_RegisterToBot() : false;
- //---------------------------------------------------------------------------------------------------------
-        /* response to plugins requests */
-        if (isset($rawcmd[1][0]) && $rawcmd[1][0] == $GLOBALS['CONFIG.CMD.PREFIX']) {
-            $pluginReq = str_replace($GLOBALS['CONFIG.CMD.PREFIX'], '', $rawcmd[1]);
-            $p = $GLOBALS['CONFIG.CMD.PREFIX'];
+    $who = whoIsUser();
 
-            /* OWNER */
-            if (HasOwner($mask) && in_array_r($rawcmd[1], [$p.'seen', $p.'panel', $p.'load', $p.'unload', $p.'pause',
-                $GLOBALS['OWNER_PLUGINS'], $GLOBALS['ADMIN_PLUGINS'], $GLOBALS['USER_PLUGINS']])) {
-                call_user_func('plugin_'.$pluginReq);
-                pluginUsageCli($pluginReq);
-            /* ADMIN */
-            } elseif (!HasOwner($mask) && HasAdmin($mask) && in_array_r($rawcmd[1], [$p.'seen', $GLOBALS['ADMIN_PLUGINS'], $GLOBALS['USER_PLUGINS']])) {
-                      call_user_func('plugin_'.$pluginReq);
-                      pluginUsageCli($pluginReq);
-            /* USER */
-            } elseif (!HasOwner($mask) && !HasAdmin($mask) && in_array_r($rawcmd[1], [$p.'seen', $GLOBALS['USER_PLUGINS']])) {
-                      call_user_func('plugin_'.$pluginReq);
-                      pluginUsageCli($pluginReq);
-            }
-    
-            if (!function_exists('plugin_')) {
-                function plugin_()
-                {
-                }
-            }
+    /* owner */
+    if ($who[1] == 0) {
+        if (in_array_r(substr($rawcmd[1], 1), [coreCommandsToArray(), $GLOBALS['ALL_PLUGINS']])) {
+            call_user_func('plugin_'.substr($rawcmd[1], 1));
+            pluginUsageCli(substr($rawcmd[1], 1));
+        }
+    /* user */
+    } else if ($who[1] == 999) {
+               if (in_array_r(substr($rawcmd[1], 1), ['seen', $GLOBALS[$who[0].'_PLUGINS']])) {
+                   call_user_func('plugin_'.substr($rawcmd[1], 1));
+                   pluginUsageCli(substr($rawcmd[1], 1));
+               }
+    /* all else */
+    } else {
+             if (in_array_r(substr($rawcmd[1], 1), ['seen', $GLOBALS[$who[0].'_PLUGINS'], $GLOBALS[getStandardUserName().'_PLUGINS'], returnNextUsersCommands($who[1])])) {
+                 call_user_func('plugin_'.substr($rawcmd[1], 1));
+                 pluginUsageCli(substr($rawcmd[1], 1));
+             }
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function getStandardUserName()
+{
+    $cfg = new IniParser(getConfigFileName());
+    $section = $cfg->getsection("USERSLEVELS");
+
+    /* get user name */
+    foreach ($section as $user => $level) {
+        if ($level == 999) {
+            return $user;
+        }
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function getOwnerUserName()
+{
+    $cfg = new IniParser(getConfigFileName());
+    $section = $cfg->getsection("USERSLEVELS");
+
+    foreach ($section as $user => $level) {
+        if ($level == 0) {
+            return $user;
+        }
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function isUserOwner()
+{
+    debug("isUserOwner()");
+
+    $cfg = new IniParser(getConfigFileName());
+    $section = $cfg->getsection("PRIVILEGES");
+
+    foreach ($section as $user => $mask) {
+       if (fnmatch($mask, userFullMask(), 16)) {
+           $level = loadValueFromConfigFile('USERSLEVELS', $user);
+           
+           if ($level == 0) {
+               return true;
+           } else {
+                    return false;
+           }
        }
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function LoadPlugins()
+function whoIsUser()
 {
-    $CountedOwner = count(glob(PLUGINSDIR."/OWNER/*.php", GLOB_BRACE));
-    $CountedAdmin = count(glob(PLUGINSDIR."/ADMIN/*.php", GLOB_BRACE));
-    $CountedUser  = count(glob(PLUGINSDIR."/USER/*.php", GLOB_BRACE));
-  
-    $GLOBALS['OWNER_PLUGINS'] = null;
-    $GLOBALS['ADMIN_PLUGINS'] = null;
-    $GLOBALS['USER_PLUGINS'] = null;
+    $cfg = new IniParser(getConfigFileName());
+    $section = $cfg->getsection("PRIVILEGES");
 
-//---------------------------------------------------------------------------------------------------------
-    /* CORE PLUGINS */
-    cli('>>> Core Commands ('.CORECOUNT.') <<<');
-    line();
-    cli('[load] -- Loads specified plugins to BOT: !load <plugin>');
-    cli('[panel] -- Starts web admin panel for BOT: !panel help');
-    cli('[pause] -- Pause all BOT activity: !pause');
-    cli('[seen] -- Check specified user when was last seen on channel: !seen <nickname>');
-    cli('[unload] -- Unloads specified plugin from BOT: !unload <plugin>');
-    cli('[unpause] -- Restore BOT from pause mode: !unpause');
+    foreach ($section as $user => $mask) {
+       $pieces = explode(", ", $mask);
 
-    line();
-//---------------------------------------------------------------------------------------------------------
-    /* OWNER PLUGINS */
-    cli(">>> Owner Plugins ({$CountedOwner}) <<<");
-    line();
+       foreach ($pieces as $piece) {
 
-    foreach (glob(PLUGINSDIR.'/OWNER/*.php') as $pluginName) {
-         /* simple verify plugin */
-         if (preg_match("~\b".PLUGIN_HASH."\b~", file_get_contents($pluginName))) {
-            include_once($pluginName);
-            $GLOBALS['OWNER_PLUGINS'] .= "{$GLOBALS['CONFIG.CMD.PREFIX']}{$plugin_command} ";
-            $pluginName = basename($pluginName, '.php');
-            cli("[{$pluginName}] -- {$plugin_description}");
-        } else {
-                 $pluginName = basename($pluginName, '.php');
-                 cli("[ERROR: {$pluginName}] - Incompatible plugin!");
-        }
-    }
-    (count(glob(PLUGINSDIR."/OWNER/*.php")) === 0) ? cli("(no plugins)") : false;
-    line();
-//---------------------------------------------------------------------------------------------------------
-    /* ADMIN PLUGINS */
-    cli(">>> Admin Plugins ({$CountedAdmin}) <<<");
-    line();
-
-    foreach (glob(PLUGINSDIR.'/ADMIN/*.php') as $pluginName) {
-         /* simple verify plugin */
-        if (preg_match("~\b".PLUGIN_HASH."\b~", file_get_contents($pluginName))) {
-            include_once($pluginName);
-            $GLOBALS['ADMIN_PLUGINS'] .= "{$GLOBALS['CONFIG.CMD.PREFIX']}{$plugin_command} ";
-            $pluginName = basename($pluginName, '.php');
-            cli("[{$pluginName}] -- {$plugin_description}");
-        } else {
-                 $pluginName = basename($pluginName, '.php');
-                 cli("[ERROR: {$pluginName}] - Incompatible plugin!");
-        }
-    }
-    (count(glob(PLUGINSDIR."/ADMIN/*.php")) === 0) ? cli("(no plugins)") : false;
-    line();
-//---------------------------------------------------------------------------------------------------------
-    /* USER PLUGINS */
-    cli(">>> User Plugins ({$CountedUser}) <<<");
-    line();
-
-    foreach (glob(PLUGINSDIR.'/USER/*.php') as $pluginName) {
-         /* simple verify plugin */
-        if (preg_match("~\b".PLUGIN_HASH."\b~", file_get_contents($pluginName))) {
-            include_once($pluginName);
-            $GLOBALS['USER_PLUGINS'] .= "{$GLOBALS['CONFIG.CMD.PREFIX']}{$plugin_command} ";
-            $pluginName = basename($pluginName, '.php');
-            cli("[{$pluginName}] -- {$plugin_description}");
-        } else {
-                 $pluginName = basename($pluginName, '.php');
-                 cli("[ERROR: {$pluginName}] - Incompatible plugin!");
-        }
+          if (fnmatch($piece, userFullMask(), 16)) {
+              $level = loadValueFromConfigFile('USERSLEVELS', $user);
+              $data = [$user, $level, $mask];
+          }
+       }
     }
 
-    (count(glob(PLUGINSDIR."/USER/*.php")) === 0) ? cli("(no plugins)") : false;
-
-    $allCounted = CORECOUNT+$CountedOwner+$CountedAdmin+$CountedUser;
-    
-    cli("----------------------------------------------------------Total: ({$allCounted})---------");
-    unset($allCounted);
-
-//---------------------------------------------------------------------------------------------------------
-    /* OWNER Plugins array */
-    $GLOBALS['OWNER_PLUGINS'] = explode(" ", $GLOBALS['OWNER_PLUGINS']);
-    
-    /* ADMIN Plugins array */
-    $GLOBALS['ADMIN_PLUGINS'] = explode(" ", $GLOBALS['ADMIN_PLUGINS']);
-
-    /* USER Plugins array */
-    $GLOBALS['USER_PLUGINS'] = explode(" ", $GLOBALS['USER_PLUGINS']);
-}
-//---------------------------------------------------------------------------------------------------------
-function UnloadPlugin($plugin)
-{
-    try {
-           $withPrefix    = $GLOBALS['CONFIG.CMD.PREFIX'].$plugin;
-           $withoutPrefix = $plugin;
-
-        if (in_array($withPrefix, $GLOBALS['OWNER_PLUGINS']) || in_array($withPrefix, $GLOBALS['ADMIN_PLUGINS']) ||
-            in_array($withPrefix, $GLOBALS['USER_PLUGINS'])) {
-            if (($key = array_search($withPrefix, $GLOBALS['OWNER_PLUGINS'])) !== false) {
-                unset($GLOBALS['OWNER_PLUGINS'][$key]);
-                //TODO: rename function
-                if (!in_array($withPrefix, $GLOBALS['OWNER_PLUGINS'])) {
-                    cliLog("[Plugin]: '{$withoutPrefix}' unloaded by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
-                    response("Plugin: '{$withoutPrefix}' unloaded.");
-                }
-            }
-//---------------------------------------------------------------------------------------------------------
-            if (($key = array_search($withPrefix, $GLOBALS['ADMIN_PLUGINS'])) !== false) {
-                unset($GLOBALS['ADMIN_PLUGINS'][$key]);
-                //TODO: rename function
-                if (!in_array($withPrefix, $GLOBALS['ADMIN_PLUGINS'])) {
-                    cliLog("[Plugin]: '{$withoutPrefix}' unloaded by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
-                    response("Plugin: '{$withoutPrefix}' unloaded.");
-                }
-            }
-//---------------------------------------------------------------------------------------------------------
-            if (($key = array_search($withPrefix, $GLOBALS['USER_PLUGINS'])) !== false) {
-                unset($GLOBALS['USER_PLUGINS'][$key]);
-                //TODO: rename function
-                if (!in_array($withPrefix, $GLOBALS['USER_PLUGINS'])) {
-                    cliLog("[Plugin]: '{$withoutPrefix}' unloaded by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
-                    response("Plugin: '{$withoutPrefix}' unloaded.");
-                }
-            }
-        } else {
-                  cliLog("[PLUGIN]: No such plugin to unload: '{$GLOBALS['piece1']}' by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
-                  response('No such plugin to unload');
-        }
-    } catch (Exception $e) {
-                              cliLog('[ERROR]: Function: '.__FUNCTION__.' failed');
+    if (!empty($data)) {
+        return $data;
+    } else {
+        return [getStandardUserName(), '999'];
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function LoadPlugin($plugin)
+function returnNextUsersCommands($from) /* format: command command2 etc,. */
 {
-    try {
-           $withPrefix    = $GLOBALS['CONFIG.CMD.PREFIX'].$plugin;
-           $withoutPrefix = $plugin;
+    $cfg = new IniParser(getConfigFileName());
+    $section = $cfg->getsection("USERSLEVELS");
 
-        if (in_array($withPrefix, $GLOBALS['OWNER_PLUGINS']) || in_array($withPrefix, $GLOBALS['ADMIN_PLUGINS']) ||
-            in_array($withPrefix, $GLOBALS['USER_PLUGINS'])) {
-            response('Plugin already Loaded!');
+    $users = [];
 
-          /* if there is no plugin name in plugins array */
-        } elseif (!in_array($withPrefix, $GLOBALS['OWNER_PLUGINS']) ||
-            !in_array($withPrefix, $GLOBALS['ADMIN_PLUGINS']) || !in_array($withPrefix, $GLOBALS['USER_PLUGINS'])) {
-            /* if no plugin in array & file exists in dir */
-            if (is_file(PLUGINSDIR."/OWNER/{$withoutPrefix}.php")) {
-                /* include that file */
-                include_once(PLUGINSDIR."/OWNER/{$withoutPrefix}.php");
-
-                /* add prefix & plugin name to plugins array */
-                array_push($GLOBALS['OWNER_PLUGINS'], $withPrefix);
- 
-                /* bot responses */
-                response("Plugin: '{$withoutPrefix}' loaded.");
-                cliLog("[PLUGIN]: Plugin Loaded: '{$withoutPrefix}', by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
-            } elseif (is_file(PLUGINSDIR."/ADMIN/{$withoutPrefix}.php")) {
-                /* include that file */
-                include_once(PLUGINSDIR."/ADMIN/{$withoutPrefix}.php");
-
-                /* add prefix & plugin name to plugins array */
-                array_push($GLOBALS['ADMIN_PLUGINS'], $withPrefix);
-
-                /* bot responses */
-                response("Plugin: '{$withoutPrefix}' loaded.");
-                cliLog("[PLUGIN]: Plugin Loaded: '{$withoutPrefix}', by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
-            } elseif (is_file(PLUGINSDIR."/USER/{$withoutPrefix}.php")) {
-                /* include that file */
-                include_once(PLUGINSDIR."/USER/{$withoutPrefix}.php");
-
-                /* add prefix & plugin name to plugins array */
-                array_push($GLOBALS['USER_PLUGINS'], $withPrefix);
-
-                /* bot responses */
-                response("Plugin: '{$withoutPrefix}' loaded.");
-                cliLog("[PLUGIN]: Plugin Loaded: '{$withoutPrefix}', by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']}), channel: ".getBotChannel());
-            } else {
-                     response('No such plugin to load.');
-            }
+    /* get user name */
+    foreach ($section as $user => $level) {
+        if ($level > $from && $level != 999) {
+            $users[] .= $user;
         }
-    } catch (Exception $e) {
-                             cliLog('[ERROR]: Function: '.__FUNCTION__.' failed');
+    }
+
+    $commands = null;
+    
+    for ($i=0; $i<count($users); $i++) {
+        if (!empty($GLOBALS[$users[$i].'_PLUGINS'])) {
+            $commands .= json_encode($GLOBALS[$users[$i].'_PLUGINS'], true);
+        }
+    }
+
+    if (!empty($commands)) {
+        $commands = json_decode($commands);
+        $commands = implode(' ',$commands);
+        $commands = explode(' ',$commands);
+       
+        return $commands;
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function getUserLevelByUserName($user)
+{
+    $cfg = new IniParser(getConfigFileName());
+    $section = $cfg->getsection("USERSLEVELS");
+
+    foreach ($section as $entry => $level) {
+        if ($entry == $user) {
+            return $level;
+        }
     }
 }

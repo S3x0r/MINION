@@ -21,43 +21,69 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Shows BOT commands: {$GLOBALS['CONFIG.CMD.PREFIX']}help";
+    $plugin_description = "Shows BOT commands: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."help";
     $plugin_command     = 'help';
 
-/* TODO: -move plugin to core commands
+/* TODO:
          -if plugin(s) dir empty do not show "commands" txt 
 */
 
 function plugin_help()
 {
-    /* if OWNER use help */
-    if (HasOwner($GLOBALS['mask'])) {
-        
-        $response = null;
-        
-        foreach ( CORECOMMANDSLIST as $coreCommand ) {
-            $response .= $GLOBALS['CONFIG.CMD.PREFIX'].$coreCommand.' ';
+    $prefix = loadValueFromConfigFile('COMMAND', 'command.prefix');
+
+    $who = whoIsUser();
+
+    /* owner */
+    if ($who[1] == 0) {
+        $plugs = null;
+
+        foreach (CORECOMMANDSLIST as $coreCommand => $coreCmdInfo) {
+            $plugs .= $prefix.$coreCommand.' ';
         }
 
-        response('Core Commands: '.$response);
-        
-        response('Owner Commands: '.implode(' ', $GLOBALS['OWNER_PLUGINS']));
-        response('Admin Commands: '.implode(' ', $GLOBALS['ADMIN_PLUGINS']));
-        response('User Commands: '.implode(' ', $GLOBALS['USER_PLUGINS']));
+        response('Core Plugins: '.$plugs);
 
-      /* if ADMIN use help */
-    } elseif (!HasOwner($GLOBALS['mask']) && HasAdmin($GLOBALS['mask'])) {
-              response("Core Commands: {$GLOBALS['CONFIG.CMD.PREFIX']}seen");
-              response('Admin Commands: '.implode(' ', $GLOBALS['ADMIN_PLUGINS']));
-              response('User Commands: '.implode(' ', $GLOBALS['USER_PLUGINS']));
+        $allPlugins = implode(' ', $GLOBALS['ALL_PLUGINS']);
+        $allPlugins = str_replace(' ', " $prefix", $allPlugins);
 
-        !empty($GLOBALS['CONFIG.BOT.ADMIN']) ? response("Bot Admin: {$GLOBALS['CONFIG.BOT.ADMIN']}") : false;
-      
-      /* if USER use help */
-    } elseif (!HasOwner($GLOBALS['mask']) && !HasAdmin($GLOBALS['mask'])) {
-              response("Core Commands: {$GLOBALS['CONFIG.CMD.PREFIX']}seen");
-              response('User Commands: '.implode(' ', $GLOBALS['USER_PLUGINS']));
-              
-        !empty($GLOBALS['CONFIG.BOT.ADMIN']) ? response("Bot Admin: {$GLOBALS['CONFIG.BOT.ADMIN']}") : false;
+        response($prefix.$allPlugins);
+    /* user */
+    } else if ($who[1] == 999) {
+               $userPlugins = implode(' ', $GLOBALS[getStandardUserName().'_PLUGINS']);
+               $userPlugins = str_replace(' ', " $prefix", $userPlugins);
+               
+               response($who[0].' Plugins: '.$prefix.'seen '.$prefix.$userPlugins);
+               
+               !empty(loadValueFromConfigFile('OWNER', 'bot.admin')) ? response("Bot Admin: ".loadValueFromConfigFile('OWNER', 'bot.admin')) : false;
+    
+    /* all else */
+    } else {
+             $userPlugins = implode(' ', $GLOBALS[getStandardUserName().'_PLUGINS']);
+             $userPlugins = str_replace(' ', " $prefix", $userPlugins);
+
+             if (!empty($GLOBALS[$who[0].'_PLUGINS'])) {
+                 $ownPlugins = implode(' ', $GLOBALS[$who[0].'_PLUGINS']);
+                 $ownPlugins = str_replace(' ', " $prefix", $ownPlugins);
+                 $ownPlugins = $prefix.$ownPlugins.' ';
+             } else {
+                      $ownPlugins = '';
+             }
+
+
+             if (!empty(returnNextUsersCommands($who[1]))) {
+                 $msg = implode(' ', returnNextUsersCommands($who[1]));
+                 $msg = str_replace(' ', " $prefix", $msg);
+                 $msg = $prefix.$msg.' ';
+             } else {
+                      $msg = '';
+             }
+
+             response($who[0].' Plugins: '.$prefix.'seen '.
+                                           $ownPlugins.
+                                           $msg.
+                                           $prefix.$userPlugins);
+ 
+             !empty(loadValueFromConfigFile('OWNER', 'bot.admin')) ? response("Bot Admin: ".loadValueFromConfigFile('OWNER', 'bot.admin')) : false;
     }
 }

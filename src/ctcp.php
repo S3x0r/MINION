@@ -22,62 +22,53 @@
 
 function if_CTCP()
 {
-    global $rawcmd;
-
-    if (empty($GLOBALS['stop']) && $GLOBALS['CONFIG.CTCP.RESPONSE'] == 'yes' && isset($rawcmd[1][0]) && $rawcmd[1][0] == '') {
-        on_CTCP();
-    }
-}
-//---------------------------------------------------------------------------------------------------------
-function on_CTCP()
-{
     switch ($GLOBALS['rawcmd'][1]) {
         case 'version':
-            toServer("NOTICE {$GLOBALS['USER']} :VERSION {$GLOBALS['CONFIG.CTCP.VERSION']}");
+            toServer("NOTICE ".userPreg()[0]." :VERSION ".loadValueFromConfigFile('CTCP', 'ctcp.version'));
 
-            cliLog("[bot] (ctcp) VERSION by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})");
+            cliLog("[bot] (ctcp) VERSION by: ".userPreg()[0]." (".userPreg()[3].")");
             PlaySound('ctcp.mp3');
             break;
 
         case 'clientinfo':
-            toServer("NOTICE {$GLOBALS['USER']} :CLIENTINFO {$GLOBALS['CONFIG.CTCP.VERSION']}");
+            toServer("NOTICE ".userPreg()[0]." :CLIENTINFO ".loadValueFromConfigFile('CTCP', 'ctcp.version'));
 
-            cliLog("[bot] (ctcp) CLIENTINFO by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})");
+            cliLog("[bot] (ctcp) CLIENTINFO by: ".userPreg()[0]." (".userPreg()[3].")");
             PlaySound('ctcp.mp3');
             break;
 
         case 'source':
-            toServer("NOTICE {$GLOBALS['USER']} :SOURCE http://github.com/S3x0r/MINION");
+            toServer("NOTICE ".userPreg()[0]." :SOURCE http://github.com/S3x0r/MINION");
 
-            cliLog("[bot] (ctcp) SOURCE by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})");
+            cliLog("[bot] (ctcp) SOURCE by: ".userPreg()[0]." (".userPreg()[3].")");
             PlaySound('ctcp.mp3');
             break;
 
         case 'userinfo':
-            toServer("NOTICE {$GLOBALS['USER']} :USERINFO Powered by Minions!");
+            toServer("NOTICE ".userPreg()[0]." :USERINFO Powered by Minions!");
 
-            cliLog("[bot] (ctcp) USERINFO by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})");
+            cliLog("[bot] (ctcp) USERINFO by: ".userPreg()[0]." (".userPreg()[3].")");
             PlaySound('ctcp.mp3');
             break;
 
         case 'finger':
-            toServer("NOTICE {$GLOBALS['USER']} :FINGER {$GLOBALS['CONFIG.CTCP.FINGER']}");
+            toServer("NOTICE ".userPreg()[0]." :FINGER ".loadValueFromConfigFile('CTCP', 'ctcp.finger'));
 
-            cliLog("[bot] (ctcp) FINGER by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})");
+            cliLog("[bot] (ctcp) FINGER by: ".userPreg()[0]." (".userPreg()[3].")");
             PlaySound('ctcp.mp3');
             break;
 
         case 'ping':
-            toServer("NOTICE {$GLOBALS['USER']} :PING ".str_replace(' ', '', $GLOBALS['args']));
+            toServer("NOTICE ".userPreg()[0]." :PING ".str_replace(' ', '', msgAsArguments()));
 
-            cliLog("[bot] (ctcp) PING by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})");
+            cliLog("[bot] (ctcp) PING by: ".userPreg()[0]." (".userPreg()[3].")");
             PlaySound('ctcp.mp3');
             break;
 
         case 'time':
-            toServer("NOTICE {$GLOBALS['USER']} :TIME ".date("F j, Y, g:i a"));
+            toServer("NOTICE ".userPreg()[0]." :TIME ".date("F j, Y, g:i a"));
 
-            cliLog("[bot] (ctcp) TIME by: {$GLOBALS['USER']} ({$GLOBALS['USER_HOST']})");
+            cliLog("[bot] (ctcp) TIME by: ".userPreg()[0]." (".userPreg()[3].")");
             PlaySound('ctcp.mp3');
             break;
     }

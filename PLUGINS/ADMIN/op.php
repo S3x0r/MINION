@@ -21,13 +21,13 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Gives op: {$GLOBALS['CONFIG.CMD.PREFIX']}op <nick>";
+    $plugin_description = "Gives op: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."op <nick>";
     $plugin_command     = 'op';
 
 function plugin_op()
 {
     if (OnEmptyArg('op <nick>')) {
     } elseif (BotOpped() == true) {
-             toServer("MODE ".getBotChannel()." +o {$GLOBALS['args']}");
+             toServer("MODE ".getBotChannel()." +o ".msgAsArguments());
     }
 }

@@ -107,9 +107,9 @@ function StartTimers()
 function every_1_minute()
 {
     /* check if bot can change nick to original */
-    if (empty($GLOBALS['stop'])) {
-        if ($GLOBALS['CONFIG.KEEP.NICK'] == 'yes' && isset($GLOBALS['I_USE_RND_NICKNAME'])) {
-            toServer("ISON :{$GLOBALS['CONFIG.NICKNAME']}");
+    if (!getPause()) {
+        if (loadValueFromConfigFile('AUTOMATIC', 'keep.nick') == 'yes' && isset($GLOBALS['I_USE_RND_NICKNAME'])) {
+            toServer("ISON :".loadValueFromConfigFile('BOT', 'nickname'));
         }
     }
 }

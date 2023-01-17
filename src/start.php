@@ -20,78 +20,70 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-function Start()
+function StartBot()
 {
-   /* if no dirs -> create */
-   !is_dir(LOGSDIR) ? mkdir(LOGSDIR) : false;
-   !is_dir(DATADIR) ? mkdir(DATADIR) : false;
-
-   /* Check if we got cli args - args.php */
-   if (isset($_SERVER['argv'][1])) {
-       checkArgs();
-   }
-
-   /* info */
-   Baner();
-
-   /* Check if there is new version */
-   CheckUpdateInfo();
+    /* if no dirs -> create */
+    !is_dir(LOGSDIR) ? mkdir(LOGSDIR) : false;
+    !is_dir(DATADIR) ? mkdir(DATADIR) : false;
+ 
+    /* Check if we got cli args - args.php */
+    if (isset($_SERVER['argv'][1])) {
+        checkArgs();
+    }
+ 
+    /* info */
+    Baner();
+ 
+    /* Check if there is new version */
+    CheckUpdateInfo();
+       
+    /* if no config -> create default one */
+    if (!is_file(getConfigFileName())) {
+        cli('[WARNING] Config file missing! Creating default config in: '.getConfigFileName().N);
+        CreateDefaultDataConfigFile();
+        
+        if (!is_file(getConfigFileName())) {
+            cli('[ERROR]: Error! Cannot make default config! Read-Only filesystem? Exiting.');
+            WinSleep(6);
+            exit;
+        }
+    }
+ 
+    /* set timezone from config */
+    if (!empty(loadValueFromConfigFile('TIME', 'time.zone'))) {
+        date_default_timezone_set(loadValueFromConfigFile('TIME', 'time.zone'));
+    }
+ 
+    /* Logging init - logs.php */
+    if (loadValueFromConfigFile('LOGS', 'logging') == 'yes' && is_dir(LOGSDIR)) {
+        LogsInit();
+    }
+ 
+    cliLog('Configuration Loaded from: '.getConfigFileName());
+ 
+    cliLine();
+ 
+    /* check if we got default owner password, if yes -> change it - misc.php */
+    if (loadValueFromConfigFile('OWNER', 'owner.password') == DEFAULT_PWD) {
+        PlaySound('error_conn.mp3');
+ 
+        cliLog('[WARNING] Default BOT owner(s) password detected!');
+        cliLog('[WARNING] For security please change it (password can not contain spaces)');
       
-   /* Load config - config.php */
-   if (isset($GLOBALS['configFile'])) { /* args already checks if file exists */
-       LoadConfig();
-   } else {
-            $GLOBALS['configFile'] = CONFIGFILE;
-
-            /* if config file exists */
-            if (is_file($GLOBALS['configFile'])) {
-                LoadConfig();
-            } else {
-                     cliLog('[bot] Config file missing! Creating default config in: '.CONFIGFILE.N);
-                     CreateDefaultConfig(CONFIGFILE);
-
-                     /* Load config again */
-                     if (is_file(CONFIGFILE)) {
-                         LoadConfig();
-                     } else { /* read only file system? */
-                              cliLog('[bot]: Error! Cannot make default config! Read-Only filesystem? Exiting.');
-                              WinSleep(6);
-                              exit;
-                     }
-            }
-   }
-
-   /* check if we got default owner password, if yes -> change it - misc.php */
-   if ($GLOBALS['CONFIG.OWNER.PASSWD'] == DEFAULT_PWD) {
-       PlaySound('error_conn.mp3');
-
-       cliLog('[bot] Default BOT owner(s) password detected!');
-       cliLog('[bot] For security please change it (password can not contain spaces)');
-     
-       changeDefaultOwnerPwd();
-   }
-  
-   /* Logging init - logs.php */
-   if ($GLOBALS['CONFIG.LOGGING'] == 'yes' && is_dir(LOGSDIR)) {
-       LogsInit();
-   }
-  
-   /* Load plugins - plugins.php */
-   LoadPlugins();
-  
-   /* check if panel is not closed */
-   if (isRunned('serv')) {
-       kill('serv') ? cliLog('[bot] Detected Panel still running, Terminating.') : false;
-   }
-
-   /* Time to connect */
-   cliLog("[bot] Connecting to: {$GLOBALS['CONFIG.SERVER']}, port: {$GLOBALS['CONFIG.PORT']}\n");
-  
-   /* socket.php */
-   if (tryToConnect()) {
-       if (Identify()) {
-           /* main loop */
-           SocketLoop();
-       }
-   }
+        changeDefaultOwnerPwd();
+    }
+   
+    /* Load plugins - plugins.php */
+    LoadPlugins();
+   
+    /* Time to connect */
+    cliLog("[bot] Connecting to: ".loadValueFromConfigFile('SERVER', 'server').", port: ".loadValueFromConfigFile('SERVER', 'port')."\n");
+   
+    /* socket.php */
+    if (tryToConnect()) {
+        if (Identify()) {
+            /* main loop */
+            SocketLoop();
+        }
+    }
 }

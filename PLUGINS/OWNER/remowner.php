@@ -21,19 +21,18 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Removes owner from config file: {$GLOBALS['CONFIG.CMD.PREFIX']}remowner <nick!ident@hostname>";
+    $plugin_description = "Removes owner from config file: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."remowner <nick!ident@hostname>";
     $plugin_command     = 'remowner';
 
 function plugin_remowner()
 {
     if (OnEmptyArg('remowner <nick!ident@hostname>')) {
     } else {
-        if (preg_match('/^(.+?)!(.+?)@(.+?)$/', $GLOBALS['args'], $host)) {
+        if (preg_match('/^(.+?)!(.+?)@(.+?)$/', msgAsArguments(), $host)) {
             /* read owners from config */
-            LoadData($GLOBALS['configFile'], 'OWNER', 'bot.owners');
-            $owners_list = $GLOBALS['LOADED'];
-            $array = explode(" ", str_replace(',', '', $owners_list));
-            $key = array_search($GLOBALS['args'], $array);
+            $ownersList = loadValueFromConfigFile('PRIVILEGES', getOwnerUserName());
+            $array = explode(" ", str_replace(',', '', $ownersList));
+            $key = array_search(msgAsArguments(), $array);
 
             if ($key !== false) {
                 /* remove from host from array */
@@ -44,14 +43,10 @@ function plugin_remowner()
                 $string2 = str_replace(' ', ', ', $string);
 
                 /* save new list to config */
-                SaveData($GLOBALS['configFile'], 'OWNER', 'bot.owners', $string2);
-
-                /* update variable with new owners */
-                $cfg = new IniParser($GLOBALS['configFile']);
-                $GLOBALS['CONFIG.OWNERS'] = $cfg->get("OWNER", "bot.owners");
+                SaveValueToConfigFile('PRIVILEGES', getOwnerUserName(), $string2);
 
                 /* send info to user */
-                response("Host: '{$GLOBALS['args']}' removed from owners.");
+                response("Host: '".msgAsArguments()."' removed from owners.");
             } else {
                      response('No such host in my list.');
             }

@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Sends raw string to server: {$GLOBALS['CONFIG.CMD.PREFIX']}raw <string>";
+    $plugin_description = "Sends raw string to server: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."raw <string>";
     $plugin_command     = 'raw';
 
 // TODO: whole message
@@ -30,7 +30,7 @@ function plugin_raw()
 {
     if (OnEmptyArg('raw <string>')) {
     } else {
-             $msg = "{$GLOBALS['piece1']} {$GLOBALS['piece2']} {$GLOBALS['piece3']} {$GLOBALS['piece4']}".PHP_EOL;
+             $msg = msgPieces()[0].msgPieces()[1].msgPieces()[2].msgPieces()[3].PHP_EOL;
 
              toServer($msg);
     }

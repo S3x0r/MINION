@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Ip address to hostname change: {$GLOBALS['CONFIG.CMD.PREFIX']}gethost <ip>";
+    $plugin_description = "Ip address to hostname change: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."gethost <ip>";
     $plugin_command     = 'gethost';
 
 /*
@@ -33,16 +33,16 @@ function plugin_gethost()
 {
     if (OnEmptyArg('gethost <ip>')) {
     } else {
-             $host = @gethostbyaddr(trim($GLOBALS['args']));
+             $host = @gethostbyaddr(trim(msgAsArguments()));
         if (!empty($host) &&
-            $host != $GLOBALS['args'] &&
-            substr($GLOBALS['args'], 0, 3) != '127' &&
-            substr($GLOBALS['args'], 0, 3) != '192' &&
-            substr($GLOBALS['args'], 0, 1) != '0') {
+            $host != msgAsArguments() &&
+            substr(msgAsArguments(), 0, 3) != '127' &&
+            substr(msgAsArguments(), 0, 3) != '192' &&
+            substr(msgAsArguments(), 0, 1) != '0') {
 
             response("hostname: $host");
-        } elseif ($host == $GLOBALS['args']) {
-                  response("Cannot resolve {$GLOBALS['args']}");
+        } elseif ($host == msgAsArguments()) {
+                  response("Cannot resolve ".msgAsArguments());
         } elseif (empty($host)) {
                   response('Address is not a valid IPv4/IPv6 address');
         }

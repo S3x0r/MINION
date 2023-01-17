@@ -21,17 +21,17 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Shows BOT owners: {$GLOBALS['CONFIG.CMD.PREFIX']}listowners";
+    $plugin_description = "Shows BOT owners: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."listowners";
     $plugin_command     = 'listowners';
 
 function plugin_listowners()
 {
-    LoadData($GLOBALS['configFile'], 'OWNER', 'bot.owners');
+    $ownersList = loadValueFromConfigFile('PRIVILEGES', getOwnerUserName());
 
-    if (empty($GLOBALS['LOADED'])) {
+    if (empty($ownersList)) {
         response('Empty owner(s) list.');
     } else {
-             $owners = explode(", ", $GLOBALS['LOADED']);
+             $owners = explode(", ", $ownersList);
  
              response('My Owner(s) Host(s):');
 

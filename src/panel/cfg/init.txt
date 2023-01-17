@@ -1,7 +1,0 @@
-httpHost=localhost
-httpPort=80
-httpsPort=443
-noHTTPS=true
-docPath=web
-openURL=
-indexFiles=index.php,index.html,index.htm

@@ -21,16 +21,16 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Checks ip address and shows results: {$GLOBALS['CONFIG.CMD.PREFIX']}ripe <ip>";
+    $plugin_description = "Checks ip address and shows results: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."ripe <ip>";
     $plugin_command     = 'ripe';
 
 function plugin_ripe()
 {
     if (OnEmptyArg('ripe <ip>')) {
     } else if (extension_loaded('openssl')) {
-               if ($GLOBALS['args'] == '127.0.0.1' or $GLOBALS['args'] == '0.0.0.0') {
+               if (msgAsArguments() == '127.0.0.1' or msgAsArguments() == '0.0.0.0') {
                } else {
-                        response(ripeCheckAddress($GLOBALS['args']));
+                        response(ripeCheckAddress(msgAsArguments()));
                }
         } else {
                  response('I cannot use this plugin, i need php_openssl extension to work!');

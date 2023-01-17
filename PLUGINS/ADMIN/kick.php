@@ -21,13 +21,13 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Kicks from channel: {$GLOBALS['CONFIG.CMD.PREFIX']}kick <#channel> <who>";
+    $plugin_description = "Kicks from channel: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."kick <#channel> <who>";
     $plugin_command     = 'kick';
 
 function plugin_kick()
 {
     if (OnEmptyArg('kick <#channel> <who>')) {
-    } elseif (BotOpped() == true && $GLOBALS['piece2'] != getBotNickname() && $GLOBALS['piece2'] != $GLOBALS['USER']) {
-              toServer("KICK {$GLOBALS['piece1']} :{$GLOBALS['piece2']}");
+    } elseif (BotOpped() == true && msgPieces()[1] != getBotNickname() && msgPieces()[1] != userPreg()[0]) {
+              toServer("KICK ".msgPieces()[0]." :".msgPieces()[1]);
     }
 }

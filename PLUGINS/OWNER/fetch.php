@@ -21,16 +21,17 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Downloads plugins from repository: {$GLOBALS['CONFIG.CMD.PREFIX']}fetch for help";
+    $plugin_description = "Downloads plugins from repository: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."fetch for help";
     $plugin_command     = 'fetch';
 
 function plugin_fetch()
 {
+    /*
     if (OnEmptyArg('fetch list / fetch get <plugin> <permissions>')) {
     } else {
         if (extension_loaded('openssl')) {
-            /* if we have list command */
-            if ($GLOBALS['args'] == 'list') {
+
+            if (msgAsArguments() == 'list') {
                 $addr_list = 'https://raw.githubusercontent.com/S3x0r/minion_repository_plugins/master/plugin_list.db';
                 $list = @file_get_contents($addr_list);
 
@@ -42,33 +43,32 @@ function plugin_fetch()
                          response('Cannot connect to fetch server, aborting.');
                 }
             }
-            /* if we have get command */
-            if ($GLOBALS['piece1'] == 'get') {
-                if (!empty($GLOBALS['piece2'])) { /* if we have plugin */
-                    if (!empty($GLOBALS['piece3'])) { /* if we have perm */
+
+            if (msgPieces()[0] == 'get') {
+                if (!empty(msgPieces()[1])) {
+                    if (!empty(msgPieces()[2])) {
                         $dirs = array_diff(scandir(PLUGINSDIR), array('..', '.'));
-                        if (in_array($GLOBALS['piece3'], ['USER', 'ADMIN', 'OWNER'])) { /* if we have perm from input */
-                            $check_file = PLUGINSDIR."/{$GLOBALS['piece3']}/{$GLOBALS['piece2']}.php";
+                        if (in_array(msgPieces()[2], ['USER', 'ADMIN', 'OWNER'])) {
+                            $check_file = PLUGINSDIR."/".msgPieces()[2]."/".msgPieces()[1].".php";
                            
                             $dir_user = array_diff(scandir(PLUGINSDIR.'/USER/'), array('..', '.'));
                             $dir_admin = array_diff(scandir(PLUGINSDIR.'/ADMIN/'), array('..', '.'));
                             $dir_owner = array_diff(scandir(PLUGINSDIR.'/OWNER/'), array('..', '.'));
                             $all_dirs = array_merge($dir_user, $dir_admin, $dir_owner);
                             
-                            if (in_array($GLOBALS['piece2'].'.php', $all_dirs)) {
+                            if (in_array(msgPieces()[1].'.php', $all_dirs)) {
                                 response('I already have this plugin, aborting.');
                             } else {
-                                     $address = "{$GLOBALS['CONFIG.FETCH.SERVER']}/{$GLOBALS['piece2']}.php";
-                                if (@file_get_contents($address)) { /* if we have that file in repository */
-                                    response("Downloading plugin: '{$GLOBALS['piece2']}' from repository to: '{$GLOBALS['piece3']}'");
+                                     $address = loadValueFromConfigFile('FETCH', 'fetch.server')."/".msgPieces()[1].".php";
+                                if (@file_get_contents($address)) {
+                                    response("Downloading plugin: '".msgPieces()[1]."' from repository to: '".msgPieces()[2]."'");
 
                                     $file = file_get_contents($address);
-                                    $a = fopen(PLUGINSDIR."/{$GLOBALS['piece3']}/{$GLOBALS['piece2']}.php", 'w');
+                                    $a = fopen(PLUGINSDIR."/".msgPieces()[2]."/".msgPieces()[2].".php", 'w');
                                     fwrite($a, $file);
                                     fclose($a);
 
-                                    /* Load Plugin */
-                                    LoadPlugin($GLOBALS['piece2']);
+                                    LoadPlugin(msgPieces()[1]);
 
                                     response('Plugin added.');
                                 } else {
@@ -89,4 +89,5 @@ function plugin_fetch()
                  response('I cannot use this plugin, i need php_openssl extension to work!');
         }
     }
+    */
 }

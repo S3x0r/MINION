@@ -21,22 +21,22 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Pings host/ip: {$GLOBALS['CONFIG.CMD.PREFIX']}ping <host/ip>";
+    $plugin_description = "Pings host/ip: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."ping <host/ip>";
     $plugin_command     = 'ping';
 
 function plugin_ping()
 {
     if (OnEmptyArg('ping <host/ip>')) {
-    } elseif (!isset($GLOBALS['OS'])) {
-              $ip = gethostbyname($GLOBALS['args']);
+    } elseif (ifWindowsOs()) {
+              $ip = gethostbyname(msgAsArguments());
 
               if ((!preg_match('/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/', $ip)) and
-                 (($ip == $GLOBALS['args']) or ($ip === false))) {
-                   response("Unknown host/ip: '{$GLOBALS['args']}'");
+                 (($ip == msgAsArguments()) or ($ip === false))) {
+                   response("Unknown host/ip: '".msgAsArguments()."'");
               } else {
                        $ping = ping($ip);
                 if ($ping) {
-                    $ping[0] = $GLOBALS['USER'].': '.$ping[0];
+                    $ping[0] = userPreg()[0].': '.$ping[0];
                     foreach ($ping as $thisline) {
                              response($thisline);
                     }
