@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -20,25 +20,38 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
+function connect()
+{
+    if (tryToConnect()) {
+        if (identify()) {
+            socketLoop();
+        }
+    }
+}
+//---------------------------------------------------------------------------------------------------------
 function tryToConnect()
 {
     $i = 0;
 
-    while ($i++ <= loadValueFromConfigFile('SERVER', 'try.connect')) {
+    while ($i++ <= loadValueFromConfigFile('SERVER', 'how many times connect to server')) {
            $GLOBALS['socket'] = @fsockopen(loadValueFromConfigFile('SERVER', 'server'),
                                            loadValueFromConfigFile('SERVER', 'port'),
                                            $GLOBALS['errno'], $GLOBALS['errstr']);
         if ($GLOBALS['socket'] == false) {
-            cliLog("[bot] Cannot connect to: ".loadValueFromConfigFile('SERVER', 'server').
-                                             ":".loadValueFromConfigFile('SERVER', 'port').
-                                             ", trying again ({$i}/".
-                                             loadValueFromConfigFile('SERVER', 'try.connect').")...");
-            PlaySound('error_conn.mp3');
-            usleep(loadValueFromConfigFile('SERVER', 'connect.delay') * 1000000); // reconnect delay
-            if ($i == loadValueFromConfigFile('SERVER', 'try.connect')) {
-                cliLog('[bot] Unable to connect to server, exiting program.');
-                PlaySound('error_conn.mp3');
-                WinSleep(7);
+            cliBot('Cannot connect to: '.loadValueFromConfigFile('SERVER', 'server').
+                                     ':'.loadValueFromConfigFile('SERVER', 'port').
+               ', trying again ('.$i.'/'.loadValueFromConfigFile('SERVER', 'how many times connect to server').
+                                  ')...');
+
+            playSound('error_conn.mp3');
+
+            usleep(loadValueFromConfigFile('SERVER', 'connect delay') * 1000000); // reconnect delay
+
+            if ($i == loadValueFromConfigFile('SERVER', 'how many times connect to server')) {
+                cliBot('Unable to connect to server, exiting program.');
+                playSound('error_conn.mp3');
+                winSleep(7);
+
                 exit;
             }
         } else {
@@ -47,20 +60,20 @@ function tryToConnect()
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function Identify()
+function identify()
 {
-    if (!empty(loadValueFromConfigFile('SERVER', 'server.password'))) {
-        toServer("PASS ".loadValueFromConfigFile('SERVER', 'server.password'));
+    if (!empty(loadValueFromConfigFile('SERVER', 'server password'))) {
+        toServer('PASS '.loadValueFromConfigFile('SERVER', 'server password'));
     }
 
-    toServer("NICK ".loadValueFromConfigFile('BOT', 'nickname'));
+    toServer('NICK '.loadValueFromConfigFile('BOT', 'nickname'));
 
-    toServer("USER ".loadValueFromConfigFile('BOT', 'ident')." 8 * :".loadValueFromConfigFile('BOT', 'name'));
+    toServer('USER '.loadValueFromConfigFile('BOT', 'ident').' 8 * :'.loadValueFromConfigFile('BOT', 'name'));
 
     return true;
 }
 //---------------------------------------------------------------------------------------------------------
-function SocketLoop()
+function socketLoop()
 {
     global $rawData;
     global $rawcmd;
@@ -75,26 +88,25 @@ function SocketLoop()
         while (!feof($GLOBALS['socket'])) {
 
             /* start timers */
-            !getPause() ? StartTimers() : false;
+            StartTimers();
 
             /* get raw data */
             $rawData = fgets($GLOBALS['socket'], 1024);
 
             /* if raw mode send debug data to cli */
-            cliDebug($rawData, 0);
+            cliRaw($rawData, 0);
 
             /* put raw data to array */
             rawDataArray();
 
             /* if ping -> response */
             if (isset(rawDataArray()[0]) && rawDataArray()[0] == 'PING') {
-                on_PING();
+                toServer('PONG '.rawDataArray()[1]);
             }
 
-            /* if operation (JOIN,PART,etc) -> response */
-            if (isset(rawDataArray()[1]) && in_array(rawDataArray()[1], ['JOIN', 'PART', 'KICK', 'TOPIC', 'PRIVMSG',
-                                                                         'NICK', 'QUIT', 'MODE', 'NOTICE'])) {
-                function_exists('on_'.rawDataArray()[1]) ? call_user_func('on_'.rawDataArray()[1]) : false;
+            /* if operation (JOIN,PART,etc) */
+            if (isset(rawDataArray()[1]) && in_array(rawDataArray()[1], WORD)) {
+                handleUserEvent(rawDataArray()[1]);
             }
 
             if (count(rawDataArray()) < 4) {
@@ -105,124 +117,114 @@ function SocketLoop()
 
             /* Case sensitive */
             isset($rawcmd[1]) ? $rawcmd[1] = strtolower($rawcmd[1]) : false;
-//---------------------------------------------------------------------------------------------------------
+            
             /* if numeric message from server (001,002,etc) -> response */
             if (isset(rawDataArray()[1]) && is_numeric(rawDataArray()[1])) {
-                function_exists('on_'.rawDataArray()[1]) ? call_user_func('on_'.rawDataArray()[1]) : false;
+                handleNumericResponse(rawDataArray()[1]);
+            }
+//---------------------------------------------------------------------------------------------------------
+            if (loadValueFromConfigFile('CTCP', 'ctcp response') == true && isset($rawcmd[1][0]) && $rawcmd[1][0] == '') {
+                handleCTCP();
             }
 
-            /* if CTCP request -> response */
-            if (!getPause() && loadValueFromConfigFile('CTCP', 'ctcp.response') == 'yes' && isset($rawcmd[1][0]) && $rawcmd[1][0] == '') {
-                if_CTCP();
+            /* Command: 'register' -> register to bot from user */
+            if (isset($rawcmd[1]) && $rawcmd[1] == 'register' && rawDataArray()[2] == getBotNickname()) {
+                plugin_register();
             }
+    
+            /* 1. if first char == command prefix (eg. !) */
+            if (isset($rawcmd[1][0]) && $rawcmd[1][0] == commandPrefix()) {
+                ifPrivilegesExecuteCommand();
+    
+                if (!function_exists('plugin_')) {
+                    function plugin_() { }
+                }
+           }
 
-            /* if plugin request -> response */
-            if (getPause() == true) {
-                /* Command: 'unpause' -> OWNER core command: works only if paused */
-                if (isUserOwner() && isset($rawcmd[1]) && $rawcmd[1] == loadValueFromConfigFile('COMMAND', 'command.prefix').'unpause') {
-                    plugin_unpause();
-                }
-            }
-        
-            if (getPause() == false) {
-                
-                /* Command: 'register' -> register to bot from user */
-                if (isset($rawcmd[1]) && $rawcmd[1] == 'register' && rawDataArray()[2] == getBotNickname()) {
-                    plugin_register();
-                }
-        
-                /* 1. if first char == command prefix (eg. !) */
-                if (isset($rawcmd[1][0]) && $rawcmd[1][0] == loadValueFromConfigFile('COMMAND', 'command.prefix')) {
-                    ifPrivilegesExecuteCommand();
-        
-                    if (!function_exists('plugin_')) {
-                        function plugin_() { }
-                    }
-               }
-            }
+           if (preg_match("~\bYou are not authorized to connect to this server\b~", $rawData)) {
+               cliBot('Cannot connect to: '.loadValueFromConfigFile('SERVER', 'server').':'.loadValueFromConfigFile('SERVER', 'port').' - Server requires password to connect! Exiting.');
+
+               winSleep(10);
+               exit;
+           }
 //---------------------------------------------------------------------------------------------------------
         }
         /* if disconected */
         if (empty($GLOBALS['disconnected'])) {
-            cliDebug($rawData, 0);
+            cliRaw($rawData, 0);
 
             if (preg_match("~\bToo many connections from your IP\b~", $rawData)) {
-                cliLog("[bot] Cannot connect to: ".loadValueFromConfigFile('SERVER', 'server').":".loadValueFromConfigFile('SERVER', 'port').", too many connections! Exiting.");
+                cliBot('Cannot connect to: '.loadValueFromConfigFile('SERVER', 'server').':'.loadValueFromConfigFile('SERVER', 'port').', too many connections! Exiting.');
 
-                WinSleep(10);
+                winSleep(10);
                 exit;
             }
 
             if (preg_match("~\bSession limit exceeded\b~", $rawData)) {
-                cliLog("[bot] Cannot connect to: ".loadValueFromConfigFile('SERVER', 'server').":".loadValueFromConfigFile('SERVER', 'port').", too many connections! Exiting.");
+                cliBot('Cannot connect to: '.loadValueFromConfigFile('SERVER', 'server').':'.loadValueFromConfigFile('SERVER', 'port').', too many connections! Exiting.');
 
-                WinSleep(10);
+                winSleep(10);
                 exit;
             }
 
             if (preg_match("~\bToo many user connections\b~", $rawData)) {
-                cliLog("[bot] Cannot connect to: ".loadValueFromConfigFile('SERVER', 'server').":".loadValueFromConfigFile('SERVER', 'port').", too many connections! Exiting.");
+                cliBot('Cannot connect to: '.loadValueFromConfigFile('SERVER', 'server').':'.loadValueFromConfigFile('SERVER', 'port').', too many connections! Exiting.');
 
-                WinSleep(10);
+                winSleep(10);
                 exit;
             }
 
-            cliLog("[bot] Cannot connect to: ".loadValueFromConfigFile('SERVER', 'server').":".loadValueFromConfigFile('SERVER', 'port').", Exiting!");
-            WinSleep(10);
-            exit;
+            cliBot('Disconnected! Trying to reconnect...');
+            connect();
         }
     }
 }
 //---------------------------------------------------------------------------------------------------------
 function response($msg)
 {
-    switch (loadValueFromConfigFile('RESPONSE', 'bot.response')) {
+    switch (loadValueFromConfigFile('RESPONSE', 'bot response')) {
         case 'channel':
-            toServer("PRIVMSG ".getBotChannel()." :$msg");
-            usleep(loadValueFromConfigFile('DELAYS', 'channel.delay') * 1000000);
+            toServer('PRIVMSG '.getBotChannel().' :'.$msg);
+            usleep(loadValueFromConfigFile('DELAYS', 'channel delay') * 1000000);
             break;
 
         case 'notice':
-            toServer("NOTICE ".userPreg()[0]." :$msg");
-            usleep(loadValueFromConfigFile('DELAYS', 'notice.delay') * 1000000);
+            toServer('NOTICE '.userNickname().' :'.$msg);
+            usleep(loadValueFromConfigFile('DELAYS', 'notice delay') * 1000000);
             break;
 
         case 'priv':
-            toServer("PRIVMSG ".userPreg()[0]." :$msg");
-            usleep(loadValueFromConfigFile('DELAYS', 'private.delay') * 1000000);
+            toServer('PRIVMSG '.userNickname().' :'.$msg);
+            usleep(loadValueFromConfigFile('DELAYS', 'private delay') * 1000000);
             break;
     }
-}
-//---------------------------------------------------------------------------------------------------------
-function privateMsg($message)
-{
-    toServer("PRIVMSG ".userPreg()[0]." :{$message}");
-    usleep(loadValueFromConfigFile('DELAYS', 'private.delay') * 1000000);
 }
 //---------------------------------------------------------------------------------------------------------
 function privateMsgTo($user, $message)
 {
     toServer("PRIVMSG {$user} :{$message}");
-    usleep(loadValueFromConfigFile('DELAYS', 'private.delay') * 1000000);
+    usleep(loadValueFromConfigFile('DELAYS', 'private delay') * 1000000);
 }
 //---------------------------------------------------------------------------------------------------------
 function joinChannel($channel)
 {
-    toServer("JOIN {$channel}");
+    if (!empty(loadValueFromConfigFile('CHANNEL', 'channel key'))) {
+        toServer('JOIN '.$channel.' '.loadValueFromConfigFile('CHANNEL', 'channel key'));
+    } else {
+             toServer('JOIN '.$channel);
+    }
 }
 //---------------------------------------------------------------------------------------------------------
 function toServer($data)
 {   
     /* send own message to cli if raw mode */
-    cliDebug($data, 1);
+    cliRaw($data, 1);
 
     if (@fputs($GLOBALS['socket'], "{$data}\n")) { }
 }
 //---------------------------------------------------------------------------------------------------------
 function msgFromServer()
 {
-    debug("msgFromServer()");
- 
     $msg = null;
     
     for ($i=3; $i < count(rawDataArray()); $i++) {
@@ -242,18 +244,6 @@ function getBotNickname()
 function setBotNickname($nickname)
 {
     $GLOBALS['BOT_NICKNAME'] = $nickname;
-}
-//---------------------------------------------------------------------------------------------------------
-function getBotModes()
-{
-    if (isset($GLOBALS['BOT_MODES']) && !empty($GLOBALS['BOT_MODES'])) {
-        return $GLOBALS['BOT_MODES'];
-    }
-}
-//---------------------------------------------------------------------------------------------------------
-function setBotModes($modes)
-{
-    $GLOBALS['BOT_MODES'] = $modes;
 }
 //---------------------------------------------------------------------------------------------------------
 function getServerName()
@@ -282,44 +272,59 @@ function setServerName($name)
     $serverName = $name;
 }
 //---------------------------------------------------------------------------------------------------------
-function msgAsArguments()
+function userNickname()
 {
-    $args = null;
+    cliDebug('userNickname()');
 
-    for ($i=4; $i < count(rawDataArray()); $i++) {
-         $args .= rawDataArray()[$i].'';
+    if (preg_match('/^:(.*)\!(.*)\@(.*)$/', rawDataArray()[0], $userNickname)) {
+        return $userNickname[1];
     }
-
-    return $args;
 }
 //---------------------------------------------------------------------------------------------------------
-function userPreg()
+function userIdent()
 {
-    debug("userPreg()");
+    cliDebug('userIdent()');
 
+    if (preg_match('/^:(.*)\!(.*)\@(.*)$/', rawDataArray()[0], $userIdent)) {
+        return $userIdent[2];
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function userHostname()
+{
+    if (preg_match('/^:(.*)\!(.*)\@(.*)$/', rawDataArray()[0], $userHostname)) {
+        return $userHostname[3];
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function userIdentAndHostname()
+{
     if (preg_match('/^:(.*)\!(.*)\@(.*)$/', rawDataArray()[0], $source)) {
-        $USER       = $source[1];
-        $USER_IDENT = $source[2];
-        $host       = $source[3];
-        $USER_HOST  = $USER_IDENT.'@'.$host;
-
-        return [$USER, $USER_IDENT, $host, $USER_HOST];
+        return $source[2].'@'.$source[3];
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function userFullMask()
+function userNickIdentAndHostname()
 {
-    debug("userFullMask()");
-
-    if (isset(userPreg()[0])) {
-        return userPreg()[0].'!'.userPreg()[1].'@'.userPreg()[2];
+    if (preg_match('/^:(.*)\!(.*)\@(.*)$/', rawDataArray()[0], $source)) {
+        if (isset($source[1])) {
+            return $source[1].'!'.$source[2].'@'.$source[3];
+        }
     }
+}
+//---------------------------------------------------------------------------------------------------------
+function print_userNick_IdentHost()
+{
+    return userNickname().' ('.userIdentAndHostname().')';    
+}
+//---------------------------------------------------------------------------------------------------------
+function print_userNick_NickIdentHost()
+{
+    return userNickname().' ('.userNickIdentAndHostname().')';
 }
 //---------------------------------------------------------------------------------------------------------
 function msgPieces()
 {
-    debug("msgPieces()");
-
     $args = null;
     for ($i=4; $i < count(rawDataArray()); $i++) {
          $args .= rawDataArray()[$i].' ';
@@ -353,9 +358,50 @@ function msgPieces()
     return [$piece1, $piece2, $piece3, $piece4];
 }
 //---------------------------------------------------------------------------------------------------------
+function commandFromUser() /* first command only */
+{
+    if (isset(rawDataArray()[4]) && !empty(rawDataArray()[4])) {
+        return rawDataArray()[4];
+    }
+}
+//---------------------------------------------------------------------------------------------------------
 function rawDataArray()
 {
     $rawDataArray = explode(' ', trim($GLOBALS['rawData']));
 
     return $rawDataArray;
+}
+//---------------------------------------------------------------------------------------------------------
+function all_args_from_user_array() /* start from 1 */
+{
+    $input = null;
+
+    for ($i=4; $i <= (count(rawDataArray())-1); $i++) {
+         $input .= rawDataArray()[$i]." ";
+    }
+
+    $data = rtrim($input);
+    $data = explode(' ', $data);
+    
+    array_unshift($data, '');
+    
+    unset($data[0]);
+    
+    return $data;
+}
+//---------------------------------------------------------------------------------------------------------
+function inputFromLine($index)
+{
+    $a = rawDataArray();
+    $current = '';
+
+    while (isset($a[$index])) {
+           $current .= $a[$index].' ';
+           $index++;
+    }
+
+    $string = preg_replace('/^:/', '', $current, 1);
+    $string = substr($string, 0, -1);
+
+    return $string;
 }

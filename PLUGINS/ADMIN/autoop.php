@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,36 +21,42 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Adds host to autoop list in config file: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."autoop <nick!ident@host>";
+    $plugin_description = 'Adds host to autoop list in config file: '.commandPrefix().'autoop <nick!ident@host>';
     $plugin_command     = 'autoop';
 
 function plugin_autoop()
 {
-    /* get nick from hostname mask */
-    $hostNick = explode('!', trim(msgAsArguments()));
-
-    response($hostNick);
-
     if (OnEmptyArg('autoop <nick!ident@hostname>')) {
-    } elseif ($hostNick[0] != getBotNickname()) {
-        if (preg_match('/^(.+?)!(.+?)@(.+?)$/', msgAsArguments())) {
-            $autoOpList = loadValueFromConfigFile('AUTOMATIC', 'auto.op.list');
-
-            if (strpos($autoOpList, msgAsArguments()) !== false) {
-                response('I already have that host in my auto op list.');
-            } else {
-                     empty($autoOpList) ? $newList = msgAsArguments() : $newList = "{$autoOpList}, ".msgAsArguments();
- 
-                     SaveValueToConfigFile('AUTOMATIC', 'auto.op.list', $newList);
-
-                     privateMsgTo($hostNick[0], 'From now you are on my auto op list, enjoy.');
-
-                     response("Host: '".msgAsArguments()."' added to auto op list.");
-            }
-        } else {
-                 response('Bad input, try: nick!ident@hostname');
-        }
     } else {
-             response('I cannot add myself to auto op list, iam already OP MASTER!');
+             /* if nick!ident@hostname */
+             if (preg_match('/^(.*)\!(.*)\@(.*)$/', commandFromUser(), $data)) {
+                 $fullmask = $data[0];
+                 $nick = $data[1];
+
+                 if ($nick != getBotNickname() && $nick != userNickname()) {
+                     $autoOpList = loadValueFromConfigFile('AUTOMATIC', 'auto op list');
+
+                     /* if not in config */
+                     if (strpos($autoOpList, $fullmask) === false) {
+                         empty($autoOpList) ? $newList = $fullmask : $newList = "{$autoOpList}, {$fullmask}";
+ 
+                         saveValueToConfigFile('AUTOMATIC', 'auto op list', $newList);
+
+                         privateMsgTo($nick, 'From now you are on my auto op list, enjoy.');
+
+                         if (BotOpped()) {
+                             toServer('MODE '.getBotChannel().' +o '.$nick);
+                         }
+
+                         response("Host: '{$fullmask}' added to auto op list.");
+                     } else {
+                              response('I already have that host in my auto op list.');
+                     }
+                 } else {
+                          response('nope.');
+                 }
+             } else {
+                      response('Bad input, try: nick!ident@hostname');
+             }
     }
 }

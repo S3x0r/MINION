@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,23 +21,22 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Clustering plugin: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."cluster help to list commands";
+    $plugin_description = 'Clustering plugin: '.commandPrefix().'cluster help to list commands';
     $plugin_command     = 'cluster';
 
 function plugin_cluster()
 {
     if (OnEmptyArg('cluster <help> to list commands')) {
     } else {
-        switch (msgAsArguments()) {
+        switch (commandFromUser()) {
             case 'help':
                   response('Cluster commands:');
                   response('cluster help       - Shows this help');
-                  response("cluster shutdown   - Bot shutdowns computer: ".loadValueFromConfigFile('COMMAND', 'command.prefix').
-                           "cluster shutdown <bot_nickname>");
-                  response("cluster shutdown * - Bot shutdowns all bots computers: ".loadValueFromConfigFile('COMMAND', 'command.prefix').
-                           "cluster shutdown *");
+                  response('cluster shutdown   - Bot shutdowns computer: '.commandPrefix().'cluster shutdown <bot_nickname>');
+                  response('cluster shutdown * - Bot shutdowns all bots computers: '.commandPrefix().'cluster shutdown *');
                 break;
         }
+
         /* me */
         if (msgPieces()[0] == 'shutdown' && msgPieces()[1] == getBotNickname()) {
             response('Shutting down machine...');

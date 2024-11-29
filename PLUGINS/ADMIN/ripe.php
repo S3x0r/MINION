@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,30 +21,27 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Checks ip address and shows results: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."ripe <ip>";
+    $plugin_description = 'Checks ip address and shows results: '.commandPrefix().'ripe <ip>';
     $plugin_command     = 'ripe';
 
 function plugin_ripe()
 {
     if (OnEmptyArg('ripe <ip>')) {
     } else if (extension_loaded('openssl')) {
-               if (msgAsArguments() == '127.0.0.1' or msgAsArguments() == '0.0.0.0') {
-               } else {
-                        response(ripeCheckAddress(msgAsArguments()));
-               }
-        } else {
-                 response('I cannot use this plugin, i need php_openssl extension to work!');
-        }
+               response(ripeCheckAddress(commandFromUser()));
+    } else {
+             response('I cannot use this plugin, i need php_openssl extension to work!');
+    }
 }
 
 function ripeCheckAddress($args)
 {
-    $result = json_decode(file_get_contents("https://stat.ripe.net/data/whois/data.json?resource="
-              .urlencode($args)."/32"), true);
+    $result = json_decode(file_get_contents('https://stat.ripe.net/data/whois/data.json?resource='
+              .urlencode($args).'/32'), true);
 
     if (empty($result)) {
         $returnstring = 'Cannot check IP, no connection to ripe server.';
-    } elseif (count($result["data"]["records"])==0) {
+    } elseif (count($result["data"]["records"]) == 0) {
               $returnstring = 'No results.';
     } else {
              $data = 'IP-block: ';
@@ -54,7 +51,7 @@ function ripeCheckAddress($args)
                 case 'netname':
                 case 'descr':
                 case 'country':
-                    $data .= "[".$record["value"]."] ";
+                    $data .= '['.$record["value"].'] ';
                     //fall-through
                 default:
             }
@@ -62,12 +59,12 @@ function ripeCheckAddress($args)
         foreach ($result["data"]["irr_records"][0] as $record) {
             switch ($record["key"]) {
                 case 'origin':
-                    $data .= "| Network: AS".$record["value"]." |";
+                    $data .= '| Network: AS'.$record["value"].' |';
                     //fall-through
                 default:
             }
         }
-            $returnstring = "Info about {$args}: {$data} rDNS: ".gethostbyaddr($args);
+            $returnstring = "Info about {$args}: {$data} rDNS: ".@gethostbyaddr($args);
     }
     return $returnstring;
 }

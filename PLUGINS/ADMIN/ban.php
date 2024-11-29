@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,30 +21,37 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Ban specified host: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."ban <hostname>";
+    $plugin_description = 'Ban specified host: '.commandPrefix().'ban <nick!ident@hostname>';
     $plugin_command     = 'ban';
 
 function plugin_ban()
 {
-    if (OnEmptyArg('ban <hostname>')) {
-    } elseif(BotOpped() == true) {
-           $nickToBan = explode('!', trim(msgAsArguments()));
-           $nickToBan = $nickToBan[0];
+    if (OnEmptyArg('ban <nick!ident@hostname>')) {
+    } elseif (BotOpped()) {
+              /* if nick!ident@hostname */
+              if (preg_match('/^(.*)\!(.*)\@(.*)$/', commandFromUser(), $data)) {
+                  $fullmask  = $data[0];
+                  $nickToBan = $data[1];
 
-           if ($nickToBan != getBotNickname() && $nickToBan != userPreg()[0]) {
-               /* ban host */
-               toServer("MODE ".getBotChannel()." +b ".msgAsArguments());
-               
-               /* save host to ban list */
-               $banList = loadValueFromConfigFile('BANS', 'ban.list');
+                  if ($nickToBan != getBotNickname() && $nickToBan != userNickname()) {
+                      /* ban host */
+                      toServer('MODE '.getBotChannel().' +b '.$fullmask);
 
-               if (strpos($banList, msgAsArguments()) === false) {
-                   empty($banList) ? $newList = $host[0] : $newList = "{$banList}, ".msgAsArguments();
- 
-                   SaveValueToConfigFile('BANS', 'ban.list', $newList);
+                      $banList = loadValueFromConfigFile('BANS', 'ban list');
 
-                   response("Host: '".msgAsArguments()."' added to ban list.");
-               }
-           }
+                      /* if not in config */
+                      if (strpos($banList, $fullmask) === false) {
+                          empty($banList) ? $newList = $fullmask : $newList = "{$banList}, {$fullmask}";
+                      
+                          saveValueToConfigFile('BANS', 'ban list', $newList);
+                      
+                          response("Host: '{$fullmask}' added to ban list.");
+                      }
+                  } else {
+                           response('nope.');
+                  }
+              } else {
+                       response('Bad input, try: ban <nick!ident@hostname>');
+              }
     }
 }

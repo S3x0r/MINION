@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,13 +21,13 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Leave channel: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."leave <#channel>";
+    $plugin_description = 'Leave channel: '.commandPrefix().'leave <#channel>';
     $plugin_command     = 'leave';
 
 function plugin_leave()
 {
     if (OnEmptyArg('leave <#channel>')) {
     } else {
-             toServer("PART ".msgAsArguments());
+             toServer('PART '.commandFromUser());
     }
 }

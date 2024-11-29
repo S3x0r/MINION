@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,14 +21,15 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Shows webpage titile: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."webtitle <web address>";
+    $plugin_description = 'Shows webpage titile: '.commandPrefix().'webtitle <web address>';
     $plugin_command     = 'webtitle';
 
 function plugin_webtitle()
 {
     if (OnEmptyArg('webtitle <web address>')) {
     } elseif (extension_loaded('openssl')) {
-              $data = str_replace('http://', '', str_replace('https://', '', msgAsArguments()));
+              $data = str_replace('http://', '', str_replace('https://', '', commandFromUser()));
+
               if ($file = @file_get_contents('http://'.$data)) {
                   if (preg_match('@<title>([^<]{1,256}).*?</title>@mi', $file, $matches)) {
                       if (strlen($matches[1]) == 256) {

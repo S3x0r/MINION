@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -20,56 +20,56 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-function if_CTCP()
+function handleCTCP()
 {
     switch ($GLOBALS['rawcmd'][1]) {
         case 'version':
-            toServer("NOTICE ".userPreg()[0]." :VERSION ".loadValueFromConfigFile('CTCP', 'ctcp.version'));
+            toServer("NOTICE ".userNickname()." :VERSION ".loadValueFromConfigFile('CTCP', 'ctcp version'));
 
-            cliLog("[bot] (ctcp) VERSION by: ".userPreg()[0]." (".userPreg()[3].")");
-            PlaySound('ctcp.mp3');
+            cliCTCP('VERSION', print_userNick_IdentHost());
+            playSound('ctcp.mp3');
             break;
 
         case 'clientinfo':
-            toServer("NOTICE ".userPreg()[0]." :CLIENTINFO ".loadValueFromConfigFile('CTCP', 'ctcp.version'));
+            toServer("NOTICE ".userNickname()." :CLIENTINFO ".loadValueFromConfigFile('CTCP', 'ctcp version'));
 
-            cliLog("[bot] (ctcp) CLIENTINFO by: ".userPreg()[0]." (".userPreg()[3].")");
-            PlaySound('ctcp.mp3');
+            cliCTCP('CLIENTINFO', print_userNick_IdentHost());
+            playSound('ctcp.mp3');
             break;
 
         case 'source':
-            toServer("NOTICE ".userPreg()[0]." :SOURCE http://github.com/S3x0r/MINION");
+            toServer("NOTICE ".userNickname()." :SOURCE http://github.com/S3x0r/MINION");
 
-            cliLog("[bot] (ctcp) SOURCE by: ".userPreg()[0]." (".userPreg()[3].")");
-            PlaySound('ctcp.mp3');
+            cliCTCP('SOURCE', print_userNick_IdentHost());
+            playSound('ctcp.mp3');
             break;
 
         case 'userinfo':
-            toServer("NOTICE ".userPreg()[0]." :USERINFO Powered by Minions!");
+            toServer("NOTICE ".userNickname()." :USERINFO Powered by Minions!");
 
-            cliLog("[bot] (ctcp) USERINFO by: ".userPreg()[0]." (".userPreg()[3].")");
-            PlaySound('ctcp.mp3');
+            cliCTCP('USERINFO', print_userNick_IdentHost());
+            playSound('ctcp.mp3');
             break;
 
         case 'finger':
-            toServer("NOTICE ".userPreg()[0]." :FINGER ".loadValueFromConfigFile('CTCP', 'ctcp.finger'));
+            toServer("NOTICE ".userNickname()." :FINGER ".loadValueFromConfigFile('CTCP', 'ctcp finger'));
 
-            cliLog("[bot] (ctcp) FINGER by: ".userPreg()[0]." (".userPreg()[3].")");
-            PlaySound('ctcp.mp3');
+            cliCTCP('FINGER', print_userNick_IdentHost());
+            playSound('ctcp.mp3');
             break;
 
         case 'ping':
-            toServer("NOTICE ".userPreg()[0]." :PING ".str_replace(' ', '', msgAsArguments()));
+            toServer("NOTICE ".userNickname()." :PING ".str_replace(' ', '', commandFromUser()));
 
-            cliLog("[bot] (ctcp) PING by: ".userPreg()[0]." (".userPreg()[3].")");
-            PlaySound('ctcp.mp3');
+            cliCTCP('PING', print_userNick_IdentHost());
+            playSound('ctcp.mp3');
             break;
 
         case 'time':
-            toServer("NOTICE ".userPreg()[0]." :TIME ".date("F j, Y, g:i a"));
+            toServer("NOTICE ".userNickname()." :TIME ".date("F j, Y, g:i a"));
 
-            cliLog("[bot] (ctcp) TIME by: ".userPreg()[0]." (".userPreg()[3].")");
-            PlaySound('ctcp.mp3');
+            cliCTCP('TIME', print_userNick_IdentHost());
+            playSound('ctcp.mp3');
             break;
     }
 }

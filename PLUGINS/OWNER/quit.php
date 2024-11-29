@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,22 +21,24 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Shutdown BOT: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."quit";
+    $plugin_description = 'Shutdown BOT: '.commandPrefix().'quit';
     $plugin_command     = 'quit';
 
 function plugin_quit()
 {
     /* give op before quit */
-    if (BotOpped() == true) {
-        toServer("MODE ".getBotChannel()." +o ".userPreg()[0]);
+    if (BotOpped()) {
+        toServer('MODE '.getBotChannel().' +o '.userNickname());
     }
 
     response('Bye!');
     
     toServer("QUIT :http://github.com/S3x0r/MINION");
 
-    cliLog('Terminating BOT.');
+    cliLog('Terminating BOT...');
     cliLog('------------------LOG ENDED: '.date('d.m.Y | H:i:s')."------------------\r\n");
+    
+    sleep(4);
 
     exit;
 }

@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -20,12 +20,12 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-function LoadPlugins()
+function loadPlugins()
 {
     $GLOBALS['ALL_PLUGINS'] = null;
 
     /* CORE PLUGINS */
-    cli(">>> 'Core' Plugins (".CORECOUNT." Plugins) [lvl: 0] <<<");
+    cli('>>> \'Core\' Plugins ('.CORECOUNT.' Plugins) [lvl: 0] <<<');
 
     cliLine();
 
@@ -42,7 +42,7 @@ function LoadPlugins()
        
        $userLvl = getUserLevelByUserName($userDirectory);
        
-       cli(">>> '".$userDirectory."' Plugins (".countPlugins($userDirectory)." Plugins) [lvl: ".$userLvl."] <<<");
+       cli('>>> \''.$userDirectory.'\' Plugins ('.countPlugins($userDirectory).' Plugins) [lvl: '.$userLvl.'] <<<');
        
        cliLine();
        
@@ -54,7 +54,7 @@ function LoadPlugins()
 
     $pluginsSum = $pluginsSum + CORECOUNT;
 
-    cli("----------------------------------------------------------Total: (".$pluginsSum.")---------");
+    cli('----------------------------------------------------------Total: ('.$pluginsSum.')---------');
 }
 //---------------------------------------------------------------------------------------------------------
 function countPlugins($user)
@@ -82,7 +82,7 @@ function loadPluginsFromEachGroupDir($user)
 
             cli('['.basename($pluginName, '.php').'] -- '.$plugin_description);
         } else {
-                 cli('[ERROR: '.basename($pluginName, '.php').'] - Incompatible plugin!');
+                 cliError(basename($pluginName, '.php').' - Incompatible plugin!');
         }
     }
 }
@@ -105,6 +105,8 @@ function coreCommandsToArray() /* return core commands array */
 //---------------------------------------------------------------------------------------------------------
 function ifPrivilegesExecuteCommand()
 {
+    cliDebug('ifPrivilegesExecuteCommand()');
+    
     global $rawcmd;
     $who = whoIsUser();
 
@@ -112,27 +114,26 @@ function ifPrivilegesExecuteCommand()
     if ($who[1] == 0) {
         if (in_array_r(substr($rawcmd[1], 1), [coreCommandsToArray(), $GLOBALS['ALL_PLUGINS']])) {
             call_user_func('plugin_'.substr($rawcmd[1], 1));
-            pluginUsageCli(substr($rawcmd[1], 1));
+            cliPluginUsage(substr($rawcmd[1], 1));
         }
     /* user */
     } else if ($who[1] == 999) {
                if (in_array_r(substr($rawcmd[1], 1), ['seen', $GLOBALS[$who[0].'_PLUGINS']])) {
                    call_user_func('plugin_'.substr($rawcmd[1], 1));
-                   pluginUsageCli(substr($rawcmd[1], 1));
+                   cliPluginUsage(substr($rawcmd[1], 1));
                }
     /* all else */
     } else {
              if (in_array_r(substr($rawcmd[1], 1), ['seen', $GLOBALS[$who[0].'_PLUGINS'], $GLOBALS[getStandardUserName().'_PLUGINS'], returnNextUsersCommands($who[1])])) {
                  call_user_func('plugin_'.substr($rawcmd[1], 1));
-                 pluginUsageCli(substr($rawcmd[1], 1));
+                 cliPluginUsage(substr($rawcmd[1], 1));
              }
     }
 }
 //---------------------------------------------------------------------------------------------------------
 function getStandardUserName()
 {
-    $cfg = new IniParser(getConfigFileName());
-    $section = $cfg->getsection("USERSLEVELS");
+    $section = json_decode(file_get_contents(getConfigFileName()), true)['USERSLEVELS'];
 
     /* get user name */
     foreach ($section as $user => $level) {
@@ -144,8 +145,7 @@ function getStandardUserName()
 //---------------------------------------------------------------------------------------------------------
 function getOwnerUserName()
 {
-    $cfg = new IniParser(getConfigFileName());
-    $section = $cfg->getsection("USERSLEVELS");
+    $section = json_decode(file_get_contents(getConfigFileName()), true)['USERSLEVELS'];
 
     foreach ($section as $user => $level) {
         if ($level == 0) {
@@ -156,13 +156,12 @@ function getOwnerUserName()
 //---------------------------------------------------------------------------------------------------------
 function isUserOwner()
 {
-    debug("isUserOwner()");
+    cliDebug('isUserOwner()');
 
-    $cfg = new IniParser(getConfigFileName());
-    $section = $cfg->getsection("PRIVILEGES");
+    $section = json_decode(file_get_contents(getConfigFileName()), true)['PRIVILEGES'];
 
     foreach ($section as $user => $mask) {
-       if (fnmatch($mask, userFullMask(), 16)) {
+       if (fnmatch($mask, userNickIdentAndHostname(), 16)) {
            $level = loadValueFromConfigFile('USERSLEVELS', $user);
            
            if ($level == 0) {
@@ -176,15 +175,14 @@ function isUserOwner()
 //---------------------------------------------------------------------------------------------------------
 function whoIsUser()
 {
-    $cfg = new IniParser(getConfigFileName());
-    $section = $cfg->getsection("PRIVILEGES");
+    $section = json_decode(file_get_contents(getConfigFileName()), true)['PRIVILEGES'];
 
     foreach ($section as $user => $mask) {
        $pieces = explode(", ", $mask);
 
        foreach ($pieces as $piece) {
 
-          if (fnmatch($piece, userFullMask(), 16)) {
+          if (fnmatch($piece, userNickIdentAndHostname(), 16)) {
               $level = loadValueFromConfigFile('USERSLEVELS', $user);
               $data = [$user, $level, $mask];
           }
@@ -200,8 +198,7 @@ function whoIsUser()
 //---------------------------------------------------------------------------------------------------------
 function returnNextUsersCommands($from) /* format: command command2 etc,. */
 {
-    $cfg = new IniParser(getConfigFileName());
-    $section = $cfg->getsection("USERSLEVELS");
+    $section = json_decode(file_get_contents(getConfigFileName()), true)['USERSLEVELS'];
 
     $users = [];
 
@@ -231,12 +228,41 @@ function returnNextUsersCommands($from) /* format: command command2 etc,. */
 //---------------------------------------------------------------------------------------------------------
 function getUserLevelByUserName($user)
 {
-    $cfg = new IniParser(getConfigFileName());
-    $section = $cfg->getsection("USERSLEVELS");
+    $section = json_decode(file_get_contents(getConfigFileName()), true)['USERSLEVELS'];
 
     foreach ($section as $entry => $level) {
         if ($entry == $user) {
             return $level;
         }
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function allPluginsWithoutCoreString()
+{
+    $plug = implode(' ', $GLOBALS['ALL_PLUGINS']);
+    $plug = str_replace(' ', ' '.commandPrefix(), $plug);
+    
+    return commandPrefix().$plug.' ';
+}
+//---------------------------------------------------------------------------------------------------------
+function allPluginsString()
+{
+    $corePlugins = null;
+
+    foreach (CORECOMMANDSLIST as $corePlugin => $corePluginDescription) {
+        $corePlugins .= commandPrefix().$corePlugin.' ';
+    }
+    
+    return $corePlugins;
+}
+//---------------------------------------------------------------------------------------------------------
+/* if first arg after !plugin <arg> is empty */
+function OnEmptyArg($info)
+{
+    if (empty(commandFromUser())) {
+        response('Usage: '.commandPrefix().$info);
+        return true;
+    } else {
+              return false;
     }
 }

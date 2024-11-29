@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Downloads plugins from repository: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."fetch for help";
+    $plugin_description = 'Downloads plugins from repository: '.commandPrefix().'fetch for help';
     $plugin_command     = 'fetch';
 
 function plugin_fetch()
@@ -31,7 +31,7 @@ function plugin_fetch()
     } else {
         if (extension_loaded('openssl')) {
 
-            if (msgAsArguments() == 'list') {
+            if (commandFromUser() == 'list') {
                 $addr_list = 'https://raw.githubusercontent.com/S3x0r/minion_repository_plugins/master/plugin_list.db';
                 $list = @file_get_contents($addr_list);
 
@@ -59,7 +59,7 @@ function plugin_fetch()
                             if (in_array(msgPieces()[1].'.php', $all_dirs)) {
                                 response('I already have this plugin, aborting.');
                             } else {
-                                     $address = loadValueFromConfigFile('FETCH', 'fetch.server')."/".msgPieces()[1].".php";
+                                     $address = loadValueFromConfigFile('FETCH', 'fetch server')."/".msgPieces()[1].".php";
                                 if (@file_get_contents($address)) {
                                     response("Downloading plugin: '".msgPieces()[1]."' from repository to: '".msgPieces()[2]."'");
 

@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,13 +21,13 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Say specified text to channel: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."say <text>";
+    $plugin_description = 'Say specified text to channel: '.commandPrefix().'say <text>';
     $plugin_command     = 'say';
 
 function plugin_say()
 {
     if (OnEmptyArg('say <text>')) {
     } else {
-             toServer("PRIVMSG ".getBotChannel()." ".inputFromLine(4));
+             toServer('PRIVMSG '.getBotChannel().' '.inputFromLine(4));
     }
 }

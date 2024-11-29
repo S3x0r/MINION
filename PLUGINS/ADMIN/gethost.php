@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,30 +21,21 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Ip address to hostname change: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."gethost <ip>";
+    $plugin_description = 'Ip address to hostname change: '.commandPrefix().'gethost <ip>';
     $plugin_command     = 'gethost';
-
-/*
-  TODO:
-  - if box hostname 
-*/
 
 function plugin_gethost()
 {
     if (OnEmptyArg('gethost <ip>')) {
-    } else {
-             $host = @gethostbyaddr(trim(msgAsArguments()));
-        if (!empty($host) &&
-            $host != msgAsArguments() &&
-            substr(msgAsArguments(), 0, 3) != '127' &&
-            substr(msgAsArguments(), 0, 3) != '192' &&
-            substr(msgAsArguments(), 0, 1) != '0') {
+    } elseif (filter_var(trim(commandFromUser()), FILTER_VALIDATE_IP)) {
+             $ip = @gethostbyaddr(trim(commandFromUser()));
 
-            response("hostname: $host");
-        } elseif ($host == msgAsArguments()) {
-                  response("Cannot resolve ".msgAsArguments());
-        } elseif (empty($host)) {
-                  response('Address is not a valid IPv4/IPv6 address');
-        }
+             if (!empty($ip)) {
+                 response("hostname: $ip");
+             } elseif ($ip == commandFromUser()) {
+                       response('Cannot resolve '.commandFromUser());
+             }
+    } else {
+             response('Address is not a valid IPv4 address');
     }
 }

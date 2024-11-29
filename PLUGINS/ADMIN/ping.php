@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,22 +21,22 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Pings host/ip: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."ping <host/ip>";
+    $plugin_description = 'Pings host/ip: '.commandPrefix().'ping <host/ip>';
     $plugin_command     = 'ping';
 
 function plugin_ping()
 {
     if (OnEmptyArg('ping <host/ip>')) {
     } elseif (ifWindowsOs()) {
-              $ip = gethostbyname(msgAsArguments());
+              $ip = gethostbyname(commandFromUser());
 
-              if ((!preg_match('/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/', $ip)) and
-                 (($ip == msgAsArguments()) or ($ip === false))) {
-                   response("Unknown host/ip: '".msgAsArguments()."'");
+              if (filter_var($ip, FILTER_VALIDATE_IP) and
+                 (($ip == commandFromUser()) or ($ip === false))) {
+                   response("Unknown host/ip: '".commandFromUser()."'");
               } else {
                        $ping = ping($ip);
                 if ($ping) {
-                    $ping[0] = userPreg()[0].': '.$ping[0];
+                    $ping[0] = userNickname().': '.$ping[0];
                     foreach ($ping as $thisline) {
                              response($thisline);
                     }
@@ -50,10 +50,12 @@ function plugin_ping()
 function ping($hostname)
 {
     exec('ping '.escapeshellarg($hostname), $list);
-    
-    if (isset($list[4])) {
-        return([$list[2], $list[3], $list[4]]);
-    } else {
-             return([$list[2], $list[3]]);
+
+    if (count($list) == 11) {
+        return ([$list[1], $list[2], $list[3], $list[4], $list[5], $list[6], $list[7], $list[8], $list[9], $list[10]]);
+    }
+
+    if (count($list) == 1) {
+        return ([$list[0]]);
     }
 }

@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,13 +21,15 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Changing Topic in channel: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."topic <new_topic>";
+    $plugin_description = 'Changing Topic in channel: '.commandPrefix().'topic <new_topic>';
     $plugin_command     = 'topic';
 
 function plugin_topic()
 {
     if (OnEmptyArg('topic <new_topic>')) {
     } else {
-            toServer("TOPIC ".getBotChannel()." ".msg_without_command());
+            $newTopic = implode(' ', all_args_from_user_array());
+
+            setTopic(getBotChannel(), $newTopic);
     }
 }

@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,13 +21,13 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Kicks from channel: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."kick <#channel> <who>";
+    $plugin_description = 'Kicks from channel: '.commandPrefix().'kick <nickname> <reason>';
     $plugin_command     = 'kick';
 
 function plugin_kick()
 {
-    if (OnEmptyArg('kick <#channel> <who>')) {
-    } elseif (BotOpped() == true && msgPieces()[1] != getBotNickname() && msgPieces()[1] != userPreg()[0]) {
-              toServer("KICK ".msgPieces()[0]." :".msgPieces()[1]);
+    if (OnEmptyArg('kick <nickname> <reason>')) {
+    } elseif (BotOpped() && all_args_from_user_array()[1] != getBotNickname() && all_args_from_user_array()[1] != userNickname()) {
+              toServer('KICK '.getBotChannel().' '.all_args_from_user_array()[1].' :'.inputFromLine('5'));
     }
 }

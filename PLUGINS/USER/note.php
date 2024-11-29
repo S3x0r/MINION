@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,30 +21,23 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Adds a note: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."note help to list commands";
+    $plugin_description = 'Adds a note: '.commandPrefix().'note help to list commands';
     $plugin_command     = 'note';
-
-/* TODO:
-   - fix noteFilename position?
-   - add note show <id>
-   - if no writable =disable plugin
-   - note del - possible to clear higher number =fix
-*/
 
 function plugin_note()
 {
     if (OnEmptyArg('note <help> to list commands')) {
     } else {
-        $notesFilename = DATADIR."/".removeIllegalCharsFromNickname(userPreg()[0])."-".userPreg()[2].".txt";
+        $notesFilename = DATADIR."/".removeIllegalCharsFromNickname(userNickname())."-".userHostname().".txt";
     
-        switch (msgAsArguments()) {
+        switch (commandFromUser()) {
             case 'help':
                  response('Note commands:');
-                 response(loadValueFromConfigFile('COMMAND', 'command.prefix').'note add <note>  - Adds a note');
-                 response(loadValueFromConfigFile('COMMAND', 'command.prefix').'note clear       - Delete all notes');
-                 response(loadValueFromConfigFile('COMMAND', 'command.prefix').'note del <numer> - Delete specified note');
-                 response(loadValueFromConfigFile('COMMAND', 'command.prefix').'note help        - Shows help');
-                 response(loadValueFromConfigFile('COMMAND', 'command.prefix').'note list        - List notes');
+                 response(commandPrefix().'note add <note>  - Adds a note');
+                 response(commandPrefix().'note clear       - Delete all notes');
+                 response(commandPrefix().'note del <numer> - Delete specified note');
+                 response(commandPrefix().'note help        - Shows help');
+                 response(commandPrefix().'note list        - List notes');
                 break;
 
             case 'list':
@@ -104,6 +97,7 @@ function plugin_note()
                         unset($notes[$j]);
 
                         $saveNotes = fopen($notesFilename, "w+");
+
                         foreach ($notes as $value) {
                                  $writeNotes = $value."\n";
                                  fwrite($saveNotes, $writeNotes);

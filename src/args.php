@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -20,11 +20,15 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-function checkArgs()
+function checkCliArguments()
 {
-    switch ($_SERVER['argv'][1]) {
+    if (isset($_SERVER['argv'][1])) { $argument_1 = $_SERVER['argv'][1]; }
+    if (isset($_SERVER['argv'][2])) { $argument_2 = $_SERVER['argv'][2]; }
+    if (isset($_SERVER['argv'][3])) { $argument_3 = $_SERVER['argv'][3]; }
+    
+    switch ($argument_1) {
         case '-h': /* show help */
-            echo N.'  Bot cli commands usage: php BOT.php -[option]'.NN,
+            echo N.'  Minion Bot cli commands usage: php BOT.php -[option]'.NN,
                  '  -c <config_file>   # loads config from the specified path (eg. C:\my folder\\'.getConfigFileName().')'.N, /* config file */
                  '  -h                 # this help'.N, /* help */
                  '  -n                 # set bot nickname'.N, /* change bot nickname */
@@ -36,36 +40,36 @@ function checkArgs()
             break;
 
         case '-n': /* set nickname */
-            if (!empty($_SERVER['argv'][2])) {
-                SaveValueToConfigFile('BOT', 'nickname', $_SERVER['argv'][2]);
+            if (!empty($argument_2)) {
+                saveValueToConfigFile('BOT', 'nickname', $argument_2);
             } else {
-                     echo '  [ERROR] You need to specify BOT nickname! Exiting.'.NN;
+                     cliError('You need to specify bot nickname! Exiting.');
                      exit;
             }
             break;
 
         case '-c': /* check if config is loaded from -c switch */
-            if (!empty($_SERVER['argv'][2]) && !is_file($_SERVER['argv'][2])) {
-                echo '  [ERROR] Config file does not exist, wrong path?'.NN;
+            if (!empty($argument_2) && !is_file($argument_2)) {
+                cliError('Config file does not exist, wrong path?');
                 exit;
-            } elseif (empty($_SERVER['argv'][2])) {
-                      echo '  [ERROR] You need to specify config file! I need some data :)'.NN;
+            } elseif (empty($argument_2)) {
+                      cliError('You need to specify config file! I need some data.');
                       exit;
             }
             break;
 
         case '-o': /* server connect: eg: irc.example.net 6667 */
-            if (!empty($_SERVER['argv'][2]) && !empty($_SERVER['argv'][3]) && is_numeric($_SERVER['argv'][3])) {
-                SaveValueToConfigFile('SERVER', 'server', $_SERVER['argv'][2]);
-                SaveValueToConfigFile('SERVER', 'port',   $_SERVER['argv'][3]);
-            } elseif (empty($_SERVER['argv'][2])) {
-                      echo N.' ERROR: You need to specify server address, Exiting.';
+            if (!empty($argument_2) && !empty($argument_3) && is_numeric($argument_3)) {
+                saveValueToConfigFile('SERVER', 'server', $argument_2);
+                saveValueToConfigFile('SERVER', 'port',   $argument_3);
+            } elseif (empty($argument_2)) {
+                      cliError('You need to specify server address, Exiting.');
                       exit;
-            } elseif (empty($_SERVER['argv'][3])) {
-                      echo N.' ERROR: You need to specify server port, Exiting.';
+            } elseif (empty($argument_3)) {
+                      cliError('You need to specify server port, Exiting.');
                       exit;
-            } elseif (!is_numeric($_SERVER['argv'][3])) {
-                      echo N.' ERROR: Wrong server port, Exiting.';
+            } elseif (!is_numeric($argument_3)) {
+                      cliError('Wrong server port, Exiting.');
                       exit;
             }
             break;
@@ -86,15 +90,16 @@ function checkArgs()
             echo ' > ';
 
             $answer = trim(fgets($STDIN));
+
             if ($answer == 'yes' xor $answer == 'y') {
                 if (is_file(getConfigFileName())) {
-                    SaveValueToConfigFile('OWNER', 'owner.password', hash('sha256', rtrim($pwd, "\n\r")));
+                    saveValueToConfigFile('OWNER', 'owner password', hash('sha256', rtrim($pwd, "\n\r")));
                     echo N.' Password saved to config file, Exiting.';
-                    WinSleep(6);
+                    winSleep(6);
                     exit;
                 } else {
-                         echo N." Cannot find '".getConfigFileName()."' file, exiting!";
-                         WinSleep(5);
+                         cliError('Cannot find \''.getConfigFileName().'\' file, exiting!');
+                         winSleep(5);
                          exit;
                 }
             } else {
@@ -102,36 +107,32 @@ function checkArgs()
             }
 
         case '-v': /* show version */
-            echo N.' MINION version: '.VER.N;
+            echo ' MINION Bot version: '.VER;
             exit;
             break;
 
         case '-u': /* update check */
             if (extension_loaded('openssl')) {
-                $file = @file_get_contents(VERSION_URL);
-                if (!empty($file)) {
-                    $version = explode("\n", $file);
+                $versionFile = @file_get_contents(VERSION_URL);
+                if (!empty($versionFile)) {
+                    $version = explode("\n", $versionFile);
                     if ($version[0] > VER) {
                         echo N.' New version available!'.N;
-                        echo N.' My version: '.VER;
+                        echo N.' Version installed: '.VER;
                         echo N.' Version on server: '.$version[0].N;
-                        echo N.' To update BOT msg to bot by typing: !update'.NN;
-                        WinSleep(10);
+                        echo N.' Link:'.N;
+                        echo N.' https://github.com/S3x0r/MINION/releases/tag/'.$version[0].NN;
                         exit;
                     } else {
-                             echo N.' I am checking if there is a newer version of MINION Bot...'.N;
                              echo N.' No new update, you have the latest version.'.NN;
-                             WinSleep(4);
                              exit;
                     }
                 } else {
-                         echo N.' Cannot connect to update server, try next time.'.NN;
-                         WinSleep(4);
+                         cliError('Cannot connect to update server, try next time.');
                          exit;
                 }
             } else {
-                     echo N.' I cannot check for update. I need php_openssl extension to work!'.NN;
-                     WinSleep(4);
+                     cliError('I cannot check for update. I need php_openssl extension to work!');
                      exit;
             }
     }

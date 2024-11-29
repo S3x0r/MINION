@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -20,21 +20,20 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
- /* check if the bot was launched from the attached php */
+ /* checks if the bot was started from the PHP provided by the program */
  dirname($_SERVER['PHP_SELF']) == '../..' ? chdir('../../') : false;
 
  /* simple os check */
- /* PHP 7.2.0 we have PHP_OS_FAMILY */
  function ifWindowsOs()
  {
-     if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
+     if (PHP_OS == 'WINNT') {
          return true;
      } else {
               return false;
      }
  }
 
- /* hide prompt */
+ /* hide cli prompt */
  echo "\e[?25l";
 
  /* needed files */
@@ -43,39 +42,40 @@
                   'cli.php',
                   'misc.php',
                   'config.php',
+                  'start.php',
                   'core_cmnds.php',
                   'core_cmnds_helpers.php',
-                  'events.php',
+                  'bot_events.php',
+                  'user_events.php',
                   'logs.php',
                   'plugins.php',
                   'socket.php',
-                  'on_numeric.php',
-                  'on_word.php',
+                  'numeric_events.php',
+                  'word_events.php',
                   'timers.php',
-                  'ctcp.php',
-                  'start.php'
+                  'ctcp.php'
                  ];
 
- /* check if we got all files */
+ /* checks if we have all the files */
  foreach ($botCoreFiles as $botCoreFile) {
      if (is_file("src/{$botCoreFile}")) {
-         require_once("src/{$botCoreFile}");
+         include("src/{$botCoreFile}");
      } else {
               echo "\n";
               echo "  I need a file '{$botCoreFile}' to work!\n\n",
                    "  You can download missing files from:\n",
                    "  https://github.com/S3x0r/MINION/releases\n\n",
-                   "  Terminating program after 10 seconds.\n\n";
+                   "  Terminating BOT after 10 seconds.\n\n";
               (ifWindowsOs()) ? sleep(10) : false;
               exit;
      }
  }
 
-    /* if we cannot write */
-    if (!is_writable('BOT.php')) {
-        echo "\n Bot has no permissions to save files, Check your permissions! Exiting.";
-        WinSleep(7);
-        exit;
-    } else {
-             StartBot();
-    }
+/* if we cannot write */
+if (!is_writable('BOT.php')) {
+    echo N.' Bot has no permissions to save files, Check your permissions! Exiting.';
+    winSleep(7);
+    exit;
+} else {
+         startBot();
+}

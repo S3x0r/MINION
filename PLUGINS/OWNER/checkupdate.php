@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,24 +21,24 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Checking for updates: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."checkupdate";
+    $plugin_description = 'Checking for updates: '.commandPrefix().'checkupdate';
     $plugin_command     = 'checkupdate';
 //------------------------------------------------------------------------------------------------
 function plugin_checkupdate()
 {
     if (extension_loaded('openssl')) {
-        $CheckVersion = file_get_contents(VERSION_URL);
+        $versionData = file_get_contents(VERSION_URL);
 
-        if (!empty($CheckVersion)) {
-                $version = explode("\n", $CheckVersion);
+        if (!empty($versionData)) {
+            $version = explode("\n", $versionData);
 
-                if ($version[0] > VER) {
-                    response('New version available!');
-                    response("My version: ".VER.", version on server: {$version[0]} ");
-                    response("To update BOT, use ".loadValueFromConfigFile('COMMAND', 'command.prefix')."update");
-                } else {
-                          response('No new update, you have the latest version.');
-                }
+            if ($version[0] > VER) {
+                response('New version available!');
+                response('My version: '.VER.', version on server: '.$version[0]);
+                response('To update BOT, use '.commandPrefix().'update');
+            } else {
+                     response('No new update, you have the latest version.');
+            }
         } else {
                  response('Cannot connect to update server, try next time.');
         }

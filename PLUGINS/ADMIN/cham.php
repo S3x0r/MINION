@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,14 +21,11 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Shows random text from file: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."cham <nick>";
+    $plugin_description = 'Shows random text from file: '.commandPrefix().'cham <nick>';
     $plugin_command     = 'cham';
 
 /*
     For use this plugin you must add file to $file var in main bot directory
-    TODO:
-    - simplify
-
 */
 
 function plugin_cham()
@@ -45,7 +42,7 @@ function plugin_cham()
 
                 shuffle($texts);
                 $text = $texts[$count++];
-                $who = trim(msgAsArguments());
+                $who = trim(commandFromUser());
 
                 response("{$who}: {$text}");
             } else {

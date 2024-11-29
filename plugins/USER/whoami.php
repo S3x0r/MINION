@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Displays user assigned name and privilege level ".loadValueFromConfigFile('COMMAND', 'command.prefix')."whoami";
+    $plugin_description = 'Displays user assigned name and privilege level '.commandPrefix().'whoami';
     $plugin_command     = 'whoami';
 
 function plugin_whoami()
@@ -34,5 +34,5 @@ function plugin_whoami()
              $resp = '(Custom level)';
     }
 
-    response("You're: ".whoIsUser()[0]. ', lvl: '.whoIsUser()[1].' '.$resp);
+    response('You\'re: '.whoIsUser()[0]. ', lvl: '.whoIsUser()[1].' '.$resp);
 }

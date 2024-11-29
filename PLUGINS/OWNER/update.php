@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Updates the BOT if new version is available: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."update";
+    $plugin_description = 'Updates the BOT if new version is available: '.commandPrefix().'update';
     $plugin_command     = 'update';
 
 //------------------------------------------------------------------------------------------------
@@ -45,7 +45,7 @@ function v_connect()
         v_checkVersion();
     } else {
               response('Cannot connect to update server, try next time.');
-              cliLog('[bot] Cannot connect to update server');
+              cliBot('Cannot connect to update server');
     }
 }
 //------------------------------------------------------------------------------------------------
@@ -57,12 +57,12 @@ function v_checkVersion()
     if ($version[0] > VER) {
         response('My version: '.VER.', version on server: '.$version[0].'');
 
-        cliLog('[bot] New bot update on server: '.$version[0]);
+        cliBot('New bot update on server: '.$version[0]);
         
         v_tryDownload();
     } else {
               response('No new update, you have the latest version.');
-              cliLog('[bot] There is no new update');
+              cliBot('There is no new update');
     }
 }
 //------------------------------------------------------------------------------------------------
@@ -70,7 +70,7 @@ function v_tryDownload()
 {
     response('Downloading update...');
 
-    cliLog('[bot] Downloading update...');
+    cliBot('Downloading update...');
 
     $newUpdate = file_get_contents($GLOBALS['v_source']);
     $dlHandler = fopen('update.zip', 'w');
@@ -78,12 +78,12 @@ function v_tryDownload()
     if (!fwrite($dlHandler, $newUpdate)) {
         response('Could not save new update, operation aborted');
 
-        cliLog('[bot] Could not save new update, operation aborted');
+        cliBot('Could not save new update, operation aborted');
     }
 
     fclose($dlHandler);
     response('Update Downloaded');
-    cliLog('[bot] Update Downloaded');
+    cliBot('Update Downloaded');
     
     v_extract();
 }
@@ -121,7 +121,7 @@ function delete_files($target)
 function v_extract()
 {
     response('Extracting update');
-    cliLog('[bot] Extracting update');
+    cliBot('Extracting update');
 
     $zip = new ZipArchive;
     if ($zip->open('update.zip') === true) {
@@ -129,7 +129,7 @@ function v_extract()
         $zip->close();
   
         response('Extracted.');
-        cliLog('[bot] Extracted.');
+        cliBot('Extracted.');
 
         unlink('MINION-master/.gitattributes');
 
@@ -140,7 +140,7 @@ function v_extract()
         delete_files('MINION-master/');
 
         // copy CONFIG from older version
-        copy(getConfigFileName(), $GLOBALS['newdir'].'/OLD_CONFIG.INI');
+        copy(getConfigFileName(), $GLOBALS['newdir'].'/OLD_CONFIG.json');
 
         // copy DATA folder
         recurse_copy(DATADIR, $GLOBALS['newdir'].'/'.DATADIR);
@@ -149,24 +149,24 @@ function v_extract()
         recurse_copy(LOGSDIR, $GLOBALS['newdir'].'/'.LOGSDIR);
 
         if (BotOpped() == true) {
-            toServer("MODE ".getBotChannel()." +o ".userPreg()[0]);
+            toServer("MODE ".getBotChannel()." +o ".userNickname());
         }
 
         // reconnect to run new version
         toServer("QUIT :Installing update...");
-        cliLog('[bot] Restarting bot to new version...');
+        cliBot('Restarting bot to new version...');
    
         // if windows
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             system('cd '.$GLOBALS['newdir'].' & START_BOT.BAT');
         } else {
                   system('cd '.$GLOBALS['newdir'].' & php -f '.$GLOBALS['newdir'].'/BOT.php '
-                  .$GLOBALS['newdir'].'/CONFIG.INI');
+                  .$GLOBALS['newdir'].'/CONFIG.json');
         }
         exit;
     } else {
               response('Failed to extract, aborting.');
-              cliLog('[bot] Failed to extract update, aborting!');
+              cliBot('Failed to extract update, aborting!');
     }
 
     */

@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -22,36 +22,28 @@
 
 function SeenSave()
 {
-    !is_dir(DATADIR.'/'.SEENDIR) ? @mkdir(DATADIR.'/'.SEENDIR) : false;
+    cliDebug('SeenSave()');
     
-    $seenDataFull = DATADIR.'/'.SEENDIR.'/';
-
     substr(getBotChannel(), 0, 1) != '#' ? $chan = loadValueFromConfigFile('CHANNEL', 'channel') : $chan = getBotChannel();
 
-    $data = "Last seen user: ".userPreg()[0]." (".userPreg()[3].") On channel: {$chan}, Date: ".date("d.m.Y").", Time: ".date("H:i:s");
+    $data = 'Last seen user: '.print_userNick_IdentHost().' On channel: '.$chan.', Date: '.date("d.m.Y").', Time: '.date("H:i:s");
 
     /* illegal chars for file */
-    userPreg()[0] = removeIllegalCharsFromNickname(userPreg()[0]);
+    $seenDataFullDir = DATADIR.'/'.SEENDIR.'/';
+    
+    $userNickname = removeIllegalCharsFromNickname(userNickname());
 
-    is_file($seenDataFull.userPreg()[0]) ?
-        @file_put_contents($seenDataFull.userPreg()[0], $data) : @file_put_contents($seenDataFull.userPreg()[0], $data);
+    is_file($seenDataFullDir.$userNickname) ?
+        @file_put_contents($seenDataFullDir.$userNickname, $data) : @file_put_contents($seenDataFullDir.$userNickname, $data);
 }
 //---------------------------------------------------------------------------------------------------------
-function setPause()
+function removeIllegalCharsFromNickname($nickname)
 {
-    $GLOBALS['pause'] = true;
-}
-//---------------------------------------------------------------------------------------------------------
-function unsetPause()
-{
-    unset($GLOBALS['pause']);
-}
-//---------------------------------------------------------------------------------------------------------
-function getPause()
-{
-    if (isset($GLOBALS['pause'])) {
-        return true;
-    } else {
-             return false;
-    }
+    cliDebug('removeIllegalCharsFromNickname()');
+    
+    /* illegal chars for file */
+    $bad  = [chr(0x5c), '/', ':', '*', '?', '"', '<', '>', '|'];
+    $good = ["@[1]", "@[2]", "@[3]", "@[4]", "@[5]", "@[6]", "@[7]", "@[8]", "@[9]"];
+    
+    return str_replace($bad, $good, $nickname);
 }

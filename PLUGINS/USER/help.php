@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Shows BOT commands: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."help";
+    $plugin_description = 'Shows BOT commands: '.commandPrefix().'help';
     $plugin_command     = 'help';
 
 /* TODO:
@@ -30,24 +30,14 @@
 
 function plugin_help()
 {
-    $prefix = loadValueFromConfigFile('COMMAND', 'command.prefix');
-
+    $prefix = commandPrefix();
     $who = whoIsUser();
 
     /* owner */
     if ($who[1] == 0) {
-        $plugs = null;
+        response('Core Plugins: '.allPluginsString());
+        response('All Plugins: '.allPluginsWithoutCoreString());
 
-        foreach (CORECOMMANDSLIST as $coreCommand => $coreCmdInfo) {
-            $plugs .= $prefix.$coreCommand.' ';
-        }
-
-        response('Core Plugins: '.$plugs);
-
-        $allPlugins = implode(' ', $GLOBALS['ALL_PLUGINS']);
-        $allPlugins = str_replace(' ', " $prefix", $allPlugins);
-
-        response($prefix.$allPlugins);
     /* user */
     } else if ($who[1] == 999) {
                $userPlugins = implode(' ', $GLOBALS[getStandardUserName().'_PLUGINS']);
@@ -55,7 +45,7 @@ function plugin_help()
                
                response($who[0].' Plugins: '.$prefix.'seen '.$prefix.$userPlugins);
                
-               !empty(loadValueFromConfigFile('OWNER', 'bot.admin')) ? response("Bot Admin: ".loadValueFromConfigFile('OWNER', 'bot.admin')) : false;
+               !empty(loadValueFromConfigFile('OWNER', 'bot admin')) ? response("Bot Admin: ".loadValueFromConfigFile('OWNER', 'bot admin')) : false;
     
     /* all else */
     } else {
@@ -70,7 +60,6 @@ function plugin_help()
                       $ownPlugins = '';
              }
 
-
              if (!empty(returnNextUsersCommands($who[1]))) {
                  $msg = implode(' ', returnNextUsersCommands($who[1]));
                  $msg = str_replace(' ', " $prefix", $msg);
@@ -84,6 +73,6 @@ function plugin_help()
                                            $msg.
                                            $prefix.$userPlugins);
  
-             !empty(loadValueFromConfigFile('OWNER', 'bot.admin')) ? response("Bot Admin: ".loadValueFromConfigFile('OWNER', 'bot.admin')) : false;
+             !empty(loadValueFromConfigFile('OWNER', 'bot admin')) ? response("Bot Admin: ".loadValueFromConfigFile('OWNER', 'bot admin')) : false;
     }
 }

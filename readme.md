@@ -1,13 +1,7 @@
 ### Easy to use IRC BOT in PHP language, ready to use from first start
 
-<dl>
-<pre>
-    Author: S3x0r
-</pre>
-</dl>
-
 ### Important!
-Before running the Bot, it must be configured in the file 'CONFIG.INI'
+Before running the Bot, it must be configured in the file 'config.json'
 To become a Bot owner and have access to all commands
 You have to write to Bot in a private message:
 /msg <bot_nickname> register <password_from_config>
@@ -91,24 +85,19 @@ You can change prefix in config file.
 |                  | Delete specified note                     | !note del <numer>                 |  ALL         | All |
 |                  | Shows help                                | !note help                        |  ALL         | All |
 |                  | Lists notes                               | !note list                        |  ALL         | All |
-|    newnick       | Changes BOT nickname                      | !newnick <newnick>                |  OWNER       | All |
 |    op            | BOT gives op to given nick                | !op <nick>                        |  OWNER/ADMIN | All |
-|    pause         | Pause BOT activity (plugins use, etc)     | !pause                            |  OWNER       | All |
 |    ping          | Ping given host/ip                        | !ping <host/ip>                   |  OWNER/ADMIN | WIN |
 |    quit          | Shutdown BOT                              | !quit                             |  OWNER       | All |
-|    raw           | Sends raw string to server                | !raw <string> <2> <3> <4>         |  OWNER       | All |
 |    remowner      | Removes owner host from config file       | !remowner <nick!ident@host>       |  OWNER       | All |
 |    restart       | Restarts BOT                              | !restart                          |  OWNER       | All |
 |    ripe          | Checks ip address and show results        | !ripe <ip address>                |  OWNER/ADMIN | All |
 |    say           | Say specified text to channel             | !say <text>                       |  OWNER/ADMIN | All |
 |    seen          | Check nick when was last seen on channel  | !seen <nickname>                  |  ALL         | All |
-|    server        | Connects to specified server              | !server <server port>             |  OWNER       | All |
 |    topic         | Changes topic on channel                  | !topic <string>                   |  OWNER/ADMIN | All |
 |    unload        | Unloads plugin from BOT                   | !unload <plugin>                  |  OWNER       | All |
 |    update        | Updates BOT if new version is available   | !update                           |  OWNER       | All |
 |    uptime        | Shows BOT uptime                          | !uptime                           |  OWNER/ADMIN | All |
 |    unban         | Unban specified user/hostmask             | !unban <nick!ident@host>          |  OWNER/ADMIN | All |
-|    unpause       | Restore BOT from !pause mode              | !unpause                          |  OWNER       | All |
 |    voice         | BOT gives voice                           | !voice <nick>                     |  OWNER/ADMIN | All |
 |    webstatus     | Shows http status info from given number  | !webstatus <code>                 |  ALL         | All |
 |    webtitle      | Shows webpage titile                      | !webtitle <web address>           |  ALL         | All |

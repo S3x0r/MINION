@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -19,7 +19,7 @@
   exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '1.1.7');
+    define('VER', '1.1.8');
 //---------------------------------------------------------------------------------------------------------
     error_reporting(-1);
     
@@ -34,7 +34,7 @@
     define('PLUGINSDIR', 'plugins');
 
     /* config filename */
-    define('CONFIGFILE', 'CONFIG.INI');
+    define('CONFIGFILE', 'config.json');
 
     define('START_TIME', time());
     define('PHP_VER', phpversion());
@@ -42,12 +42,12 @@
     define('DEFAULT_PWD', '47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed');
     
     /* core commands count */
-    define('CORECOMMANDSLIST', ['load'    => 'Loads specified plugins to BOT: !load <plugin>',
-                                'pause'   => 'Pause all BOT activity: !pause',
-                                'seen'    => 'Check specified user when was last seen on channel: !seen <nickname>',
-                                'unload'  => 'Unloads specified plugin from BOT: !unload <plugin>',
-                                'unpause' => 'Restore BOT from pause mode: !unpause']);
-    define('CORECOUNT', '5');
+    define('CORECOMMANDSLIST', ['load'    => 'Loads specified plugins to BOT: load <plugin>',
+                                'seen'    => 'Check specified user when was last seen on channel: seen <nickname>',
+                                'unload'  => 'Unloads specified plugin from BOT: unload <plugin>']);
+    define('CORECOUNT', '3');
     
+    define('WORD', ['JOIN', 'PART', 'KICK', 'TOPIC', 'PRIVMSG', 'NICK', 'QUIT', 'MODE', 'NOTICE', 'INVITE', 'KILL']);
+
     /* check version url */
     define('VERSION_URL', 'https://raw.githubusercontent.com/S3x0r/version-for-BOT/master/VERSION.TXT');

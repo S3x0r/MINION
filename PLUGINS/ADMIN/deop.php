@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,13 +21,13 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Deops someone: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."deop <nick>";
+    $plugin_description = 'Deops someone: '.commandPrefix().'deop <nick>';
     $plugin_command     = 'deop';
 
 function plugin_deop()
 {
     if (OnEmptyArg('deop <nick>')) {
-    } elseif (BotOpped() == true && msgAsArguments() != getBotNickname() && msgAsArguments() != userPreg()[0]) {
-              toServer("MODE ".getBotChannel()." -o ".msgAsArguments());
+    } elseif (BotOpped() && commandFromUser() != getBotNickname() && commandFromUser() != userNickname()) {
+              toServer('MODE '.getBotChannel().' -o '.commandFromUser());
     }
 }

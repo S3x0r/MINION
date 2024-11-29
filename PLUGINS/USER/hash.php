@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,21 +21,19 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Changing string to choosed algorithm: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."hash help to list algorithms";
     $plugin_command     = 'hash';
+    $plugin_arguments   = '<help>';
+    $plugin_description = 'Changing string to choosed algorithm: '.commandPrefix().$plugin_command.' '.$plugin_arguments.' to list algorithms';
 
-/*
-TODO: if server message limit -cut and send in parts
-*/
 
 function plugin_hash()
 {
     if (OnEmptyArg('hash help to get algorithms list')) {
-    } elseif (msgAsArguments() == 'help') {
-              response("Usage: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."hash <algorithm> <string>");
+    } elseif (commandFromUser() == 'help') {
+              response('Usage: '.commandPrefix().'hash <algorithm> <string>');
               response('Algos: '.implode(' ', hash_algos()));
     } elseif (in_array(msgPieces()[0], hash_algos())) {
-              response(msgPieces()[0].": ".hash(msgPieces()[0], inputFromLine(5)));
+              response(msgPieces()[0].': '.hash(msgPieces()[0], inputFromLine(5)));
     } else {
               response('Unknown hashing algorithm.');
     }

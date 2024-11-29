@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -22,14 +22,25 @@
 
 function logFileNameFormat()
 {
-    !empty($_SERVER['COMPUTERNAME']) ? $data = $_SERVER['COMPUTERNAME'] : $data = gethostname();
+    $data = loadValueFromConfigFile('CHANNEL', 'channel').'.'.loadValueFromConfigFile('SERVER', 'server');
 
-    return LOGSDIR."/".date('Y.m.d')."-".$data.".txt";
+    return LOGSDIR."/{$data}.txt";
 }
 //---------------------------------------------------------------------------------------------------------
-function LogsInit()
+function logsInit()
 {
-    $data = "-------------------------LOG CREATED: ".date('d.m.Y | H:i:s')."-------------------------\r\n";
+    $data = '-------------------------Session Start: '.date('d.m.Y | H:i:s').'-------------------------'.N;
 
-    SaveToFile(logFileNameFormat(), $data, 'a');
+    saveToFile(logFileNameFormat(), $data, 'a');
+}
+//---------------------------------------------------------------------------------------------------------
+function cliLog($data) /* log message +time */
+{
+    $line = "[".@date('H:i:s')."] {$data}".N;
+
+    if (loadValueFromConfigFile('LOGS', 'logging') == true) {
+        saveToFile(logFileNameFormat(), $line, 'a');
+    }
+
+    echo $line;
 }

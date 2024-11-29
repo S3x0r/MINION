@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,13 +21,13 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Uban specified host: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."unban <nick!ident@host>";
+    $plugin_description = 'Uban specified host: '.commandPrefix().'unban <nick!ident@host>';
     $plugin_command     = 'unban';
 
 function plugin_unban()
 {
     if (OnEmptyArg('unban <nick!ident@host>')) {
-    } else if (BotOpped() == true) {
-               toServer("MODE ".getBotChannel()." -b ".msgAsArguments());
+    } else if (BotOpped()) {
+               toServer('MODE '.getBotChannel().' -b '.commandFromUser());
     }
 }

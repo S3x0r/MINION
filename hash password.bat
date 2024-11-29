@@ -1,5 +1,5 @@
 @echo off
-title MINION - HASH PASSWORD
+title MINION BOT - HASH PASSWORD
 cd src
 cd PHP
 php -c "php.ini" ../../BOT.php -p

@@ -1,5 +1,5 @@
 @echo off
-title MINION
+title MINION BOT
 cd src
-cd PHP
+cd php
 php.exe -c "php.ini" -f "../../BOT.php"

@@ -1,9 +1,39 @@
 
+   v1.1.8 changes (29.11.2024):
+   - config changed from ini to json format (config.ini => config.json)
+   - deleted 'update check.bat' since we now checking it after start time
+   - added config section MESSAGE and new options:
+                          show channel user messages
+                          show private messages
+                          show users join channel
+                          show users part channel
+                          show users quit messages
+                          show topic changes
+                          show nick changes
+                          show channel kicks messages
+			  show plugin usage info
+			  show users notice messages
+			  show users invite messages
+   - added "keep topic" (CHANNEL) in config
+     bot can now protect topic if changed
+   - added "channel topic" (CHANNEL) in config
+     bot can now set topic if got @
+   - removed plugins: pause, unpause, newnick, raw, server
+   - log filename format changed <#channelname.servername.txt>
+   - added time in raw messages
+   - added reason in kick messages
+   - fixed rejoining channel if key is set
+   - fixed notice messages from user(s)
+   - fixed ctcp messages
+   - new sounds
+   - some bot messages have been changed
+   - code cleanup
+
    v1.1.7 changes (17.01.2023):
-   - From now on, you can create 1-998 permissions + normaln user (999) and 'owner' (0)
+   - from now on, you can create 1-998 permissions + 'normal user' (999) and 'owner' (0)
    - The entitlement structure changed, As of now The owner directory can have any name
      but it is important that it must be in configuration file ([USERSLEVELS]) 0
-     also name must be added in PRIVILEGES.
+     also name must be added in config ([PRIVILEGES]).
      A normal user has userlevel 999 and can only see own commands
      user levels from (1) to (998) may be assigned other privileges
      The -lower- number has access to all -higher- level commands
@@ -21,7 +51,7 @@
    - bot prints channel user(s) on bot join
    - added files 'core_cmnds_helpers.php', 'on_numeric.php', 'on_word.php' and changed 'core_commands' to 'core_cmnds'
    - REMOVED PLUGINS: 'showconfig', 'save', 'addadmin', 'listadmins', 'remadmin', 'panel', 'plugin'
-     plugins will return in future.
+     (plugins will return in future)
    - disabled for now 'fetch' plugin
    - removed files: 'debug.php', 'web.php'
    - code cleanup

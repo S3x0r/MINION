@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,58 +21,52 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Add owner host to config: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."addowner <nick!ident@hostname>";
+    $plugin_description = 'Add owner host to config: '.commandPrefix().'addowner <nick!ident@hostname>';
     $plugin_command     = 'addowner';
 
 function plugin_addowner()
 {
-    $nick_ex = explode('!', trim(msgAsArguments()));
+    $newOwnerNick = explode('!', trim(commandFromUser()));
+    $newOwnerNick = $newOwnerNick[0];
 
     if (OnEmptyArg('addowner <nick!ident@hostname>')) {
-    } elseif ($nick_ex[0] != getBotNickname()) {
-        if (preg_match('/^(.+?)!(.+?)@(.+?)$/', msgAsArguments())) {
-            $botOwners = loadValueFromConfigFile('PRIVILEGES', getOwnerUserName());
+    } elseif ($newOwnerNick != getBotNickname() && $newOwnerNick != userNickname()) {
+        if (preg_match('/^(.+?)!(.+?)@(.+?)$/', commandFromUser())) {
+            $botOwnersConfig = loadValueFromConfigFile('PRIVILEGES', getOwnerUserName());
 
-            if (strpos($botOwners, msgAsArguments()) !== false) {
+            if (strpos($botOwnersConfig, commandFromUser()) !== false) {
                 response('I already have this host.');
             } else {
                 /* add user to owner's host's */
-                empty($botOwners) ? $new_list = msgAsArguments() : $new_list = "{$botOwners}, ".msgAsArguments();
+                empty($botOwnersConfig) ? $newList = commandFromUser() : $newList = $botOwnersConfig.', '.commandFromUser();
 
-                SaveValueToConfigFile('PRIVILEGES', getOwnerUserName(), $new_list);
+                saveValueToConfigFile('PRIVILEGES', getOwnerUserName(), $newList);
 
                 /* add user to auto op list */
-                $autoOpList = loadValueFromConfigFile('AUTOMATIC', 'auto.op.list');
+                $autoOpList = loadValueFromConfigFile('AUTOMATIC', 'auto op list');
 
-                if (strpos($autoOpList, msgAsArguments()) === false) {
-                    empty($autoOpList) ? $newAutoOpList = msgAsArguments() : $newAutoOpList = $autoOpList.', '.msgAsArguments();
+                if (strpos($autoOpList, commandFromUser()) === false) {
+                    empty($autoOpList) ? $newAutoOpList = commandFromUser() : $newAutoOpList = $autoOpList.', '.commandFromUser();
 
-                    SaveValueToConfigFile('AUTOMATIC', 'auto.op.list', $newAutoOpList);
+                    saveValueToConfigFile('AUTOMATIC', 'auto op list', $newAutoOpList);
                 }
 
                 /* inform user about it */
-                privateMsgTo($nick_ex[0], "From now you are on my owner(s)/auto op(s) lists, enjoy.");
+                privateMsgTo($newOwnerNick, 'From now you are on my owner(s)/auto op(s) lists, enjoy.');
+                privateMsgTo($newOwnerNick, 'Core Plugins: '.allPluginsString());
+                privateMsgTo($newOwnerNick, 'All Plugins: '.allPluginsWithoutCoreString());
 
-                $prefix = loadValueFromConfigFile('COMMAND', 'command.prefix');
-                $plugs = null;
-            
-                foreach (CORECOMMANDSLIST as $coreCommand => $coreCmdInfo) {
-                    $plugs .= $prefix.$coreCommand.' ';
+                /* give op */
+                if (BotOpped()) {
+                    bot_op_user($newOwnerNick);
                 }
-            
-                privateMsgTo($nick_ex[0], "Core Plugins: ".$plugs);
-            
-                $allPlugins = implode(' ', $GLOBALS['ALL_PLUGINS']);
-                $allPlugins = str_replace(' ', " $prefix", $allPlugins);
-            
-                privateMsgTo($nick_ex[0], $prefix.$allPlugins);
 
-                response("Host: '".msgAsArguments()."' added to owner list.");
+                response("Host: '".commandFromUser()."' added to owner(s) list.");
             }
         } else {
                  response('Bad input, try: nick!ident@hostname');
         }
     } else {
-             response('I cannot add myself to owners, iam already master.');
+             response('nope.');
     }
 }

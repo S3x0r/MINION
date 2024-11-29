@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2013-2020, S3x0r <olisek@gmail.com>
+/* Copyright (c) 2013-2024, minions
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------------
 
     $VERIFY             = 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c';
-    $plugin_description = "Shows BOT owners: ".loadValueFromConfigFile('COMMAND', 'command.prefix')."listowners";
+    $plugin_description = 'Shows BOT owners: '.commandPrefix().'listowners';
     $plugin_command     = 'listowners';
 
 function plugin_listowners()
@@ -33,7 +33,7 @@ function plugin_listowners()
     } else {
              $owners = explode(", ", $ownersList);
  
-             response('My Owner(s) Host(s):');
+             response('My Owner(s) List:');
 
         for ($i=0; $i<count($owners); $i++) {
              response($owners[$i]);
