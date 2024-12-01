@@ -2,7 +2,8 @@
   "BOT": {
            "nickname" : "minion",
            "name"     : "http://github.com/S3x0r/MINION",
-           "ident"    : "minion"
+           "ident"    : "minion",
+           "bot modes": ""
          },
   "SERVER": {
               "server"                           : "localhost",
@@ -14,7 +15,9 @@
             },
   "OWNER": {
              "bot admin"      : "minion <user@localhost>",
-             "owner password" : "47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed"
+             "owner password" : "47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed",
+             "owner message on join channel": true,
+             "owner message": "Bello my master!"
            },
   "PRIVILEGES": {
                   "OWNER" : "",
@@ -42,8 +45,12 @@
                  "channel modes" : "nt",
                  "channel key"   : "",
                  "channel topic" : "bello!",
-                 "keep topic"    : true
+                 "keep topic"    : true,
+                 "give voice users on join channel": false
              },
+  "COMMANDS": {
+                 "raw commands on start": ""
+    },
   "MESSAGE": {
         "show channel user messages": false,
         "show channel kicks messages": true,
@@ -65,7 +72,7 @@
              },
   "CTCP": {
             "ctcp response" : true,
-            "ctcp version"  : "minion (1.1.8) powered by minions!",
+            "ctcp version"  : "minion (1.1.9) powered by minions!",
             "ctcp finger"   : "minion"
           },
   "DELAYS": {

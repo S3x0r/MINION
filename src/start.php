@@ -39,6 +39,13 @@ function startBot()
     /* if no config -> create default one */
     checkIfConfigExists();
  
+    /* egg */
+    $date = date('dm');
+
+	if ($date == '0112' or $date == '2412') {
+	    playSound('egg.mp3');
+	}
+
     /* set timezone from config file */
     setTimezone();
  
@@ -65,6 +72,9 @@ function startBot()
     loadPlugins();
    
     cliBot('Connecting to: '.loadValueFromConfigFile('SERVER', 'server').', port: '.loadValueFromConfigFile('SERVER', 'port').N);
-   
+
+    /* ctrl+c ctrl+break handler */
+    sapi_windows_set_ctrl_handler('ctrl_handler');
+
     connect();
 }

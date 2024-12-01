@@ -24,8 +24,10 @@ function loadPlugins()
 {
     $GLOBALS['ALL_PLUGINS'] = null;
 
+    $countedCoreCmnds = count(CORECOMMANDSLIST);
+
     /* CORE PLUGINS */
-    cli('>>> \'Core\' Plugins ('.CORECOUNT.' Plugins) [lvl: 0] <<<');
+    cli('>>> \'Core\' Plugins ('.$countedCoreCmnds.' Plugins) [lvl: 0] <<<');
 
     cliLine();
 
@@ -37,24 +39,26 @@ function loadPlugins()
 
     $pluginsSum = null;
 
-    foreach (usersDirectoriesToArray() as $userDirectory) {
-       $pluginsSum = $pluginsSum + countPlugins($userDirectory);
-       
-       $userLvl = getUserLevelByUserName($userDirectory);
-       
-       cli('>>> \''.$userDirectory.'\' Plugins ('.countPlugins($userDirectory).' Plugins) [lvl: '.$userLvl.'] <<<');
-       
-       cliLine();
-       
-       /* add to $GLOBALS[$user.'_PLUGINS'] & include plugin */
-       loadPluginsFromEachGroupDir($userDirectory);
-       
-       cliLine();
+    if (is_dir(PLUGINSDIR)) {
+        foreach (usersDirectoriesToArray() as $userDirectory) {
+           $pluginsSum = $pluginsSum + countPlugins($userDirectory);
+           
+           $userLvl = getUserLevelByUserName($userDirectory);
+           
+           cli('>>> \''.$userDirectory.'\' Plugins ('.countPlugins($userDirectory).' Plugins) [lvl: '.$userLvl.'] <<<');
+           
+           cliLine();
+           
+           /* add to $GLOBALS[$user.'_PLUGINS'] & include plugin */
+           loadPluginsFromEachGroupDir($userDirectory);
+           
+           cliLine();
+        }
     }
 
-    $pluginsSum = $pluginsSum + CORECOUNT;
+    $pluginsSum = $pluginsSum + $countedCoreCmnds;
 
-    cli('----------------------------------------------------------Total: ('.$pluginsSum.')---------');
+    cli('--------------------------------------------------Total Plugins: ('.$pluginsSum.')---------');
 }
 //---------------------------------------------------------------------------------------------------------
 function countPlugins($user)

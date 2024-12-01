@@ -1,4 +1,13 @@
 
+   v1.1.9 changes (01.12.2024):
+   - added in config "owner message on join channel", if set to true and "owner message" is provided.
+     This message will be shown if owner joins channel
+   - added in config "give voice users on join channel", if bot got @ will give +v to everyone who joined channel
+   - added in config "bot modes", you can set bot own mode eg. -i, +ix etc...
+   - added in config "raw commands on start", you can set own raw commands eg. "JOIN #test1;JOIN #test2"
+     (separated by ';')
+   - added ctrl+c, ctrl+break handler
+
    v1.1.8 changes (29.11.2024):
    - config changed from ini to json format (config.ini => config.json)
    - deleted 'update check.bat' since we now checking it after start time

@@ -31,13 +31,18 @@ function connect()
 //---------------------------------------------------------------------------------------------------------
 function tryToConnect()
 {
+    global $socket;
+
     $i = 0;
 
     while ($i++ <= loadValueFromConfigFile('SERVER', 'how many times connect to server')) {
-           $GLOBALS['socket'] = @fsockopen(loadValueFromConfigFile('SERVER', 'server'),
+           $socket = @fsockopen(loadValueFromConfigFile('SERVER', 'server'),
                                            loadValueFromConfigFile('SERVER', 'port'),
                                            $GLOBALS['errno'], $GLOBALS['errstr']);
-        if ($GLOBALS['socket'] == false) {
+
+           @stream_set_blocking($socket, false);
+
+        if ($socket == false) {
             cliBot('Cannot connect to: '.loadValueFromConfigFile('SERVER', 'server').
                                      ':'.loadValueFromConfigFile('SERVER', 'port').
                ', trying again ('.$i.'/'.loadValueFromConfigFile('SERVER', 'how many times connect to server').
@@ -75,6 +80,7 @@ function identify()
 //---------------------------------------------------------------------------------------------------------
 function socketLoop()
 {
+    global $socket;
     global $rawData;
     global $rawcmd;
     global $BOT_NICKNAME;
@@ -85,13 +91,13 @@ function socketLoop()
 //---------------------------------------------------------------------------------------------------------
     /* main socket loop */
     while (1) {
-        while (!feof($GLOBALS['socket'])) {
+        while (!feof($socket)) {
 
             /* start timers */
             StartTimers();
 
             /* get raw data */
-            $rawData = fgets($GLOBALS['socket'], 1024);
+            $rawData = fgets($socket, 1024);
 
             /* if raw mode send debug data to cli */
             cliRaw($rawData, 0);
@@ -122,16 +128,15 @@ function socketLoop()
             if (isset(rawDataArray()[1]) && is_numeric(rawDataArray()[1])) {
                 handleNumericResponse(rawDataArray()[1]);
             }
-//---------------------------------------------------------------------------------------------------------
+
+            /* ctcp */
             if (loadValueFromConfigFile('CTCP', 'ctcp response') == true && isset($rawcmd[1][0]) && $rawcmd[1][0] == '') {
                 handleCTCP();
             }
 
-            /* Command: 'register' -> register to bot from user */
-            if (isset($rawcmd[1]) && $rawcmd[1] == 'register' && rawDataArray()[2] == getBotNickname()) {
-                plugin_register();
-            }
-    
+            /* if register command */
+            bot_register_command($rawcmd);
+
             /* 1. if first char == command prefix (eg. !) */
             if (isset($rawcmd[1][0]) && $rawcmd[1][0] == commandPrefix()) {
                 ifPrivilegesExecuteCommand();
@@ -140,43 +145,9 @@ function socketLoop()
                     function plugin_() { }
                 }
            }
-
-           if (preg_match("~\bYou are not authorized to connect to this server\b~", $rawData)) {
-               cliBot('Cannot connect to: '.loadValueFromConfigFile('SERVER', 'server').':'.loadValueFromConfigFile('SERVER', 'port').' - Server requires password to connect! Exiting.');
-
-               winSleep(10);
-               exit;
-           }
-//---------------------------------------------------------------------------------------------------------
         }
         /* if disconected */
-        if (empty($GLOBALS['disconnected'])) {
-            cliRaw($rawData, 0);
-
-            if (preg_match("~\bToo many connections from your IP\b~", $rawData)) {
-                cliBot('Cannot connect to: '.loadValueFromConfigFile('SERVER', 'server').':'.loadValueFromConfigFile('SERVER', 'port').', too many connections! Exiting.');
-
-                winSleep(10);
-                exit;
-            }
-
-            if (preg_match("~\bSession limit exceeded\b~", $rawData)) {
-                cliBot('Cannot connect to: '.loadValueFromConfigFile('SERVER', 'server').':'.loadValueFromConfigFile('SERVER', 'port').', too many connections! Exiting.');
-
-                winSleep(10);
-                exit;
-            }
-
-            if (preg_match("~\bToo many user connections\b~", $rawData)) {
-                cliBot('Cannot connect to: '.loadValueFromConfigFile('SERVER', 'server').':'.loadValueFromConfigFile('SERVER', 'port').', too many connections! Exiting.');
-
-                winSleep(10);
-                exit;
-            }
-
-            cliBot('Disconnected! Trying to reconnect...');
-            connect();
-        }
+        handleDisconnection($rawData);
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -216,11 +187,13 @@ function joinChannel($channel)
 }
 //---------------------------------------------------------------------------------------------------------
 function toServer($data)
-{   
+{
+    global $socket;
+
     /* send own message to cli if raw mode */
     cliRaw($data, 1);
 
-    if (@fputs($GLOBALS['socket'], "{$data}\n")) { }
+    if (@fputs($socket, "{$data}\n")) { }
 }
 //---------------------------------------------------------------------------------------------------------
 function msgFromServer()
@@ -274,8 +247,6 @@ function setServerName($name)
 //---------------------------------------------------------------------------------------------------------
 function userNickname()
 {
-    cliDebug('userNickname()');
-
     if (preg_match('/^:(.*)\!(.*)\@(.*)$/', rawDataArray()[0], $userNickname)) {
         return $userNickname[1];
     }
@@ -283,8 +254,6 @@ function userNickname()
 //---------------------------------------------------------------------------------------------------------
 function userIdent()
 {
-    cliDebug('userIdent()');
-
     if (preg_match('/^:(.*)\!(.*)\@(.*)$/', rawDataArray()[0], $userIdent)) {
         return $userIdent[2];
     }
@@ -404,4 +373,41 @@ function inputFromLine($index)
     $string = substr($string, 0, -1);
 
     return $string;
+}
+//---------------------------------------------------------------------------------------------------------
+function handleDisconnection($rawData)
+{
+    cliRaw($rawData, 0);
+
+    /* if server password missing */
+    if (preg_match("~\bYou are not authorized to connect to this server\b~", $rawData)) {
+        cliBot('Cannot connect to: '.loadValueFromConfigFile('SERVER', 'server').':'.loadValueFromConfigFile('SERVER', 'port').' - Server requires password to connect! Exiting.');
+        winSleep(10);
+        exit;
+    }
+
+    /* too many users */
+    if (preg_match("~\bToo many connections from your IP\b~", $rawData)) {
+        cliBot('Cannot connect to: ' . loadValueFromConfigFile('SERVER', 'server') . ':' . loadValueFromConfigFile('SERVER', 'port') . ', too many connections! Exiting.');
+        winSleep(10);
+        exit;
+    }
+
+    /* too many users */
+    if (preg_match("~\bSession limit exceeded\b~", $rawData)) {
+        cliBot('Cannot connect to: ' . loadValueFromConfigFile('SERVER', 'server') . ':' . loadValueFromConfigFile('SERVER', 'port') . ', too many connections! Exiting.');
+        winSleep(10);
+        exit;
+    }
+
+    /* too many users */
+    if (preg_match("~\bToo many user connections\b~", $rawData)) {
+        cliBot('Cannot connect to: ' . loadValueFromConfigFile('SERVER', 'server') . ':' . loadValueFromConfigFile('SERVER', 'port') . ', too many connections! Exiting.');
+        winSleep(10);
+        exit;
+    }
+
+    cliBot('Disconnected! Trying to reconnect...');
+
+    connect();
 }

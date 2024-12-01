@@ -33,12 +33,5 @@ function plugin_quit()
 
     response('Bye!');
     
-    toServer("QUIT :http://github.com/S3x0r/MINION");
-
-    cliLog('Terminating BOT...');
-    cliLog('------------------LOG ENDED: '.date('d.m.Y | H:i:s')."------------------\r\n");
-    
-    sleep(4);
-
-    exit;
+    quitSeq();
 }

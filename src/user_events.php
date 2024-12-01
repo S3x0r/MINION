@@ -41,17 +41,30 @@ function user_joined_channel()
     }
 
     /* auto op user */
-    if (loadValueFromConfigFile('AUTOMATIC', 'auto op') == true && BotOpped() == true) {
+    if (BotOpped() && loadValueFromConfigFile('AUTOMATIC', 'auto op') == true && !empty(loadValueFromConfigFile('AUTOMATIC', 'auto op list'))) {
         $autoOpList = loadValueFromConfigFile('AUTOMATIC', 'auto op list');
+
         $user = explode(", ", $autoOpList);
-  
+           
         if (in_array(userNickIdentAndHostname(), $user)) {
             cliBot('User '.print_userNick_IdentHost().' on auto op list, giving op!');
-  
             toServer('MODE '.getBotChannel().' +o '.userNickname());
-  
             playSound('prompt.mp3');
         }
+    }
+
+    /* if owner joined send message to channel */
+    if (whoIsUser()[1] == 0) {
+        if (loadValueFromConfigFile('OWNER', 'owner message on join channel') == true) {
+            if (!empty(loadValueFromConfigFile('OWNER', 'owner message'))) {
+                toServer('PRIVMSG '.getBotChannel().' :'.userNickname().': '.loadValueFromConfigFile('OWNER', 'owner message'));
+            }
+        }
+    }
+
+    /* give voice users on join if true in config */
+    if (whoIsUser()[1] != 0 && loadValueFromConfigFile('CHANNEL', 'give voice users on join channel') == true) {
+        toServer('MODE '.getBotChannel().' +v '.userNickname());
     }
 
     SeenSave();    

@@ -180,3 +180,29 @@ function on_bot_auto_join()
              cliBot('No auto join mode in '.getConfigFileName().', idling...');    
     }       
 }
+//---------------------------------------------------------------------------------------------------------
+function bot_set_own_modes()
+{
+    if (!empty(loadValueFromConfigFile('BOT', 'bot modes'))) {
+        toServer('MODE '.getBotNickname().' '.loadValueFromConfigFile('BOT', 'bot modes'));
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function bot_user_commands()
+{
+    if (!empty(loadValueFromConfigFile('COMMANDS', 'raw commands on start'))) {
+        $commands = explode(';', loadValueFromConfigFile('COMMANDS', 'raw commands on start'));
+        
+        foreach ($commands as $command) {
+            toServer($command);
+        }
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function bot_register_command($rawcmd)
+{
+    /* Command: 'register' register to bot from user */
+    if (isset($rawcmd[1]) && $rawcmd[1] == 'register' && rawDataArray()[2] == getBotNickname()) {
+        plugin_register();
+    }
+}

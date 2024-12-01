@@ -221,3 +221,28 @@ function setTimezone()
         date_default_timezone_set(loadValueFromConfigFile('TIME', 'timezone'));
     }    
 }
+//---------------------------------------------------------------------------------------------------------
+function ctrl_handler(int $event)
+{
+    switch ($event) {
+        case PHP_WINDOWS_EVENT_CTRL_C:
+            cliBot('You have pressed CTRL+C - Exiting');
+            quitSeq();
+            break;
+        case PHP_WINDOWS_EVENT_CTRL_BREAK:
+            cliBot('You have pressed CTRL+BREAK - Exiting');
+            quitSeq();
+            break;
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function quitSeq()
+{
+    toServer('QUIT :http://github.com/S3x0r/MINION');
+
+    cliBot('Terminating BOT...');
+    cliBot('------------------LOG ENDED: '.date('d.m.Y | H:i:s').'------------------'.N);
+
+    sleep(4);
+    exit;
+}

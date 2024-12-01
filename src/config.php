@@ -27,7 +27,8 @@ function createDefaultConfigFile()
   \"BOT\": {
            \"nickname\" : \"minion\",
            \"name\"     : \"http://github.com/S3x0r/MINION\",
-           \"ident\"    : \"minion\"
+           \"ident\"    : \"minion\",
+           \"bot modes\": \"\"
          },
   \"SERVER\": {
               \"server\"                           : \"localhost\",
@@ -39,7 +40,9 @@ function createDefaultConfigFile()
             },
   \"OWNER\": {
              \"bot admin\"      : \"minion <user@localhost>\",
-             \"owner password\" : \"47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed\"
+             \"owner password\" : \"47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed\",
+             \"owner message on join channel\": true,
+             \"owner message\": \"Bello my master!\"
            },
   \"PRIVILEGES\": {
                   \"OWNER\" : \"\",
@@ -67,8 +70,12 @@ function createDefaultConfigFile()
                  \"channel modes\" : \"nt\",
                  \"channel key\"   : \"\",
                  \"channel topic\" : \"bello!\",
-                 \"keep topic\"    : true
+                 \"keep topic\"    : true,
+                 \"give voice users on join channel\": false
              },
+  \"COMMANDS\": {
+                 \"raw commands on start\": \"\"
+    },
   \"MESSAGE\": {
         \"show channel user messages\": false,
         \"show channel kicks messages\": true,

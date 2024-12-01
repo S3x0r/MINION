@@ -79,8 +79,6 @@ function on_303() /* ison */
 //---------------------------------------------------------------------------------------------------------
 function on_324() /* channel modes */
 {
-    cliDebug('on_324()');
-
     if (isset(rawDataArray()[4])) {
         unset($GLOBALS['CHANNEL.MODES']);
 
@@ -102,8 +100,6 @@ function on_331() /* RPL_NOTOPIC - "<channel> :No topic is set" */
 //---------------------------------------------------------------------------------------------------------
 function on_332() /* RPL_TOPIC - "<channel> :<topic>" */
 {
-    cliDebug('on_332() RPL_TOPIC');
-
     if (loadValueFromConfigFile('CHANNEL', 'keep topic') == true && !empty(loadValueFromConfigFile('CHANNEL', 'channel topic'))) {
         if (inputFromLine('4') != loadValueFromConfigFile('CHANNEL', 'channel topic')) {
             setTopic(getBotChannel(), loadValueFromConfigFile('CHANNEL', 'channel topic'));
@@ -119,8 +115,6 @@ function on_332() /* RPL_TOPIC - "<channel> :<topic>" */
 //---------------------------------------------------------------------------------------------------------
 function on_353() /* on channel join info */
 {
-    cliDebug('on_353()');
-
     if (!isset($GLOBALS['353_Start'])) {
         $GLOBALS['channelUsersOP']     = null;
         $GLOBALS['channelUsersHalfOp'] = null;
@@ -206,7 +200,11 @@ function on_376() /* motd end */
     if (loadValueFromConfigFile('SERVER', 'show message of the day') == true) {
         cliServer(msgFromServer());
     }
-    
+
+    bot_set_own_modes();
+
+    bot_user_commands();
+
     /* show info that we are connected */
     cli('');
     cliBot('Connected! My nickname is: '.getBotNickname());
@@ -284,17 +282,17 @@ function on_461() /* USER :Not enough parameters, missing user or ident info */
 //---------------------------------------------------------------------------------------------------------
 function on_471() /* if +limit on channel */
 {
-    cliBot('I cannot join, channel is full');
+    cliBot('Cannot join - channel is full');
 }
 //---------------------------------------------------------------------------------------------------------
 function on_473() /* if +invite on channel */
 {
-    cliBot('I cannot join, channel is invite only');
+    cliBot('Cannot join - invite only channel');
 }
 //---------------------------------------------------------------------------------------------------------
 function on_474() /* if bot +banned on channel */
 {
-    cliBot('I cannot join, im banned on channel');
+    cliBot('Cannot join - bot banned in channel');
 }
 //---------------------------------------------------------------------------------------------------------
 function on_475() /* if +key on channel */

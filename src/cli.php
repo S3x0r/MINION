@@ -82,7 +82,7 @@ function cliLine() /* no log */
 //---------------------------------------------------------------------------------------------------------
 function baner()
 {
-    echo N.'                 - MINION '.VER.' | Author: S3x0r -'.N;
+    echo N.'                 - MINION '.VER.' | Author: minions -'.N;
     echo '    ---------------------------------------------------------'.N;
          
     /* check if we have needed extensions */
@@ -104,12 +104,6 @@ function baner()
     echo '                    PHP Ver: '.PHP_VER.', OS: '.$sys.N;
     echo '    ---------------------------------------------------------'.N;
     echo '                   Total Lines of code: '.totalLines().' :)'.NN.N;
-
-    $date = date('dm');
-
-	if ($date == '0112' or $date == '2412') {
-	    playSound('egg.mp3');
-	}
 }
 //---------------------------------------------------------------------------------------------------------
 function checkUpdateInfo()
