@@ -1,4 +1,35 @@
 
+   v1.2.0 changes (10.12.2024):
+   - ssl servers support
+   - more servers can now be set
+      "servers" :[
+	           "irc.dal.net:6667",
+		   "example.net:6669",
+                   "..." (...)
+                 ],
+      if the server does not connect to the first server,
+      it will go to the next server in the list and try to connect, etc.
+   - new logs structure
+   - logs now located in directories marked with date
+   - separate logs for different events
+      (ctcp.txt, notice.txt, server.txt, raw.txt, plugins.txt, bot.txt, #<channel>.<server>.txt)
+   - new options in config:
+      "ssl": true/false
+      "log bot messages": true/false
+      "log server messages": true/false
+      "log ctcp messages": true/false
+      "log notice messages": true/false
+      "log channel messages": true/false
+      "log plugins usage messages": true/false
+      "log raw messages": true/false
+      "show ctcp messages": true/false
+   - bot now shows info about sending raw commands
+   - "raw commands" in config changed
+      from: "JOIN #test1;JOIN #test2"
+      to  : "JOIN test1",
+            "JOIN test2",
+	    "..." etc,.
+
    v1.1.9 changes (01.12.2024):
    - added in config "owner message on join channel", if set to true and "owner message" is provided.
      This message will be shown if owner joins channel

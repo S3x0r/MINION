@@ -20,44 +20,73 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-function cli($data) /* no log */
+function cliNoLog($data) /* no logs */
 {
     echo $data.N;
 }
 //---------------------------------------------------------------------------------------------------------
-function cliBot($data) /* log */
-{
-    cliLog('[bot] '.$data);
-}
-//---------------------------------------------------------------------------------------------------------
-function cliServer($data) /* log */
-{
-     cliLog('[server] '.$data);
-}
-//---------------------------------------------------------------------------------------------------------
-function cliNotice($data) /* log */
-{
-    cliLog('[notice] '.$data);
-}
-//---------------------------------------------------------------------------------------------------------
-function cliError($data) /* no log */
+function cliError($data) /* no logs */
 {
     echo '[ERROR] '.$data.NN;    
 }
 //---------------------------------------------------------------------------------------------------------
-function cliCTCP($type, $from) /* log */
+function cliBot($data) /* log -- bot.txt */
 {
-    cliLog('[ctcp '.$type.'] from '.$from);    
+    $line = '['.@date('H:i:s').'] [bot] '.$data.N;
+
+    saveLog('bot', $line);
+
+    echo $line;
 }
 //---------------------------------------------------------------------------------------------------------
-function cliRaw($data, $mode) /* raw messages */
+function cliServer($data) /* log -- server.txt */
 {
-    if (loadValueFromConfigFile('DEBUG', 'show raw') == true) {
-        if ($mode == 0) {
-            echo '['.@date('H:i:s').'] -> [RAW] '.$data;
-        } else if ($mode == 1 && loadValueFromConfigFile('DEBUG', 'show own messages in raw mode') == true) {
-                   echo '['.@date('H:i:s').'] <- [RAW] '.$data.N;
-        }
+    $line = '['.@date('H:i:s').'] [server] '.$data.N;
+
+    saveLog('server', $line);
+    
+    echo $line;
+}
+//---------------------------------------------------------------------------------------------------------
+function cliLogChannel($data) /* log message +time */
+{
+    $line = '['.@date('H:i:s').'] '.$data.N;
+
+    saveLog('channel', $line);
+
+    echo $line;
+}
+//---------------------------------------------------------------------------------------------------------
+function cliNotice($data) /* log  -- bot.txt */
+{
+    $line = '['.@date('H:i:s').'] [notice] '.$data.N;
+
+    saveLog('notice', $line);
+
+    if (loadValueFromConfigFile('MESSAGE', 'show users notice messages') == true) {
+        echo $line;
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function cliCTCP($type, $from) /* log -- ctcp.txt */
+{
+    $line = "[".@date('H:i:s')."] [ctcp {$type}] from {$from}".N;
+
+    saveLog('ctcp', $line);
+
+    if (loadValueFromConfigFile('MESSAGE', 'show ctcp messages') == true) {
+        echo $line;
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function cliPluginUsage($pluginName) /* log -- plugins.txt */
+{
+    $line = "[".@date('H:i:s')."] [PLUGIN: {$pluginName}] Used by: ".print_userNick_IdentHost()." channel: ".getBotChannel().N;
+    
+    saveLog('plugin', $line);
+
+    if (loadValueFromConfigFile('MESSAGE', 'show plugin usage info') == true) {
+        echo $line;
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -68,19 +97,31 @@ function cliDebug($data)
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function cliPluginUsage($pluginName)
+function cliRaw($data, $mode) /* raw messages */
 {
-    if (loadValueFromConfigFile('MESSAGE', 'show plugin usage info') == true) {
-        cliLog('[PLUGIN: '.$pluginName.'] Used by: '.print_userNick_IdentHost().', channel: '.getBotChannel());
+    if (!empty($data)) {
+        if ($mode == 0) {
+            $line = '['.@date('H:i:s').'] -> [RAW] '.$data;
+        } else {
+                 $line = '['.@date('H:i:s').'] <- [RAW] '.$data.N;
+        }
+
+        saveLog('raw', $line);
+
+        if (loadValueFromConfigFile('DEBUG', 'show raw') == true) {
+            echo $line;
+        } else if ($mode == 1 && loadValueFromConfigFile('DEBUG', 'show own messages in raw mode') == true) {
+                   echo $line;
+        }
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function cliLine() /* no log */
+function cliLine() /* no logs */
 {
     echo '------------------------------------------------------------------------------'.N;
 }
 //---------------------------------------------------------------------------------------------------------
-function baner()
+function baner() /* no logs */
 {
     echo N.'                 - MINION '.VER.' | Author: minions -'.N;
     echo '    ---------------------------------------------------------'.N;
@@ -106,7 +147,7 @@ function baner()
     echo '                   Total Lines of code: '.totalLines().' :)'.NN.N;
 }
 //---------------------------------------------------------------------------------------------------------
-function checkUpdateInfo()
+function checkUpdateInfo() /* no logs */
 {
     if (extension_loaded('openssl')) {
         $file = @file_get_contents(VERSION_URL);

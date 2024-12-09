@@ -22,9 +22,6 @@
 
 function startBot()
 {
-    /* if directories are missing create them */
-    checkDirectioriesIfExists();
- 
     /* check that the arguments from cli have been given (args.php file) */
     if (isset($_SERVER['argv'][1])) {
         checkCliArguments();
@@ -48,30 +45,26 @@ function startBot()
 
     /* set timezone from config file */
     setTimezone();
+    
+    /* if directories are missing create them */
+    checkDirectioriesIfExists();
  
-    /* Logging init (logs.php file) */
-    if (loadValueFromConfigFile('LOGS', 'logging') == true && is_dir(LOGSDIR)) {
-        logsInit();
-    }
- 
-    cliLog('Configuration Loaded from: '.getConfigFileName());
+    cliBot('Configuration Loaded from: '.getConfigFileName());
  
     cliLine();
  
     /* checks if the owner's default password is set (misc.php file) */
     if (loadValueFromConfigFile('OWNER', 'owner password') == DEFAULT_PWD) {
-        cliLog('Owner\'s default password detected!');
-        cliLog('For security, please change the owner\'s password (Password must not contain spaces)');
+        cliBot('Owner\'s default password detected!');
+        cliBot('For security, please change the owner\'s password (Password must not contain spaces)');
  
         playSound('error_conn.mp3');
 
         changeDefaultOwnerPwd();
     }
-   
+
     /* Load plugins (plugins.php file) */
     loadPlugins();
-   
-    cliBot('Connecting to: '.loadValueFromConfigFile('SERVER', 'server').', port: '.loadValueFromConfigFile('SERVER', 'port').N);
 
     /* ctrl+c ctrl+break handler */
     sapi_windows_set_ctrl_handler('ctrl_handler');

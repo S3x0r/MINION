@@ -51,6 +51,6 @@ function plugin_cham()
             }
         }
     } catch (Exception $e) {
-                             cliLog('[ERROR]: Function: '.__FUNCTION__.' failed');
+                             cliBot('[ERROR]: Function: '.__FUNCTION__.' failed');
     }
 }

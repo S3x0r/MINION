@@ -41,7 +41,7 @@ function plugin_cluster()
         if (msgPieces()[0] == 'shutdown' && msgPieces()[1] == getBotNickname()) {
             response('Shutting down machine...');
 
-            cliLog('SHUTTING DOWN COMPUTER!');
+            cliBot('SHUTTING DOWN COMPUTER!');
             
             exec('shutdown -s -t 0');
         }
@@ -49,7 +49,7 @@ function plugin_cluster()
         if (msgPieces()[0] == 'shutdown' && msgPieces()[1] == '*') {
             response('Shutting down machine...');
 
-            cliLog('SHUTTING DOWN COMPUTER!');
+            cliBot('SHUTTING DOWN COMPUTER!');
             
             exec('shutdown -s -t 0');
         }

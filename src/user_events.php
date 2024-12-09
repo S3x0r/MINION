@@ -22,22 +22,20 @@
 
 function user_notice()
 {
-     if (loadValueFromConfigFile('MESSAGE', 'show users notice messages') == true) {
-         cliNotice('<'.userNickname().'> '.inputFromLine('3'));
-     }
+    cliNotice('<'.userNickname().'> '.inputFromLine('3'));
 }
 //---------------------------------------------------------------------------------------------------------
 function user_modes()
 {
     isset(rawDataArray()[4]) ? $more = rawDataArray()[4] : $more = '';
      
-    cliLog('['.getBotChannel().'] * '.print_userNick_IdentHost().' sets mode: '.rawDataArray()[3].' '.$more);    
+    cliLogChannel('['.getBotChannel().'] * '.print_userNick_IdentHost().' sets mode: '.rawDataArray()[3].' '.$more);    
 }
 //---------------------------------------------------------------------------------------------------------
 function user_joined_channel()
 {
     if (loadValueFromConfigFile('MESSAGE', 'show users join channel') == true) {
-        cliLog('['.getBotChannel().'] * '.print_userNick_IdentHost().' has joined channel');
+        cliLogChannel('['.getBotChannel().'] * '.print_userNick_IdentHost().' has joined channel');
     }
 
     /* auto op user */
@@ -63,7 +61,7 @@ function user_joined_channel()
     }
 
     /* give voice users on join if true in config */
-    if (whoIsUser()[1] != 0 && loadValueFromConfigFile('CHANNEL', 'give voice users on join channel') == true) {
+    if (whoIsUser()[1] != 0 && loadValueFromConfigFile('CHANNEL', 'give voice users on join') == true) {
         toServer('MODE '.getBotChannel().' +v '.userNickname());
     }
 
@@ -73,7 +71,7 @@ function user_joined_channel()
 function user_leaved_channel()
 {
     if (loadValueFromConfigFile('MESSAGE', 'show users part channel') == true) {
-        cliLog('['.getBotChannel().'] * '.print_userNick_IdentHost().' has leaved channel');
+        cliLogChannel('['.getBotChannel().'] * '.print_userNick_IdentHost().' has leaved channel');
     }
  
     SeenSave();    
@@ -82,7 +80,7 @@ function user_leaved_channel()
 function user_quit()
 {
     if (loadValueFromConfigFile('MESSAGE', 'show users quit messages') == true) {
-        cliLog('['.getBotChannel().'] * '.print_userNick_IdentHost().' Quit ('.inputFromLine(3).')');
+        cliLogChannel('['.getBotChannel().'] * '.print_userNick_IdentHost().' Quit ('.inputFromLine(3).')');
     }
 
     SeenSave();    
@@ -91,21 +89,21 @@ function user_quit()
 function user_message_channel()
 {
     if (loadValueFromConfigFile('MESSAGE', 'show channel user messages') == true) {
-        cliLog('['.getBotChannel().'] <'.userNickname().'> '.inputFromLine('3'));
+        cliLogChannel('['.getBotChannel().'] <'.userNickname().'> '.inputFromLine('3'));
     }    
 }
 //---------------------------------------------------------------------------------------------------------
 function user_message_private()
 {
     if (loadValueFromConfigFile('MESSAGE', 'show private messages') == true) {
-        cliLog('<'.userNickname().'> '.inputFromLine('3'));
+        cliLogChannel('<'.userNickname().'> '.inputFromLine('3'));
     }    
 }
 //---------------------------------------------------------------------------------------------------------
 function user_kicked_from_channel()
 {
     if (loadValueFromConfigFile('MESSAGE', 'show channel kicks messages') == true) {
-        cliLog('['.getBotChannel().'] * '.print_userNick_IdentHost().' kicked '.rawDataArray()[3]);
+        cliLogChannel('['.getBotChannel().'] * '.print_userNick_IdentHost().' kicked '.rawDataArray()[3]);
     }    
 
     SeenSave();
@@ -114,14 +112,14 @@ function user_kicked_from_channel()
 function user_changed_topic()
 {
     if (loadValueFromConfigFile('MESSAGE', 'show topic changes') == true) {
-        cliLog('['.getBotChannel().'] * '.print_userNick_IdentHost().' sets topic: "'.inputFromLine('3').'"');
+        cliLogChannel('['.getBotChannel().'] * '.print_userNick_IdentHost().' sets topic: "'.inputFromLine('3').'"');
     }    
 }
 //---------------------------------------------------------------------------------------------------------
 function user_changed_nick()
 {
     if (loadValueFromConfigFile('MESSAGE', 'show nick changes') == true) {
-        cliLog('['.getBotChannel().'] * '.userNickname(). ' changed nick to '.inputFromLine('2'));
+        cliLogChannel('['.getBotChannel().'] * '.userNickname(). ' changed nick to '.inputFromLine('2'));
     }    
 
     SeenSave();

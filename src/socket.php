@@ -32,36 +32,74 @@ function connect()
 function tryToConnect()
 {
     global $socket;
+    
+    if (isServerProvidedFromArgument() == true) {
+        $servers = [$_SERVER['argv'][2]];
+        $port    = $_SERVER['argv'][3];
+    } else {
+             $servers = array_filter(loadValueFromConfigFile('SERVER', 'servers'));
+    }
 
-    $i = 0;
+    $retries = loadValueFromConfigFile('SERVER', 'how many times connect to server');
 
-    while ($i++ <= loadValueFromConfigFile('SERVER', 'how many times connect to server')) {
-           $socket = @fsockopen(loadValueFromConfigFile('SERVER', 'server'),
-                                           loadValueFromConfigFile('SERVER', 'port'),
-                                           $GLOBALS['errno'], $GLOBALS['errstr']);
+    if (empty($servers[0])) {
+        cliBot('Server not specified in config! Exiting.');
+        winSleep(10);
+        exit;
+    }
 
-           @stream_set_blocking($socket, false);
+    for ($s = 0; $s <= count($servers); $s++) {
 
-        if ($socket == false) {
-            cliBot('Cannot connect to: '.loadValueFromConfigFile('SERVER', 'server').
-                                     ':'.loadValueFromConfigFile('SERVER', 'port').
-               ', trying again ('.$i.'/'.loadValueFromConfigFile('SERVER', 'how many times connect to server').
-                                  ')...');
+         foreach ($servers as $server) {
+                  $server_port = explode(':', $server);
+                  $server = $server_port[0];
+                  $port   = $server_port[1];
 
-            playSound('error_conn.mp3');
+                  for ($r = 1; $r <= $retries; $r++) {
+                       if (server($server, $port, $r) == true) {
+                           return true;
+                       } else {
+                                playSound('error_conn.mp3');
+                                cliBot("Unable to connect: {$server}:{$port}");
+                                usleep(loadValueFromConfigFile('SERVER', 'connect delay') * 1000000);
+                       }
 
-            usleep(loadValueFromConfigFile('SERVER', 'connect delay') * 1000000); // reconnect delay
+                       if ($r == $retries && $s != 0) {
+                           cliBot('Changing server...');
+                       }
+                  }
+         }
 
-            if ($i == loadValueFromConfigFile('SERVER', 'how many times connect to server')) {
-                cliBot('Unable to connect to server, exiting program.');
-                playSound('error_conn.mp3');
-                winSleep(7);
+         if ($s == 0) {
+             cliBot('Can\'t connect to any of the servers, Exiting!');
+             winSleep(10);
+             exit;   
+         }
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function server($server, $port, $i)
+{
+    global $socket;
+    global $connectedToServer;
+    global $connectedToPort;
 
-                exit;
-            }
-        } else {
-                 return true;
-        }
+    cliBot("Connecting: {$server}:{$port} ({$i}/".loadValueFromConfigFile('SERVER', 'how many times connect to server').")");
+
+    (loadValueFromConfigFile('SERVER', 'ssl')) ? $ssl = 'ssl://' : $ssl = '';
+    
+    
+    $socket = @fsockopen($ssl.$server, $port, $GLOBALS['errno'], $GLOBALS['errstr']);
+
+    if ($socket == true) {
+        $connectedToServer = $server;
+        $connectedToPort   = $port;
+
+        @stream_set_blocking($socket, false);      
+
+        return true;
+    } else {
+             return false;
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -130,7 +168,7 @@ function socketLoop()
             }
 
             /* ctcp */
-            if (loadValueFromConfigFile('CTCP', 'ctcp response') == true && isset($rawcmd[1][0]) && $rawcmd[1][0] == '') {
+            if (isset($rawcmd[1][0]) && $rawcmd[1][0] == '') {
                 handleCTCP();
             }
 
@@ -377,37 +415,40 @@ function inputFromLine($index)
 //---------------------------------------------------------------------------------------------------------
 function handleDisconnection($rawData)
 {
+    global $connectedToServer;
+    global $connectedToPort;
+
     cliRaw($rawData, 0);
 
     /* if server password missing */
     if (preg_match("~\bYou are not authorized to connect to this server\b~", $rawData)) {
-        cliBot('Cannot connect to: '.loadValueFromConfigFile('SERVER', 'server').':'.loadValueFromConfigFile('SERVER', 'port').' - Server requires password to connect! Exiting.');
+        cliBot('Cannot connect to: '.$connectedToServer.':'.$connectedToPort.' - Server requires password to connect! Exiting.');
         winSleep(10);
         exit;
     }
 
     /* too many users */
     if (preg_match("~\bToo many connections from your IP\b~", $rawData)) {
-        cliBot('Cannot connect to: ' . loadValueFromConfigFile('SERVER', 'server') . ':' . loadValueFromConfigFile('SERVER', 'port') . ', too many connections! Exiting.');
+        cliBot('Cannot connect to: '.$connectedToServer.':'.$connectedToPort.', too many connections! Exiting.');
         winSleep(10);
         exit;
     }
 
     /* too many users */
     if (preg_match("~\bSession limit exceeded\b~", $rawData)) {
-        cliBot('Cannot connect to: ' . loadValueFromConfigFile('SERVER', 'server') . ':' . loadValueFromConfigFile('SERVER', 'port') . ', too many connections! Exiting.');
+        cliBot('Cannot connect to: '.$connectedToServer.':'.$connectedToPort.', too many connections! Exiting.');
         winSleep(10);
         exit;
     }
 
     /* too many users */
     if (preg_match("~\bToo many user connections\b~", $rawData)) {
-        cliBot('Cannot connect to: ' . loadValueFromConfigFile('SERVER', 'server') . ':' . loadValueFromConfigFile('SERVER', 'port') . ', too many connections! Exiting.');
+        cliBot('Cannot connect to: '.$connectedToServer.':'.$connectedToPort.', too many connections! Exiting.');
         winSleep(10);
         exit;
     }
 
-    cliBot('Disconnected! Trying to reconnect...');
+    cliBot('Disconnected! ('.$connectedToServer.':'.$connectedToPort.') Trying to reconnect...');
 
     connect();
 }

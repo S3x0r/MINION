@@ -27,12 +27,12 @@ function loadPlugins()
     $countedCoreCmnds = count(CORECOMMANDSLIST);
 
     /* CORE PLUGINS */
-    cli('>>> \'Core\' Plugins ('.$countedCoreCmnds.' Plugins) [lvl: 0] <<<');
+    cliNoLog('>>> \'Core\' Plugins ('.$countedCoreCmnds.' Plugins) [lvl: 0] <<<');
 
     cliLine();
 
     foreach (CORECOMMANDSLIST as $corePlugin => $corePluginDescription) {
-       cli('['.$corePlugin.'] -- '.$corePluginDescription);
+       cliNoLog('['.$corePlugin.'] -- '.$corePluginDescription);
     }
 
     cliLine();
@@ -45,7 +45,7 @@ function loadPlugins()
            
            $userLvl = getUserLevelByUserName($userDirectory);
            
-           cli('>>> \''.$userDirectory.'\' Plugins ('.countPlugins($userDirectory).' Plugins) [lvl: '.$userLvl.'] <<<');
+           cliNoLog('>>> \''.$userDirectory.'\' Plugins ('.countPlugins($userDirectory).' Plugins) [lvl: '.$userLvl.'] <<<');
            
            cliLine();
            
@@ -58,7 +58,7 @@ function loadPlugins()
 
     $pluginsSum = $pluginsSum + $countedCoreCmnds;
 
-    cli('--------------------------------------------------Total Plugins: ('.$pluginsSum.')---------');
+    cliNoLog('--------------------------------------------------Total Plugins: ('.$pluginsSum.')---------');
 }
 //---------------------------------------------------------------------------------------------------------
 function countPlugins($user)
@@ -84,7 +84,7 @@ function loadPluginsFromEachGroupDir($user)
             $GLOBALS[$user.'_PLUGINS'][] .= $plugin_command;
             $GLOBALS['ALL_PLUGINS'][] .= $plugin_command;
 
-            cli('['.basename($pluginName, '.php').'] -- '.$plugin_description);
+            cliNoLog('['.basename($pluginName, '.php').'] -- '.$plugin_description);
         } else {
                  cliError(basename($pluginName, '.php').' - Incompatible plugin!');
         }

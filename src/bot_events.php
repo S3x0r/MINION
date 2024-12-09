@@ -190,11 +190,14 @@ function bot_set_own_modes()
 //---------------------------------------------------------------------------------------------------------
 function bot_user_commands()
 {
-    if (!empty(loadValueFromConfigFile('COMMANDS', 'raw commands on start'))) {
-        $commands = explode(';', loadValueFromConfigFile('COMMANDS', 'raw commands on start'));
-        
+    if (!empty(loadValueFromConfigFile('COMMANDS', 'raw commands on start')[0])) {
+        $commands = loadValueFromConfigFile('COMMANDS', 'raw commands on start');
+
         foreach ($commands as $command) {
-            toServer($command);
+            if (!empty($command)) {
+                cliBot('Sending raw command from config: "'.$command.'"');
+                toServer($command);
+            }
         }
     }
 }

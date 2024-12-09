@@ -15,7 +15,7 @@ ident            = 'http://github.com/S3x0r/MINION'
 [SERVER]
 
 ; server where to connect
-server           = 'minionki.com.pl'
+server           = 'irc.dal.net'
 
 ; server port
 port             = '6667'
@@ -29,7 +29,7 @@ connect_delay    = '10'
 [OWNER]
 
 ; you can set info about bot administrator here
-bot_admin        = 'S3x0r <olisek@gmail.com>'
+bot_admin        = 'minions <example@example.com>'
 
 ; bot will give op's if this hosts join channel 
 auto_op_list     = 'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host'

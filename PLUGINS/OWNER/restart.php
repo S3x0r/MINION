@@ -35,7 +35,7 @@ function plugin_restart()
     toServer('QUIT :Restarting...');
 
     /* send cli messages */
-    cliLog('Restarting BOT...');
+    cliBot('Restarting BOT...');
   
     if (ifWindowsOs()) {
         chdir('src/php');

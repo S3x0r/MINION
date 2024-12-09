@@ -87,9 +87,9 @@ function on_324() /* channel modes */
         empty(rawDataArray()[5]) ? $msg = $GLOBALS['CHANNEL.MODES'] : $msg = $GLOBALS['CHANNEL.MODES'].' '.rawDataArray()[5];
 
         if (!empty($GLOBALS['CHANNEL.MODES'])) {
-            cliLog('['.getBotChannel().'] * channel modes: +'.$msg);
+            cliLogChannel('['.getBotChannel().'] * channel modes: +'.$msg);
         } else {
-                 cliLog('['.getBotChannel().'] * channel modes are not set');
+                 cliLogChannel('['.getBotChannel().'] * channel modes are not set');
         }
     }
 }
@@ -109,7 +109,7 @@ function on_332() /* RPL_TOPIC - "<channel> :<topic>" */
     if (inputFromLine('4') != loadValueFromConfigFile('CHANNEL', 'channel topic')) {
         empty(inputFromLine('4')) ? $msg = 'channel topic is not set' : $msg = 'channel topic: "'.inputFromLine('4').'"';
         
-        cliLog('['.rawDataArray()[3].'] * '.$msg);
+        cliLogChannel('['.rawDataArray()[3].'] * '.$msg);
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -151,26 +151,26 @@ function on_353() /* on channel join info */
 //---------------------------------------------------------------------------------------------------------
 function on_366() /* end of channel user(s) nicks list- after joining channel */
 {
-    cliLog('['.getBotChannel().'] Total Channel Users: '.$GLOBALS['channelUsersCount']);
+    cliLogChannel('['.getBotChannel().'] Total Channel Users: '.$GLOBALS['channelUsersCount']);
     
     // @
     if (!empty($GLOBALS['channelUsersOP'])) {
-        cliLog('['.getBotChannel().'] (@) Op(s): '.$GLOBALS['channelUsersOP']);
+        cliLogChannel('['.getBotChannel().'] (@) Op(s): '.$GLOBALS['channelUsersOP']);
     }
 
     // %
     if (!empty($GLOBALS['channelUsersHalfOp'])) {
-        cliLog('['.getBotChannel().'] (%) HalfOp(s): '.$GLOBALS['channelUsersHalfOp']);
+        cliLogChannel('['.getBotChannel().'] (%) HalfOp(s): '.$GLOBALS['channelUsersHalfOp']);
     }
     
     // +
     if (!empty($GLOBALS['channelUsersVoice'])) {
-        cliLog('['.getBotChannel().'] (+) Voice(s): '.$GLOBALS['channelUsersVoice']);
+        cliLogChannel('['.getBotChannel().'] (+) Voice(s): '.$GLOBALS['channelUsersVoice']);
     }
 
     // others
     if (!empty($GLOBALS['channelUsersOthers'])) {
-        cliLog('['.getBotChannel().'] Other(s): '.$GLOBALS['channelUsersOthers']);
+        cliLogChannel('['.getBotChannel().'] Other(s): '.$GLOBALS['channelUsersOthers']);
     }
 
     unset($GLOBALS['353_Start']);
@@ -203,18 +203,16 @@ function on_376() /* motd end */
 
     bot_set_own_modes();
 
-    bot_user_commands();
-
     /* show info that we are connected */
-    cli('');
+    cliNoLog('');
     cliBot('Connected! My nickname is: '.getBotNickname());
 
     /* register to bot info */
     if (empty(loadValueFromConfigFile('PRIVILEGES', 'OWNER'))) {
-        cli(N.'*********************************************************');
-        cli('Bot owner not registered!');
-        cli('Register to bot by typing /msg '.getBotNickname().' register <password>');
-        cli('*********************************************************'.N);
+        cliNoLog(N.'*********************************************************');
+        cliNoLog('Bot owner not registered!');
+        cliNoLog('Register to bot by typing /msg '.getBotNickname().' register <password>');
+        cliNoLog('*********************************************************'.N);
     }
 
     /* if autojoin */
@@ -224,6 +222,8 @@ function on_376() /* motd end */
     // Statistics();
 
     playSound('connected.mp3');
+    
+    bot_user_commands();
 }
 //---------------------------------------------------------------------------------------------------------
 function on_396()

@@ -29,7 +29,7 @@ function checkCliArguments()
     switch ($argument_1) {
         case '-h': /* show help */
             echo N.'  Minion Bot cli commands usage: php BOT.php -[option]'.NN,
-                 '  -c <config_file>   # loads config from the specified path (eg. C:\my folder\\'.getConfigFileName().')'.N, /* config file */
+                 '  -c <config_file>   # loads config from the specified path (eg. C:\my folder\\'.getConfigFileName().')'.N,
                  '  -h                 # this help'.N, /* help */
                  '  -n                 # set bot nickname'.N, /* change bot nickname */
                  '  -o <server> <port> # connect to specified server: (eg. php BOT.php -o irc.dal.net 6667)'.N, /* server */
@@ -60,8 +60,7 @@ function checkCliArguments()
 
         case '-o': /* server connect: eg: irc.example.net 6667 */
             if (!empty($argument_2) && !empty($argument_3) && is_numeric($argument_3)) {
-                saveValueToConfigFile('SERVER', 'server', $argument_2);
-                saveValueToConfigFile('SERVER', 'port',   $argument_3);
+                /* we will check this later in code */
             } elseif (empty($argument_2)) {
                       cliError('You need to specify server address, Exiting.');
                       exit;

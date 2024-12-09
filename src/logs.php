@@ -20,27 +20,91 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-function logFileNameFormat()
+function saveLog($mode, $data)
 {
-    $data = loadValueFromConfigFile('CHANNEL', 'channel').'.'.loadValueFromConfigFile('SERVER', 'server');
-
-    return LOGSDIR."/{$data}.txt";
-}
-//---------------------------------------------------------------------------------------------------------
-function logsInit()
-{
-    $data = '-------------------------Session Start: '.date('d.m.Y | H:i:s').'-------------------------'.N;
-
-    saveToFile(logFileNameFormat(), $data, 'a');
-}
-//---------------------------------------------------------------------------------------------------------
-function cliLog($data) /* log message +time */
-{
-    $line = "[".@date('H:i:s')."] {$data}".N;
-
     if (loadValueFromConfigFile('LOGS', 'logging') == true) {
-        saveToFile(logFileNameFormat(), $line, 'a');
+        switch ($mode) {
+          case 'bot':
+               if (loadValueFromConfigFile('LOGS', 'log bot messages') == true) {
+                   createLogsDateDir();
+                   saveToFile(logFileNameFormatBot(), $data, 'a');
+               }
+              break;
+          case 'server':
+               if (loadValueFromConfigFile('LOGS', 'log server messages') == true) {
+                   createLogsDateDir();
+                   saveToFile(logFileNameFormatServer(), $data, 'a');
+               }
+              break;
+          case 'channel':
+               if (loadValueFromConfigFile('LOGS', 'log channel messages') == true) {
+                   createLogsDateDir();
+                   saveToFile(logFileNameFormatChannel(), $data, 'a');
+               }
+              break;
+          case 'notice':
+               if (loadValueFromConfigFile('LOGS', 'log notice messages') == true) {
+                   createLogsDateDir();
+                   saveToFile(logFileNameFormatNotice(), $data, 'a');
+               }
+              break;   
+          case 'ctcp':
+               if (loadValueFromConfigFile('LOGS', 'log ctcp messages') == true) {
+                   createLogsDateDir();
+                   saveToFile(logFileNameFormatCTCP(), $data, 'a');
+               }
+              break;
+           case 'plugin':
+               if (loadValueFromConfigFile('LOGS', 'log plugins usage messages') == true) {
+                   createLogsDateDir();
+                   saveToFile(logFileNameFormatPlugins(), $data, 'a');
+               }
+              break;
+           case 'raw':
+               if (loadValueFromConfigFile('LOGS', 'log raw messages') == true) {
+                   createLogsDateDir();
+                   saveToFile(logFileNameFormatRaw(), $data, 'a');
+               }
+              break;
+        }
     }
+}
+//---------------------------------------------------------------------------------------------------------
+function logFileNameFormatChannel()
+{
+    global $connectedToServer;
 
-    echo $line;
+    $filename = loadValueFromConfigFile('CHANNEL', 'channel').'.'.$connectedToServer.'.txt';
+
+    return LOGSDIR.'/'.@date('d.m.Y').'/'.$filename;
+}
+//---------------------------------------------------------------------------------------------------------
+function logFileNameFormatBot()
+{
+    return LOGSDIR.'/'.@date('d.m.Y').'/'.LOGBOTFILE;
+}
+//---------------------------------------------------------------------------------------------------------
+function logFileNameFormatPlugins()
+{
+    return LOGSDIR.'/'.@date('d.m.Y').'/'.LOGPLUGINSFILE;
+}
+//---------------------------------------------------------------------------------------------------------
+function logFileNameFormatServer()
+{
+    return LOGSDIR.'/'.@date('d.m.Y').'/'.LOGSERVERFILE;
+}
+//---------------------------------------------------------------------------------------------------------
+function logFileNameFormatCTCP()
+{
+    return LOGSDIR.'/'.@date('d.m.Y').'/'.LOGCTCPFILE;
+}
+//---------------------------------------------------------------------------------------------------------
+function logFileNameFormatNotice()
+{
+    return LOGSDIR.'/'.@date('d.m.Y').'/'.LOGNOTICEFILE;
+}
+//---------------------------------------------------------------------------------------------------------
+function logFileNameFormatRaw()
+{
+    return LOGSDIR.'/'.@date('d.m.Y').'/'.LOGRAWFILE;
 }

@@ -19,37 +19,45 @@
   exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '1.1.9');
+    define('VER', '1.2.0');
 //---------------------------------------------------------------------------------------------------------
     error_reporting(-1);
-    
+
     /* PHP_EOL shortcuts */
-    define('N', PHP_EOL);
-    define('NN', PHP_EOL.N);
+    define('N',              PHP_EOL);
+    define('NN',             PHP_EOL.N);
 
     /* directory names */
-    define('LOGSDIR', 'LOGS');
-    define('DATADIR', 'DATA');
-    define('SEENDIR', 'SEEN');
-    define('PLUGINSDIR', 'plugins');
+    define('LOGSDIR',        'LOGS');
+    define('DATADIR',        'DATA');
+    define('SEENDIR',        'SEEN');
+    define('PLUGINSDIR',     'plugins');
 
     /* config filename */
-    define('CONFIGFILE', 'config.json');
+    define('CONFIGFILE',     'config.json');
 
-    define('START_TIME', time());
-    define('PHP_VER', phpversion());
+    /* logs filenames */
+    define('LOGBOTFILE',     'bot.txt');
+    define('LOGSERVERFILE',  'server.txt');
+    define('LOGPLUGINSFILE', 'plugins.txt');
+    define('LOGNOTICEFILE',  'notice.txt');
+    define('LOGCTCPFILE',    'ctcp.txt');
+    define('LOGRAWFILE',     'raw.txt');
+
+    define('START_TIME',     time());
+    define('PHP_VER',        phpversion());
 
     /* plugin default identifier */
-    define('PLUGIN_HASH', 'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c');
+    define('PLUGIN_HASH',    'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c');
 
     /* default owner password */
-    define('DEFAULT_PWD', '47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed');
-    
+    define('DEFAULT_PWD',    '47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed');
+
     /* core commands count */
-    define('CORECOMMANDSLIST', ['load'    => 'Loads specified plugins to BOT: load <plugin>',
-                                'seen'    => 'Check specified user when was last seen on channel: seen <nickname>',
-                                'unload'  => 'Unloads specified plugin from BOT: unload <plugin>']);
-    
+    define('CORECOMMANDSLIST', ['load'   => 'Loads specified plugins to BOT: load <plugin>',
+                                'seen'   => 'Check specified user when was last seen on channel: seen <nickname>',
+                                'unload' => 'Unloads specified plugin from BOT: unload <plugin>']);
+
     define('WORD', ['JOIN', 'PART', 'KICK', 'TOPIC', 'PRIVMSG', 'NICK', 'QUIT', 'MODE', 'NOTICE', 'INVITE', 'KILL']);
 
     /* check version url */

@@ -45,7 +45,7 @@ function changeDefaultOwnerPwd()
     
     unset($hashedPassword);
 
-    cli('');
+    cliNoLog('');
     cliBot('Owner\'s password updated!'.N);
 }
 //---------------------------------------------------------------------------------------------------------
@@ -165,6 +165,8 @@ function isRunned($program)
 //---------------------------------------------------------------------------------------------------------
 function Statistics()
 {
+    global $connectedToServer;
+
     $ipAddress    = 'http://';
     $statsAddress = 'http://?';
 
@@ -172,9 +174,9 @@ function Statistics()
     
     /* identify bot session by hashed ip, operating system, bot nickname, name and ident */
     $botID = hash('sha256', $ip.php_uname().getBotNickname().loadValueFromConfigFile('BOT', 'name').
-                  loadValueFromConfigFile('BOT', 'ident').loadValueFromConfigFile('SERVER', 'server').VER);
+                  loadValueFromConfigFile('BOT', 'ident').$connectedToServer.VER);
 
-    @file($statsAddress."stamp={$botID}&nick=".getBotNickname()."&server=".loadValueFromConfigFile('SERVER', 'server')."&ver={VER}");
+    @file($statsAddress."stamp={$botID}&nick=".getBotNickname()."&server=".$connectedToServer."&ver={VER}");
 }
 //---------------------------------------------------------------------------------------------------------
 function winSleep($time)
@@ -210,9 +212,21 @@ function checkDirectioriesIfExists()
 {
     /* if directories are missing create them */
     !is_dir(LOGSDIR) ? mkdir(LOGSDIR) : false;
+
+    createLogsDateDir();
+    
     !is_dir(DATADIR) ? mkdir(DATADIR) : false;
 
     !is_dir(DATADIR.'/'.SEENDIR) ? @mkdir(DATADIR.'/'.SEENDIR) : false;
+}
+//---------------------------------------------------------------------------------------------------------
+function createLogsDateDir()
+{
+    if (is_dir(LOGSDIR)) {
+        if (!is_dir(LOGSDIR.'/'.@date('d.m.Y'))) {
+            mkdir(LOGSDIR.'/'.@date('d.m.Y')); 
+        }
+    }
 }
 //---------------------------------------------------------------------------------------------------------
 function setTimezone()
@@ -245,4 +259,21 @@ function quitSeq()
 
     sleep(4);
     exit;
+}
+//---------------------------------------------------------------------------------------------------------
+function isEmptyFolder($dir): bool
+{
+    return is_dir($dir) && is_readable($dir) && scandir($dir) === ['.', '..'];
+}
+//---------------------------------------------------------------------------------------------------------
+function IsfolderFromDayBeforeExisting()
+{
+    $date = @date('d.m.Y');
+    $day_before = @date( 'd.m.Y', strtotime($date.' -1 day'));
+    
+    if (is_dir(LOGSDIR.'/'.$day_before)) {
+        return true;
+    } else {
+             return false;
+    }
 }

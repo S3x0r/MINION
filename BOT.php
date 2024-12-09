@@ -59,7 +59,7 @@
  /* checks if we have all the files */
  foreach ($botCoreFiles as $botCoreFile) {
      if (is_file("src/{$botCoreFile}")) {
-         include("src/{$botCoreFile}");
+         require_once("src/{$botCoreFile}");
      } else {
               echo "\n";
               echo "  I need a file '{$botCoreFile}' to work!\n\n",

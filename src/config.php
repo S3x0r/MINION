@@ -23,107 +23,121 @@
 function createDefaultConfigFile()
 {
     $config =
-"{
-  \"BOT\": {
-           \"nickname\" : \"minion\",
-           \"name\"     : \"http://github.com/S3x0r/MINION\",
-           \"ident\"    : \"minion\",
-           \"bot modes\": \"\"
-         },
-  \"SERVER\": {
-              \"server\"                           : \"localhost\",
-              \"port\"                             : 6667,
-              \"server password\"                  : \"\",
-              \"how many times connect to server\" : 99,
-              \"connect delay\"                    :  6,
-              \"show message of the day\"          : false
-            },
-  \"OWNER\": {
-             \"bot admin\"      : \"minion <user@localhost>\",
-             \"owner password\" : \"47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed\",
-             \"owner message on join channel\": true,
-             \"owner message\": \"Bello my master!\"
-           },
-  \"PRIVILEGES\": {
-                  \"OWNER\" : \"\",
-                  \"ADMIN\" : \"\",
-                  \"USER\"  : \"\"
-                },
-  \"USERSLEVELS\": {
-                   \"OWNER\" : 0,
-                   \"ADMIN\" : 1,
-                   \"USER\"  : 999
-                 },
-  \"RESPONSE\": {
-                \"bot response\" : \"notice\"
-              },
-  \"AUTOMATIC\": {
-                 \"auto op\"            : true,
-                 \"auto op list\"       : \"\",
-                 \"auto rejoin\"        : true,
-                 \"keep channel modes\" : true,
-                 \"keep nick\"          : true
-               },
-  \"CHANNEL\": {
-                 \"channel\"       : \"#minion\",
-                 \"auto join\"     : true,
-                 \"channel modes\" : \"nt\",
-                 \"channel key\"   : \"\",
-                 \"channel topic\" : \"bello!\",
-                 \"keep topic\"    : true,
-                 \"give voice users on join channel\": false
-             },
-  \"COMMANDS\": {
-                 \"raw commands on start\": \"\"
+<<<END
+{
+    "BOT": {
+        "nickname": "minion",
+        "name": "http://github.com/S3x0r/MINION",
+        "ident": "minion",
+        "bot modes": ""
     },
-  \"MESSAGE\": {
-        \"show channel user messages\": false,
-        \"show channel kicks messages\": true,
-        \"show private messages\": false,
-        \"show users notice messages\": true,
-        \"show users join channel\": true,
-        \"show users part channel\": true,
-        \"show users quit messages\": true,
-        \"show users invite messages\": true,
-        \"show topic changes\": true,
-        \"show nick changes\": true,
-        \"show plugin usage info\": true
+    "SERVER": {
+        "servers": [
+            "localhost:6667",
+            "irc.dal.net:6667",
+            "other server:7000"
+        ],
+        "ssl": false,
+        "server password": "",
+        "how many times connect to server": 5,
+        "connect delay": 6,
+        "show message of the day": false
     },
-  \"BANS\": {
-            \"ban list\" : \"nick!ident@hostname, *!ident@hostname, *!*@onlyhost\"
-          },
-  \"COMMAND\": {
-               \"command prefix\" : \"!\"
-             },
-  \"CTCP\": {
-            \"ctcp response\" : true,
-            \"ctcp version\"  : \"minion (".VER.") powered by minions!\",
-            \"ctcp finger\"   : \"minion\"
-          },
-  \"DELAYS\": {
-              \"channel delay\" : 1,
-              \"private delay\" : 1,
-              \"notice delay\"  : 1
-            },
-  \"LOGS\": {
-            \"logging\" : true
-          },
-  \"TIME\": {
-            \"timezone\" : \"Europe/Warsaw\"
-          },
-  \"FETCH\": {
-             \"fetch server\" : \"https://raw.githubusercontent.com/S3x0r/minion_repository_plugins/master\"
-           },
-  \"PROGRAM\": {
-               \"play sounds\" : true
-             },
-  \"DEBUG\": {
-             \"show raw\"                      : false,
-             \"show own messages in raw mode\" : false,
-             \"show debug\"                    : false
-           }
+    "OWNER": {
+        "bot admin": "minion <user@localhost>",
+        "owner password": "47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed",
+        "owner message on join channel": true,
+        "owner message": "Bello my master!"
+    },
+    "PRIVILEGES": {
+        "OWNER": "",
+        "ADMIN": "",
+        "USER": ""
+    },
+    "USERSLEVELS": {
+        "OWNER": 0,
+        "ADMIN": 1,
+        "USER": 999
+    },
+    "RESPONSE": {
+        "bot response": "notice"
+    },
+    "AUTOMATIC": {
+        "auto op": true,
+        "auto op list": "",
+        "auto rejoin": true,
+        "keep channel modes": true,
+        "keep nick": true
+    },
+    "CHANNEL": {
+        "channel": "#minion",
+        "auto join": true,
+        "channel modes": "nt",
+        "channel key": "",
+        "channel topic": "bello!",
+        "keep topic": true,
+        "give voice users on join": false
+    },
+    "COMMANDS": {
+        "raw commands on start": [
+            "",
+            ""
+        ]
+    },
+    "MESSAGE": {
+        "show channel user messages": false,
+        "show channel kicks messages": true,
+        "show private messages": false,
+        "show users notice messages": true,
+        "show users join channel": true,
+        "show users part channel": true,
+        "show users quit messages": true,
+        "show users invite messages": true,
+        "show topic changes": true,
+        "show nick changes": true,
+        "show plugin usage info": true,
+        "show ctcp messages": true
+    },
+    "BANS": {
+        "ban list": "nick!ident@hostname, *!ident@hostname, *!*@onlyhost"
+    },
+    "COMMAND": {
+        "command prefix": "!"
+    },
+    "CTCP": {
+        "ctcp response": true
+    },
+    "DELAYS": {
+        "channel delay": 1,
+        "private delay": 1,
+        "notice delay": 1
+    },
+    "LOGS": {
+        "logging": true,
+        "log bot messages": true,
+        "log server messages": true,
+        "log ctcp messages": true,
+        "log notice messages": true,
+        "log channel messages": true,
+        "log plugins usage messages": true,
+        "log raw messages": false
+    },
+    "TIME": {
+        "timezone": "Europe/Warsaw"
+    },
+    "FETCH": {
+        "fetch server": "https://raw.githubusercontent.com/S3x0r/minion_repository_plugins/master"
+    },
+    "PROGRAM": {
+        "play sounds": true
+    },
+    "DEBUG": {
+        "show raw": false,
+        "show own messages in raw mode": false,
+        "show debug": false
+    }
 }
-";
+END;
 
     /* Save default config to file */
     saveToFile(getConfigFileName(), $config, 'w');
@@ -132,6 +146,16 @@ function createDefaultConfigFile()
 function isConfigProvidedFromArgument()
 {   
     if (isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == '-c' && !empty($_SERVER['argv'][2]) && is_file($_SERVER['argv'][2])) {
+        return true;
+    } else {
+             return false;
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function isServerProvidedFromArgument()
+{
+    if (isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == '-o' &&
+       !empty($_SERVER['argv'][2]) && !empty($_SERVER['argv'][3]) && is_numeric($_SERVER['argv'][3])) {
         return true;
     } else {
              return false;
@@ -174,7 +198,7 @@ function checkIfConfigExists()
 {
     /* if no config -> create default one */
     if (!is_file(getConfigFileName())) {
-        cli('Configuration file missing! I am creating a default configuration: '.getConfigFileName().N);
+        cliNoLog('Configuration file missing! I am creating a default configuration: '.getConfigFileName().N);
 
         createDefaultConfigFile();
         

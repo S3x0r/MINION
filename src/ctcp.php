@@ -24,49 +24,63 @@ function handleCTCP()
 {
     switch ($GLOBALS['rawcmd'][1]) {
         case 'version':
-            toServer("NOTICE ".userNickname()." :VERSION ".loadValueFromConfigFile('CTCP', 'ctcp version'));
+            if (loadValueFromConfigFile('CTCP', 'ctcp response') == true) {
+                toServer("NOTICE ".userNickname()." :VERSION minion (".VER.") powered by minions!");
+            }
 
             cliCTCP('VERSION', print_userNick_IdentHost());
             playSound('ctcp.mp3');
             break;
 
         case 'clientinfo':
-            toServer("NOTICE ".userNickname()." :CLIENTINFO ".loadValueFromConfigFile('CTCP', 'ctcp version'));
+            if (loadValueFromConfigFile('CTCP', 'ctcp response') == true) { 
+                toServer("NOTICE ".userNickname()." :CLIENTINFO minion (".VER.") powered by minions!");
+            }
 
             cliCTCP('CLIENTINFO', print_userNick_IdentHost());
             playSound('ctcp.mp3');
             break;
 
         case 'source':
-            toServer("NOTICE ".userNickname()." :SOURCE http://github.com/S3x0r/MINION");
+            if (loadValueFromConfigFile('CTCP', 'ctcp response') == true) {
+                toServer("NOTICE ".userNickname()." :SOURCE http://github.com/S3x0r/MINION");
+            }
 
             cliCTCP('SOURCE', print_userNick_IdentHost());
             playSound('ctcp.mp3');
             break;
 
         case 'userinfo':
-            toServer("NOTICE ".userNickname()." :USERINFO Powered by Minions!");
+            if (loadValueFromConfigFile('CTCP', 'ctcp response') == true) {
+                toServer("NOTICE ".userNickname()." :USERINFO Powered by Minions!");
+            }
 
             cliCTCP('USERINFO', print_userNick_IdentHost());
             playSound('ctcp.mp3');
             break;
 
         case 'finger':
-            toServer("NOTICE ".userNickname()." :FINGER ".loadValueFromConfigFile('CTCP', 'ctcp finger'));
+            if (loadValueFromConfigFile('CTCP', 'ctcp response') == true) {
+                toServer("NOTICE ".userNickname()." :FINGER minion");
+            }
 
             cliCTCP('FINGER', print_userNick_IdentHost());
             playSound('ctcp.mp3');
             break;
 
         case 'ping':
-            toServer("NOTICE ".userNickname()." :PING ".str_replace(' ', '', commandFromUser()));
+            if (loadValueFromConfigFile('CTCP', 'ctcp response') == true) {
+                toServer("NOTICE ".userNickname()." :PING ".str_replace(' ', '', commandFromUser()));
+            }
 
             cliCTCP('PING', print_userNick_IdentHost());
             playSound('ctcp.mp3');
             break;
 
         case 'time':
-            toServer("NOTICE ".userNickname()." :TIME ".date("F j, Y, g:i a"));
+            if (loadValueFromConfigFile('CTCP', 'ctcp response') == true) {    
+                toServer("NOTICE ".userNickname()." :TIME ".date("F j, Y, g:i a"));
+            }
 
             cliCTCP('TIME', print_userNick_IdentHost());
             playSound('ctcp.mp3');
