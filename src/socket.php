@@ -23,9 +23,7 @@
 function connect()
 {
     if (tryToConnect()) {
-        if (identify()) {
-            socketLoop();
-        }
+        socketLoop();
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -45,40 +43,67 @@ function tryToConnect()
     if (empty($servers[0])) {
         cliBot('Server not specified in config! Exiting.');
         winSleep(10);
-        exit;
     }
 
     for ($s = 0; $s <= count($servers); $s++) {
 
          foreach ($servers as $server) {
-                  $server_port = explode(':', $server);
-                  $server = $server_port[0];
-                  $port   = $server_port[1];
+            $serverData = explode(':', $server);
+            $server = $serverData[0]; /* server host */
 
-                  for ($r = 1; $r <= $retries; $r++) {
-                       if (server($server, $port, $r) == true) {
-                           return true;
-                       } else {
-                                playSound('error_conn.mp3');
-                                cliBot("Unable to connect: {$server}:{$port}");
-                                usleep(loadValueFromConfigFile('SERVER', 'connect delay') * 1000000);
-                       }
+            /* port */
+            if (isset($serverData[1]) && !empty($serverData[1])) {
+                $port = $serverData[1];
+            } else {
+                     $port = 6667;
+            }
 
-                       if ($r == $retries && $s != 0) {
-                           cliBot('Changing server...');
-                       }
-                  }
+            /* ssl,plain */
+            if (isset($serverData[2]) && !empty($serverData[2])) {
+                $connectionType = $serverData[2];
+            } else {
+                     $connectionType = 'plain';
+            }
+
+            /* server password */
+            if (isset($serverData[3]) && !empty($serverData[3])) {
+                $serverPassword = $serverData[3];
+            } else {
+                     $serverPassword = '';
+            }
+
+            for ($r = 1; $r <= $retries; $r++) {
+                 /* if connected */
+                 if (server($server, $port, $connectionType, $r) == true) {
+                     /* identify to server */
+                     if (!empty($serverPassword)) {
+                         toServer('PASS '.$serverPassword);
+                     }
+
+                     toServer('NICK '.loadValueFromConfigFile('BOT', 'nickname'));
+                     toServer('USER '.loadValueFromConfigFile('BOT', 'ident').' 8 * :'.loadValueFromConfigFile('BOT', 'name'));
+
+                     return true;
+                 } else {
+                          playSound('error_conn.mp3');
+                          cliBot("Unable to connect: {$server}:{$port}");
+                          usleep(loadValueFromConfigFile('SERVER', 'connect delay') * 1000000);
+                 }
+
+                 if ($r == $retries && $s != 0) {
+                     cliBot('Changing server...');
+                 }
+            }
          }
 
          if ($s == 0) {
              cliBot('Can\'t connect to any of the servers, Exiting!');
              winSleep(10);
-             exit;   
          }
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function server($server, $port, $i)
+function server($server, $port, $connectionType, $i)
 {
     global $socket;
     global $connectedToServer;
@@ -86,34 +111,26 @@ function server($server, $port, $i)
 
     cliBot("Connecting: {$server}:{$port} ({$i}/".loadValueFromConfigFile('SERVER', 'how many times connect to server').")");
 
-    (loadValueFromConfigFile('SERVER', 'ssl')) ? $ssl = 'ssl://' : $ssl = '';
-    
-    
-    $socket = @fsockopen($ssl.$server, $port, $GLOBALS['errno'], $GLOBALS['errstr']);
+    ($connectionType == 'ssl') ? $type = 'ssl://' : $type = '';
+
+    $socket_options = [];
+
+    $socket_context = @stream_context_create($socket_options);
+
+    $socket = @stream_socket_client($type.$server.':'.$port, $GLOBALS['errno'], $GLOBALS['errstr'], 15, STREAM_CLIENT_CONNECT, $socket_context);
+
+    $stream_timeout = 320;
+
+    @stream_set_timeout($socket, $stream_timeout, 0);
 
     if ($socket == true) {
         $connectedToServer = $server;
         $connectedToPort   = $port;
 
-        @stream_set_blocking($socket, false);      
-
         return true;
     } else {
              return false;
     }
-}
-//---------------------------------------------------------------------------------------------------------
-function identify()
-{
-    if (!empty(loadValueFromConfigFile('SERVER', 'server password'))) {
-        toServer('PASS '.loadValueFromConfigFile('SERVER', 'server password'));
-    }
-
-    toServer('NICK '.loadValueFromConfigFile('BOT', 'nickname'));
-
-    toServer('USER '.loadValueFromConfigFile('BOT', 'ident').' 8 * :'.loadValueFromConfigFile('BOT', 'name'));
-
-    return true;
 }
 //---------------------------------------------------------------------------------------------------------
 function socketLoop()
@@ -129,63 +146,70 @@ function socketLoop()
 //---------------------------------------------------------------------------------------------------------
     /* main socket loop */
     while (1) {
-        while (!feof($socket)) {
+       while (!feof($socket)) {
+          /* start timers */
+          StartTimers();
+     
+          $rawData = fgets($socket);
+     
+          /* if raw mode send debug data to cli */
+          cliRaw($rawData, 0);
+     
+          /* put raw data to array */
+          rawDataArray();
+     
+          /* if ping -> response */
+          if (isset(rawDataArray()[0]) && rawDataArray()[0] == 'PING') {
+              toServer('PONG '.rawDataArray()[1]);
+          }
+     
+          /* if operation (JOIN,PART,etc) */
+          if (isset(rawDataArray()[1]) && in_array(rawDataArray()[1], WORD)) {
+              handleUserEvent(rawDataArray()[1]);
+          }
+     
+          if (count(rawDataArray()) < 4) {
+              continue;
+          }
+     
+          isset(rawDataArray()[3]) ? $rawcmd = explode(':', rawDataArray()[3]) : false;
+     
+          /* Case sensitive */
+          isset($rawcmd[1]) ? $rawcmd[1] = strtolower($rawcmd[1]) : false;
+          
+          /* if numeric message from server (001,002,etc) -> response */
+          if (isset(rawDataArray()[1]) && is_numeric(rawDataArray()[1])) {
+              handleNumericResponse(rawDataArray()[1]);
+          }
+     
+          /* ctcp */
+          if (isset($rawcmd[1][0]) && $rawcmd[1][0] == '') {
+              if (!isIgnoredUser()) {
+                  handleCTCP();
+              }
+          }
+     
+          /* Command: 'register' register to bot from user */
+          if (isset($rawcmd[1]) && $rawcmd[1] == 'register' && rawDataArray()[2] == getBotNickname()) {
+              if (!isIgnoredUser()) {
+                  plugin_register();
+              }
+          }
+     
+          /* 1. if first char == command prefix (eg. !) */
+          if (isset($rawcmd[1][0]) && $rawcmd[1][0] == commandPrefix()) {
+              if (!isIgnoredUser()) {
+                  ifPrivilegesExecuteCommand();
+     
+                  if (!function_exists('plugin_')) {
+                      function plugin_() { }
+                  }
+              }
+          }
+       }
 
-            /* start timers */
-            StartTimers();
-
-            /* get raw data */
-            $rawData = fgets($socket, 1024);
-
-            /* if raw mode send debug data to cli */
-            cliRaw($rawData, 0);
-
-            /* put raw data to array */
-            rawDataArray();
-
-            /* if ping -> response */
-            if (isset(rawDataArray()[0]) && rawDataArray()[0] == 'PING') {
-                toServer('PONG '.rawDataArray()[1]);
-            }
-
-            /* if operation (JOIN,PART,etc) */
-            if (isset(rawDataArray()[1]) && in_array(rawDataArray()[1], WORD)) {
-                handleUserEvent(rawDataArray()[1]);
-            }
-
-            if (count(rawDataArray()) < 4) {
-                continue;
-            }
-
-            isset(rawDataArray()[3]) ? $rawcmd = explode(':', rawDataArray()[3]) : false;
-
-            /* Case sensitive */
-            isset($rawcmd[1]) ? $rawcmd[1] = strtolower($rawcmd[1]) : false;
-            
-            /* if numeric message from server (001,002,etc) -> response */
-            if (isset(rawDataArray()[1]) && is_numeric(rawDataArray()[1])) {
-                handleNumericResponse(rawDataArray()[1]);
-            }
-
-            /* ctcp */
-            if (isset($rawcmd[1][0]) && $rawcmd[1][0] == '') {
-                handleCTCP();
-            }
-
-            /* if register command */
-            bot_register_command($rawcmd);
-
-            /* 1. if first char == command prefix (eg. !) */
-            if (isset($rawcmd[1][0]) && $rawcmd[1][0] == commandPrefix()) {
-                ifPrivilegesExecuteCommand();
-    
-                if (!function_exists('plugin_')) {
-                    function plugin_() { }
-                }
-           }
-        }
-        /* if disconected */
-        handleDisconnection($rawData);
+       /* if disconected */
+       handleDisconnection($rawData);
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -424,31 +448,29 @@ function handleDisconnection($rawData)
     if (preg_match("~\bYou are not authorized to connect to this server\b~", $rawData)) {
         cliBot('Cannot connect to: '.$connectedToServer.':'.$connectedToPort.' - Server requires password to connect! Exiting.');
         winSleep(10);
-        exit;
     }
 
     /* too many users */
     if (preg_match("~\bToo many connections from your IP\b~", $rawData)) {
         cliBot('Cannot connect to: '.$connectedToServer.':'.$connectedToPort.', too many connections! Exiting.');
         winSleep(10);
-        exit;
     }
 
     /* too many users */
     if (preg_match("~\bSession limit exceeded\b~", $rawData)) {
         cliBot('Cannot connect to: '.$connectedToServer.':'.$connectedToPort.', too many connections! Exiting.');
         winSleep(10);
-        exit;
     }
 
     /* too many users */
     if (preg_match("~\bToo many user connections\b~", $rawData)) {
         cliBot('Cannot connect to: '.$connectedToServer.':'.$connectedToPort.', too many connections! Exiting.');
         winSleep(10);
-        exit;
     }
 
     cliBot('Disconnected! ('.$connectedToServer.':'.$connectedToPort.') Trying to reconnect...');
+
+    usleep(loadValueFromConfigFile('SERVER', 'connect delay') * 1000000);
 
     connect();
 }

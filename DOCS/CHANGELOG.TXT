@@ -1,4 +1,32 @@
-
+  
+   v1.2.1 changes (15.12.2024):
+   - bug with increased CPU usage fixed
+   - from now on, with each server it is possible to separately set the connection type (plain/ssl), port and password
+      eg. "localhost:6667:plain", "localhost:6679:ssl:123", etc,.  
+   - added checking configuration file for errors
+   - added compression of logs from the previous day
+      creates an '<date>.zip' file and deletes the folder
+   - ctrl+c, ctrl+break handler corrected for windows only
+   - bot can now ignore users, new structure in config:
+      "IGNORE": {
+        "users": [
+           "nick!ident@hostname",
+           "..."
+      bot ignores all plugins, register, ctcp, privmsg, channel messages, invites, notice - commands/messages
+   - new plugin 'ignore' Adds host to ignore list (!ignore <nick!ident@hostname>)
+   - new ban list format:
+      "ban list": [
+          "nick!ident@hostname",
+          "*!ident@hostname",
+          "..."
+   - new auto op list format:
+      "auto op list": [
+          "nick!ident@hostname",
+          "..."
+   - new cli argument '-x' create default configuration file (config.json)
+   - updated 'config info.txt' file
+   - updated php from 7.4.5 to 7.4.33
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v1.2.0 changes (10.12.2024):
    - ssl servers support
    - more servers can now be set
@@ -29,7 +57,7 @@
       to  : "JOIN test1",
             "JOIN test2",
 	    "..." etc,.
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v1.1.9 changes (01.12.2024):
    - added in config "owner message on join channel", if set to true and "owner message" is provided.
      This message will be shown if owner joins channel
@@ -38,7 +66,7 @@
    - added in config "raw commands on start", you can set own raw commands eg. "JOIN #test1;JOIN #test2"
      (separated by ';')
    - added ctrl+c, ctrl+break handler
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v1.1.8 changes (29.11.2024):
    - config changed from ini to json format (config.ini => config.json)
    - deleted 'update check.bat' since we now checking it after start time
@@ -68,7 +96,7 @@
    - new sounds
    - some bot messages have been changed
    - code cleanup
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v1.1.7 changes (17.01.2023):
    - from now on, you can create 1-998 permissions + 'normal user' (999) and 'owner' (0)
    - The entitlement structure changed, As of now The owner directory can have any name
@@ -95,7 +123,7 @@
    - disabled for now 'fetch' plugin
    - removed files: 'debug.php', 'web.php'
    - code cleanup
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v1.1.6 changes (28.12.2022):
    - fixed reconnect delay time
    - new option in config: 'show_own_messages_in_raw_mode'
@@ -111,23 +139,23 @@
    - separators in config file changed from '_' to '.'
    - Fixed: plugin 'say' - we can now say whole message
    - other small changes / code cleanup
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v1.1.5 changes (28.12.2020):
    - code cleanup
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v1.1.4 changes (26.12.2020):
    - Plugin: restart - now escapes from parent process
    - Plugin: server - now escapes from parent process
    - fixed repeated messages on join event
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v1.1.3 changes (21.12.2020):
    - registration to bot bug fixed
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v1.1.2 changes (21.12.2020):
    - plugin usage info moved from plugins files to misc.php
    - little code cleanup in socket.php
    - improved requests checks
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v1.1.1 changes (20.12.2020):
    - Plugin: leave - fixed bug with channels in capital letters
    - some messages was present in silent mode, fixed
@@ -137,7 +165,7 @@
    - file name changed from 'update_check.bat' to 'update check.bat'
    - DOCS/Cli Arguments.txt updated
    - many small changes/core
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v1.1.0 changes (16.12.2020):
    - Plugin: bash - removed
    - Plugin: gethost - moved to ADMIN
@@ -154,12 +182,12 @@
    - Plugin: kick - prevention against owner/admin kick
    - some cli messages changed
    - little code cleanup
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v1.0.9 changes (12.12.2020):
    - fixed some errors in Linux os
    - little code cleanup
    - read-only check
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v1.0.8 changes (23.05.2020):
    - fixed path bugs, you can run bot now from diffrent php loc
    - fixed '-c' argument, config can be now loaded from diffrent loc
@@ -177,7 +205,7 @@
    - Plugin: join - fixed bug
    - Plugin: leave - fixed bug
    - other code cleanup
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v1.0.7 changes (15.05.2020):
    - PHP version changed to 7.4.5
    - removed languages option/translation
@@ -185,37 +213,37 @@
    - changed error sound
    - "Cannot connect" message with counter now
    - some code cleanup
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v1.0.6 changes (29.09.2019):
    - errors pause now only in Windows
    - fixed !addowner - now adds also to auto op list
    - little code cleanup
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v1.0.5 changes (15.06.2018):
    - plugin !fetch works now as expected.
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v1.0.4 changes (05.06.2018):
    - new plugin: !server - Connects to specified server, eg: !server irc.dal.net 6667
    - new plugin: !say - Says specified text to channel, eg: !say hello
    - plugin !cham moved to ADMIN permissions
    - added file 'arguments.txt' to Docs dir.
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v1.0.3 changes (04.06.2018):
    - generate_password.bat changed to encrypt_password.bat
    - '-p' argument or encrypt_password.bat now asks if you want
      save password to config file, if yes it will save it.
    - some code cleanup
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v1.0.2 changes (24.05.2018):
    - keep nick works now properly
    - if no connection php error removed
    - ctcp cli logs now with user hostname
    - changed some \n to PHP_EOL
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v1.0.1 changes (13.05.2018):
    - little code change after motd
    - added anonymous bot usage statistics
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v1.0.0 changes (08.05.2018):
    - new switch '-o' You can specify server address, eg: 'BOT.php -o irc.example.net 6667'
    - no more Errors in bot response
@@ -235,7 +263,7 @@
    - now bot checks at startup if it has all extensions loaded
      if no information apear.
    - info about php version and os type at startup
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.9.9 changes (14.04.2018):
    - plugin 'bash' corrected doubled cli messages
    - plugin 'gethost' more response from plugin
@@ -247,48 +275,48 @@
    - plugins 'pause', 'unpause' fixed error message
    - plugins 'load', 'unload' more cli messages
    - copyright years updated
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.9.8 changes (14.01.2018):
    - fixed bug in creation log file name when there was no computer name
    - fixed bug in creation web.ini file
    - web panel: corrected plugins, fixed logs list, fixed index list
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.9.7 changes (04.01.2018):
    - if panel was not closed properly bot will detect it on next start
      and will try to kill it.
    - info updated if default password detected
    - when entering owner password from default prompt, it will be not visible
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.9.6 changes (23.12.2017):
    - !seen - fixed possible exploit
    - !seen - fixed illegal characters in file
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.9.5 changes (22.12.2017):
    - !seen -- when user quit's on channel there was no channel in "seen log", fixed.
    - !seen -- more check from input
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.9.4 changes (19.12.2017):
    - plugins count corrected
    - fixed: now showing full quit message on cli
    - new cli switch '-u' -- you can check if new version is on server
    - new file: update_check.bat -- it will automatic check if there is new version
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.9.3 changes (19.12.2017):
    - NEW plugin: !seen -- Check specified user when was last seen on channel: !seen <nickname>
    - colors changed :)
    - readme file updated
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.9.2 changes (03.12.2017):
    - some silent mode clean src
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.9.1 changes (29.11.2017):
    - cosmetic changes
    - more colors :)
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.9.0 changes (28.11.2017):
    - some code cleaned
    - fixed bug in silent mode
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.8.9 changes (27.11.2017):
    - added missing cli info about core plugins
    - changed cli info in registration process
@@ -303,29 +331,29 @@
      if yes keep modes from channel_modes, if no = no action.
    - updated 'config.ini info.txt'
    - some code reorganization.
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.8.8 changes (26.11.2017):
    - now all plugins follows one bot response (where to output msg)
    - new core plugin: !pause -- pause all BOT activity
      (cannot use plugins except !unpause, no ctcp response, etc)
    - new core plugin: !unpause -- restore BOT from !pause mode
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.8.7 changes (26.11.2017):
    - new plugin: !listadmins -- shows BOT admin(s) host(s) list
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.8.6 changes (26.11.2017):
    - default BOT response changed to notice
    - more config file syntax checking
    - some code reorganized/changed
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.8.5 changes (20.11.2017):
    - standarized cli msg after plugin usage:
      '[PLUGIN: pluginname] by: user (nick!ident@hostname) | chan: #channel | value: value'
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.8.4 changes (19.11.2017):
    - log's file name format changed to: full_year.month.day,computer_name.txt
      (example: 2017.11.19,mycomputer.txt)
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.8.3 changes (18.11.2017):
    - removed some doubled code
    - fix: 
@@ -336,23 +364,23 @@
 	- when default password was detected and after first connect
 	  there was information 'msg botnick register <password>'
 	  now we don't show password, only information about
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.8.2 changes (17.11.2017):
    - new plugin: 'note' -- you can add a note, show it, delete,
      type !note help to list commands
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.8.1 changes (16.11.2017):
    - new plugin: 'unban' -- unban's specified user/hostmask
    - readme.md updated
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.8.0 changes (16.11.2017):
    - Bot now checks if needed extension is loaded, if no plugin will be not used
    - fix: plugin 'winamp' checks if CLAmp is specified.
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.7.9 changes (15.11.2017):
    - if bot disconnected, it will try to connect to server again
    - removed line in silent mode
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.7.8 changes (13.11.2017):
    - section 'ADMIN' changed to 'OWNER' in config.ini
      & in section 'ADMIN' now are admin hosts
@@ -366,25 +394,25 @@
    - new plugin: 'addadmin' -- adds user host to ADMIN list in config file
    - new plugin: 'remadmin' -- removes admin from config file
    - plugins: 'load', 'plugin' fixed.
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.7.7 changes (13.11.2017):
    - plugin 'ping' for now only for windows (hangs on linux)
    - plugin 'math' removed
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.7.6 changes (12.11.2017):
    - fixed on linux: proper run & bug in PlaySound()
    - plugin: update fix
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.7.5 changes (10.11.2017):
    - fixed bug: bot not proper set's ban list to channel when first on channel
      & removed delay
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.7.4 changes (10.11.2017):
    - now on silent mode window is automatic minimized
    - we have colors now :)
    - on 'register <password>' we are checking now if there was
      space in password, if yes = remove space
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.7.3 changes (09.11.2017):
    - smaller sounds
    - changed default value how many times to connect if cannot - from '10' to '99'
@@ -393,14 +421,14 @@
    - new section in config '[BANS]' and option 'ban_list' you can set ban host's
      if bot join and opped add bans to channel from 'ban_list'
    - NEW PLUGIN: 'ban' - ban specified hostname <nick!ident@host>
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.7.2 changes (07.11.2017):
    - log file format little change
    - fixed bug: with web panel and diffrent config file (-c)
    - fixed bug: if bot kicked op var was not updated
    - fixed bug: if bot kicked channel var was not updated
    - fixed bug: double message on join & wrong order
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.7.1 changes (05.11.2017):
    - PLUGIN: 'bash' more failproof & gives now 3 output lines
    - PLUGIN: 'cham' more failproof
@@ -415,45 +443,45 @@
    - PLUGIN: 'newnick' checks first if already has that nick
    - PLUGINS: 'join', 'leave' checking now if already on that channel
    - PLUGIN: 'rem_owner' is now 'remowner'
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.7.0 changes (04.11.2017):
    - bug fixed in silent mode, there was log created
    - more config.ini checks, if 'no' or 'yes' sets defaults
    - readme.md updated
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.6.9 changes (03.11.2017):
    - more sounds on CTCP
    - prompt.wav compressed to mp3
    - sounds changed
    - smaller web server & php files
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.6.8 changes (31.10.2017):
    - fixed CoreCmd_Panel(), panel now checks more input from user
    - added simple plugin verifying, if verify include, if not not include plugin :)
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.6.7 changes (30.10.2017):
    - smaller custom play.exe file :)
    - a lot smaller custom web server for panel functionality
    - fixed bug - there was sound in silent mode ;0
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.6.6 changes (28.10.2017):
    - code reorganize
    - bot has now sound system :D
      & new option in CONFIG.INI file: 'play_sounds'
      if 'yes' sounds will be played, no = no sounds.
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.6.5 changes (27.10.2017):
    - bot core structure changes:
      some code separated to different files
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.6.4 changes (25.10.2017):
    - rebranding program name changed to 'MINION' :)
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.6.3 changes (25.10.2017):
    - bot directory structure changed
    - added: START_SILENT -- to start bot in silent mode
    - added: generate_hash -- to generate hash from password needed in config.ini
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.6.2 changes (24.10.2017):
    - new core plugin: !panel, !panel start <port>, !panel stop
      !panel start <port> - starts web server with bot admin panel
@@ -462,13 +490,13 @@
      & new option web_login - for web panel login
      $ new option web_password - for web panel password
    - logs filename format changed
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.6.1 changes (21.10.2017):
    - php engine changed from 5.4.45 to latest 5.6.31
    - new option in config.ini 'server_password' - if server have password write it there
    - new file: timers.php
    - added timers events, every: 1,5,10,15,20,25,30,35,40,45,50,55,60 minutes
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.6.0 changes (17.10.2017):
    - added copyright info
    - updated readme.md
@@ -477,7 +505,7 @@
      & new option show_logo - you can turn off logo on start :P
      & new option silent_mode - if 'yes' there will be no output to CLI window
      & new option check_update - if 'yes' bot will check if new version is available on startup
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.5.9 changes (12.10.2017):
    - api.php changed to events.php
    - bot code reorganized
@@ -485,46 +513,46 @@
      its not working perfectly but works anyway :)
    - added bot_admin -- to config.ini, you can set info about bot owner,
      added info on !help (if user is not owner, in register to bot & !info)
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.5.8 changes (07.10.2017):
    - fixed bug in identify()
    - more cli output - on nick change
    - bot nickname better handled
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.5.7 changes (07.10.2017):
    - bot can handle now more than 1 channel, response on channel where commands was put
    - cli messages bugs fixed
    - plugins updated
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.5.6 changes (06.10.2017):
    - bot now detects if it have op or no
    - bot have now channels list where he is 
    - more cli output
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.5.5 changes (05.10.2017):
    - plugin !save command_prefix - bug fixed
    - some output not included new command prefix - fixed
    - some plugins updated
    - api.php file added to hold helper functions for plugins
- 
+ // ------------------------------------------------------------------------------------------------------------------------------------------
    v0.5.4 changes (05.10.2017):
    - added 1.5 seconds delay after bot response new line in channel, and 1 second on priv & notice
    - added channel_delay, private_delay, notice_delay to config file, you can control messages delay now
    - config.ini info.txt - updated
    - added comments to CONFIG.INI
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.5.3 changes (03.10.2017):
    - new plugin: !rem_owner <nick!ident@host> - removes owner from config owners list
    - plugins !help, !add_owner - updated
    - plugin !htmltitle dont need 'http://' anymore, use: address only
    - if no nickname or server given in config - send info and exits
    - little code changes and some bugs fixed
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.5.2 changes (02.10.2017):
    - new cli command: 
      BOT.php -p <password> (it will hash your password to SHA256)
    - some little changes in code
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.5.1 changes (27.09.2017):   
    - added channel_key='' to config.ini, if channel is set +k you can write there password
    - ctcp response fix
@@ -532,7 +560,7 @@
    - new cli command: 
      BOT.php -s (Silent mode, no output messages from BOT to cli)
    - more cli info on join, part, kick, quit, mode
-   
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.5.0 changes (25.09.2017):
     - code optimized to PSR2 standard
     - more response in CTCP: USERINFO ,CLIENTINFO, SOURCE
@@ -541,52 +569,52 @@
       BOT.php -c <config_file> (loads specified config file)
       BOT.php -v (prints bot version)
       BOT.php -h (prints help)
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.4.9 changes (21.09.2017):
     - plugins: !load, !unload - moved to bot core.
     - new option in config.ini - language = '', you can change language to EN or PL at this time
-      
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.4.8 changes (19.09.2017):
     - new option in !plugin - 'plugin unload' - Unload plugin from BOT: !plugin unload <plugin_name>
     - new option in !plugin - 'plugin load' - Loads plugin to BOT: !plugin load <plugin_name>
     - new plugin !unload -- Unloads plugin from BOT: unload <plugin_name>
     - new plugin !load -- Loads plugin to BOT: load <plugin_name>
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.4.7 changes (18.09.2017):
     - plugin !restart - updated to use with linux/unix also
-   
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.4.6 changes (15.09.2017):
     - more output from server now in cli + logs
     - Bot is now platform independent, you can also run it from Linux/Unix
     - plugin !update - fixed
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.4.5 changes (15.09.2017):
     - more code optimization
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.4.4 changes (14.09.2017):
     - we have full error reporting now
     - auto_op update fix
     - ctcp requests loogged now
     - little code optimized
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.4.3 changes (13.09.2017):
     - if some data from config.ini is missing, default will be loaded
     - bot don't need plugins*.ini files anymore, they are stored in variables now
     - owner_password in config is now hashed with SHA256
     - new start logo :)
     - little code cleanup
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.4.2 changes(12.09.2017):
     - bot don't need data.ini anymore, alt-nick in variable now
     - if default password detected prompt to change it - if password is shorter than 6 chars
       inform about it and wait for new pwd.
     - new option in config file: 'keep_nick = 'yes/no', This setting makes the bot try to get
       his original nickname back if its primary nickname is already in use.
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.4.1 changes (09.09.2017):
     - register 'password' - bot dont need to restart anymore, after reg. you can use bot cmds
     - plugins: !add_owner, !auto_op, !save * - also dont need bot to restart to take effect.
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.4.0 changes (09.09.2017):
     - new plugin: !plugin -- Plugins manipulation: !plugin help to list commands
       plugin delete - Deletes plugin from directory: !plugin delete <plugin_name>
@@ -614,37 +642,37 @@
       save time_zone - Saving time zone in config: !save time_zone <eg. Europe/Warsaw>
     - plugin !showconfig - have now more config output
     - plugin !update - have now more CLI output
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.3.9 changes (07.09.2017):
     - some messages on CLI window changed
     - there is now 2 subdirectories in PLUGINS dir: 'USER' & 'OWNER' - user dir is for everybody to use
       owner - only for owners :)
     - plugin !help updated
     - little core update
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.3.8 changes (07.09.2017):
     - new plugin: !http_status -- Shows http status: !http_status <number>
     - new plugin: !wikipedia -- Searchs wikipedia: !wikipedia <lang> <string>
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.3.7 changes (07.09.2017):
     - new plugin: !ripe -- Checks ip or host address and shows results: !ripe <ip or host>
     - !uptime plugin improved/updated
     - we have now errors handler and more in logs if occured
     - !update plugin little fix
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.3.6 changes (04.09.2017):
     - new plugin: !raw <string> -- Sends raw string to server
     - you can now load bot with diffrent config from CLI
       to run: php "../BOT.php" some_other_config.ini
     - added to !quit plugin ending log message
     - some core code changed
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.3.5 changes (03.09.2017):
     - new plugin: !kick <#channel> <who> --  Kicks from channel
     - new plugin: !hash <help> -- changing string to choosed algorithm
     - new plugin: !ping <host> -- Pings a host
     - little code clean and text changes
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.3.4 changes (01.09.2017):
     - you can now set timezone in config.ini 'time_zone'
       default is: Europe/Warsaw
@@ -652,14 +680,14 @@
     - new switch in config: 'bot_response' you can chose: 'channel', 'notice', 'priv'
     - change in update plugin, old config.ini goes to old_config.ini
     - config.ini info explanation in DOCS folder
-    
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.3.3 changes (31.08.2017):
    - little information change in 'register <password>'
    - some changes in readme files
    - little code clean
    - more cli informations from plugins
    - we have now logging system :) LOGS folder :)
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.3.2 changes (30.08.2017):
    - new plugin: !morse -- converts <text> to morse code
    - new plugin: !math -- Solves mathematical tasks: !math <eg. 8*8+6>
@@ -671,13 +699,13 @@
    - plugin restart improv -- bot give owner op before restart
    - after sucessfull register <password> bot give op to owner and restart to update list
    - after !quit bot give op to owner and terminate program
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.3.1 changes (29.08.2017):
    - corrected start time
    - new plugin: !winamp - you can now control winamp by bot :)
    - save plugin code cleanup
    - topic plugin bug fixed
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.3.0 changes (25.08.2017):
    - changed from 'password' to -> 'register <password_from_config>'
    - new plugin: !weather -- Shows actual weather: !weather <city>
@@ -685,32 +713,32 @@
    - !commands renamed to !help
    - plugins: add_owner, auto_op, cham, cluster, deop, devoice, dns, fetch,
      join, leave, md5, newnick, op, save, topic, voice --- little fix.
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.2.9 changes (25.08.2017):
    - ctcp version now reply bot version :)
    - small code cleanup
    - fixed title nickname if used
    - uptime plugin improved
-   
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.2.8 changes (24.08.2017):
    - if default owner password detected in chonfig file there will be prompt to change it.
    - little change in ini parser
-   
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.2.7 changes (23.08.2017):
    - owner_password added to CONFIG.INI
      if you are not on owner list, you can msg to bot by typing 'password <password from config>'
      if password is correct your host will be added to owner hosts by bot.
-   
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.2.6 changes (20.08.2017):
    - php engine updated from 5.4.16 to 5.4.45
    - little change in startup info
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.2.5 changes (19.08.2017):
    - auto op list added to config, if on op list (nick!ident@host) give op on channel
    - auto op switch (yes/no) added to config
    - new plugin: !auto_op - Adds host to auto_op list in config file: !auto_op <nick!ident@host>
    - CONFIG.EXE temporary removed (need to be updated:)
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.2.4 changes:
    - new plugin: cluster <options>
    - all save_* plugins moved to one 'save' command, type !save help for list
@@ -720,7 +748,7 @@
      save command_prefix - Saving prefix commands: !save command_prefix <new_prefix>
      save connect_delay - Saving connect delay value to config: !save connect_delay <value>
      save try_connect - Saving how many times try connect to server: !save try_connect <value>
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.2.3 changes:
    - rejoin when bot kicked
    - rejoin switch in config file (yes/no)
@@ -729,34 +757,34 @@
      it checks if new version on server, if yes downloads it and extract
      to one directory up ../MINION(version) and copy CONFIG.INI from
      previous version, then executing new version.
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.2.2 changes:
    - !fetch list - switch added (lists all plugins from repository)
    - !fetch get <plugin> - new switch added 
    - little change in connection loop
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.2.1 changes:
    - !fetch now checks if plugin already exist
    - NEW command !save_fetch_server - Saving fetch server to config: !save_fetch_server <new_server>
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.2.0 changes: 
    - !commands improved 
    - !fetch improved
    - fetch server added to config file
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.1.9 changes:
    - changed plugins system
    - little plugins modifications
    - NEW command !fetch plugin added (you can now download plugins from repository:)
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.1.8 changes:
    - update fix
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.1.7 changes:
    - added wcli extension to php
    - now we maximize DOS window and added title to it
    - we have now gui program to configure bot-> CONFIG.EXE
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.1.6 changes:
    - alternative nick removed from config and added nick|random if nick reserved/used
    - fixed: now showing true nickname when connected
@@ -766,7 +794,7 @@
    - !save_altnick removed
    - some code cleanup/fix in plugins
    - readme.txt updated.
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.1.5 changes:
    - savecommands changed to save_command(s)
    - !listadmins changed to !list_owners and little fix applied
@@ -774,14 +802,14 @@
    - readme.txt updated
    - some other code changes
    - NEW command !addowner - Adds Owner host to config file: !addowner <nick!id@host>.
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.1.4 changes:
    -    NEW: you can now change how many times try to connect to server: config.ini
    - CHANGE: php/error reporting is showed only when show_raw enabled
    - CHANGE: configuration file structure changed
    - UPDATE: plugins updated
    - some code changed.
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.1.3 changes:
    - new plugin !dns <address>
    - now if there is no CONFIG.INI default one is created.
@@ -792,7 +820,7 @@
    - now you can choose if you want to response to ctcp: 'ctcp_response' in config.ini
    - you can now change ctcp version and finger responses in config.ini
    - little change in update plugin.
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.1.2 changes:
    - little change in 'START_BOT.BAT'
    - now checking is bot runned in CLI
@@ -800,36 +828,36 @@
    - added to !showconfig more info
    - added auto_join option to config now you can just connect bot without joining any channel
    - you can change now command prefix from '!' to anything else. Option in config.ini.
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.1.1 changes:
    - new command: !voice (+v <nick)
    - new command: !devoice (-v <nick>).
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.1.0 changes:
    - fixed join when no motd
    - added ssl support to php
    - moved folders 'PHP', 'PLUGINS' to main folder
    - moved file 'BOT.php' to main folder
    - you can now check for bot update and if its available download it and install, command: !update.
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.0.9 changes:
    - !reconnect is now !restart
    - some code cleanup/changes
    - now we are checking if there is config file
    - checks if wrong address/no connection and exits with message.
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.0.8 changes:
    - directories structure changed
    - added 'DOCS' dir for documentation
    - added 'changelog.txt' file to docs
    - php interpreter now packed with upx.
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.0.7 changes:
    - completly engine rewrited
    - added ctcp reply
    - moved admins to bot file
    - FIXED commands input by user, works now.
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.0.5 changes (27.09.2015):
    - moved source to GitHub
    - more in English
@@ -840,7 +868,7 @@
    - added readme.txt file
    - some cosmetic changes
    - fixed uptime plugin and other changes in plugins.
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.0.4 changes (22.11.2013):
    - php interpreter have now less MB
    - comments looks more natural
@@ -849,6 +877,6 @@
    - addded time in messages
    - cleaned some code: globals, etc.
    - !listadmins /New command added.
-
+// ------------------------------------------------------------------------------------------------------------------------------------------
    v0.0.3 changes (14.11.2013):
    - initial public release (sourceforge)

@@ -1,136 +1,144 @@
+######################
+# Config Explanation #
+######################
 
-  config Explanation
+#############################################################################################################################################
+BOT SECTION:
 
-[BOT]
+Bot nickname                                        =>  "nickname"                         : "minion"                (nick)
+Bot name                                            =>  "name"                             : "Bello!"                (name)
+Bot ident                                           =>  "ident"                            : "minion"                (ident)
+Bot own modes                                       =>  "bot modes"                        : "+ix"                   (modes +* /-*)
+#############################################################################################################################################
+SERVER SECTION:
 
-; bot nickname
-nickname         = 'minion'
+Servers to set: (server ip or hostname:port:plain/ssl:optional password)
+eg. irc.dal.net:6667:plain
+eg. irc.dal.net:6679:ssl
+eg. irc.dal.net:6667:plain:server_password
+(default port is 6667/plain/without password)
 
-; bot name
-name             = 'http://github.com/S3x0r/MINION'
+If the server does not connect to the first server,
+it will go to the next server in the list and try to connect, etc.
 
-; bot ident
-ident            = 'http://github.com/S3x0r/MINION'
+	"servers": [
+            "localhost:6667:plain",
+            "localhost:6679:ssl:password",
+            "other-server:7000"
+        ],
 
-[SERVER]
+How many times to try to connect to a given server  =>  "how many times connect to server" : 5                       (number)
+Time interval between connections to a given server =>  "connect delay"                    : 6                       (seconds)
+Show server message of the day                      =>  "show message of the day"          : true                    (true/false)
+#############################################################################################################################################
+OWNER SECTION:
 
-; server where to connect
-server           = 'irc.dal.net'
+Bot owner info                                      =>  "bot admin"                        : "minion <user@local>"   (info)
+Owner hashed main password                          =>  "owner password"                   : "abc"                   (password)
+When owner joins channel, show message on channel   =>  "owner message on join channel"    : true                    (true/false)
+Show message when owner joins                       =>  "owner message"                    : "Bello my master!"      (message)
+#############################################################################################################################################
+PRIVILEGES SECTION:
+   
+Owner(s) Hosts                                      =>  "OWNER"                            : "nick!ident@hostname"   (nick!ident@host, ...)
+Admin(s) Hosts                                      =>  "ADMIN"                            : "nick!ident@hostname"   (nick!ident@host, ...)
+User(s) Hosts                                       =>  "USER"                             : "nick!ident@hostname"   (nick!ident@host, ...)
+#############################################################################################################################################
+USERSLEVELS SECTION:
 
-; server port
-port             = '6667'
+                                                    =>  "OWNER"                            : 0                       (number)
+                                                    =>  "ADMIN"                            : 1                       (number)
+                                                    =>  "USER"                             : 999                     (number)
+#############################################################################################################################################
+RESPONSE SECTION:
 
-; try connect 'n' (in seconds) times to server, if cannot then quit
-try_connect      = '99'
+Bot response option                                 =>  "bot response"                     : "notice"                (notice/channel/priv)
+#############################################################################################################################################
+AUTOMATIC SECTION:
 
-; delay (in seconds) after new connection to server
-connect_delay    = '10'
+Auto op users from auto op list                     =>  "auto op"                          : true                    (true/false)
+Auto op list                                        =>  "auto op list"                     : ["nick!id@host", "..."] (nick!ident@host)
+Automatic rejoin channel when kicked                =>  "auto rejoin"                      : true                    (true/false)
+Keep channel modes                                  =>  "keep channel modes"               : true                    (true/false)
+Try to keep/recover nick from config                =>  "keep nick"                        : true                    (true/false)
+#############################################################################################################################################
+CHANNEL SECTION:
 
-[OWNER]
+Channel name to join                                =>  "channel"                          : "#minion"               (channel name)
+Join channel when connected                         =>  "auto join"                        : true                    (true/false)
+Channel modes                                       =>  "channel modes"                    : "nt"                    (modes)
+Channel password if set                             =>  "channel key"                      : ""                      (key)
+Channel topic to set                                =>  "channel topic"                    : "bello!"                (topic)
+Protect topic                                       =>  "keep topic"                       : true,                   (true/false)
+Give voice to everyone in channel on join new user  =>  "give voice users on join"         : false                   (true/false)
+#############################################################################################################################################
+COMMANDS SECTION:
 
-; you can set info about bot administrator here
-bot_admin        = 'minions <example@example.com>'
+Send raw commands when connected                    =>  "raw commands on start"            : ["", "", "..."]         (raw commands)
+#############################################################################################################################################
+MESSAGE SECTION:
 
-; bot will give op's if this hosts join channel 
-auto_op_list     = 'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host'
+Show in cli channel user messages                   =>  "show channel user messages"       : false                   (true/false)
+Show in cli channel kicks messages                  =>  "show channel kicks messages"      : true                    (true/false)
+Show in cli users private messages                  =>  "show private messages"            : false                   (true/false)
+Show in cli users notice messages                   =>  "show users notice messages"       : true                    (true/false)
+Show in cli users joins to channel                  =>  "show users join channel"          : true                    (true/false)
+Show in cli users parts channel                     =>  "show users part channel"          : true                    (true/false)
+Show in cli users quit messages                     =>  "show users quit messages"         : true                    (true/false)
+Show in cli users invite messages                   =>  "show users invite messages"       : true                    (true/false)
+Show in cli channel topic changes                   =>  "show topic changes"               : true                    (true/false)
+Show in cli users nick changes                      =>  "show nick changes"                : true                    (true/false)
+Show in cli plugin usage info                       =>  "show plugin usage info"           : true                    (true/false)
+Show in cli ctcp messages                           =>  "show ctcp messages"               : true                    (true/false)
+#############################################################################################################################################
+IGNORE SECTION:
 
-; BOT OWNER HOSTS
-bot_owners       = 'S3x0r!S3x0r@Clk-945A43A3, nick!ident@some.other.host'
+Users to ignore (list)                              =>  "users"                            : ["", "", "..."]         (nick!ident@host)
+#############################################################################################################################################
+BANS SECTION:
 
-; owner password (SHA256)
-owner_password   = '47a8f9b32ec41bd93d79bf6c1c924aaecaa26d9afe88c39fc3a638f420f251ed'
+Ban list                                            =>  "ban list":                        : ["", "", "..."]         (*!*@*)       
+#############################################################################################################################################
+COMMAND SECTION:
 
-[ADMIN]
+Command prefix                                      =>  "command prefix"                   : "!"                     (prefix)
+#############################################################################################################################################
+CTCP SECTION:
 
-; admin host list
-admin_list       = 'nick!ident@hostname, other, ...'
+Ctcp response                                       =>  "ctcp response"                    : true                    (true/false)
+#############################################################################################################################################
+DELAYS SECTION:
+    
+Bot channel messages delay time                     =>  "channel delay"                    : 1                       (true/false)
+Bot private messages delay time                     =>  "private delay"                    : 1	                     (true/false)
+Bot notice messages delay time                      =>  "notice delay"                     : 1	                     (true/false)
+#############################################################################################################################################
+LOGS SECTION:
 
-[RESPONSE]
+Log                                                 =>  "logging"                          : true                    (true/false)
+Log bot messages                                    =>  "log bot messages"                 : true                    (true/false)
+Log server messages                                 =>  "log server messages"              : true                    (true/false)
+Log ctcp messages                                   =>  "log ctcp messages"                : true                    (true/false)
+Log notice messages                                 =>  "log notice messages"              : true                    (true/false)
+Log channel messages                                =>  "log channel messages"             : true                    (true/false)
+Log plugins usage messages                          =>  "log plugins usage messages"       : true                    (true/false)
+Log raw messages"                                   =>  "log raw messages"                 : false                   (true/false)
+#############################################################################################################################################
+TIME SECTION:
 
-; where bot should response, you can choose from: 'channel', 'notice', 'priv'
-bot_response     = 'notice'
+Set timezone                                        =>  "timezone"                         : "Europe/Warsaw"         (timezone)
+#############################################################################################################################################
+FETCH SECTION:
+    
+Link to plugins                                     =>  "fetch server"                     : "https://..."           (link)
+#############################################################################################################################################
+PROGRAM SECTION:
 
-[AUTOMATIC]
+Play sounds                                         =>  "play sounds"                      : true                    (true/false)
+#############################################################################################################################################
+DEBUG SECTION:
 
-; bot will give op when join to channel from auto_op_list: 'yes', 'no'
-auto_op          = 'yes'
-
-; bot will auto rejoin channel when kicked: 'yes', 'no'
-auto_rejoin      = 'yes'
-
-; do we want to keep channel modes from channel_modes option?: 'yes', 'no'
-keep_chan_modes  = 'yes'
-
-; this setting makes the bot try to get his original nickname back if its primary nickname is already in use
-keep_nick        = 'yes'
-
-[CHANNEL]
-
-; channel where to join when connected
-channel          = '#minion'
-
-; auto join channel when connected: 'yes', 'no'
-auto_join        = 'yes'
-
-; set channel modes on bot join, eg: 'nts'
-channel_modes    = 'nt'
-
-; channel key if exists
-channel_key      = ''
-
-[BANS]
-
-; ban users from this list
-ban_list         = 'nick!ident@hostname, *!ident@hostname, *!*@onlyhost'
-
-[COMMAND]
-
-; bot commands prefix eg. !info, you can change to what you want
-command_prefix   = '!'
-
-[CTCP]
-
-; response to ctcp requests? 'yes', 'no'
-ctcp_response    = 'yes'
-
-; ctcp version response (please do not change it:)
-ctcp_version     = 'MINION (0.5.4) powered by minions!'
-
-; ctcf finger response
-ctcp_finger      = 'MINION'
-
-[DELAYS]
-
-; bot response delay on channel (in seconds)
-channel_delay   = '1.5'
-
-; bot response delay on private messages (in seconds)
-private_delay   = '1'
-
-; bot response delay on notice messages (in seconds)
-notice_delay    = '1'
-
-[LOGS]
-
-; log CLI messages to LOGS folder? 'yes', 'no'
-logging          = 'yes'
-
-[TIME]
-
-; bot time zone
-time_zone        = 'Europe/Warsaw'
-
-[FETCH]
-
-; bot plugin repository address
-fetch_server     = 'https://raw.githubusercontent.com/S3x0r/minion_repository_plugins/master'
-
-[PROGRAM]
-
-; if we want to play sounds?: 'yes', 'no'
-play_sounds      = 'yes'
-
-[DEBUG]
-
-; show raw output on CLI window
-show_raw         = 'no'
+Show in cli raw messages                            =>  "show raw"                         : false                   (true/false)
+Show in cli own messages in raw mode                =>  "show own messages in raw mode"    : false                   (true/false)
+Show in cli debug messages                          =>  "show debug"                       : false                   (true/false)
+#############################################################################################################################################

@@ -112,6 +112,7 @@ function ifPrivilegesExecuteCommand()
     cliDebug('ifPrivilegesExecuteCommand()');
     
     global $rawcmd;
+
     $who = whoIsUser();
 
     /* owner */

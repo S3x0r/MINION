@@ -23,8 +23,8 @@
 /* set timers */
 $GLOBALS['TIMER1'] = time();
 $GLOBALS['TIMER2'] = time();
-$GLOBALS['TIMER7'] = time();
-$GLOBALS['TIMER13'] = time();
+$GLOBALS['TIMER3'] = time();
+$GLOBALS['TIMER4'] = time();
 //---------------------------------------------------------------------------------------------------------
 function StartTimers()
 {
@@ -39,14 +39,14 @@ function StartTimers()
         $GLOBALS['TIMER2'] = time();
     }
     /* TIMERS - 30 minutes */
-    if (time()-$GLOBALS['TIMER7'] > 1800) {
+    if (time()-$GLOBALS['TIMER3'] > 1800) {
         every_30_minutes();
-        $GLOBALS['TIMER7'] = time();
+        $GLOBALS['TIMER3'] = time();
     }
     /* TIMERS - 60 minutes */
-    if (time()-$GLOBALS['TIMER13'] > 3600) {
+    if (time()-$GLOBALS['TIMER4'] > 3600) {
         every_60_minutes();
-        $GLOBALS['TIMER13'] = time();
+        $GLOBALS['TIMER4'] = time();
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -73,4 +73,6 @@ function every_30_minutes()
 //---------------------------------------------------------------------------------------------------------
 function every_60_minutes()
 {
+    /* try to compress old logs */
+    zipLogs();
 }

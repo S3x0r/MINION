@@ -75,7 +75,6 @@
 if (!is_writable('BOT.php')) {
     echo N.' Bot has no permissions to save files, Check your permissions! Exiting.';
     winSleep(7);
-    exit;
 } else {
          startBot();
 }

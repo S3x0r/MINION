@@ -143,14 +143,10 @@ function plugin_register()
             saveValueToConfigFile('PRIVILEGES', getOwnerUserName(), $newList);
 
             /* Add host to auto op list */
-            $autoOpList = loadValueFromConfigFile('AUTOMATIC', 'auto op list');
+            if (!in_array($new, loadValueFromConfigFile('AUTOMATIC', 'auto op list'))) {
+                saveValueToListConfigFile('AUTOMATIC', 'auto op list', $new);
+            }
 
-            $new = trim(userNickIdentAndHostname());
-
-            empty($autoOpList) ? $newList = $new : $newList = "{$autoOpList}, {$new}";
-
-            saveValueToConfigFile('AUTOMATIC', 'auto op list', $newList);
-  
             bot_newUserRegisteredAsOwner();
         }
     }

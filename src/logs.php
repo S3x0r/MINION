@@ -70,6 +70,63 @@ function saveLog($mode, $data)
     }
 }
 //---------------------------------------------------------------------------------------------------------
+function zipLogs()
+{
+    if (IsfolderFromDayBeforeExisting() == true) {
+        $date              = @date('d.m.Y');
+        $day_before_folder = LOGSDIR.'/'.@date( 'd.m.Y', strtotime($date.' -1 day'));
+
+        /* if we got logs in folder */
+        if (!isEmptyFolder($day_before_folder)) {
+            cliBot("Compressing logs: '{$day_before_folder}'");
+            $zip_file_name = $day_before_folder.'.zip';
+
+            $rootPath = realpath($day_before_folder);
+
+            $zip = new ZipArchive();
+            $zip->open($zip_file_name, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+            $files = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($rootPath),
+                RecursiveIteratorIterator::LEAVES_ONLY
+            );
+
+            foreach ($files as $file)
+            {
+                if (!$file->isDir()) {
+                    $filePath = $file->getRealPath();
+                    $relativePath = substr($filePath, strlen($rootPath) + 1);
+                    $zip->addFile($filePath, $relativePath);
+                }
+            }
+
+            $zip->close();
+
+            /* if compressed file exists */
+            if (is_file($zip_file_name)) {
+                cliBot("Compressed logs file: '{$zip_file_name}'");
+
+                if (is_dir($day_before_folder)) {
+                    cliBot("Deleting directory: '{$day_before_folder}'");
+
+                    $files = glob($day_before_folder.'/'.'*', GLOB_MARK);
+
+                    foreach ($files as $file) {
+                             unlink($file);
+                    }
+
+                    rmdir($day_before_folder);
+
+                    if (!is_dir($day_before_folder)) {
+                        cliBot('Done.');
+                        playSound('prompt.mp3');
+                    }
+                }
+            }
+        }
+    }
+}
+//---------------------------------------------------------------------------------------------------------
 function logFileNameFormatChannel()
 {
     global $connectedToServer;

@@ -125,10 +125,13 @@ function bot_op_user($userNickname)
 function bot_setChannelModesAndBans()
 {
     /* set bans from config */
-    if (!empty(loadValueFromConfigFile('BANS', 'ban list'))) {
-        $banList = explode(', ', loadValueFromConfigFile('BANS', 'ban list'));
+    if (!empty(loadValueFromConfigFile('BANS', 'ban list')[0])) {
+        $banList = loadValueFromConfigFile('BANS', 'ban list');
+        
         foreach ($banList as $ban_address) {
-            toServer('MODE '.getBotChannel().' +b '.$ban_address);
+            if (!empty($ban_address)) {
+                toServer('MODE '.getBotChannel().' +b '.$ban_address);
+            }
         }
     }
 
@@ -166,8 +169,10 @@ function setTopic($channel, $topic)
 //---------------------------------------------------------------------------------------------------------
 function on_bot_invited_to_channel()
 {
-    if (loadValueFromConfigFile('MESSAGE', 'show users invite messages') == true) {
-        cliBot(print_userNick_IdentHost().' invites me to channel: '.inputFromLine('3'));
+    if (!isIgnoredUser()) {
+        if (loadValueFromConfigFile('MESSAGE', 'show users invite messages') == true) {
+            cliBot(print_userNick_IdentHost().' invites me to channel: '.inputFromLine('3'));
+        }
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -177,7 +182,7 @@ function on_bot_auto_join()
     if (loadValueFromConfigFile('CHANNEL', 'auto join') == true) {
         joinChannel(loadValueFromConfigFile('CHANNEL', 'channel'));
     } else {
-             cliBot('No auto join mode in '.getConfigFileName().', idling...');    
+             cliBot('No auto join channel in '.getConfigFileName().', idling...');    
     }       
 }
 //---------------------------------------------------------------------------------------------------------
@@ -194,18 +199,10 @@ function bot_user_commands()
         $commands = loadValueFromConfigFile('COMMANDS', 'raw commands on start');
 
         foreach ($commands as $command) {
-            if (!empty($command)) {
-                cliBot('Sending raw command from config: "'.$command.'"');
-                toServer($command);
-            }
+           if (!empty($command)) {
+               cliBot('Sending raw command from config: "'.$command.'"');
+               toServer($command);
+           }
         }
-    }
-}
-//---------------------------------------------------------------------------------------------------------
-function bot_register_command($rawcmd)
-{
-    /* Command: 'register' register to bot from user */
-    if (isset($rawcmd[1]) && $rawcmd[1] == 'register' && rawDataArray()[2] == getBotNickname()) {
-        plugin_register();
     }
 }

@@ -19,7 +19,7 @@
   exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '1.2.0');
+    define('VER', '1.2.1');
 //---------------------------------------------------------------------------------------------------------
     error_reporting(-1);
 

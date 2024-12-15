@@ -43,12 +43,8 @@ function plugin_addowner()
                 saveValueToConfigFile('PRIVILEGES', getOwnerUserName(), $newList);
 
                 /* add user to auto op list */
-                $autoOpList = loadValueFromConfigFile('AUTOMATIC', 'auto op list');
-
-                if (strpos($autoOpList, commandFromUser()) === false) {
-                    empty($autoOpList) ? $newAutoOpList = commandFromUser() : $newAutoOpList = $autoOpList.', '.commandFromUser();
-
-                    saveValueToConfigFile('AUTOMATIC', 'auto op list', $newAutoOpList);
+                if (!in_array(commandFromUser(), loadValueFromConfigFile('AUTOMATIC', 'auto op list'))) {
+                    saveValueToListConfigFile('AUTOMATIC', 'auto op list', commandFromUser()); 
                 }
 
                 /* inform user about it */

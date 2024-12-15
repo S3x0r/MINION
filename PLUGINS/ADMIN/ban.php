@@ -37,15 +37,12 @@ function plugin_ban()
                       /* ban host */
                       toServer('MODE '.getBotChannel().' +b '.$fullmask);
 
-                      $banList = loadValueFromConfigFile('BANS', 'ban list');
-
-                      /* if not in config */
-                      if (strpos($banList, $fullmask) === false) {
-                          empty($banList) ? $newList = $fullmask : $newList = "{$banList}, {$fullmask}";
-                      
-                          saveValueToConfigFile('BANS', 'ban list', $newList);
-                      
+                      if (!in_array($fullmask, loadValueFromConfigFile('BANS', 'ban list'))) {
+                          saveValueToListConfigFile('BANS', 'ban list', $fullmask); 
+                              
                           response("Host: '{$fullmask}' added to ban list.");
+                      } else {
+                               response('I already have that host in my ban list.');
                       }
                   } else {
                            response('nope.');

@@ -7,12 +7,10 @@
     },
     "SERVER": {
         "servers": [
-            "localhost:6667",
-            "irc.dal.net:6667",
-            "other server:7000"
+            "localhost:6667:plain",
+            "localhost:6679:ssl:password",
+            "other-server:7000"
         ],
-        "ssl": false,
-        "server password": "",
         "how many times connect to server": 5,
         "connect delay": 6,
         "show message of the day": false
@@ -38,7 +36,9 @@
     },
     "AUTOMATIC": {
         "auto op": true,
-        "auto op list": "",
+        "auto op list": [
+            "user!ident@hostname"
+        ],
         "auto rejoin": true,
         "keep channel modes": true,
         "keep nick": true
@@ -54,8 +54,6 @@
     },
     "COMMANDS": {
         "raw commands on start": [
-            "",
-            ""
         ]
     },
     "MESSAGE": {
@@ -72,8 +70,16 @@
         "show plugin usage info": true,
         "show ctcp messages": true
     },
+    "IGNORE": {
+       "users": [
+       ]
+    },
     "BANS": {
-        "ban list": "nick!ident@hostname, *!ident@hostname, *!*@onlyhost"
+        "ban list": [
+            "nick!ident@hostname",
+            "*!ident@hostname",
+            "*!*@onlyhost"
+        ]
     },
     "COMMAND": {
         "command prefix": "!"

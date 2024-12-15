@@ -63,7 +63,6 @@ function getPasswd($string = '')
                       '  https://github.com/S3x0r/MINION/releases'.N.N,
                       '  Terminating program after 10 seconds.'.N.N.'  ';
                  winSleep(10);
-                 exit;
         }
     } else {
              system('stty -echo');
@@ -92,17 +91,18 @@ function CountLines($exts = ['php'])
     $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($fpath));
 
     foreach ($it as $file) {
-             if ($file->isDir()) {
-                 continue;
-             }
+       if ($file->isDir()) {
+           continue;
+       }
 
-             $parts = explode('.', $file->getFilename());
-             $extension = end($parts);
+       $parts = explode('.', $file->getFilename());
+       $extension = end($parts);
 
-             if (in_array($extension, $exts)) {
-                 $files[$file->getPathname()] = count(file($file->getPathname()));
-             }
+       if (in_array($extension, $exts)) {
+           $files[$file->getPathname()] = count(file($file->getPathname()));
+       }
     }
+
     return $files;
 }
 //---------------------------------------------------------------------------------------------------------
@@ -183,6 +183,7 @@ function winSleep($time)
 {
     if (ifWindowsOs()) {
         sleep($time);
+        exit;
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -275,5 +276,18 @@ function IsfolderFromDayBeforeExisting()
         return true;
     } else {
              return false;
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function isIgnoredUser()
+{
+    if (!empty(loadValueFromConfigFile('IGNORE', 'users')[0])) {
+        $IgnoredUsers = loadValueFromConfigFile('IGNORE', 'users');
+
+        if (in_array(userNickIdentAndHostname(), $IgnoredUsers)) {
+            return true;
+        } else {
+                 return false;
+        }
     }
 }

@@ -29,7 +29,11 @@ function handleUserEvent($parsedData)
 //---------------------------------------------------------------------------------------------------------
 function on_NOTICE()
 {
-    (rawDataArray()[2] == getBotNickname()) ? user_notice() : cliServer('[notice] '.msgFromServer());
+    if (rawDataArray()[2] == getBotNickname()) {
+        user_notice();
+    } else {
+             cliServer('[notice] '.msgFromServer());
+    }
 }
 //---------------------------------------------------------------------------------------------------------
 function on_MODE()
@@ -87,7 +91,7 @@ function on_PRIVMSG()
     } elseif (rawDataArray()[2] == getBotChannel()) { /* if message in channel */
               user_message_channel();
     } elseif (rawDataArray()[2] == getBotNickname()) { /* if private message */
-              if (rawDataArray()[3][1] != '') { /* if not ctcp */
+              if (isset(rawDataArray()[3][1]) && rawDataArray()[3][1] != '') { /* if not ctcp */
                   user_message_private();
               }
     }

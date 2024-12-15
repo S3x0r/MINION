@@ -30,6 +30,7 @@ function checkCliArguments()
         case '-h': /* show help */
             echo N.'  Minion Bot cli commands usage: php BOT.php -[option]'.NN,
                  '  -c <config_file>   # loads config from the specified path (eg. C:\my folder\\'.getConfigFileName().')'.N,
+                 '  -x                 # create default configuration file (config.json)'.N, /* default config */
                  '  -h                 # this help'.N, /* help */
                  '  -n                 # set bot nickname'.N, /* change bot nickname */
                  '  -o <server> <port> # connect to specified server: (eg. php BOT.php -o irc.dal.net 6667)'.N, /* server */
@@ -56,6 +57,19 @@ function checkCliArguments()
                       cliError('You need to specify config file! I need some data.');
                       exit;
             }
+            break;
+
+        case '-x': /* create default configuration */
+            echo N.' Creating default configuration file ('.getConfigFileName().')'.N;
+            createDefaultConfigFile();
+
+            if (is_file(getConfigFileName())) {
+                echo ' Done.'.N;
+            } else {
+                     cliError('Cannot create default configuration file. Read-only file system?');
+            }
+
+            exit;
             break;
 
         case '-o': /* server connect: eg: irc.example.net 6667 */
@@ -95,11 +109,9 @@ function checkCliArguments()
                     saveValueToConfigFile('OWNER', 'owner password', hash('sha256', rtrim($pwd, "\n\r")));
                     echo N.' Password saved to config file, Exiting.';
                     winSleep(6);
-                    exit;
                 } else {
                          cliError('Cannot find \''.getConfigFileName().'\' file, exiting!');
                          winSleep(5);
-                         exit;
                 }
             } else {
                      exit;

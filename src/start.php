@@ -33,8 +33,13 @@ function startBot()
     /* check for a new version */
     checkUpdateInfo();
        
-    /* if no config -> create default one */
-    checkIfConfigExists();
+    /* config checks */
+    if (checkIfConfigExists() == TRUE) {
+        checkIfConfigIsValid(getConfigFileName());
+    } else {
+             cliNoLog('Configuration file missing! I am creating a default configuration: '.getConfigFileName().N);
+             createDefaultConfigFile();
+    }
  
     /* egg */
     $date = date('dm');
@@ -67,7 +72,9 @@ function startBot()
     loadPlugins();
 
     /* ctrl+c ctrl+break handler */
-    sapi_windows_set_ctrl_handler('ctrl_handler');
+    if (ifWindowsOs()) {
+        sapi_windows_set_ctrl_handler('ctrl_handler');
+    }
 
     connect();
 }

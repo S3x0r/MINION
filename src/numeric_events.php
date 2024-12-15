@@ -242,7 +242,6 @@ function on_431() /* 431 * :No nickname given */
         cliError('Bot nickname missing, please fill in missing data in config. Exiting!');
     
         winSleep(10);
-        exit;
     }    
 }
 //---------------------------------------------------------------------------------------------------------
@@ -276,7 +275,6 @@ function on_461() /* USER :Not enough parameters, missing user or ident info */
         cliError('Bot name or ident missing, please fill in missing data in config. Exiting!');
     
         winSleep(10);
-        exit;
     }
 }
 //---------------------------------------------------------------------------------------------------------

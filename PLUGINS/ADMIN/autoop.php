@@ -34,21 +34,15 @@ function plugin_autoop()
                  $nick = $data[1];
 
                  if ($nick != getBotNickname() && $nick != userNickname()) {
-                     $autoOpList = loadValueFromConfigFile('AUTOMATIC', 'auto op list');
-
-                     /* if not in config */
-                     if (strpos($autoOpList, $fullmask) === false) {
-                         empty($autoOpList) ? $newList = $fullmask : $newList = "{$autoOpList}, {$fullmask}";
- 
-                         saveValueToConfigFile('AUTOMATIC', 'auto op list', $newList);
+                     if (!in_array($fullmask, loadValueFromConfigFile('AUTOMATIC', 'auto op list'))) {
+                         saveValueToListConfigFile('AUTOMATIC', 'auto op list', $fullmask); 
 
                          privateMsgTo($nick, 'From now you are on my auto op list, enjoy.');
+                         response("Host: '{$fullmask}' added to auto op list.");
 
                          if (BotOpped()) {
                              toServer('MODE '.getBotChannel().' +o '.$nick);
                          }
-
-                         response("Host: '{$fullmask}' added to auto op list.");
                      } else {
                               response('I already have that host in my auto op list.');
                      }

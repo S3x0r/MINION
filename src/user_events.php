@@ -22,7 +22,9 @@
 
 function user_notice()
 {
-    cliNotice('<'.userNickname().'> '.inputFromLine('3'));
+    if (!isIgnoredUser()) {
+        cliNotice('<'.userNickname().'> '.inputFromLine('3'));
+    }
 }
 //---------------------------------------------------------------------------------------------------------
 function user_modes()
@@ -39,12 +41,10 @@ function user_joined_channel()
     }
 
     /* auto op user */
-    if (BotOpped() && loadValueFromConfigFile('AUTOMATIC', 'auto op') == true && !empty(loadValueFromConfigFile('AUTOMATIC', 'auto op list'))) {
+    if (BotOpped() && loadValueFromConfigFile('AUTOMATIC', 'auto op') == true && !empty(loadValueFromConfigFile('AUTOMATIC', 'auto op list')[0])) {
         $autoOpList = loadValueFromConfigFile('AUTOMATIC', 'auto op list');
 
-        $user = explode(", ", $autoOpList);
-           
-        if (in_array(userNickIdentAndHostname(), $user)) {
+        if (in_array(userNickIdentAndHostname(), $autoOpList)) {
             cliBot('User '.print_userNick_IdentHost().' on auto op list, giving op!');
             toServer('MODE '.getBotChannel().' +o '.userNickname());
             playSound('prompt.mp3');
@@ -88,16 +88,20 @@ function user_quit()
 //---------------------------------------------------------------------------------------------------------
 function user_message_channel()
 {
-    if (loadValueFromConfigFile('MESSAGE', 'show channel user messages') == true) {
-        cliLogChannel('['.getBotChannel().'] <'.userNickname().'> '.inputFromLine('3'));
-    }    
+    if (!isIgnoredUser()) {
+        if (loadValueFromConfigFile('MESSAGE', 'show channel user messages') == true) {
+            cliLogChannel('['.getBotChannel().'] <'.userNickname().'> '.inputFromLine('3'));
+        }
+    }
 }
 //---------------------------------------------------------------------------------------------------------
 function user_message_private()
 {
-    if (loadValueFromConfigFile('MESSAGE', 'show private messages') == true) {
-        cliLogChannel('<'.userNickname().'> '.inputFromLine('3'));
-    }    
+    if (!isIgnoredUser()) {
+        if (loadValueFromConfigFile('MESSAGE', 'show private messages') == true) {
+            cliLogChannel('<'.userNickname().'> '.inputFromLine('3'));
+        }
+    }
 }
 //---------------------------------------------------------------------------------------------------------
 function user_kicked_from_channel()

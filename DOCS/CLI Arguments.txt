@@ -4,6 +4,7 @@
  Bot cli commands usage: BOT.php [argument]
 
  -c <config_file>   # loads config
+ -x                 # create default configuration file (config.json)
  -h                 # this help
  -n                 # set bot nickname
  -o <server> <port> # connect to specified server: eg: BOT.php irc.dal.net 6667
