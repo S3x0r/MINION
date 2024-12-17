@@ -40,7 +40,7 @@ function checkCliArguments()
             exit;
             break;
 
-        case '-n': /* set nickname */
+        case '-n': /* set bot nickname */
             if (!empty($argument_2)) {
                 saveValueToConfigFile('BOT', 'nickname', $argument_2);
             } else {
@@ -49,7 +49,7 @@ function checkCliArguments()
             }
             break;
 
-        case '-c': /* check if config is loaded from -c switch */
+        case '-c': /* loads config from the specified path */
             if (!empty($argument_2) && !is_file($argument_2)) {
                 cliError('Config file does not exist, wrong path?');
                 exit;

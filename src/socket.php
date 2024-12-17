@@ -138,9 +138,11 @@ function socketLoop()
     global $socket;
     global $rawData;
     global $rawcmd;
+    global $flood;
     global $BOT_NICKNAME;
     global $I_USE_RND_NICKNAME;
 //---------------------------------------------------------------------------------------------------------
+    $flood              = [];
     $BOT_NICKNAME       = null;
     $I_USE_RND_NICKNAME = null;
 //---------------------------------------------------------------------------------------------------------
@@ -185,6 +187,7 @@ function socketLoop()
           /* ctcp */
           if (isset($rawcmd[1][0]) && $rawcmd[1][0] == '') {
               if (!isIgnoredUser()) {
+                  floodProtect('ctcp');
                   handleCTCP();
               }
           }

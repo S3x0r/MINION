@@ -27,7 +27,9 @@
 function plugin_deop()
 {
     if (OnEmptyArg('deop <nick>')) {
-    } elseif (BotOpped() && commandFromUser() != getBotNickname() && commandFromUser() != userNickname()) {
-              toServer('MODE '.getBotChannel().' -o '.commandFromUser());
+    } elseif (BotOpped()) {
+              if (commandFromUser() != getBotNickname() && commandFromUser() != userNickname()) {
+                  toServer('MODE '.getBotChannel().' -o '.commandFromUser());
+              }
     }
 }

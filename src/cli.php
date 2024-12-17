@@ -145,13 +145,10 @@ function baner() /* no logs */
     echo '                    PHP Ver: '.PHP_VER.', OS: '.$sys.N;
     echo '    ---------------------------------------------------------'.N;
     echo '                   Total Lines of code: '.totalLines().' :)'.NN.N;
-}
-//---------------------------------------------------------------------------------------------------------
-function checkUpdateInfo() /* no logs */
-{
+
     if (extension_loaded('openssl')) {
         $file = @file_get_contents(VERSION_URL);
-    
+
         if (!empty($file)) {
             $version = explode("\n", $file);
             if ($version[0] > VER) {

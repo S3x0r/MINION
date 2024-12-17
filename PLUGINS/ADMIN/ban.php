@@ -34,8 +34,7 @@ function plugin_ban()
                   $nickToBan = $data[1];
 
                   if ($nickToBan != getBotNickname() && $nickToBan != userNickname()) {
-                      /* ban host */
-                      toServer('MODE '.getBotChannel().' +b '.$fullmask);
+                      banUserFromChannel(getBotChannel(), $fullmask);
 
                       if (!in_array($fullmask, loadValueFromConfigFile('BANS', 'ban list'))) {
                           saveValueToListConfigFile('BANS', 'ban list', $fullmask); 

@@ -26,43 +26,39 @@
  /* simple os check */
  function ifWindowsOs()
  {
-     if (PHP_OS == 'WINNT') {
-         return true;
-     } else {
-              return false;
-     }
+     return (PHP_OS == 'WINNT');
  }
 
  /* hide cli prompt */
  echo "\e[?25l";
 
  /* needed files */
- $botCoreFiles = ['define.php',
-                  'args.php',
-                  'cli.php',
-                  'misc.php',
-                  'config.php',
-                  'start.php',
-                  'core_cmnds.php',
-                  'core_cmnds_helpers.php',
-                  'bot_events.php',
-                  'user_events.php',
-                  'logs.php',
-                  'plugins.php',
-                  'socket.php',
-                  'numeric_events.php',
-                  'word_events.php',
-                  'timers.php',
-                  'ctcp.php'
-                 ];
+ $botFiles = ['define.php',
+              'args.php',
+              'cli.php',
+              'misc.php',
+              'config.php',
+              'start.php',
+              'core_cmnds.php',
+              'core_cmnds_helpers.php',
+              'bot_events.php',
+              'user_events.php',
+              'logs.php',
+              'plugins.php',
+              'socket.php',
+              'numeric_events.php',
+              'word_events.php',
+              'timers.php',
+              'ctcp.php'
+             ];
 
  /* checks if we have all the files */
- foreach ($botCoreFiles as $botCoreFile) {
-     if (is_file("src/{$botCoreFile}")) {
-         require_once("src/{$botCoreFile}");
+ foreach ($botFiles as $file) {
+     if (is_file("src/{$file}")) {
+         require_once("src/{$file}");
      } else {
               echo "\n";
-              echo "  I need a file '{$botCoreFile}' to work!\n\n",
+              echo "  I need a file '{$file}' to work!\n\n",
                    "  You can download missing files from:\n",
                    "  https://github.com/S3x0r/MINION/releases\n\n",
                    "  Terminating BOT after 10 seconds.\n\n";
@@ -71,10 +67,9 @@
      }
  }
 
-/* if we cannot write */
-if (!is_writable('BOT.php')) {
-    echo N.' Bot has no permissions to save files, Check your permissions! Exiting.';
-    winSleep(7);
-} else {
-         startBot();
-}
+ if (!is_writable('BOT.php')) {
+     echo N.' Bot has no permissions to save files, Check your permissions! Exiting.';
+     winSleep(7);
+ } else {
+          startBot();
+ }

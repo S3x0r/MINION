@@ -26,38 +26,31 @@ function startBot()
     if (isset($_SERVER['argv'][1])) {
         checkCliArguments();
     }
- 
-    /* info baner */
+
+    /* info baner (cli.php file) */
     baner();
- 
-    /* check for a new version */
-    checkUpdateInfo();
-       
-    /* config checks */
-    if (checkIfConfigExists() == TRUE) {
+
+    /* config checks (config.php file) */
+    if (checkIfConfigExists() == true) {
         checkIfConfigIsValid(getConfigFileName());
     } else {
              cliNoLog('Configuration file missing! I am creating a default configuration: '.getConfigFileName().N);
              createDefaultConfigFile();
     }
- 
-    /* egg */
-    $date = date('dm');
 
-	if ($date == '0112' or $date == '2412') {
-	    playSound('egg.mp3');
-	}
+    /* egg */
+	in_array(@date('dm'), array('0112', '2412')) ? playSound('egg.mp3') : false;
 
     /* set timezone from config file */
     setTimezone();
-    
+
     /* if directories are missing create them */
     checkDirectioriesIfExists();
  
     cliBot('Configuration Loaded from: '.getConfigFileName());
- 
+
     cliLine();
- 
+
     /* checks if the owner's default password is set (misc.php file) */
     if (loadValueFromConfigFile('OWNER', 'owner password') == DEFAULT_PWD) {
         cliBot('Owner\'s default password detected!');

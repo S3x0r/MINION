@@ -40,19 +40,21 @@ function loadPlugins()
     $pluginsSum = null;
 
     if (is_dir(PLUGINSDIR)) {
-        foreach (usersDirectoriesToArray() as $userDirectory) {
-           $pluginsSum = $pluginsSum + countPlugins($userDirectory);
-           
-           $userLvl = getUserLevelByUserName($userDirectory);
-           
-           cliNoLog('>>> \''.$userDirectory.'\' Plugins ('.countPlugins($userDirectory).' Plugins) [lvl: '.$userLvl.'] <<<');
-           
-           cliLine();
-           
-           /* add to $GLOBALS[$user.'_PLUGINS'] & include plugin */
-           loadPluginsFromEachGroupDir($userDirectory);
-           
-           cliLine();
+        if (!empty(usersDirectoriesToArray())) {
+            foreach (usersDirectoriesToArray() as $userDirectory) {
+               $pluginsSum = $pluginsSum + countPlugins($userDirectory);
+               
+               $userLvl = getUserLevelByUserName($userDirectory);
+               
+               cliNoLog('>>> \''.$userDirectory.'\' Plugins ('.countPlugins($userDirectory).' Plugins) [lvl: '.$userLvl.'] <<<');
+               
+               cliLine();
+               
+               /* add to $GLOBALS[$user.'_PLUGINS'] & include plugin */
+               loadPluginsFromEachGroupDir($userDirectory);
+               
+               cliLine();
+            }
         }
     }
 

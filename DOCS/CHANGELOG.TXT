@@ -1,4 +1,20 @@
-  
+
+   v1.2.2 changes (17.12.2024):  
+   - added flood protection (channel, privmsg, notice, ctcp messages)
+   - new options in config ('FLOOD' section):
+      "flood delay": 0.5         <- interval in float
+      "channel flood": "bankick" <- action after channel flood, options: 'bankick', 'kick', 'warn'
+      "privmsg flood": "ignore"  <- action after privmsg flood, options: 'ignore', 'warn'
+      "notice flood":  "ignore"  <- action after notice flood, options: 'ignore', 'warn'
+      "ctcp flood":    "ignore"  <- action after ctcp flood, options: 'ignore', 'warn'
+      
+      bankick = ban + kick in channel
+      kick    = kick from channel
+      ignore  = add user to ignore list (*!ident@hostname)
+      warn    = send warning to user
+   - fixed ignore list and corrected channel ignore
+   - fixed topic loop in timer
+// ------------------------------------------------------------------------------------------------------------------------------------------ 
    v1.2.1 changes (15.12.2024):
    - bug with increased CPU usage fixed
    - from now on, with each server it is possible to separately set the connection type (plain/ssl), port and password

@@ -34,7 +34,7 @@ function plugin_ignore()
 
                  if ($nick != getBotNickname() && $nick != userNickname()) {
                      if (!in_array($host_ident, loadValueFromConfigFile('IGNORE', 'users'))) {
-                         saveValueToListConfigFile('IGNORE', 'users', $host_ident); 
+                         addUserToIgnoreList($host_ident);
 
                          response("Host: '{$host_ident}' added to ignore list.");
 

@@ -56,6 +56,13 @@
         "raw commands on start": [
         ]
     },
+    "FLOOD": {
+        "flood delay": 0.5,
+        "channel flood": "bankick",
+        "privmsg flood": "ignore",
+        "notice flood": "ignore",
+        "ctcp flood": "ignore"
+    },
     "MESSAGE": {
         "show channel user messages": false,
         "show channel kicks messages": true,

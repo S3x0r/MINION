@@ -22,12 +22,12 @@
 
 function bot_joined_channel()
 {
-    /* 1. set channel from 353 */
+    /* set #channel name from 353 */
     setBotChannel(str_replace(':', '', rawDataArray()[2]));
     
     cliBot('Joined channel '.getBotChannel());
 
-    /* 1.check channel modes for cli message */
+    /* check channel modes for cli message */
     toServer('MODE '.getBotChannel());
 }
 //---------------------------------------------------------------------------------------------------------
@@ -130,7 +130,7 @@ function bot_setChannelModesAndBans()
         
         foreach ($banList as $ban_address) {
             if (!empty($ban_address)) {
-                toServer('MODE '.getBotChannel().' +b '.$ban_address);
+                banUserFromChannel(getBotChannel(), $ban_address);
             }
         }
     }

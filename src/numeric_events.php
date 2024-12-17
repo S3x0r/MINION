@@ -100,9 +100,11 @@ function on_331() /* RPL_NOTOPIC - "<channel> :No topic is set" */
 //---------------------------------------------------------------------------------------------------------
 function on_332() /* RPL_TOPIC - "<channel> :<topic>" */
 {
-    if (loadValueFromConfigFile('CHANNEL', 'keep topic') == true && !empty(loadValueFromConfigFile('CHANNEL', 'channel topic'))) {
-        if (inputFromLine('4') != loadValueFromConfigFile('CHANNEL', 'channel topic')) {
-            setTopic(getBotChannel(), loadValueFromConfigFile('CHANNEL', 'channel topic'));
+    if (BotOpped()) {
+        if (loadValueFromConfigFile('CHANNEL', 'keep topic') == true && !empty(loadValueFromConfigFile('CHANNEL', 'channel topic'))) {
+            if (inputFromLine('4') != loadValueFromConfigFile('CHANNEL', 'channel topic')) {
+                setTopic(getBotChannel(), loadValueFromConfigFile('CHANNEL', 'channel topic'));
+            }
         }
     }
     

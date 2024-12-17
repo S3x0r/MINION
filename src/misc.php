@@ -284,10 +284,130 @@ function isIgnoredUser()
     if (!empty(loadValueFromConfigFile('IGNORE', 'users')[0])) {
         $IgnoredUsers = loadValueFromConfigFile('IGNORE', 'users');
 
-        if (in_array(userNickIdentAndHostname(), $IgnoredUsers)) {
+        if (in_array(userIdentAndHostname(), $IgnoredUsers)) {
             return true;
         } else {
                  return false;
         }
     }
+}
+//---------------------------------------------------------------------------------------------------------
+function commandPrefix()
+{
+    return loadValueFromConfigFile('COMMAND', 'command prefix');
+}
+//---------------------------------------------------------------------------------------------------------
+function floodProtect($where)
+{
+    $key          = userNickname().';'.userIdentAndHostname().';'.getBotChannel();
+    $keyArray     = explode(';', $key);
+    $nickname     = $keyArray[0];
+    $fullHostmask = $keyArray[0].'!'.$keyArray[1];
+
+    /* if user != owner */
+    if ($fullHostmask != isUserOwner()) {
+        global $flood;
+
+        $identHost    = $keyArray[1];
+        $channel      = $keyArray[2];
+        $delay        = loadValueFromConfigFile('FLOOD', 'flood delay');
+        $kick_comment = 'reason: flood';      
+        $previous_timestamp = array_key_exists($key, $flood) ? floatval($flood[$key]) : 0.0000;
+
+        $flood[$key] = microtime(true);
+
+        if (abs($flood[$key] - $previous_timestamp) < floatval($delay)) {
+            /* channel flood */
+            if ($where == 'channel') {
+                /* ban kick */
+                if (loadValueFromConfigFile('FLOOD', 'channel flood') == 'bankick') {
+                    if (banUserFromChannel($channel, $identHost)) {
+                        kickUserFromChannel($channel, $nickname, $kick_comment);
+                        cliBot("User: '{$nickname}' Host: '{$identHost}' ban-kicked. Reason: Channel message flood");
+                    }
+                }
+   
+                /* kick */
+                if (loadValueFromConfigFile('FLOOD', 'channel flood') == 'kick') {
+                    if (kickUserFromChannel($channel, $nickname, $kick_comment)) {
+                        cliBot("User: '{$nickname}' Host: '{$identHost}' kicked. Reason: Channel message flood");
+                    }
+                }
+   
+                /* warn */
+                if (loadValueFromConfigFile('FLOOD', 'channel flood') == 'warn') {
+                    response("{$nickname}: Please do not flood in channel!");
+                    cliBot("User: '{$nickname}' Host: '{$identHost}' warned. Reason: Channel message flood");
+                }
+            }
+   
+            /* privmsg flood */
+            if ($where == 'privmsg') {
+                /* ignore */
+                if (loadValueFromConfigFile('FLOOD', 'privmsg flood') == 'ignore') {
+                    addUserToIgnoreList($identHost);
+                    cliBot("User: '{$nickname}' Host: '{$identHost}' added to ignore list. Reason: Private message flood");
+                }
+
+                /* warn */
+                if (loadValueFromConfigFile('FLOOD', 'privmsg flood') == 'warn') {
+                    response("{$nickname}: Please do not flood me!");
+                    cliBot("User: '{$nickname}' Host: '{$identHost}' warned. Reason: Private message flood");
+                }
+            }
+
+            /* notice flood */
+            if ($where == 'notice') {
+                /* ignore */
+                if (loadValueFromConfigFile('FLOOD', 'notice flood') == 'ignore') {
+                    addUserToIgnoreList($identHost);
+                    cliBot("User: '{$nickname}' Host: '{$identHost}' added to ignore list. Reason: Notice message flood");   
+                }
+                
+                /* warn */
+                if (loadValueFromConfigFile('FLOOD', 'notice flood') == 'warn') {
+                    response("{$nickname}: Please do not flood me!");
+                    cliBot("User: '{$nickname}' Host: '{$identHost}' warned. Reason: Notice message flood");
+                }
+            }
+
+             /* ctcp flood */
+            if ($where == 'ctcp') {
+                /* ignore */
+                if (loadValueFromConfigFile('FLOOD', 'ctcp flood') == 'ignore') {
+                    addUserToIgnoreList($identHost);
+                    cliBot("User: '{$nickname}' Host: '{$identHost}' added to ignore list. Reason: CTCP message flood");  
+                }
+
+                /* warn */
+                if (loadValueFromConfigFile('FLOOD', 'ctcp flood') == 'warn') {
+                    response("{$nickname}: Please do not flood me!");
+                    cliBot("User: '{$nickname}' Host: '{$identHost}' warned. Reason: CTCP message flood");
+                }
+            }
+        }
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function kickUserFromChannel($channel, $nickname, $reason)
+{
+    if (BotOpped()) {
+        toServer("KICK {$channel} {$nickname} :{$reason}");
+        
+        return true;
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function banUserFromChannel($channel, $hostmask)
+{
+    if (BotOpped()) {
+        toServer("MODE {$channel} +b {$hostmask}");
+        
+        return true;
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function addUserToIgnoreList($hostmask)
+{
+    saveValueToListConfigFile('IGNORE', 'users', $hostmask);
 }

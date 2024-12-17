@@ -23,6 +23,8 @@
 function user_notice()
 {
     if (!isIgnoredUser()) {
+        floodProtect('notice');
+
         cliNotice('<'.userNickname().'> '.inputFromLine('3'));
     }
 }
@@ -88,16 +90,22 @@ function user_quit()
 //---------------------------------------------------------------------------------------------------------
 function user_message_channel()
 {
-    if (!isIgnoredUser()) {
-        if (loadValueFromConfigFile('MESSAGE', 'show channel user messages') == true) {
-            cliLogChannel('['.getBotChannel().'] <'.userNickname().'> '.inputFromLine('3'));
-        }
+    floodProtect('channel');
+
+    if (loadValueFromConfigFile('MESSAGE', 'show channel user messages') == true) {
+
+    /* no colors */ 
+    $withoutColors = preg_replace('/[]]?\d+[,]?\d*/', '', inputFromLine('3'));
+  
+    cliLogChannel('['.getBotChannel().'] <'.userNickname().'> '.$withoutColors);
     }
 }
 //---------------------------------------------------------------------------------------------------------
 function user_message_private()
 {
     if (!isIgnoredUser()) {
+        floodProtect('privmsg');
+
         if (loadValueFromConfigFile('MESSAGE', 'show private messages') == true) {
             cliLogChannel('<'.userNickname().'> '.inputFromLine('3'));
         }

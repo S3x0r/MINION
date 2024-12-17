@@ -58,8 +58,10 @@ function every_1_minute()
     }
     
     /* keep topic */
-    if (loadValueFromConfigFile('CHANNEL', 'keep topic') == true && !empty(loadValueFromConfigFile('CHANNEL', 'channel topic'))) {
-        toServer('TOPIC '.getBotChannel());
+    if (BotOpped()) {
+        if (loadValueFromConfigFile('CHANNEL', 'keep topic') == true && !empty(loadValueFromConfigFile('CHANNEL', 'channel topic'))) {
+            toServer('TOPIC '.getBotChannel());
+        }
     }
 }
 //---------------------------------------------------------------------------------------------------------
