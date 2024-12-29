@@ -25,7 +25,6 @@
     $plugin_arguments   = '<help>';
     $plugin_description = 'Changing string to choosed algorithm: '.commandPrefix().$plugin_command.' '.$plugin_arguments.' to list algorithms';
 
-
 function plugin_hash()
 {
     if (OnEmptyArg('hash help to get algorithms list')) {

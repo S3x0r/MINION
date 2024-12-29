@@ -28,6 +28,6 @@ function plugin_leave()
 {
     if (OnEmptyArg('leave <#channel>')) {
     } else {
-             toServer('PART '.commandFromUser());
+             leaveChannel(commandFromUser());
     }
 }

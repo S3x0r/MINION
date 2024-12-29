@@ -20,50 +20,45 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-function saveLog($mode, $data)
+function saveLog($_mode, $_data)
 {
     if (loadValueFromConfigFile('LOGS', 'logging') == true) {
-        switch ($mode) {
+        createLogsDateDir();
+
+        switch ($_mode) {
           case 'bot':
                if (loadValueFromConfigFile('LOGS', 'log bot messages') == true) {
-                   createLogsDateDir();
-                   saveToFile(logFileNameFormatBot(), $data, 'a');
+                   saveToFile(logFileNameFormatBot(), $_data, 'a');
                }
               break;
           case 'server':
                if (loadValueFromConfigFile('LOGS', 'log server messages') == true) {
-                   createLogsDateDir();
-                   saveToFile(logFileNameFormatServer(), $data, 'a');
+                   saveToFile(logFileNameFormatServer(), $_data, 'a');
                }
               break;
           case 'channel':
                if (loadValueFromConfigFile('LOGS', 'log channel messages') == true) {
-                   createLogsDateDir();
-                   saveToFile(logFileNameFormatChannel(), $data, 'a');
+                   saveToFile(logFileNameFormatChannel(), $_data, 'a');
                }
               break;
           case 'notice':
                if (loadValueFromConfigFile('LOGS', 'log notice messages') == true) {
-                   createLogsDateDir();
-                   saveToFile(logFileNameFormatNotice(), $data, 'a');
+                   saveToFile(logFileNameFormatNotice(), $_data, 'a');
                }
               break;   
           case 'ctcp':
                if (loadValueFromConfigFile('LOGS', 'log ctcp messages') == true) {
-                   createLogsDateDir();
-                   saveToFile(logFileNameFormatCTCP(), $data, 'a');
+                   saveToFile(logFileNameFormatCTCP(), $_data, 'a');
                }
               break;
            case 'plugin':
                if (loadValueFromConfigFile('LOGS', 'log plugins usage messages') == true) {
-                   createLogsDateDir();
-                   saveToFile(logFileNameFormatPlugins(), $data, 'a');
+                   saveToFile(logFileNameFormatPlugins(), $_data, 'a');
                }
               break;
            case 'raw':
                if (loadValueFromConfigFile('LOGS', 'log raw messages') == true) {
-                   createLogsDateDir();
-                   saveToFile(logFileNameFormatRaw(), $data, 'a');
+                   saveToFile(logFileNameFormatRaw(), $_data, 'a');
                }
               break;
         }

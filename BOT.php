@@ -20,56 +20,52 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
- /* checks if the bot was started from the PHP provided by the program */
- dirname($_SERVER['PHP_SELF']) == '../..' ? chdir('../../') : false;
+/* checks if the bot was started from bundled php */
+dirname($_SERVER['PHP_SELF']) == '../..' ? chdir('../../') : false;
 
- /* simple os check */
- function ifWindowsOs()
- {
-     return (PHP_OS == 'WINNT');
- }
+/* simple os check */
+function ifWindowsOs()
+{
+    return (PHP_OS == 'WINNT');
+}
 
- /* hide cli prompt */
- echo "\e[?25l";
+/* hide cli prompt */
+echo "\e[?25l";
 
- /* needed files */
- $botFiles = ['define.php',
-              'args.php',
-              'cli.php',
-              'misc.php',
-              'config.php',
-              'start.php',
-              'core_cmnds.php',
-              'core_cmnds_helpers.php',
-              'bot_events.php',
-              'user_events.php',
-              'logs.php',
-              'plugins.php',
-              'socket.php',
-              'numeric_events.php',
-              'word_events.php',
-              'timers.php',
-              'ctcp.php'
-             ];
+/* needed files */
+$botFiles = ['define.php',
+             'args.php',
+             'cli.php',
+             'misc.php',
+             'config.php',
+             'start.php',
+             'actions.php',
+             'core_cmnds.php',
+             'core_cmnds_helpers.php',
+             'bot_events.php',
+             'user_events.php',
+             'logs.php',
+             'plugins.php',
+             'socket.php',
+             'numeric_events.php',
+             'word_events.php',
+             'timers.php',
+             'ctcp.php'
+            ];
 
- /* checks if we have all the files */
- foreach ($botFiles as $file) {
-     if (is_file("src/{$file}")) {
-         require_once("src/{$file}");
-     } else {
-              echo "\n";
-              echo "  I need a file '{$file}' to work!\n\n",
-                   "  You can download missing files from:\n",
-                   "  https://github.com/S3x0r/MINION/releases\n\n",
-                   "  Terminating BOT after 10 seconds.\n\n";
-              (ifWindowsOs()) ? sleep(10) : false;
-              exit;
-     }
- }
+/* checks if we have all the files */
+foreach ($botFiles as $file) {
+    if (is_file("src/{$file}")) {
+        require_once("src/{$file}");
+    } else {
+             echo "\n";
+             echo "  I need a file '{$file}' to work!\n\n",
+                  "  You can download missing files from:\n",
+                  "  https://github.com/S3x0r/MINION/releases\n\n",
+                  "  Terminating BOT after 10 seconds.\n\n";
+             (ifWindowsOs()) ? sleep(10) : false;
+             exit;
+    }
+}
 
- if (!is_writable('BOT.php')) {
-     echo N.' Bot has no permissions to save files, Check your permissions! Exiting.';
-     winSleep(7);
- } else {
-          startBot();
- }
+init();

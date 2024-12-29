@@ -23,12 +23,12 @@
 function bot_joined_channel()
 {
     /* set #channel name from 353 */
-    setBotChannel(str_replace(':', '', rawDataArray()[2]));
+    setBotChannel(str_replace(':', '', dataArray()[2]));
     
     cliBot('Joined channel '.getBotChannel());
 
     /* check channel modes for cli message */
-    toServer('MODE '.getBotChannel());
+    channelMode(getBotChannel());
 }
 //---------------------------------------------------------------------------------------------------------
 function bot_leaved_channel()
@@ -56,7 +56,7 @@ function bot_kicked_from_channel()
         sleep(2);
         cliBot('Rejoining channel '.getBotChannel());
         
-        joinChannel(rawDataArray()[2]);
+        joinChannel(dataArray()[2]);
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -80,12 +80,8 @@ function bot_own_modes()
 function on_bot_opped()
 {
     /* send info */
-    if (print_userNick_IdentHost() == ' ()') {
-        $from = 'server (first on channel)';
-    } else {
-             $from = print_userNick_IdentHost();
-    }
-    
+    $from = (print_userNick_IdentHost() == ' ()') ? 'server (first on channel)' : print_userNick_IdentHost();
+
     cliBot('Got @ in: '.getBotChannel().', from: '.$from);
 
     /* set var that we have op */
@@ -96,7 +92,7 @@ function on_bot_opped()
     
     /* set topic if present in config */
     if (!empty(loadValueFromConfigFile('CHANNEL', 'channel topic'))) {
-        setTopic(getBotChannel(), loadValueFromConfigFile('CHANNEL', 'channel topic'));
+        changeTopic(getBotChannel(), loadValueFromConfigFile('CHANNEL', 'channel topic'));
     }
 
     /* play sound */
@@ -115,13 +111,6 @@ function on_bot_deoped()
     playSound('prompt.mp3');    
 }
 //---------------------------------------------------------------------------------------------------------
-function bot_op_user($userNickname)
-{
-    if (BotOpped() == true) {
-        toServer('MODE '.getBotChannel().' +o '.$userNickname);
-    }
-}
-//---------------------------------------------------------------------------------------------------------
 function bot_setChannelModesAndBans()
 {
     /* set bans from config */
@@ -130,21 +119,21 @@ function bot_setChannelModesAndBans()
         
         foreach ($banList as $ban_address) {
             if (!empty($ban_address)) {
-                banUserFromChannel(getBotChannel(), $ban_address);
+                banUser(getBotChannel(), $ban_address);
             }
         }
     }
 
     /* set channel modes from config */
-    if (loadValueFromConfigFile('AUTOMATIC', 'keep channel modes') == true && BotOpped() == true) { //FIX: keep modes
+    if (loadValueFromConfigFile('AUTOMATIC', 'keep channel modes')) { //FIX: keep modes
         if (isset($GLOBALS['CHANNEL.MODES']) && $GLOBALS['CHANNEL.MODES'] != loadValueFromConfigFile('CHANNEL', 'channel modes')) {
             sleep(1);
-            toServer('MODE '.getBotChannel().' +'.loadValueFromConfigFile('CHANNEL', 'channel modes'));
+            setChannelMode(getBotChannel(), '+'.loadValueFromConfigFile('CHANNEL', 'channel modes'));
         }
 
         if (!isset($GLOBALS['CHANNEL.MODES'])) {
             sleep(1);
-            toServer('MODE '.getBotChannel().' +'.loadValueFromConfigFile('CHANNEL', 'channel modes'));
+            setChannelMode(getBotChannel(), '+'.loadValueFromConfigFile('CHANNEL', 'channel modes'));
         }
     }
 }
@@ -159,12 +148,7 @@ function bot_newUserRegisteredAsOwner()
     user_registered_as_owner();
 
     /* give op */
-    bot_op_user(userNickname());    
-}
-//---------------------------------------------------------------------------------------------------------
-function setTopic($channel, $topic)
-{
-    toServer("TOPIC {$channel} :{$topic}");
+    opUser(userNickname());
 }
 //---------------------------------------------------------------------------------------------------------
 function on_bot_invited_to_channel()
@@ -189,7 +173,7 @@ function on_bot_auto_join()
 function bot_set_own_modes()
 {
     if (!empty(loadValueFromConfigFile('BOT', 'bot modes'))) {
-        toServer('MODE '.getBotNickname().' '.loadValueFromConfigFile('BOT', 'bot modes'));
+        setBotMode(loadValueFromConfigFile('BOT', 'bot modes'));
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -201,7 +185,7 @@ function bot_user_commands()
         foreach ($commands as $command) {
            if (!empty($command)) {
                cliBot('Sending raw command from config: "'.$command.'"');
-               toServer($command);
+               sendRaw($command);
            }
         }
     }

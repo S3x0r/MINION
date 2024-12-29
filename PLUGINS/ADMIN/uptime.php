@@ -26,35 +26,8 @@
 
 function plugin_uptime()
 {
-    $uptime = uptimeCount(microtime(true) - START_TIME);
+    $uptime = time()-START_TIME;
 
-    response("I've been running since (".date('d.m.Y, H:i:s', START_TIME).") and been running for {$uptime}");
-}
-
-function uptimeCount($s)
-{
-    $weeks = (floor($s / (60 * 60) / 24)) / 7;
-    $days = (floor($s / (60 * 60) / 24)) % 7;
-    $hours = (floor($s / (60 * 60))) % 24;
-
-    $divisor_for_minutes = $s % (60 * 60);
-    $minutes = floor($divisor_for_minutes / 60);
-
-    $divisor_for_seconds = $divisor_for_minutes % 60;
-    $s = ceil($divisor_for_seconds);
-
-    $result = '';
-    
-    !empty($weeks) && $days > 0 ? $result .= $weeks.' week' : false;
-    $weeks > 1 ? $result .= 's' : false;
-    !empty($days) && $days > 0 ? $result .= $days.' day' : false;
-    $days > 1 ? $result .= 's' : false;
-    !empty($hours) && $hours > 0 ? $result .= $hours.' hour' : false;
-    $hours > 1 ? $result .= 's' : false;
-    !empty($minutes) && $minutes > 0 ? $result .= ' '.$minutes.' minute' : false;
-    $minutes > 1 ? $result .= 's' : false;
-    !empty($s) && $s > 0 ? $result .= ' '.$s.' second' : false;
-    $s > 1 ? $result .= 's' : false;
-
-    return trim($result);
+    response('I\'ve been running since '.date('d.m.Y, H:i:s', START_TIME).' and been running for '.
+             floor($uptime/60/60/24).' days, '.($uptime/60/60%24).' hours, '.($uptime/60%60).' minutes, and '.($uptime%60).' seconds. ');
 }

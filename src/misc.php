@@ -45,13 +45,13 @@ function changeDefaultOwnerPwd()
     
     unset($hashedPassword);
 
-    cliNoLog('');
+    cliNoLog();
     cliBot('Owner\'s password updated!'.N);
 }
 //---------------------------------------------------------------------------------------------------------
-function getPasswd($string = '')
+function getPasswd($_string = '')
 {
-    echo $string;
+    echo $_string;
  
     if (ifWindowsOs()) {
         if (is_file('src\php\hide.exe')) {
@@ -73,17 +73,7 @@ function getPasswd($string = '')
     return rtrim($psw, N);
 }
 //---------------------------------------------------------------------------------------------------------
-/* sends info if bot is opped, true, false */
-function BotOpped()
-{
-    if (isset($GLOBALS['BOT_OPPED'])) {
-        return true;
-    } else { 
-             return false;
-    }
-}
-//---------------------------------------------------------------------------------------------------------
-function CountLines($exts = ['php'])
+function CountLines($_exts = ['php'])
 {
     $fpath = '.';
     $files = array();
@@ -98,7 +88,7 @@ function CountLines($exts = ['php'])
        $parts = explode('.', $file->getFilename());
        $extension = end($parts);
 
-       if (in_array($extension, $exts)) {
+       if (in_array($extension, $_exts)) {
            $files[$file->getPathname()] = count(file($file->getPathname()));
        }
     }
@@ -111,31 +101,22 @@ function totalLines()
     return array_sum(CountLines());
 }
 //---------------------------------------------------------------------------------------------------------
-function saveToFile($file, $data, $method)
+function playSound($_sound)
 {
-    $file = @fopen($file, $method);
-    @flock($file, 2);
-    @fwrite($file, $data);
-    @flock($file, 3);
-    @fclose($file);
-}
-//---------------------------------------------------------------------------------------------------------
-function playSound($sound)
-{
-    if (loadValueFromConfigFile('PROGRAM', 'play sounds') == true && ifWindowsOs()) {
-        if (is_file('src/php/play.exe') && is_file('src/sounds/'.$sound)) {
-            $command = 'start /b src/php/play.exe src/sounds/'.$sound;
-            pclose(popen($command, 'r'));
+    if (ifWindowsOs() && loadValueFromConfigFile('PROGRAM', 'play sounds')) {
+        if (is_file('src/php/play.exe') && is_file('src/sounds/'.$_sound)) {
+            $cmd = 'start /b src/php/play.exe src/sounds/'.$_sound;
+            pclose(popen($cmd, 'r'));
         } else {
                  echo "\x07";
         }
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function kill($program)
+function kill($_program)
 {
     if (ifWindowsOs()) {
-        $pattern = '~('.$program.')\.exe~i';
+        $pattern = '~('.$_program.')\.exe~i';
         $tasks = array();
         exec("tasklist 2>NUL", $tasks);
 
@@ -148,10 +129,10 @@ function kill($program)
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function isRunned($program)
+function isRunned($_program)
 {
     if (ifWindowsOs()) {
-        $pattern = '~('.$program.')\.exe~i';
+        $pattern = '~('.$_program.')\.exe~i';
         $tasks = array();
         exec("tasklist 2>NUL", $tasks);
 
@@ -179,18 +160,18 @@ function Statistics()
     @file($statsAddress."stamp={$botID}&nick=".getBotNickname()."&server=".$connectedToServer."&ver={VER}");
 }
 //---------------------------------------------------------------------------------------------------------
-function winSleep($time)
+function winSleep($_time)
 {
     if (ifWindowsOs()) {
-        sleep($time);
+        sleep($_time);
         exit;
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function in_array_r($needle, $haystack, $strict = false)
+function in_array_r($_needle, $_haystack, $_strict = false)
 {
-    foreach ($haystack as $item) {
-        if (($strict ? $item === $needle : $item == $needle) || (is_array($item) && in_array_r($needle, $item, $strict))) {
+    foreach ($_haystack as $item) {
+        if (($_strict ? $item === $_needle : $item == $_needle) || (is_array($item) && in_array_r($_needle, $item, $_strict))) {
             return true;
         }
     }
@@ -198,7 +179,7 @@ function in_array_r($needle, $haystack, $strict = false)
     return false;
 }
 //---------------------------------------------------------------------------------------------------------
-function runProgram($command)
+function runProgram($_command)
 {
     $descriptorspec = array(
           0 => array("pipe", "r"),
@@ -206,40 +187,12 @@ function runProgram($command)
           2 => array("pipe", "w")
     );
 
-    $process = proc_open($command, $descriptorspec, $pipes);
+    $process = proc_open($_command, $descriptorspec, $pipes);
 }
 //---------------------------------------------------------------------------------------------------------
-function checkDirectioriesIfExists()
+function ctrl_handler(int $_event)
 {
-    /* if directories are missing create them */
-    !is_dir(LOGSDIR) ? mkdir(LOGSDIR) : false;
-
-    createLogsDateDir();
-    
-    !is_dir(DATADIR) ? mkdir(DATADIR) : false;
-
-    !is_dir(DATADIR.'/'.SEENDIR) ? @mkdir(DATADIR.'/'.SEENDIR) : false;
-}
-//---------------------------------------------------------------------------------------------------------
-function createLogsDateDir()
-{
-    if (is_dir(LOGSDIR)) {
-        if (!is_dir(LOGSDIR.'/'.@date('d.m.Y'))) {
-            mkdir(LOGSDIR.'/'.@date('d.m.Y')); 
-        }
-    }
-}
-//---------------------------------------------------------------------------------------------------------
-function setTimezone()
-{
-    if (!empty(loadValueFromConfigFile('TIME', 'timezone'))) {
-        date_default_timezone_set(loadValueFromConfigFile('TIME', 'timezone'));
-    }    
-}
-//---------------------------------------------------------------------------------------------------------
-function ctrl_handler(int $event)
-{
-    switch ($event) {
+    switch ($_event) {
         case PHP_WINDOWS_EVENT_CTRL_C:
             cliBot('You have pressed CTRL+C - Exiting');
             quitSeq();
@@ -253,7 +206,7 @@ function ctrl_handler(int $event)
 //---------------------------------------------------------------------------------------------------------
 function quitSeq()
 {
-    toServer('QUIT :http://github.com/S3x0r/MINION');
+    quitFromServer('http://github.com/S3x0r/MINION');
 
     cliBot('Terminating BOT...');
     cliBot('------------------LOG ENDED: '.date('d.m.Y | H:i:s').'------------------'.N);
@@ -262,9 +215,9 @@ function quitSeq()
     exit;
 }
 //---------------------------------------------------------------------------------------------------------
-function isEmptyFolder($dir): bool
+function isEmptyFolder($_dir): bool
 {
-    return is_dir($dir) && is_readable($dir) && scandir($dir) === ['.', '..'];
+    return is_dir($_dir) && is_readable($_dir) && scandir($_dir) === ['.', '..'];
 }
 //---------------------------------------------------------------------------------------------------------
 function IsfolderFromDayBeforeExisting()
@@ -297,7 +250,7 @@ function commandPrefix()
     return loadValueFromConfigFile('COMMAND', 'command prefix');
 }
 //---------------------------------------------------------------------------------------------------------
-function floodProtect($where)
+function floodProtect($_where)
 {
     $key          = userNickname().';'.userIdentAndHostname().';'.getBotChannel();
     $keyArray     = explode(';', $key);
@@ -318,18 +271,18 @@ function floodProtect($where)
 
         if (abs($flood[$key] - $previous_timestamp) < floatval($delay)) {
             /* channel flood */
-            if ($where == 'channel') {
+            if ($_where == 'channel') {
                 /* ban kick */
                 if (loadValueFromConfigFile('FLOOD', 'channel flood') == 'bankick') {
-                    if (banUserFromChannel($channel, $identHost)) {
-                        kickUserFromChannel($channel, $nickname, $kick_comment);
+                    if (banUser($channel, $identHost)) {
+                        kickUser($channel, $nickname, $kick_comment);
                         cliBot("User: '{$nickname}' Host: '{$identHost}' ban-kicked. Reason: Channel message flood");
                     }
                 }
    
                 /* kick */
                 if (loadValueFromConfigFile('FLOOD', 'channel flood') == 'kick') {
-                    if (kickUserFromChannel($channel, $nickname, $kick_comment)) {
+                    if (kickUser($channel, $nickname, $kick_comment)) {
                         cliBot("User: '{$nickname}' Host: '{$identHost}' kicked. Reason: Channel message flood");
                     }
                 }
@@ -342,7 +295,7 @@ function floodProtect($where)
             }
    
             /* privmsg flood */
-            if ($where == 'privmsg') {
+            if ($_where == 'privmsg') {
                 /* ignore */
                 if (loadValueFromConfigFile('FLOOD', 'privmsg flood') == 'ignore') {
                     addUserToIgnoreList($identHost);
@@ -357,7 +310,7 @@ function floodProtect($where)
             }
 
             /* notice flood */
-            if ($where == 'notice') {
+            if ($_where == 'notice') {
                 /* ignore */
                 if (loadValueFromConfigFile('FLOOD', 'notice flood') == 'ignore') {
                     addUserToIgnoreList($identHost);
@@ -372,7 +325,7 @@ function floodProtect($where)
             }
 
              /* ctcp flood */
-            if ($where == 'ctcp') {
+            if ($_where == 'ctcp') {
                 /* ignore */
                 if (loadValueFromConfigFile('FLOOD', 'ctcp flood') == 'ignore') {
                     addUserToIgnoreList($identHost);
@@ -387,27 +340,4 @@ function floodProtect($where)
             }
         }
     }
-}
-//---------------------------------------------------------------------------------------------------------
-function kickUserFromChannel($channel, $nickname, $reason)
-{
-    if (BotOpped()) {
-        toServer("KICK {$channel} {$nickname} :{$reason}");
-        
-        return true;
-    }
-}
-//---------------------------------------------------------------------------------------------------------
-function banUserFromChannel($channel, $hostmask)
-{
-    if (BotOpped()) {
-        toServer("MODE {$channel} +b {$hostmask}");
-        
-        return true;
-    }
-}
-//---------------------------------------------------------------------------------------------------------
-function addUserToIgnoreList($hostmask)
-{
-    saveValueToListConfigFile('IGNORE', 'users', $hostmask);
 }

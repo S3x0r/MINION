@@ -31,9 +31,9 @@ function user_notice()
 //---------------------------------------------------------------------------------------------------------
 function user_modes()
 {
-    isset(rawDataArray()[4]) ? $more = rawDataArray()[4] : $more = '';
+    $more = isset(dataArray()[4]) ? dataArray()[4] : '';
      
-    cliLogChannel('['.getBotChannel().'] * '.print_userNick_IdentHost().' sets mode: '.rawDataArray()[3].' '.$more);    
+    cliLogChannel('['.getBotChannel().'] * '.print_userNick_IdentHost().' sets mode: '.dataArray()[3].' '.$more);    
 }
 //---------------------------------------------------------------------------------------------------------
 function user_joined_channel()
@@ -43,12 +43,12 @@ function user_joined_channel()
     }
 
     /* auto op user */
-    if (BotOpped() && loadValueFromConfigFile('AUTOMATIC', 'auto op') == true && !empty(loadValueFromConfigFile('AUTOMATIC', 'auto op list')[0])) {
+    if (isBotOpped() && loadValueFromConfigFile('AUTOMATIC', 'auto op') == true && !empty(loadValueFromConfigFile('AUTOMATIC', 'auto op list')[0])) {
         $autoOpList = loadValueFromConfigFile('AUTOMATIC', 'auto op list');
 
         if (in_array(userNickIdentAndHostname(), $autoOpList)) {
             cliBot('User '.print_userNick_IdentHost().' on auto op list, giving op!');
-            toServer('MODE '.getBotChannel().' +o '.userNickname());
+            opUser(userNickname());
             playSound('prompt.mp3');
         }
     }
@@ -57,14 +57,14 @@ function user_joined_channel()
     if (whoIsUser()[1] == 0) {
         if (loadValueFromConfigFile('OWNER', 'owner message on join channel') == true) {
             if (!empty(loadValueFromConfigFile('OWNER', 'owner message'))) {
-                toServer('PRIVMSG '.getBotChannel().' :'.userNickname().': '.loadValueFromConfigFile('OWNER', 'owner message'));
+                sayInChannel(getBotChannel(), userNickname().': '.loadValueFromConfigFile('OWNER', 'owner message'));
             }
         }
     }
 
     /* give voice users on join if true in config */
     if (whoIsUser()[1] != 0 && loadValueFromConfigFile('CHANNEL', 'give voice users on join') == true) {
-        toServer('MODE '.getBotChannel().' +v '.userNickname());
+        giveVoice(userNickname());
     }
 
     SeenSave();    
@@ -115,7 +115,7 @@ function user_message_private()
 function user_kicked_from_channel()
 {
     if (loadValueFromConfigFile('MESSAGE', 'show channel kicks messages') == true) {
-        cliLogChannel('['.getBotChannel().'] * '.print_userNick_IdentHost().' kicked '.rawDataArray()[3]);
+        cliLogChannel('['.getBotChannel().'] * '.print_userNick_IdentHost().' kicked '.dataArray()[3]);
     }    
 
     SeenSave();

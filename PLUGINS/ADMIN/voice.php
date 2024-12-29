@@ -27,7 +27,7 @@
 function plugin_voice()
 {
     if (OnEmptyArg('voice <nick>')) {
-    } else if (BotOpped()) {
-               toServer('MODE '.getBotChannel().' +v '.commandFromUser());
+    } else {
+             giveVoice(commandFromUser());
     }
 }

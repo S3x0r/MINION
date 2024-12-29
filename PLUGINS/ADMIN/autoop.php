@@ -37,12 +37,9 @@ function plugin_autoop()
                      if (!in_array($fullmask, loadValueFromConfigFile('AUTOMATIC', 'auto op list'))) {
                          saveValueToListConfigFile('AUTOMATIC', 'auto op list', $fullmask); 
 
-                         privateMsgTo($nick, 'From now you are on my auto op list, enjoy.');
+                         sendPRIVMSG($nick, 'From now you are on my auto op list, enjoy.');
                          response("Host: '{$fullmask}' added to auto op list.");
-
-                         if (BotOpped()) {
-                             toServer('MODE '.getBotChannel().' +o '.$nick);
-                         }
+                         opUser($nick);
                      } else {
                               response('I already have that host in my auto op list.');
                      }

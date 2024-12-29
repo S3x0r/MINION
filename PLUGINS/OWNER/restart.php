@@ -27,12 +27,10 @@
 function plugin_restart()
 {
     /* give op before restart */
-    if (BotOpped()) {
-        toServer('MODE '.getBotChannel().' +o '.userNickname());
-    }
+    opUser(userNickname());
 
-    /* quit from irc server */
-    toServer('QUIT :Restarting...');
+    /* disconnect from server */
+    quitFromServer('Restarting...');
 
     /* send cli messages */
     cliBot('Restarting BOT...');

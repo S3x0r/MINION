@@ -20,20 +20,20 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-function handleNumericResponse($parsedData)
+function handleNumericResponse($_parsedData)
 {
-    if (function_exists('on_'.$parsedData)) {
-        call_user_func('on_'.$parsedData);
+    if (function_exists('on_'.$_parsedData)) {
+        call_user_func('on_'.$_parsedData);
     }
 }
 //---------------------------------------------------------------------------------------------------------
 function on_001() /* server message */
 {
     /* 1.set server name */
-    setServerName(rawDataArray()[0]);
+    setServerName(dataArray()[0]);
 
     /* 1.set bot nickname */
-    setBotNickname(rawDataArray()[2]);
+    setBotNickname(dataArray()[2]);
 
     cliServer(msgFromServer());
 }
@@ -64,12 +64,15 @@ function on_005()
 //---------------------------------------------------------------------------------------------------------
 function on_303() /* ison */
 {
-    if (rawDataArray()[3] == ':') {
-        toServer('NICK '.loadValueFromConfigFile('BOT', 'nickname'));
+    global $recoverNickname;
+
+    if (dataArray()[3] == ':') {
+        changeNick(loadValueFromConfigFile('BOT', 'nickname'));
+
         /* 1.set nickname from config */
         setBotNickname(loadValueFromConfigFile('BOT', 'nickname'));
 
-        unset($GLOBALS['I_USE_RND_NICKNAME']);
+        unset($recoverNickname);
 
         cliBot('Recovered original nickname from config');
 
@@ -79,12 +82,12 @@ function on_303() /* ison */
 //---------------------------------------------------------------------------------------------------------
 function on_324() /* channel modes */
 {
-    if (isset(rawDataArray()[4])) {
+    if (isset(dataArray()[4])) {
         unset($GLOBALS['CHANNEL.MODES']);
 
-        $GLOBALS['CHANNEL.MODES'] = str_replace('+', '', rawDataArray()[4]);
+        $GLOBALS['CHANNEL.MODES'] = str_replace('+', '', dataArray()[4]);
 
-        empty(rawDataArray()[5]) ? $msg = $GLOBALS['CHANNEL.MODES'] : $msg = $GLOBALS['CHANNEL.MODES'].' '.rawDataArray()[5];
+        $msg = empty(dataArray()[5]) ? $GLOBALS['CHANNEL.MODES'] : $GLOBALS['CHANNEL.MODES'].' '.dataArray()[5];
 
         if (!empty($GLOBALS['CHANNEL.MODES'])) {
             cliLogChannel('['.getBotChannel().'] * channel modes: +'.$msg);
@@ -100,18 +103,18 @@ function on_331() /* RPL_NOTOPIC - "<channel> :No topic is set" */
 //---------------------------------------------------------------------------------------------------------
 function on_332() /* RPL_TOPIC - "<channel> :<topic>" */
 {
-    if (BotOpped()) {
+    if (isBotOpped()) {
         if (loadValueFromConfigFile('CHANNEL', 'keep topic') == true && !empty(loadValueFromConfigFile('CHANNEL', 'channel topic'))) {
             if (inputFromLine('4') != loadValueFromConfigFile('CHANNEL', 'channel topic')) {
-                setTopic(getBotChannel(), loadValueFromConfigFile('CHANNEL', 'channel topic'));
+                changeTopic(getBotChannel(), loadValueFromConfigFile('CHANNEL', 'channel topic'));
             }
         }
     }
     
     if (inputFromLine('4') != loadValueFromConfigFile('CHANNEL', 'channel topic')) {
-        empty(inputFromLine('4')) ? $msg = 'channel topic is not set' : $msg = 'channel topic: "'.inputFromLine('4').'"';
+        $msg = empty(inputFromLine('4')) ? 'channel topic is not set' : 'channel topic: "'.inputFromLine('4').'"';
         
-        cliLogChannel('['.rawDataArray()[3].'] * '.$msg);
+        cliLogChannel('['.dataArray()[3].'] * '.$msg);
     }
 }
 //---------------------------------------------------------------------------------------------------------
@@ -143,9 +146,9 @@ function on_353() /* on channel join info */
         $GLOBALS['channelUsersCount']++;
     }
     
-    $nick = str_replace(':', '', rawDataArray()[5]);
+    $nick = str_replace(':', '', dataArray()[5]);
 
-    /* check if bot is first in channel and if got OP */
+    /* check if bot is first in channel @ */
     if ($nick == '@'.getBotNickname()) {
         on_bot_opped();
     }
@@ -206,7 +209,7 @@ function on_376() /* motd end */
     bot_set_own_modes();
 
     /* show info that we are connected */
-    cliNoLog('');
+    cliNoLog();
     cliBot('Connected! My nickname is: '.getBotNickname());
 
     /* register to bot info */
@@ -242,23 +245,24 @@ function on_431() /* 431 * :No nickname given */
 {
     if (empty(loadValueFromConfigFile('BOT', 'nickname'))) {
         cliError('Bot nickname missing, please fill in missing data in config. Exiting!');
-    
+
         winSleep(10);
     }    
 }
 //---------------------------------------------------------------------------------------------------------
 function on_432() /* if nick reserved */
 {
-    /* vars for keep nick functionality */
-    (loadValueFromConfigFile('AUTOMATIC', 'keep nick') == true) ? $GLOBALS['I_USE_RND_NICKNAME'] = '1' : false;
+    global $recoverNickname;
+
+    (loadValueFromConfigFile('AUTOMATIC', 'keep nick') == true) ? $recoverNickname = '1' : false;
    
-    /* add random to nick */
+    /* add random part to nick "nick|0-999" */
     $randomNick = loadValueFromConfigFile('BOT', 'nickname').'|'.rand(0, 999);
 
     /* set random nick */
     cliBot('Nickname already in use, changing nickname to: '.$randomNick);
 
-    toServer('NICK '.$randomNick);
+    changeNick($randomNick);
 }
 //---------------------------------------------------------------------------------------------------------
 function on_433() /* if nick already exists */

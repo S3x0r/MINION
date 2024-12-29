@@ -48,14 +48,12 @@ function plugin_addowner()
                 }
 
                 /* inform user about it */
-                privateMsgTo($newOwnerNick, 'From now you are on my owner(s)/auto op(s) lists, enjoy.');
-                privateMsgTo($newOwnerNick, 'Core Plugins: '.allPluginsString());
-                privateMsgTo($newOwnerNick, 'All Plugins: '.allPluginsWithoutCoreString());
+                sendPRIVMSG($newOwnerNick, 'From now you are on my owner(s)/auto op(s) lists, enjoy.');
+                sendPRIVMSG($newOwnerNick, 'Core Plugins: '.allPluginsString());
+                sendPRIVMSG($newOwnerNick, 'All Plugins: '.allPluginsWithoutCoreString());
 
                 /* give op */
-                if (BotOpped()) {
-                    bot_op_user($newOwnerNick);
-                }
+                opUser($newOwnerNick);
 
                 response("Host: '".commandFromUser()."' added to owner(s) list.");
             }

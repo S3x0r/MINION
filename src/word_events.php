@@ -20,16 +20,16 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-function handleUserEvent($parsedData)
+function handleUserEvent($_parsedData)
 {
-    if (function_exists('on_'.$parsedData)) {
-        call_user_func('on_'.$parsedData);
+    if (function_exists('on_'.$_parsedData)) {
+        call_user_func('on_'.$_parsedData);
     }
 }
 //---------------------------------------------------------------------------------------------------------
 function on_NOTICE()
 {
-    if (rawDataArray()[2] == getBotNickname()) {
+    if (dataArray()[2] == getBotNickname()) {
         user_notice();
     } else {
              cliServer('[notice] '.msgFromServer());
@@ -39,25 +39,25 @@ function on_NOTICE()
 function on_MODE()
 {
     /* bot own modes */
-    if (rawDataArray()[0] == ':'.getBotNickname() && rawDataArray()[2] == getBotNickname()) {
+    if (dataArray()[0] == ':'.getBotNickname() && dataArray()[2] == getBotNickname()) {
         bot_own_modes();
     }
 
     /* 1. set channel modes to variable */
-    if (rawDataArray()[0] == getServerName() && isset(rawDataArray()[3]) && !empty(rawDataArray()[0])) {
-        $GLOBALS['CHANNEL.MODES'] = str_replace('+', '', rawDataArray()[3]); //check this
+    if (dataArray()[0] == getServerName() && isset(dataArray()[3]) && !empty(dataArray()[0])) {
+        $GLOBALS['CHANNEL.MODES'] = str_replace('+', '', dataArray()[3]); //check this
     }
     
     /* user sets channel modes */
-    if (rawDataArray()[0] != getServerName() && isset(rawDataArray()[3]) && !empty(rawDataArray()[3]) && rawDataArray()[2] != getBotNickname()) {
+    if (dataArray()[0] != getServerName() && isset(dataArray()[3]) && !empty(dataArray()[3]) && dataArray()[2] != getBotNickname()) {
         user_modes();
     }
 
-    if (isset(rawDataArray()[4]) && rawDataArray()[4] == getBotNickname()) {
-        if (isset(rawDataArray()[3])) {
-            if (rawDataArray()[3] == '+o') { /* if bot opped */
+    if (isset(dataArray()[4]) && dataArray()[4] == getBotNickname()) {
+        if (isset(dataArray()[3])) {
+            if (dataArray()[3] == '+o') { /* if bot opped */
                 on_bot_opped();
-            } elseif (rawDataArray()[3] == '-o') { /* if bot deoped */
+            } elseif (dataArray()[3] == '-o') { /* if bot deoped */
                       on_bot_deoped();
             }
         }
@@ -87,11 +87,11 @@ function on_TOPIC()  /* topic change */
 function on_PRIVMSG()
 {
     /* if register <pwd> */
-    if (rawDataArray()[2] == getBotNickname() && isset(rawDataArray()[3]) && rawDataArray()[3] == ':register') {
-    } elseif (rawDataArray()[2] == getBotChannel()) { /* if message in channel */
+    if (dataArray()[2] == getBotNickname() && isset(dataArray()[3]) && dataArray()[3] == ':register') {
+    } elseif (dataArray()[2] == getBotChannel()) { /* if message in channel */
               user_message_channel();
-    } elseif (rawDataArray()[2] == getBotNickname()) { /* if private message */
-              if (isset(rawDataArray()[3][1]) && rawDataArray()[3][1] != '') { /* if not ctcp */
+    } elseif (dataArray()[2] == getBotNickname()) { /* if private message */
+              if (isset(dataArray()[3][1]) && dataArray()[3][1] != '') { /* if not ctcp */
                   user_message_private();
               }
     }
@@ -99,12 +99,14 @@ function on_PRIVMSG()
 //---------------------------------------------------------------------------------------------------------
 function on_NICK() /* not checked */
 {
+    global $recoverNickname;
+
     cliDebug('on_NICK()');
 
-    $a0 = str_replace(':', '', rawDataArray()[0]);
-    $a2 = str_replace(':', '', rawDataArray()[2]);
+    $a0 = str_replace(':', '', dataArray()[0]);
+    $a2 = str_replace(':', '', dataArray()[2]);
 
-    if (userNickname() == loadValueFromConfigFile('BOT', 'nickname') && empty($GLOBALS['I_USE_RND_NICKNAME'])) {
+    if (userNickname() == loadValueFromConfigFile('BOT', 'nickname') && empty($recoverNickname)) {
         /* 1.set nickname */
         setBotNickname($a2);
         cliBot('My new nickname is: '.getBotNickname());
@@ -121,7 +123,7 @@ function on_NICK() /* not checked */
 //---------------------------------------------------------------------------------------------------------
 function on_KICK()
 {
-    (isset(rawDataArray()[3]) && rawDataArray()[3] == getBotNickname()) ? bot_kicked_from_channel() : user_kicked_from_channel();
+    (isset(dataArray()[3]) && dataArray()[3] == getBotNickname()) ? bot_kicked_from_channel() : user_kicked_from_channel();
 }
 //---------------------------------------------------------------------------------------------------------
 function on_INVITE()

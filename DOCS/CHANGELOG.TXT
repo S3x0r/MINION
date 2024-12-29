@@ -1,4 +1,10 @@
 
+   v1.2.3 changes (29.12.2024):
+   - auto remove mirc colors from channel messages
+   - uptime plugin simplified
+   - added php version check
+   - code cleanum
+// ------------------------------------------------------------------------------------------------------------------------------------------ 
    v1.2.2 changes (17.12.2024):  
    - added flood protection (channel, privmsg, notice, ctcp messages)
    - new options in config ('FLOOD' section):

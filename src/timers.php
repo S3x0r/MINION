@@ -52,15 +52,17 @@ function StartTimers()
 //---------------------------------------------------------------------------------------------------------
 function every_1_minute()
 {
-    /* keep nick - check if bot can change nick to original */
-    if (loadValueFromConfigFile('AUTOMATIC', 'keep nick') == true && isset($GLOBALS['I_USE_RND_NICKNAME'])) {
-        toServer('ISON :'.loadValueFromConfigFile('BOT', 'nickname'));
+    global $recoverNickname;
+
+    /* keep nick - check if bot can recover nickname */
+    if (loadValueFromConfigFile('AUTOMATIC', 'keep nick') == true && isset($recoverNickname)) {
+        ison(loadValueFromConfigFile('BOT', 'nickname'));
     }
     
     /* keep topic */
-    if (BotOpped()) {
+    if (isBotOpped()) {
         if (loadValueFromConfigFile('CHANNEL', 'keep topic') == true && !empty(loadValueFromConfigFile('CHANNEL', 'channel topic'))) {
-            toServer('TOPIC '.getBotChannel());
+            channelTopic(getBotChannel());
         }
     }
 }

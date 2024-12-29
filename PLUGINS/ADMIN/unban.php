@@ -27,7 +27,7 @@
 function plugin_unban()
 {
     if (OnEmptyArg('unban <nick!ident@host>')) {
-    } else if (BotOpped()) {
-               toServer('MODE '.getBotChannel().' -b '.commandFromUser());
+    } else {
+             unban(commandFromUser());
     }
 }

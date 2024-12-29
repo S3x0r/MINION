@@ -27,11 +27,9 @@
 function plugin_quit()
 {
     /* give op before quit */
-    if (BotOpped()) {
-        toServer('MODE '.getBotChannel().' +o '.userNickname());
-    }
+    opUser(userNickname());
 
     response('Bye!');
-    
+
     quitSeq();
 }

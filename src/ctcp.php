@@ -25,7 +25,7 @@ function handleCTCP()
     switch ($GLOBALS['rawcmd'][1]) {
         case 'version':
             if (loadValueFromConfigFile('CTCP', 'ctcp response') == true) {
-                toServer("NOTICE ".userNickname()." :VERSION minion (".VER.") powered by minions!");
+                sendCTCP(userNickname(), 'VERSION minion ('.VER.') powered by minions!');
             }
 
             cliCTCP('VERSION', print_userNick_IdentHost());
@@ -34,7 +34,7 @@ function handleCTCP()
 
         case 'clientinfo':
             if (loadValueFromConfigFile('CTCP', 'ctcp response') == true) { 
-                toServer("NOTICE ".userNickname()." :CLIENTINFO minion (".VER.") powered by minions!");
+                sendCTCP(userNickname(), 'CLIENTINFO I know these CTCP commands: CLIENTINFO FINGER PING SOURCE TIME USERINFO VERSION');
             }
 
             cliCTCP('CLIENTINFO', print_userNick_IdentHost());
@@ -43,7 +43,7 @@ function handleCTCP()
 
         case 'source':
             if (loadValueFromConfigFile('CTCP', 'ctcp response') == true) {
-                toServer("NOTICE ".userNickname()." :SOURCE http://github.com/S3x0r/MINION");
+                sendCTCP(userNickname(), 'SOURCE http://github.com/S3x0r/MINION');
             }
 
             cliCTCP('SOURCE', print_userNick_IdentHost());
@@ -52,7 +52,7 @@ function handleCTCP()
 
         case 'userinfo':
             if (loadValueFromConfigFile('CTCP', 'ctcp response') == true) {
-                toServer("NOTICE ".userNickname()." :USERINFO Powered by Minions!");
+                sendCTCP(userNickname(), 'USERINFO Powered by Minions!');
             }
 
             cliCTCP('USERINFO', print_userNick_IdentHost());
@@ -61,7 +61,7 @@ function handleCTCP()
 
         case 'finger':
             if (loadValueFromConfigFile('CTCP', 'ctcp response') == true) {
-                toServer("NOTICE ".userNickname()." :FINGER minion");
+                sendCTCP(userNickname(), 'FINGER minion');
             }
 
             cliCTCP('FINGER', print_userNick_IdentHost());
@@ -70,7 +70,7 @@ function handleCTCP()
 
         case 'ping':
             if (loadValueFromConfigFile('CTCP', 'ctcp response') == true) {
-                toServer("NOTICE ".userNickname()." :PING ".str_replace(' ', '', commandFromUser()));
+                sendCTCP(userNickname(), 'PING '.str_replace(' ', '', commandFromUser()));
             }
 
             cliCTCP('PING', print_userNick_IdentHost());
@@ -78,8 +78,8 @@ function handleCTCP()
             break;
 
         case 'time':
-            if (loadValueFromConfigFile('CTCP', 'ctcp response') == true) {    
-                toServer("NOTICE ".userNickname()." :TIME ".date("F j, Y, g:i a"));
+            if (loadValueFromConfigFile('CTCP', 'ctcp response') == true) {
+                sendCTCP(userNickname(), 'TIME '.date("F j, Y, g:i a"));
             }
 
             cliCTCP('TIME', print_userNick_IdentHost());

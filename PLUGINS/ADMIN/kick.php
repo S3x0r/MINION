@@ -27,9 +27,9 @@
 function plugin_kick()
 {
     if (OnEmptyArg('kick <nickname> <reason>')) {
-    } elseif (BotOpped()) {
+    } elseif (isBotOpped()) {
               if (all_args_from_user_array()[1] != getBotNickname() && all_args_from_user_array()[1] != userNickname()) {
-                  kickUserFromChannel(getBotChannel(), all_args_from_user_array()[1], inputFromLine('5'));
+                  kickUser(getBotChannel(), all_args_from_user_array()[1], inputFromLine('5'));
               }
     }
 }

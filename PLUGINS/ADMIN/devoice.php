@@ -27,9 +27,7 @@
 function plugin_devoice()
 {
     if (OnEmptyArg('devoice <nick>')) {
-    } elseif (BotOpped()) {
-              if (commandFromUser() != getBotNickname() && commandFromUser() != userNickname()) {
-                  toServer('MODE '.getBotChannel().' -v '.commandFromUser());
-              }
+    } else {
+             takeVoice(commandFromUser());
     }
 }

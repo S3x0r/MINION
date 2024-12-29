@@ -24,7 +24,7 @@ function SeenSave()
 {
     cliDebug('SeenSave()');
     
-    substr(getBotChannel(), 0, 1) != '#' ? $chan = loadValueFromConfigFile('CHANNEL', 'channel') : $chan = getBotChannel();
+    $chan = substr(getBotChannel(), 0, 1) != '#' ? loadValueFromConfigFile('CHANNEL', 'channel') : getBotChannel();
 
     $data = 'Last seen user: '.print_userNick_IdentHost().' On channel: '.$chan.', Date: '.date("d.m.Y").', Time: '.date("H:i:s");
 
@@ -37,13 +37,11 @@ function SeenSave()
         @file_put_contents($seenDataFullDir.$userNickname, $data) : @file_put_contents($seenDataFullDir.$userNickname, $data);
 }
 //---------------------------------------------------------------------------------------------------------
-function removeIllegalCharsFromNickname($nickname)
+function removeIllegalCharsFromNickname($_nickname)
 {
-    cliDebug('removeIllegalCharsFromNickname()');
-    
     /* illegal chars for file */
     $bad  = [chr(0x5c), '/', ':', '*', '?', '"', '<', '>', '|'];
     $good = ["@[1]", "@[2]", "@[3]", "@[4]", "@[5]", "@[6]", "@[7]", "@[8]", "@[9]"];
     
-    return str_replace($bad, $good, $nickname);
+    return str_replace($bad, $good, $_nickname);
 }

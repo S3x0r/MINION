@@ -19,13 +19,13 @@
   exit('This script can\'t be run from a web browser. Use CLI terminal to run it<br>'.
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
-    define('VER', '1.2.2');
+    define('VER', '1.2.3');
 //---------------------------------------------------------------------------------------------------------
     error_reporting(-1);
 
     /* PHP_EOL shortcuts */
     define('N',              PHP_EOL);
-    define('NN',             PHP_EOL.N);
+    define('NN',             PHP_EOL.PHP_EOL);
 
     /* directory names */
     define('LOGSDIR',        'LOGS');
@@ -45,7 +45,7 @@
     define('LOGRAWFILE',     'raw.txt');
 
     define('START_TIME',     time());
-    define('PHP_VER',        phpversion());
+    define('PHPDEV_VER',     '7.4.33');
 
     /* plugin default identifier */
     define('PLUGIN_HASH',    'bfebd8778dbc9c58975c4f09eae6aea6ad2b621ed6a6ed8a3cbc1096c6041f0c');

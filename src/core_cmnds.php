@@ -138,7 +138,7 @@ function plugin_register()
     
             $new = trim(userNickIdentAndHostname());
 
-            empty($botOwnersFromConfig) ? $newList = $new : $newList = "{$botOwnersFromConfig}, {$new}";
+            $newList = empty($botOwnersFromConfig) ? $new : "{$botOwnersFromConfig}, {$new}";
 
             saveValueToConfigFile('PRIVILEGES', getOwnerUserName(), $newList);
 

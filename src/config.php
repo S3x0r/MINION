@@ -189,36 +189,36 @@ function getConfigFileName()
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function loadValueFromConfigFile($section, $value)
+function loadValueFromConfigFile($_section, $_value)
 {
     $config = json_decode(file_get_contents(getConfigFileName()), true);
 
-    if (isset($config[$section][$value])) { // dodano isset - sprawdzic!
-        return $config[$section][$value];
+    if (isset($config[$_section][$_value])) {
+        return $config[$_section][$_value];
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function saveValueToConfigFile($section, $option, $value)
+function saveValueToConfigFile($_section, $_option, $_value)
 {
     $config = json_decode(file_get_contents(getConfigFileName()), true);
 
-    $replace = [$section => [$option => $value]];
+    $replace = [$_section => [$_option => $_value]];
     
     $newArray = array_replace_recursive($config, $replace);
     
     $newJsonData = file_put_contents(getConfigFileName(), json_encode($newArray, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 }
 //---------------------------------------------------------------------------------------------------------
-function saveValueToListConfigFile($section, $option, $value)
+function saveValueToListConfigFile($_section, $_option, $_value)
 {
     $config = json_decode(file_get_contents(getConfigFileName()), true);
 
-    array_push($config[$section][$option], $value);
+    array_push($config[$_section][$_option], $_value);
 
     $newJsonData = file_put_contents(getConfigFileName(), json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 }
 //---------------------------------------------------------------------------------------------------------
-function checkIfConfigExists()
+function ifConfigExists()
 {
     if (is_file(getConfigFileName())) {
         return true;
@@ -227,9 +227,9 @@ function checkIfConfigExists()
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function checkIfConfigIsValid($configFile)
+function checkIfConfigIsValid($_configFile)
 {
-    $config = json_decode(file_get_contents($configFile), true);
+    $config = json_decode(file_get_contents($_configFile), true);
 
     /* if valid json file, lets now check variables, etc */
     if (json_last_error() === JSON_ERROR_NONE) {
@@ -334,24 +334,48 @@ function checkIfConfigIsValid($configFile)
         (emptyOrNoBool($config, 'DEBUG'     , 'show debug'))                    ? cliConfigErr($infoTxt.'"show debug"'.$infoTxtEnd)                      : false;
      } else {
               /* if invalid json format */
-              cliNoLog('');
+              cliNoLog();
               cliBot('Config file ('.getConfigFileName().') contains JSON syntax errors, Correct errors in config!');
               winSleep(7);
               exit;
      }
 }
 //---------------------------------------------------------------------------------------------------------
-function cliConfigErr($info)
+function emptyOrNoBool($_config, $_section, $_value)
 {
-    cliError($info);
-    winSleep(7);
-}
-//---------------------------------------------------------------------------------------------------------
-function emptyOrNoBool($config, $section, $value)
-{
-    $data = strtolower($config[$section][$value]);
+    $data = strtolower($_config[$_section][$_value]);
 
     if (empty($data) xor !in_array($data, array("true", "false", "1", "0"), true)) {
         return true;
+    }
+}
+//---------------------------------------------------------------------------------------------------------
+function saveToFile($file, $_data, $_method)
+{
+    $file = @fopen($file, $_method);
+    @flock($file, 2);
+    @fwrite($file, $_data);
+    @flock($file, 3);
+    @fclose($file);
+}
+//---------------------------------------------------------------------------------------------------------
+function createLogsDataDir()
+{
+    /* if directories are missing create them */
+    !is_dir(LOGSDIR) ? mkdir(LOGSDIR) : false;
+
+    createLogsDateDir();
+    
+    !is_dir(DATADIR) ? mkdir(DATADIR) : false;
+
+    !is_dir(DATADIR.'/'.SEENDIR) ? @mkdir(DATADIR.'/'.SEENDIR) : false;
+}
+//---------------------------------------------------------------------------------------------------------
+function createLogsDateDir()
+{
+    if (is_dir(LOGSDIR)) {
+        if (!is_dir(LOGSDIR.'/'.@date('d.m.Y'))) {
+            mkdir(LOGSDIR.'/'.@date('d.m.Y')); 
+        }
     }
 }

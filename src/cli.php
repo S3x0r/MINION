@@ -20,46 +20,56 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-function cliNoLog($data) /* no logs */
+function cliNoLog($_data = null) /* no logs */
 {
-    echo $data.N;
+    if ($_data != null) {
+        echo $_data.N;
+    } else {
+             echo N;
+    }
 }
 //---------------------------------------------------------------------------------------------------------
-function cliError($data) /* no logs */
+function cliError($_data) /* no logs */
 {
-    echo '[ERROR] '.$data.NN;    
+    echo '[ERROR] '.$_data.NN;    
 }
 //---------------------------------------------------------------------------------------------------------
-function cliBot($data) /* log -- bot.txt */
+function cliConfigErr($_info)
 {
-    $line = '['.@date('H:i:s').'] [bot] '.$data.N;
+    cliError($_info);
+    winSleep(7);
+}
+//---------------------------------------------------------------------------------------------------------
+function cliBot($_data) /* log -- bot.txt */
+{
+    $line = '['.@date('H:i:s').'] [bot] '.$_data.N;
 
     saveLog('bot', $line);
 
     echo $line;
 }
 //---------------------------------------------------------------------------------------------------------
-function cliServer($data) /* log -- server.txt */
+function cliServer($_data) /* log -- server.txt */
 {
-    $line = '['.@date('H:i:s').'] [server] '.$data.N;
+    $line = '['.@date('H:i:s').'] [server] '.$_data.N;
 
     saveLog('server', $line);
     
     echo $line;
 }
 //---------------------------------------------------------------------------------------------------------
-function cliLogChannel($data) /* log message +time */
+function cliLogChannel($_data) /* log message +time */
 {
-    $line = '['.@date('H:i:s').'] '.$data.N;
+    $line = '['.@date('H:i:s').'] '.$_data.N;
 
     saveLog('channel', $line);
 
     echo $line;
 }
 //---------------------------------------------------------------------------------------------------------
-function cliNotice($data) /* log  -- bot.txt */
+function cliNotice($_data) /* log  -- bot.txt */
 {
-    $line = '['.@date('H:i:s').'] [notice] '.$data.N;
+    $line = '['.@date('H:i:s').'] [notice] '.$_data.N;
 
     saveLog('notice', $line);
 
@@ -68,9 +78,9 @@ function cliNotice($data) /* log  -- bot.txt */
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function cliCTCP($type, $from) /* log -- ctcp.txt */
+function cliCTCP($_type, $_from) /* log -- ctcp.txt */
 {
-    $line = "[".@date('H:i:s')."] [ctcp {$type}] from {$from}".N;
+    $line = "[".@date('H:i:s')."] [ctcp {$_type}] from {$_from}".N;
 
     saveLog('ctcp', $line);
 
@@ -79,9 +89,9 @@ function cliCTCP($type, $from) /* log -- ctcp.txt */
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function cliPluginUsage($pluginName) /* log -- plugins.txt */
+function cliPluginUsage($_pluginName) /* log -- plugins.txt */
 {
-    $line = "[".@date('H:i:s')."] [PLUGIN: {$pluginName}] Used by: ".print_userNick_IdentHost()." channel: ".getBotChannel().N;
+    $line = "[".@date('H:i:s')."] [PLUGIN: {$_pluginName}] Used by: ".print_userNick_IdentHost()." channel: ".getBotChannel().N;
     
     saveLog('plugin', $line);
 
@@ -90,27 +100,27 @@ function cliPluginUsage($pluginName) /* log -- plugins.txt */
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function cliDebug($data)
+function cliDebug($_data)
 {
     if (loadValueFromConfigFile('DEBUG', 'show debug') == true) {
-        echo '['.@date('H:i:s').'] [DEBUG] '.$data.N;
+        echo '['.@date('H:i:s').'] [DEBUG] '.$_data.N;
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function cliRaw($data, $mode) /* raw messages */
+function cliRaw($_data, $_mode) /* raw messages */
 {
-    if (!empty($data)) {
-        if ($mode == 0) {
-            $line = '['.@date('H:i:s').'] -> [RAW] '.$data;
+    if (!empty($_data)) {
+        if ($_mode == 0) {
+            $line = '['.@date('H:i:s').'] -> [RAW] '.$_data;
         } else {
-                 $line = '['.@date('H:i:s').'] <- [RAW] '.$data.N;
+                 $line = '['.@date('H:i:s').'] <- [RAW] '.$_data.N;
         }
 
         saveLog('raw', $line);
 
         if (loadValueFromConfigFile('DEBUG', 'show raw') == true) {
             echo $line;
-        } else if ($mode == 1 && loadValueFromConfigFile('DEBUG', 'show own messages in raw mode') == true) {
+        } else if ($_mode == 1 && loadValueFromConfigFile('DEBUG', 'show own messages in raw mode') == true) {
                    echo $line;
         }
     }
@@ -121,6 +131,16 @@ function cliLine() /* no logs */
     echo '------------------------------------------------------------------------------'.N;
 }
 //---------------------------------------------------------------------------------------------------------
+function print_userNick_IdentHost()
+{
+    return userNickname().' ('.userIdentAndHostname().')';    
+}
+//---------------------------------------------------------------------------------------------------------
+function print_userNick_NickIdentHost()
+{
+    return userNickname().' ('.userNickIdentAndHostname().')';
+}
+//---------------------------------------------------------------------------------------------------------
 function baner() /* no logs */
 {
     echo N.'                 - MINION '.VER.' | Author: minions -'.N;
@@ -128,23 +148,29 @@ function baner() /* no logs */
          
     /* check if we have needed extensions */
     if (extension_loaded('curl') && extension_loaded('openssl')) {
-        echo '                   All needed extensions loaded'.N;
+        echo '                    All needed extensions loaded'.N;
     }
 
     if (!extension_loaded('curl')) {
-        echo '       Extension \'curl\' missing, some plugins will not work'.N;
+        echo '       Extension \'curl\' missing - some plugins will not work!'.N;
     }
 
     if (!extension_loaded('openssl')) {
-        echo '     Extension \'openssl\' missing, some plugins will not work'.N;
+        echo '     Extension \'openssl\' missing - some plugins will not work!'.N;
     }
 
     /* os txt */
-    (ifWindowsOs()) ? $sys = 'Windows' : $sys = 'Linux';
+    $sys = (ifWindowsOs()) ? 'Windows' : 'Linux';
 
-    echo '                    PHP Ver: '.PHP_VER.', OS: '.$sys.N;
+    echo '                    PHP Ver: '.PHP_VERSION.', OS: '.$sys.N;
     echo '    ---------------------------------------------------------'.N;
-    echo '                   Total Lines of code: '.totalLines().' :)'.NN.N;
+    echo '                    Total Lines of code: '.totalLines().' :)'.NN;
+
+    if (PHP_VERSION != PHPDEV_VER) {
+        echo '                             CAUTION!'.N;
+        echo '               Bot was tested on PHP 7.4.33 version'.N;
+        echo '             With other versions it may run unstable!'.NN;
+    }
 
     if (extension_loaded('openssl')) {
         $file = @file_get_contents(VERSION_URL);

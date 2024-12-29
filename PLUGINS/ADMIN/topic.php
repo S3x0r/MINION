@@ -30,6 +30,6 @@ function plugin_topic()
     } else {
             $newTopic = implode(' ', all_args_from_user_array());
 
-            setTopic(getBotChannel(), $newTopic);
+            changeTopic(getBotChannel(), $newTopic);
     }
 }

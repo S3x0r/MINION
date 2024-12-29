@@ -20,8 +20,13 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
-function startBot()
+function init()
 {
+    if (!is_writable('BOT.php')) {
+        echo N.' [ERROR] Bot has no permissions to save files. Check your permissions! Exiting.'.NN;
+        winSleep(7);
+    }
+    
     /* check that the arguments from cli have been given (args.php file) */
     if (isset($_SERVER['argv'][1])) {
         checkCliArguments();
@@ -31,7 +36,7 @@ function startBot()
     baner();
 
     /* config checks (config.php file) */
-    if (checkIfConfigExists() == true) {
+    if (ifConfigExists()) {
         checkIfConfigIsValid(getConfigFileName());
     } else {
              cliNoLog('Configuration file missing! I am creating a default configuration: '.getConfigFileName().N);
@@ -42,10 +47,12 @@ function startBot()
 	in_array(@date('dm'), array('0112', '2412')) ? playSound('egg.mp3') : false;
 
     /* set timezone from config file */
-    setTimezone();
+    if (!empty(loadValueFromConfigFile('TIME', 'timezone'))) {
+        date_default_timezone_set(loadValueFromConfigFile('TIME', 'timezone'));
+    }
 
     /* if directories are missing create them */
-    checkDirectioriesIfExists();
+    createLogsDataDir();
  
     cliBot('Configuration Loaded from: '.getConfigFileName());
 

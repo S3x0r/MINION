@@ -148,12 +148,10 @@ function v_extract()
         // copy LOGS folder
         recurse_copy(LOGSDIR, $GLOBALS['newdir'].'/'.LOGSDIR);
 
-        if (BotOpped() == true) {
-            toServer("MODE ".getBotChannel()." +o ".userNickname());
-        }
+        opUser(userNickname());
 
         // reconnect to run new version
-        toServer("QUIT :Installing update...");
+        quitFromServer('Installing update...');
         cliBot('Restarting bot to new version...');
    
         // if windows

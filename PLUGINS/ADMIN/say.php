@@ -28,6 +28,6 @@ function plugin_say()
 {
     if (OnEmptyArg('say <text>')) {
     } else {
-             toServer('PRIVMSG '.getBotChannel().' '.inputFromLine(4));
+             sayInChannel(getBotChannel(), inputFromLine(4));
     }
 }

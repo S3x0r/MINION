@@ -27,7 +27,7 @@
 function plugin_op()
 {
     if (OnEmptyArg('op <nick>')) {
-    } elseif (BotOpped()) {
-              toServer('MODE '.getBotChannel().' +o '.commandFromUser());
+    } else {
+             opUser(commandFromUser());
     }
 }

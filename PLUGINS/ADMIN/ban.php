@@ -27,14 +27,14 @@
 function plugin_ban()
 {
     if (OnEmptyArg('ban <nick!ident@hostname>')) {
-    } elseif (BotOpped()) {
+    } elseif (isBotOpped()) {
               /* if nick!ident@hostname */
               if (preg_match('/^(.*)\!(.*)\@(.*)$/', commandFromUser(), $data)) {
                   $fullmask  = $data[0];
                   $nickToBan = $data[1];
 
                   if ($nickToBan != getBotNickname() && $nickToBan != userNickname()) {
-                      banUserFromChannel(getBotChannel(), $fullmask);
+                      banUser(getBotChannel(), $fullmask);
 
                       if (!in_array($fullmask, loadValueFromConfigFile('BANS', 'ban list'))) {
                           saveValueToListConfigFile('BANS', 'ban list', $fullmask); 

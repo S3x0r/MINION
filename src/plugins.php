@@ -63,30 +63,26 @@ function loadPlugins()
     cliNoLog('--------------------------------------------------Total Plugins: ('.$pluginsSum.')---------');
 }
 //---------------------------------------------------------------------------------------------------------
-function countPlugins($user)
+function countPlugins($_user)
 {
-    $count = count(glob(PLUGINSDIR."/{$user}/*.php"));
+    $count = count(glob(PLUGINSDIR."/{$_user}/*.php"));
 
-    if ($count == 0) {
-        return 0;
-    } else {
-             return $count;
-    }
+    return ($count == 0) ? 0 : $count;
 }
 //---------------------------------------------------------------------------------------------------------
-function loadPluginsFromEachGroupDir($user)
+function loadPluginsFromEachGroupDir($_user)
 {
-    $GLOBALS[$user.'_PLUGINS'] = null;
+    $GLOBALS[$_user.'_PLUGINS'] = null;
 
-    foreach (glob(PLUGINSDIR."/{$user}/*.php") as $pluginName) {
+    foreach (glob(PLUGINSDIR."/{$_user}/*.php") as $pluginName) {
          /* simple verify plugin */
          if (preg_match("~\b".PLUGIN_HASH."\b~", file_get_contents($pluginName))) {
-            include_once($pluginName);
+             include_once($pluginName);
 
-            $GLOBALS[$user.'_PLUGINS'][] .= $plugin_command;
-            $GLOBALS['ALL_PLUGINS'][] .= $plugin_command;
+             $GLOBALS[$_user.'_PLUGINS'][] .= $plugin_command;
+             $GLOBALS['ALL_PLUGINS'][] .= $plugin_command;
 
-            cliNoLog('['.basename($pluginName, '.php').'] -- '.$plugin_description);
+             cliNoLog('['.basename($pluginName, '.php').'] -- '.$plugin_description);
         } else {
                  cliError(basename($pluginName, '.php').' - Incompatible plugin!');
         }
@@ -203,7 +199,7 @@ function whoIsUser()
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function returnNextUsersCommands($from) /* format: command command2 etc,. */
+function returnNextUsersCommands($_from) /* format: command command2 etc,. */
 {
     $section = json_decode(file_get_contents(getConfigFileName()), true)['USERSLEVELS'];
 
@@ -211,7 +207,7 @@ function returnNextUsersCommands($from) /* format: command command2 etc,. */
 
     /* get user name */
     foreach ($section as $user => $level) {
-        if ($level > $from && $level != 999) {
+        if ($level > $_from && $level != 999) {
             $users[] .= $user;
         }
     }
@@ -233,12 +229,12 @@ function returnNextUsersCommands($from) /* format: command command2 etc,. */
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function getUserLevelByUserName($user)
+function getUserLevelByUserName($_user)
 {
     $section = json_decode(file_get_contents(getConfigFileName()), true)['USERSLEVELS'];
 
     foreach ($section as $entry => $level) {
-        if ($entry == $user) {
+        if ($entry == $_user) {
             return $level;
         }
     }
@@ -264,10 +260,10 @@ function allPluginsString()
 }
 //---------------------------------------------------------------------------------------------------------
 /* if first arg after !plugin <arg> is empty */
-function OnEmptyArg($info)
+function OnEmptyArg($_info)
 {
     if (empty(commandFromUser())) {
-        response('Usage: '.commandPrefix().$info);
+        response('Usage: '.commandPrefix().$_info);
         return true;
     } else {
               return false;
