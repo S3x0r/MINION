@@ -24,43 +24,51 @@ function loadPlugins()
 {
     $GLOBALS['ALL_PLUGINS'] = null;
 
-    $countedCoreCmnds = count(CORECOMMANDSLIST);
+    if (loadValueFromConfigFile('PROGRAM', 'list plugins on start')) {
+        $countedCoreCmnds = count(CORECOMMANDSLIST);
 
-    /* CORE PLUGINS */
-    cliNoLog('>>> \'Core\' Plugins ('.$countedCoreCmnds.' Plugins) [lvl: 0] <<<');
+        /* CORE PLUGINS */
+        cliNoLog('>>> \'Core\' Plugins ('.$countedCoreCmnds.' Plugins) [lvl: 0] <<<');
 
-    cliLine();
+        cliLine();
 
-    foreach (CORECOMMANDSLIST as $corePlugin => $corePluginDescription) {
-       cliNoLog('['.$corePlugin.'] -- '.$corePluginDescription);
+        foreach (CORECOMMANDSLIST as $corePlugin => $corePluginDescription) {
+           cliNoLog('['.$corePlugin.'] -- '.$corePluginDescription);
+        }
+
+        cliLine();
+
+        $pluginsSum = null;
     }
-
-    cliLine();
-
-    $pluginsSum = null;
 
     if (is_dir(PLUGINSDIR)) {
         if (!empty(usersDirectoriesToArray())) {
             foreach (usersDirectoriesToArray() as $userDirectory) {
-               $pluginsSum = $pluginsSum + countPlugins($userDirectory);
-               
-               $userLvl = getUserLevelByUserName($userDirectory);
-               
-               cliNoLog('>>> \''.$userDirectory.'\' Plugins ('.countPlugins($userDirectory).' Plugins) [lvl: '.$userLvl.'] <<<');
-               
-               cliLine();
-               
+               if (loadValueFromConfigFile('PROGRAM', 'list plugins on start')) {
+                   $pluginsSum = $pluginsSum + countPlugins($userDirectory);
+
+                   $userLvl = getUserLevelByUserName($userDirectory);
+
+                   cliNoLog('>>> \''.$userDirectory.'\' Plugins ('.countPlugins($userDirectory).' Plugins) [lvl: '.$userLvl.'] <<<');
+
+                   cliLine();
+               }
+
                /* add to $GLOBALS[$user.'_PLUGINS'] & include plugin */
                loadPluginsFromEachGroupDir($userDirectory);
-               
-               cliLine();
+
+               if (loadValueFromConfigFile('PROGRAM', 'list plugins on start')) {
+                   cliLine();
+               }
             }
         }
     }
 
-    $pluginsSum = $pluginsSum + $countedCoreCmnds;
-
-    cliNoLog('--------------------------------------------------Total Plugins: ('.$pluginsSum.')---------');
+    if (loadValueFromConfigFile('PROGRAM', 'list plugins on start')) {
+        $pluginsSum = $pluginsSum + $countedCoreCmnds;
+       
+        cliNoLog('--------------------------------------------------Total Plugins: ('.$pluginsSum.')---------');
+    }
 }
 //---------------------------------------------------------------------------------------------------------
 function countPlugins($_user)
@@ -82,7 +90,9 @@ function loadPluginsFromEachGroupDir($_user)
              $GLOBALS[$_user.'_PLUGINS'][] .= $plugin_command;
              $GLOBALS['ALL_PLUGINS'][] .= $plugin_command;
 
-             cliNoLog('['.basename($pluginName, '.php').'] -- '.$plugin_description);
+             if (loadValueFromConfigFile('PROGRAM', 'list plugins on start')) {
+                 cliNoLog('['.basename($pluginName, '.php').'] -- '.$plugin_description);
+             }
         } else {
                  cliError(basename($pluginName, '.php').' - Incompatible plugin!');
         }

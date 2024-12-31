@@ -116,7 +116,8 @@
         "fetch server": "https://raw.githubusercontent.com/S3x0r/minion_repository_plugins/master"
     },
     "PROGRAM": {
-        "play sounds": true
+        "play sounds": true,
+        "list plugins on start": true
     },
     "DEBUG": {
         "show raw": false,

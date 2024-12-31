@@ -80,7 +80,7 @@ function pickServerFromConfig()
          }
 
          if ($s == 0) {
-             cliBot('Can\'t connect to any of the servers, Exiting!');
+             cliBot('Can\'t connect to any of the servers - Exiting!');
              winSleep(10);
          }
     }

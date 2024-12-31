@@ -142,7 +142,8 @@ function createDefaultConfigFile()
         "fetch server": "https://raw.githubusercontent.com/S3x0r/minion_repository_plugins/master"
     },
     "PROGRAM": {
-        "play sounds": true
+        "play sounds": true,
+        "list plugins on start": true
     },
     "DEBUG": {
         "show raw": false,
@@ -329,6 +330,7 @@ function checkIfConfigIsValid($_configFile)
         (emptyOrNoBool($config, 'LOGS'      , 'log plugins usage messages'))    ? cliConfigErr($infoTxt.'"log plugins usage messages"'.$infoTxtEnd)      : false;
         (emptyOrNoBool($config, 'LOGS'      , 'log raw messages'))              ? cliConfigErr($infoTxt.'"log raw messages"'.$infoTxtEnd)                : false;
         (emptyOrNoBool($config, 'PROGRAM'   , 'play sounds'))                   ? cliConfigErr($infoTxt.'"play sounds"'.$infoTxtEnd)                     : false;
+        (emptyOrNoBool($config, 'PROGRAM'   , 'list plugins on start'))         ? cliConfigErr($infoTxt.'"list plugins on start"'.$infoTxtEnd)           : false;
         (emptyOrNoBool($config, 'DEBUG'     , 'show raw'))                      ? cliConfigErr($infoTxt.'"show raw"'.$infoTxtEnd)                        : false;
         (emptyOrNoBool($config, 'DEBUG'     , 'show own messages in raw mode')) ? cliConfigErr($infoTxt.'"show own messages in raw mode"'.$infoTxtEnd)   : false;
         (emptyOrNoBool($config, 'DEBUG'     , 'show debug'))                    ? cliConfigErr($infoTxt.'"show debug"'.$infoTxtEnd)                      : false;
