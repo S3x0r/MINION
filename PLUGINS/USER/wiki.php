@@ -28,7 +28,7 @@ function plugin_wiki()
 {
     if (OnEmptyArg('wikipedia <lang> <string>')) {
     } elseif (extension_loaded('openssl')) {
-              $json = @file_get_contents("http://".msgPieces()[0].".wikipedia.org/w/api.php?action=opensearch&list=search&search=".urlencode(inputFromLine('5')));
+              $json = @file_get_contents("http://".msgPiece()[0].".wikipedia.org/w/api.php?action=opensearch&list=search&search=".urlencode(inputFromLine('5')));
             
               if (!empty($json)) {
                   $json = json_decode($json);

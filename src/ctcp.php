@@ -20,70 +20,34 @@
        'Visit <a href="https://github.com/S3x0r/MINION/">this page</a> for more information.') : false;
 //---------------------------------------------------------------------------------------------------------
 
+define('CTCP_VERSION',    'version');
+define('CTCP_CLIENTINFO', 'clientinfo');
+define('CTCP_SOURCE',     'source');
+define('CTCP_USERINFO',   'userinfo');
+define('CTCP_FINGER',     'finger');
+define('CTCP_PING',       'ping');
+define('CTCP_TIME',       'time');
+
 function handleCTCP()
 {
-    switch ($GLOBALS['rawcmd'][1]) {
-        case 'version':
-            if (loadValueFromConfigFile('CTCP', 'ctcp response') == true) {
-                sendCTCP(userNickname(), 'VERSION minion ('.VER.') powered by minions!');
-            }
+    $ctcpCommands = [
+        CTCP_VERSION    => ['VERSION minion ('.VER.') powered by minions!', 'VERSION'],
+        CTCP_CLIENTINFO => ['CLIENTINFO I know these CTCP commands: CLIENTINFO FINGER PING SOURCE TIME USERINFO VERSION', 'CLIENTINFO'],
+        CTCP_SOURCE     => ['SOURCE http://github.com/S3x0r/MINION', 'SOURCE'],
+        CTCP_USERINFO   => ['USERINFO Powered by Minions!', 'USERINFO'],
+        CTCP_FINGER     => ['FINGER minion', 'FINGER'],
+        CTCP_PING       => ['PING '.str_replace(' ', '', commandFromUser()), 'PING'],
+        CTCP_TIME       => ['TIME '.date("F j, Y, g:i a"), 'TIME']
+    ];
 
-            cliCTCP('VERSION', print_userNick_IdentHost());
-            playSound('ctcp.mp3');
-            break;
+    $command = $GLOBALS['rawcmd'][1];
 
-        case 'clientinfo':
-            if (loadValueFromConfigFile('CTCP', 'ctcp response') == true) { 
-                sendCTCP(userNickname(), 'CLIENTINFO I know these CTCP commands: CLIENTINFO FINGER PING SOURCE TIME USERINFO VERSION');
-            }
+    if (isset($ctcpCommands[$command])) {
+        if (loadValueFromConfigFile('CTCP', 'ctcp response') == true) {
+            sendCTCP(userNickname(), $ctcpCommands[$command][0]);
+        }
 
-            cliCTCP('CLIENTINFO', print_userNick_IdentHost());
-            playSound('ctcp.mp3');
-            break;
-
-        case 'source':
-            if (loadValueFromConfigFile('CTCP', 'ctcp response') == true) {
-                sendCTCP(userNickname(), 'SOURCE http://github.com/S3x0r/MINION');
-            }
-
-            cliCTCP('SOURCE', print_userNick_IdentHost());
-            playSound('ctcp.mp3');
-            break;
-
-        case 'userinfo':
-            if (loadValueFromConfigFile('CTCP', 'ctcp response') == true) {
-                sendCTCP(userNickname(), 'USERINFO Powered by Minions!');
-            }
-
-            cliCTCP('USERINFO', print_userNick_IdentHost());
-            playSound('ctcp.mp3');
-            break;
-
-        case 'finger':
-            if (loadValueFromConfigFile('CTCP', 'ctcp response') == true) {
-                sendCTCP(userNickname(), 'FINGER minion');
-            }
-
-            cliCTCP('FINGER', print_userNick_IdentHost());
-            playSound('ctcp.mp3');
-            break;
-
-        case 'ping':
-            if (loadValueFromConfigFile('CTCP', 'ctcp response') == true) {
-                sendCTCP(userNickname(), 'PING '.str_replace(' ', '', commandFromUser()));
-            }
-
-            cliCTCP('PING', print_userNick_IdentHost());
-            playSound('ctcp.mp3');
-            break;
-
-        case 'time':
-            if (loadValueFromConfigFile('CTCP', 'ctcp response') == true) {
-                sendCTCP(userNickname(), 'TIME '.date("F j, Y, g:i a"));
-            }
-
-            cliCTCP('TIME', print_userNick_IdentHost());
-            playSound('ctcp.mp3');
-            break;
+        cliCTCP($ctcpCommands[$command][1], print_userNick_IdentHost());
+        playSound('ctcp.mp3');
     }
 }

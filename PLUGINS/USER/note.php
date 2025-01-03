@@ -63,9 +63,9 @@ function plugin_note()
                 }
                 break;
         }
-        switch (msgPieces()[0]) {
+        switch (msgPiece()[0]) {
             case 'add':
-                if (!empty(msgPieces()[1])) {
+                if (!empty(msgPiece()[1])) {
                     /* if file is empty */
                     if (is_file($notesFilename) && filesize($notesFilename) == 0) {
                         $note = inputFromLine('5');
@@ -90,7 +90,7 @@ function plugin_note()
                 if (is_file($notesFilename)) {
                     $writeNotes = '';
                     $notes = file($notesFilename, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-                    $i = msgPieces()[1];
+                    $i = msgPiece()[1];
 
                     if (is_numeric((int)$i) && $i > 0) {
                         $j = $i-1;

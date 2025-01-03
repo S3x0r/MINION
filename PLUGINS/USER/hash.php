@@ -31,8 +31,8 @@ function plugin_hash()
     } elseif (commandFromUser() == 'help') {
               response('Usage: '.commandPrefix().'hash <algorithm> <string>');
               response('Algos: '.implode(' ', hash_algos()));
-    } elseif (in_array(msgPieces()[0], hash_algos())) {
-              response(msgPieces()[0].': '.hash(msgPieces()[0], inputFromLine(5)));
+    } elseif (in_array(msgPiece()[0], hash_algos())) {
+              response(msgPiece()[0].': '.hash(msgPiece()[0], inputFromLine(5)));
     } else {
               response('Unknown hashing algorithm.');
     }

@@ -1,6 +1,9 @@
 
+   v1.2.5 changes (03.01.2025):
+   - code cleanup
+// ------------------------------------------------------------------------------------------------------------------------------------------ 
    v1.2.4 changes (31.12.2024):
-   -  added option in config PROGRAM -> "list plugins on start": true/false
+   - added option in config PROGRAM -> "list plugins on start": true/false
 // ------------------------------------------------------------------------------------------------------------------------------------------ 
    v1.2.3 changes (29.12.2024):
    - auto remove mirc colors from channel messages

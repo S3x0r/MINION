@@ -88,10 +88,7 @@ function pickServerFromConfig()
 //---------------------------------------------------------------------------------------------------------
 function server($_server, $_port, $_connectionType, $_times)
 {
-    global $socket;
-    global $connectedToServer;
-    global $connectedToPort;
-    global $server_port;
+    global $socket, $connectedToServer, $connectedToPort, $server_port;
 
     cliBot("Connecting: {$_server}:{$_port} ({$_times}/".loadValueFromConfigFile('SERVER', 'how many times connect to server').")");
 
@@ -120,20 +117,13 @@ function server($_server, $_port, $_connectionType, $_times)
 //---------------------------------------------------------------------------------------------------------
 function socketLoop()
 {
-    global $socket;
-    global $rawData;
-    global $rawcmd;
-    global $flood;
-    global $server_port;
-    global $serverName;
-    global $BOT_NICKNAME;
-    global $recoverNickname;
-//---------------------------------------------------------------------------------------------------------
+    global $socket, $rawData, $rawcmd, $flood, $server_port, $serverName, $BOT_NICKNAME, $recoverNickname;
+
     $flood              = [];
     $BOT_NICKNAME       = null;
     $serverName         = null;
     $recoverNickname    = null;
-//---------------------------------------------------------------------------------------------------------
+
     /* main socket loop */
     while (1) {
        while (!feof($socket)) {
@@ -269,7 +259,7 @@ function userNickIdentAndHostname()
     }
 }
 //---------------------------------------------------------------------------------------------------------
-function msgPieces()
+function msgPiece()
 {
     $args = null;
 
@@ -279,10 +269,10 @@ function msgPieces()
 
     $pieces = explode(" ", $args);
 
-    (isset($pieces[0])) ? $piece1 = $pieces[0] : $piece1 = '';
-    (isset($pieces[1])) ? $piece2 = $pieces[1] : $piece2 = '';
-    (isset($pieces[2])) ? $piece3 = $pieces[2] : $piece3 = '';
-    (isset($pieces[3])) ? $piece4 = $pieces[3] : $piece4 = '';
+    $piece1 = $pieces[0] ?? '';
+    $piece2 = $pieces[1] ?? '';
+    $piece3 = $pieces[2] ?? '';
+    $piece4 = $pieces[3] ?? '';
 
     return [$piece1, $piece2, $piece3, $piece4];
 }

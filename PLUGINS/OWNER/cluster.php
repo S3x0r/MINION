@@ -38,7 +38,7 @@ function plugin_cluster()
         }
 
         /* me */
-        if (msgPieces()[0] == 'shutdown' && msgPieces()[1] == getBotNickname()) {
+        if (msgPiece()[0] == 'shutdown' && msgPiece()[1] == getBotNickname()) {
             response('Shutting down machine...');
 
             cliBot('SHUTTING DOWN COMPUTER!');
@@ -46,7 +46,7 @@ function plugin_cluster()
             exec('shutdown -s -t 0');
         }
         /* all */
-        if (msgPieces()[0] == 'shutdown' && msgPieces()[1] == '*') {
+        if (msgPiece()[0] == 'shutdown' && msgPiece()[1] == '*') {
             response('Shutting down machine...');
 
             cliBot('SHUTTING DOWN COMPUTER!');

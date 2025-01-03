@@ -44,31 +44,31 @@ function plugin_fetch()
                 }
             }
 
-            if (msgPieces()[0] == 'get') {
-                if (!empty(msgPieces()[1])) {
-                    if (!empty(msgPieces()[2])) {
+            if (msgPiece()[0] == 'get') {
+                if (!empty(msgPiece()[1])) {
+                    if (!empty(msgPiece()[2])) {
                         $dirs = array_diff(scandir(PLUGINSDIR), array('..', '.'));
-                        if (in_array(msgPieces()[2], ['USER', 'ADMIN', 'OWNER'])) {
-                            $check_file = PLUGINSDIR."/".msgPieces()[2]."/".msgPieces()[1].".php";
+                        if (in_array(msgPiece()[2], ['USER', 'ADMIN', 'OWNER'])) {
+                            $check_file = PLUGINSDIR."/".msgPiece()[2]."/".msgPiece()[1].".php";
                            
                             $dir_user = array_diff(scandir(PLUGINSDIR.'/USER/'), array('..', '.'));
                             $dir_admin = array_diff(scandir(PLUGINSDIR.'/ADMIN/'), array('..', '.'));
                             $dir_owner = array_diff(scandir(PLUGINSDIR.'/OWNER/'), array('..', '.'));
                             $all_dirs = array_merge($dir_user, $dir_admin, $dir_owner);
                             
-                            if (in_array(msgPieces()[1].'.php', $all_dirs)) {
+                            if (in_array(msgPiece()[1].'.php', $all_dirs)) {
                                 response('I already have this plugin, aborting.');
                             } else {
-                                     $address = loadValueFromConfigFile('FETCH', 'fetch server')."/".msgPieces()[1].".php";
+                                     $address = loadValueFromConfigFile('FETCH', 'fetch server')."/".msgPiece()[1].".php";
                                 if (@file_get_contents($address)) {
-                                    response("Downloading plugin: '".msgPieces()[1]."' from repository to: '".msgPieces()[2]."'");
+                                    response("Downloading plugin: '".msgPiece()[1]."' from repository to: '".msgPiece()[2]."'");
 
                                     $file = file_get_contents($address);
-                                    $a = fopen(PLUGINSDIR."/".msgPieces()[2]."/".msgPieces()[2].".php", 'w');
+                                    $a = fopen(PLUGINSDIR."/".msgPiece()[2]."/".msgPiece()[2].".php", 'w');
                                     fwrite($a, $file);
                                     fclose($a);
 
-                                    LoadPlugin(msgPieces()[1]);
+                                    LoadPlugin(msgPiece()[1]);
 
                                     response('Plugin added.');
                                 } else {
